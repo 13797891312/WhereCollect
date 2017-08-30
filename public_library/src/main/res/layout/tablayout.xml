@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="54dp"
+    android:background="@drawable/shape_main_tab"
+    android:minHeight="54dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/tab_img"
+            android:layout_width="30.0dip"
+            android:layout_height="24.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tab_home_selected" />
+
+        <TextView
+            android:id="@+id/tab_text"
+            android:layout_width="wrap_content"
+            android:layout_height="18.0dip"
+            android:gravity="center_vertical"
+            android:text="首页"
+            android:textColor="#23AC38"
+            android:textSize="12.0sp" />
+    </LinearLayout>
+
+     <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/tab_img"
+            android:layout_width="30.0dip"
+            android:layout_height="24.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tab_video_unselected" />
+
+        <TextView
+            android:id="@+id/tab_text"
+            android:layout_width="wrap_content"
+            android:layout_height="18.0dip"
+            android:gravity="center_vertical"
+            android:text="宝宝视频"
+            android:textColor="#858786"
+            android:textSize="12.0sp" />
+    </LinearLayout>
+
+     <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/tab_img"
+            android:layout_width="30.0dip"
+            android:layout_height="24.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tab_talk_unselected" />
+
+        <TextView
+            android:id="@+id/tab_text"
+            android:layout_width="wrap_content"
+            android:layout_height="18.0dip"
+            android:gravity="center_vertical"
+            android:text="班级圈"
+            android:textColor="#858786"
+            android:textSize="12.0sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/tab_img"
+            android:layout_width="30.0dip"
+            android:layout_height="24.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tab_my_unselected" />
+
+        <TextView
+            android:id="@+id/tab_text"
+            android:layout_width="wrap_content"
+            android:layout_height="18.0dip"
+            android:gravity="center_vertical"
+            android:text="共育中心"
+            android:textColor="#858786"
+            android:textSize="12.0sp" />
+    </LinearLayout>
+
+</LinearLayout>

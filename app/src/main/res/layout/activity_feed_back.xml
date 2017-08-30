@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_feed_back"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.gongwu.wherecollect.activity.FeedBackActivity">
+
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dip_16"
+              android:layout_marginTop="@dimen/dip_16"
+              android:text="标题"
+              android:textColor="@color/black_26"
+              android:textSize="@dimen/f_15"/>
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_hight"
+        android:layout_marginTop="@dimen/dip_4"
+        android:background="@color/white"
+        android:hint="请填写标题"
+        android:paddingLeft="@dimen/dip_16"
+        android:paddingRight="@dimen/dip_16"
+        android:singleLine="true"
+        android:textColor="@color/black_87"
+        android:textSize="@dimen/f_15">
+    </EditText>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dip_16"
+              android:layout_marginTop="@dimen/dip_16"
+              android:text="反馈详情"
+              android:textColor="@color/black_26"
+              android:textSize="@dimen/f_15"/>
+    <EditText
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dip_4"
+        android:background="@color/white"
+        android:gravity="left"
+        android:hint="请填写反馈详情"
+        android:minHeight="@dimen/dip_120"
+        android:paddingLeft="@dimen/dip_16"
+        android:paddingRight="@dimen/dip_16"
+        android:paddingTop="@dimen/dip_16"
+        android:singleLine="true"
+        android:textColor="@color/black_87"
+        android:textSize="@dimen/f_15">
+    </EditText>
+
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dip_16"
+              android:layout_marginTop="@dimen/dip_16"
+              android:text="联系方式"
+              android:textColor="@color/black_26"
+              android:textSize="@dimen/f_15"/>
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_hight"
+        android:layout_marginTop="@dimen/dip_4"
+        android:background="@color/white"
+        android:hint="请填写您的联系方式"
+        android:paddingLeft="@dimen/dip_16"
+        android:paddingRight="@dimen/dip_16"
+        android:singleLine="true"
+        android:textColor="@color/black_87"
+        android:textSize="@dimen/f_15">
+    </EditText>
+
+</LinearLayout>

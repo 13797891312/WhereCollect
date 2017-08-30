@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#02C7AF</color>
+    <color name="colorPrimaryDark">#02C7AF</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="maincolor">#02C7AF</color>
+    <color name="maincolor_press">#2CB8AE</color>
+    <color name="btn_enable">#DDDDDD</color>
+    <color name="windowsbg">#EDEEF0</color>
+
+
+    <color name="trans">#00000000</color>
+    <color name="head">#f5f5f5</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="red">#f00</color>
+    <color name="red_light">#ED774C</color>
+    <color name="redd">#88ff6666</color>
+    <color name="reds">#ea5465</color>
+    <color name="transparent">#00000000</color>
+    <color name="black_87">#DE000000</color>
+    <color name="black_70">#b3000000</color>
+    <color name="black_54">#8f000000</color>
+    <color name="black_40">#66000000</color>
+    <color name="black_26">#42000000</color>
+    <color name="black_12">#1e000000</color>
+    <color name="black_05">#0c000000</color>
+    <color name="white_76">#b3ffffff</color>
+    <color name="white_30">#8fffffff</color>
+    <color name="white_54">#8fffffff</color>
+    <color name="white_12">#1effffff</color>
+    <color name="holo_red_light">#ffff4444</color>
+</resources>

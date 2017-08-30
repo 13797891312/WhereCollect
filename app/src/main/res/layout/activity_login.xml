@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.gongwu.wherecollect.activity.LoginActivity">
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="@dimen/dip_32"
+               android:src="@drawable/icon_yun"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/dip_32"
+              android:text="收哪儿·云"
+              android:textColor="@color/black_87"
+              android:textSize="@dimen/f_16"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/dip_4"
+              android:text="(免费云端数据同步服务)"
+              android:textColor="@color/black_26"
+              android:textSize="@dimen/f_14"/>
+    <RelativeLayout android:id="@+id/wx_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dip_44"
+                    android:layout_marginLeft="@dimen/dip_32"
+                    android:layout_marginRight="@dimen/dip_32"
+                    android:layout_marginTop="@dimen/dip_24"
+                    android:background="@drawable/select_maincolor_r4_bg">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerInParent="true"
+                  android:drawableLeft="@drawable/icon_wx"
+                  android:drawablePadding="@dimen/dip_4"
+                  android:text="微信登陆"
+                  android:textColor="@color/white"
+                  android:textSize="@dimen/f_16"/>
+    </RelativeLayout>
+
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="@dimen/dip_16"
+                  android:orientation="horizontal">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="点击登录表示已阅读并同意"
+                  android:textColor="@color/black_26"
+                  android:textSize="@dimen/f_12"/>
+        <TextView android:id="@+id/agree"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="《服务条款》"
+                  android:textColor="@color/black_87"
+                  android:textSize="@dimen/f_12"/>
+    </LinearLayout>
+    <View android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"></View>
+
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/dip_24"
+                  android:layout_marginTop="@dimen/dip_40"
+                  android:gravity="center_vertical"
+                  android:orientation="horizontal">
+        <View android:layout_width="@dimen/dip_50"
+              android:layout_height="1px"
+              android:background="@color/black_12"></View>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/dip_8"
+                  android:layout_marginRight="@dimen/dip_8"
+                  android:text="其他方式登录"
+                  android:textColor="@color/black_26"
+                  android:textSize="@dimen/f_12"/>
+        <View android:layout_width="@dimen/dip_50"
+              android:layout_height="1px"
+              android:background="@color/black_12"></View>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="@dimen/dip_16"
+                  android:paddingRight="@dimen/dip_16"
+                  android:layout_marginBottom="@dimen/dip_50"
+                  android:orientation="horizontal">
+        <LinearLayout android:id="@+id/wb_layout"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:gravity="center"
+                      android:orientation="vertical">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:drawablePadding="@dimen/dip_2"
+                      android:drawableTop="@drawable/icon_wb"
+                      android:gravity="center"
+                      android:text="微博"
+                      android:textColor="@color/black_26"
+                      android:textSize="@dimen/f_14"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/qq_layout"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:gravity="center"
+                      android:orientation="vertical">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:drawablePadding="@dimen/dip_2"
+                      android:drawableTop="@drawable/icon_qq"
+                      android:gravity="center"
+                      android:text="QQ"
+                      android:textColor="@color/black_26"
+                      android:textSize="@dimen/f_14"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/msg_layout"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:gravity="center"
+                      android:orientation="vertical">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:drawablePadding="@dimen/dip_2"
+                      android:drawableTop="@drawable/icon_msg"
+                      android:gravity="center"
+                      android:text="邮箱"
+                      android:textColor="@color/black_26"
+                      android:textSize="@dimen/f_14"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
