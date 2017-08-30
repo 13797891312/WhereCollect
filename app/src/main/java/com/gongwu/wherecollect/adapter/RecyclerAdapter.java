@@ -27,7 +27,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Custom
     }
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_recyclerview_editlocation_tab, null);
+        View view = View.inflate(context, R.layout.item_editlocation_tab_recyclerview, null);
         return new CustomViewHolder(view);
     }
 

@@ -9,7 +9,6 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.util.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +40,7 @@ public class EditLocationTabAdapter extends RecyclerView.Adapter<EditLocationTab
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_recyclerview_editlocation_tab, null);
+        View view = View.inflate(context, R.layout.item_editlocation_tab_recyclerview, null);
         return new CustomViewHolder(view);
     }
 

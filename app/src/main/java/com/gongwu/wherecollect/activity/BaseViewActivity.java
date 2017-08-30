@@ -2,12 +2,14 @@ package com.gongwu.wherecollect.activity;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
 
 import com.gongwu.wherecollect.R;
@@ -126,5 +128,13 @@ public class BaseViewActivity extends FragmentActivity {
         } else {
             return mIsDestoryed;// 在onDestroy中设置true
         }
+    }
+
+    // 获取状态栏高度。不能在onCreate回调方法中获取
+    public static int getStateHeight(Context context) {
+        Rect frame = new Rect();
+        ((Activity) context).getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        int statusBarHeight = frame.top;
+        return statusBarHeight;
     }
 }
