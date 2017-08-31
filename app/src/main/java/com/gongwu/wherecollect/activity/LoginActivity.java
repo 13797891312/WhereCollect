@@ -2,6 +2,7 @@ package com.gongwu.wherecollect.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,6 +41,7 @@ public class LoginActivity extends BaseViewActivity {
         ButterKnife.bind(this);
         titleLayout.setBack(true, null);
         titleLayout.setTitle("登录");
+        Log.e("test","123");
     }
 
     @Override
