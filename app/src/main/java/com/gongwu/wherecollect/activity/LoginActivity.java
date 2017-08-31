@@ -41,7 +41,6 @@ public class LoginActivity extends BaseViewActivity {
         ButterKnife.bind(this);
         titleLayout.setBack(true, null);
         titleLayout.setTitle("登录");
-        Log.e("test","123");
     }
 
     @Override
