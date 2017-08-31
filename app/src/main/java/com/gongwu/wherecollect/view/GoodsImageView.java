@@ -3,7 +3,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.gongwu.wherecollect.entity.GoodsBean;
 /**
@@ -13,7 +16,7 @@ import com.gongwu.wherecollect.entity.GoodsBean;
  * @author zhaojin
  * @since JDK 1.7
  */
-public class GoodsImageView extends ImageView implements View.OnLongClickListener {
+public class GoodsImageView extends LinearLayout implements View.OnLongClickListener {
     private GoodsBean bean;
 
     public GoodsImageView(Context context) {
@@ -27,11 +30,13 @@ public class GoodsImageView extends ImageView implements View.OnLongClickListene
 
     public void setGoods(GoodsBean bean) {
         this.bean = bean;
-        setImageResource(bean.getImageResouseId());
+        ImageView imageView = new ImageView(getContext());
+        imageView.setImageResource(bean.getImageResouseId());
         setX(bean.getX());
         setY(bean.getY());
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(bean.getWidth(), bean.getHeight());
         setLayoutParams(layoutParams);
+        addView(imageView);
     }
 
     @Override

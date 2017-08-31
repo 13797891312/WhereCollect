@@ -1,9 +1,11 @@
 package com.gongwu.wherecollect.view;
+
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Function:
  * Date: 2017/8/29
@@ -86,6 +89,7 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
             @Override
             public View getView(ViewGroup container, int position) {
                 EditLocationPage v = new EditLocationPage(context);
+                v.setDragListenerFromView(dragListener);
                 container.addView(v);
                 return v;
             }
@@ -93,6 +97,9 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
         pageView.setAdapter(list3.size(), 0);
     }
 
+    /**
+     * 初始化tab
+     */
     private void initRec1() {
         list1.add("客厅");
         list1.add("厨房");
@@ -115,6 +122,9 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
         });
     }
 
+    /**
+     * 物品栏
+     */
     private void initRec2() {
         for (int i = 0; i < 20; i++) {
             GoodsBean bean = new GoodsBean();
@@ -131,74 +141,170 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
         });
     }
 
+    /**
+     * pageView滑动切换
+     *
+     * @param position 当前切换到哪项
+     */
     @Override
     public void onSelected(int position) {
         recyclerAdapter1.setSelectPostion(position);
         recyclerAdapter1.notifyDataSetChanged();
     }
 
+    /**
+     * 拖拽监听
+     * 总监听，所有拖拽事件逻辑都在这监听里
+     */
     public class MyDragListener implements OnDragListener {
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
-            View v = ((View) dragEvent.getLocalState());
-            GoodsBean bean = (GoodsBean) v.getTag();
-            if (view.getId() == R.id.delete_Layout) {//如果拖拽到了删除里
+
+            //判断view的类型
+            if (view.getId() == R.id.delete_Layout) {
+                //如果拖拽到了删除里
+                deleteLayoutListener(view, dragEvent);
+            } else if (view.getId() == R.id.tagViewPager_edit_location) {
+                //如果拖拽到了viewpager里
+                viewPagerListener(view, dragEvent);
+//                if (view instanceof GoodsImageView) {
+//                    Log.e("test", "重贴了");
+//                }
+            } else if (view.getId() == R.id.rec_goods) {
+                //如果是拖拽到下面的物品栏里
+                return resGoodsListener(view, dragEvent);
+            } else if (view instanceof GoodsImageView) {
+
                 switch (dragEvent.getAction()) {
-                    case DragEvent.ACTION_DROP://在某布局结束
-                        deleteLayout.setVisibility(GONE);
-                        EditLocationPage page = (EditLocationPage) pageView.getPrimaryItem();
-                        bean.setType(0);
-                        page.removeGoods(bean, v);
-                        recyclerAdapter2.addBean(bean);
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        Log.e("test", view + "," + dragEvent.getAction());
                         break;
-                    case DragEvent.ACTION_DRAG_ENTERED://进入某布局
-                        deleteLayout.setVisibility(VISIBLE);
+                    case DragEvent.ACTION_DRAG_LOCATION:
+                        Log.e("test", view + "," + dragEvent.getAction());
                         break;
-                    case DragEvent.ACTION_DRAG_EXITED://离开某布局
-                        deleteLayout.setVisibility(GONE);
-                        break;
-                    case DragEvent.ACTION_DRAG_ENDED://结束
-                        v.setVisibility(VISIBLE);
-                        break;
-                }
-            } else if (view.getId() == R.id.tagViewPager_edit_location) {//如果拖拽到了viewpager里
-                switch (dragEvent.getAction()) {
-                    case DragEvent.ACTION_DRAG_ENTERED://进入某布局
-                        break;
-                    case DragEvent.ACTION_DRAG_LOCATION://位置
-                        break;
-                    case DragEvent.ACTION_DROP://在某布局结束
-                        ((ViewGroup) v.getParent()).removeView(v);
-                        bean.setType(1);//设置有归属
-                        bean.setX(dragEvent.getX() - bean.getWidth() / 2);//有点偏移需要减去自身宽的一半
-                        bean.setY(dragEvent.getY() - BaseViewActivity.getStateHeight(context));
-                        EditLocationPage page = (EditLocationPage) ((TagViewPager) view).getPrimaryItem();
-                        page.addGoods(bean);
-                        recyclerAdapter2.removeBean(bean);
-                        break;
-                    case DragEvent.ACTION_DRAG_EXITED://离开某布局
-                        break;
-                    case DragEvent.ACTION_DRAG_ENDED://结束
-                        v.setVisibility(VISIBLE);
-                        break;
-                }
-            } else if (view.getId() == R.id.rec_goods) {//如果是拖拽到下面的物品栏里
-                if (bean.getType() == 0)
-                    return false;//如果本来就是物品栏的什么都不做
-                switch (dragEvent.getAction()) {
-                    case DragEvent.ACTION_DRAG_ENTERED://进入某布局
-                        if (bean.getType() == 0)
-                            return false;//如果本来就是物品栏的什么都不做
-                        deleteLayout.setVisibility(VISIBLE);
-                        break;
-                    case DragEvent.ACTION_DRAG_ENDED://结束
-                        v.setVisibility(VISIBLE);
-                        if (bean.getType() == 0)
-                            return false;//如果本来就是物品栏的什么都不做
-                        break;
+//                    default:
+//                        return false;
+//                    case DragEvent.ACTION_DRAG_STARTED:
+//                        Log.e("test", "ACTION_DRAG_STARTED");
+//                        break;
+//                    case DragEvent.ACTION_DROP://在某布局结束
+//                        Log.e("test", "ACTION_DROP");
+//                        break;
+//                    case DragEvent.ACTION_DRAG_ENTERED://进入某布局
+//                        Log.e("test", "ACTION_DRAG_ENTERED");
+//                        break;
+//                    case DragEvent.ACTION_DRAG_EXITED://离开某布局
+//                        Log.e("test", "ACTION_DRAG_EXITED");
+//                        break;
+//                    case DragEvent.ACTION_DRAG_ENDED://结束
+//                        Log.e("test", "ACTION_DRAG_ENDED");
+//                        break;
                 }
             }
             return true;
         }
     }
+
+    /**
+     * 拖拽删除布局
+     *
+     * @param view
+     * @param dragEvent
+     */
+    private void deleteLayoutListener(View view, DragEvent dragEvent) {
+        View v = ((View) dragEvent.getLocalState());
+        GoodsBean bean = (GoodsBean) v.getTag();
+        switch (dragEvent.getAction()) {
+            case DragEvent.ACTION_DROP://在某布局结束
+                //隐藏删除布局
+                deleteLayout.setVisibility(GONE);
+                EditLocationPage page = (EditLocationPage) pageView.getPrimaryItem();
+                bean.setType(0);
+                page.removeGoods(bean, v);
+                recyclerAdapter2.addBean(bean);
+                break;
+            case DragEvent.ACTION_DRAG_ENTERED://进入某布局
+                deleteLayout.setVisibility(VISIBLE);
+                break;
+            case DragEvent.ACTION_DRAG_EXITED://离开某布局
+                deleteLayout.setVisibility(GONE);
+                break;
+            case DragEvent.ACTION_DRAG_ENDED://结束
+                v.setVisibility(VISIBLE);
+                break;
+        }
+    }
+
+    /**
+     * 拖拽到viewpager布局
+     *
+     * @param view
+     * @param dragEvent
+     */
+    private void viewPagerListener(View view, DragEvent dragEvent) {
+        View v = ((View) dragEvent.getLocalState());
+        GoodsBean bean = (GoodsBean) v.getTag();
+        EditLocationPage page = (EditLocationPage) ((TagViewPager) view).getPrimaryItem();
+        switch (dragEvent.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                //判断viewpager是否有这个数据，有的话说明是在viewpger内抬起的，就显示删除布局
+                if (page.queryGoods(bean)) {
+                    deleteLayout.setVisibility(View.VISIBLE);
+                } else {
+                    deleteLayout.setVisibility(View.GONE);
+                }
+                break;
+            case DragEvent.ACTION_DRAG_ENTERED://进入某布局
+                break;
+            case DragEvent.ACTION_DRAG_LOCATION://位置
+                break;
+            case DragEvent.ACTION_DROP://在某布局结束
+                ((ViewGroup) v.getParent()).removeView(v);
+                bean.setType(1);//设置有归属
+                bean.setX(dragEvent.getX() - bean.getWidth() / 2);//有点偏移需要减去自身宽的一半
+                bean.setY(dragEvent.getY() - BaseViewActivity.getStateHeight(context));
+                page.addGoods(bean);
+                recyclerAdapter2.removeBean(bean);
+                //落下后删除布局隐藏
+                if (deleteLayout.getVisibility() == View.VISIBLE) {
+                    deleteLayout.setVisibility(View.GONE);
+                }
+                break;
+            case DragEvent.ACTION_DRAG_EXITED://离开某布局
+                break;
+            case DragEvent.ACTION_DRAG_ENDED://结束
+                v.setVisibility(VISIBLE);
+                break;
+        }
+    }
+
+
+    /**
+     * 拖拽物品栏
+     *
+     * @param view
+     * @param dragEvent
+     * @return
+     */
+    private boolean resGoodsListener(View view, DragEvent dragEvent) {
+        View v = ((View) dragEvent.getLocalState());
+        GoodsBean bean = (GoodsBean) v.getTag();
+        //如果是拖拽到下面的物品栏里
+        if (bean.getType() == 0)
+            return false;//如果本来就是物品栏的什么都不做
+        switch (dragEvent.getAction()) {
+            case DragEvent.ACTION_DRAG_ENTERED://进入某布局
+                if (bean.getType() == 0)
+                    return false;//如果本来就是物品栏的什么都不做
+                deleteLayout.setVisibility(VISIBLE);
+                break;
+            case DragEvent.ACTION_DRAG_ENDED://结束
+                v.setVisibility(VISIBLE);
+                if (bean.getType() == 0)
+                    return false;//如果本来就是物品栏的什么都不做
+                break;
+        }
+        return true;
+    }
+
 }
