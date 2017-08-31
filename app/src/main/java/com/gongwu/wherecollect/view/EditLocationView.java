@@ -203,7 +203,7 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
 
     /**
      * 拖拽监听
-     * 总监听，所有拖拽事件逻辑都在这监听里
+     * 总监听，所有拖拽事件逻辑由这里分发到各个子View
      */
     public class MyDragListener implements OnDragListener {
         @Override
