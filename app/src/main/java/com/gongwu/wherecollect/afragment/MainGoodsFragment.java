@@ -5,15 +5,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gongwu.wherecollect.R;
-public class MainFragment1_goodsFragment extends BaseFragment {
+public class MainGoodsFragment extends BaseFragment {
     View view;
 
-    public MainFragment1_goodsFragment() {
+    public MainGoodsFragment() {
         // Required empty public constructor
     }
 
-    public static MainFragment1_goodsFragment newInstance() {
-        MainFragment1_goodsFragment fragment = new MainFragment1_goodsFragment();
+    public static MainGoodsFragment newInstance() {
+        MainGoodsFragment fragment = new MainGoodsFragment();
         Bundle args = new Bundle();
         //        args.putString(ARG_PARAM1, param1);
         //        args.putString(ARG_PARAM2, param2);

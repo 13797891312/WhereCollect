@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:animateLayoutChanges="true"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rec_tab"
         android:layout_width="match_parent"
@@ -12,18 +11,20 @@
         android:paddingLeft="@dimen/dip_8"
         android:paddingRight="@dimen/dip_8"
         android:paddingTop="@dimen/dip_8"></android.support.v7.widget.RecyclerView>
+
     <com.zhaojin.myviews.TagViewPager
         android:id="@+id/tagViewPager_edit_location"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottem_layout"
+        android:layout_below="@+id/rec_tab"
         android:background="@color/white">
     </com.zhaojin.myviews.TagViewPager>
-
-
     <RelativeLayout
+        android:id="@+id/bottem_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="@dimen/dip_150"
                       android:orientation="vertical">
@@ -53,19 +54,20 @@
                 android:paddingTop="@dimen/dip_4">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-        <LinearLayout android:id="@+id/delete_Layout"
-                      android:layout_width="match_parent"
-                      android:layout_height="@dimen/dip_150"
-                      android:background="@color/maincolor"
-                      android:gravity="center"
-                      android:orientation="horizontal"
-                      android:visibility="invisible">
+        <com.gongwu.wherecollect.view.DeleteDragView
+            android:id="@+id/delete_Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_150"
+            android:background="@color/maincolor"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="invisible">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="删 除"
                 android:textColor="@color/white"
                 android:textSize="@dimen/f_15"/>
-        </LinearLayout>
+        </com.gongwu.wherecollect.view.DeleteDragView>
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

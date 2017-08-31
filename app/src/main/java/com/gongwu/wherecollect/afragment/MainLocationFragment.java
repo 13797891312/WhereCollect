@@ -5,15 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gongwu.wherecollect.R;
-public class MainFragment1_locationFragment extends BaseFragment {
+import com.gongwu.wherecollect.view.EditLocationView;
+
+import butterknife.ButterKnife;
+public class MainLocationFragment extends BaseFragment {
+    public static EditLocationView editLocationView;
     View view;
 
-    public MainFragment1_locationFragment() {
+    public MainLocationFragment() {
         // Required empty public constructor
     }
 
-    public static MainFragment1_locationFragment newInstance() {
-        MainFragment1_locationFragment fragment = new MainFragment1_locationFragment();
+    public static MainLocationFragment newInstance() {
+        MainLocationFragment fragment = new MainLocationFragment();
         Bundle args = new Bundle();
         //        args.putString(ARG_PARAM1, param1);
         //        args.putString(ARG_PARAM2, param2);
@@ -35,6 +39,14 @@ public class MainFragment1_locationFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_fragment1_location, container, false);
+        editLocationView = (EditLocationView) view.findViewById(R.id.editLocationView);
+        ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

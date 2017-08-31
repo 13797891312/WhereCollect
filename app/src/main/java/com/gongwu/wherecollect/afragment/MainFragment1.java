@@ -63,8 +63,8 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
     }
 
     private void initFragment() {
-        fragments.add(MainFragment1_goodsFragment.newInstance());
-        fragments.add(MainFragment1_locationFragment.newInstance());
+        fragments.add(MainGoodsFragment.newInstance());
+        fragments.add(MainLocationFragment.newInstance());
         //        fragments.add(new ChooseingExerciseFragment1(resource));
         myFragmentLayout.setScorllToNext(true);
         myFragmentLayout.setScorll(true);

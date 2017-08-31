@@ -1,11 +1,9 @@
 package com.gongwu.wherecollect.view;
-
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,7 @@ import com.gongwu.wherecollect.adapter.EditLocationGoodsAdapter;
 import com.gongwu.wherecollect.adapter.EditLocationTabAdapter;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.entity.GoodsBean;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.ScrollSpeedLinearLayoutManger;
 import com.zhaojin.myviews.TagViewPager;
 
@@ -25,7 +24,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 /**
  * Function:
  * Date: 2017/8/29
@@ -34,6 +32,8 @@ import butterknife.ButterKnife;
  * @since JDK 1.7
  */
 public class EditLocationView extends LinearLayout implements TagViewPager.OnSelectedListoner {
+    public EditLocationTabAdapter recyclerAdapter1;
+    public EditLocationGoodsAdapter recyclerAdapter2;
     Context context;
     @Bind(R.id.rec_tab)
     RecyclerView recTab;
@@ -41,8 +41,6 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
     TagViewPager pageView;
     @Bind(R.id.rec_goods)
     RecyclerView recGoods;
-    EditLocationTabAdapter recyclerAdapter1;
-    EditLocationGoodsAdapter recyclerAdapter2;
     List<String> list1 = new ArrayList<>();//头部
     List<GoodsBean> list2 = new ArrayList<>();//尾部物品
     List<String> list3 = new ArrayList<>();//中间viewpager
@@ -68,7 +66,6 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
         recTab.setHasFixedSize(true);
         recGoods.setHasFixedSize(true);
         deleteLayout.setOnDragListener(dragListener);
-        recGoods.setOnDragListener(dragListener);
         initRec1();
         initRec2();
         initViewPager();
@@ -81,7 +78,6 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
         list3.add("第一页");
         list3.add("第二页");
         list3.add("第三页");
-        pageView.setOnDragListener(dragListener);
         pageView.setOnSelectedListoner(this);
         pageView.init(0, 0);
         pageView.setAutoNext(false, 0);
@@ -89,6 +85,7 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
             @Override
             public View getView(ViewGroup container, int position) {
                 EditLocationPage v = new EditLocationPage(context);
+                v.setOnDragListener(dragListener);
                 v.setDragListenerFromView(dragListener);
                 container.addView(v);
                 return v;
@@ -153,86 +150,12 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
     }
 
     /**
-     * 拖拽监听
-     * 总监听，所有拖拽事件逻辑都在这监听里
-     */
-    public class MyDragListener implements OnDragListener {
-        @Override
-        public boolean onDrag(View view, DragEvent dragEvent) {
-
-            //判断view的类型
-            if (view.getId() == R.id.delete_Layout) {
-                //如果拖拽到了删除里
-                deleteLayoutListener(view, dragEvent);
-            } else if (view.getId() == R.id.tagViewPager_edit_location) {
-                //如果拖拽到了viewpager里
-                viewPagerListener(view, dragEvent);
-//                if (view instanceof GoodsImageView) {
-//                    Log.e("test", "重贴了");
-//                }
-            } else if (view.getId() == R.id.rec_goods) {
-                //如果是拖拽到下面的物品栏里
-                return resGoodsListener(view, dragEvent);
-            } else if (view instanceof GoodsImageView) {
-
-                switch (dragEvent.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        Log.e("test", view + "," + dragEvent.getAction());
-                        break;
-                    case DragEvent.ACTION_DRAG_LOCATION:
-                        Log.e("test", view + "," + dragEvent.getAction());
-                        break;
-//                    default:
-//                        return false;
-//                    case DragEvent.ACTION_DRAG_STARTED:
-//                        Log.e("test", "ACTION_DRAG_STARTED");
-//                        break;
-//                    case DragEvent.ACTION_DROP://在某布局结束
-//                        Log.e("test", "ACTION_DROP");
-//                        break;
-//                    case DragEvent.ACTION_DRAG_ENTERED://进入某布局
-//                        Log.e("test", "ACTION_DRAG_ENTERED");
-//                        break;
-//                    case DragEvent.ACTION_DRAG_EXITED://离开某布局
-//                        Log.e("test", "ACTION_DRAG_EXITED");
-//                        break;
-//                    case DragEvent.ACTION_DRAG_ENDED://结束
-//                        Log.e("test", "ACTION_DRAG_ENDED");
-//                        break;
-                }
-            }
-            return true;
-        }
-    }
-
-    /**
      * 拖拽删除布局
      *
      * @param view
      * @param dragEvent
      */
     private void deleteLayoutListener(View view, DragEvent dragEvent) {
-        View v = ((View) dragEvent.getLocalState());
-        GoodsBean bean = (GoodsBean) v.getTag();
-        switch (dragEvent.getAction()) {
-            case DragEvent.ACTION_DROP://在某布局结束
-                //隐藏删除布局
-                deleteLayout.setVisibility(GONE);
-                EditLocationPage page = (EditLocationPage) pageView.getPrimaryItem();
-                bean.setType(0);
-                page.removeGoods(bean, v);
-                recyclerAdapter2.addBean(bean);
-                break;
-            case DragEvent.ACTION_DRAG_ENTERED://进入某布局
-                deleteLayout.setVisibility(VISIBLE);
-                break;
-            case DragEvent.ACTION_DRAG_EXITED://离开某布局
-                deleteLayout.setVisibility(GONE);
-                break;
-            case DragEvent.ACTION_DRAG_ENDED://结束
-                v.setVisibility(VISIBLE);
-                break;
-        }
     }
 
     /**
@@ -244,7 +167,7 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
     private void viewPagerListener(View view, DragEvent dragEvent) {
         View v = ((View) dragEvent.getLocalState());
         GoodsBean bean = (GoodsBean) v.getTag();
-        EditLocationPage page = (EditLocationPage) ((TagViewPager) view).getPrimaryItem();
+        EditLocationPage page = (EditLocationPage) pageView.getPrimaryItem();
         switch (dragEvent.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
                 //判断viewpager是否有这个数据，有的话说明是在viewpger内抬起的，就显示删除布局
@@ -278,33 +201,15 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
         }
     }
 
-
     /**
-     * 拖拽物品栏
-     *
-     * @param view
-     * @param dragEvent
-     * @return
+     * 拖拽监听
+     * 总监听，所有拖拽事件逻辑都在这监听里
      */
-    private boolean resGoodsListener(View view, DragEvent dragEvent) {
-        View v = ((View) dragEvent.getLocalState());
-        GoodsBean bean = (GoodsBean) v.getTag();
-        //如果是拖拽到下面的物品栏里
-        if (bean.getType() == 0)
-            return false;//如果本来就是物品栏的什么都不做
-        switch (dragEvent.getAction()) {
-            case DragEvent.ACTION_DRAG_ENTERED://进入某布局
-                if (bean.getType() == 0)
-                    return false;//如果本来就是物品栏的什么都不做
-                deleteLayout.setVisibility(VISIBLE);
-                break;
-            case DragEvent.ACTION_DRAG_ENDED://结束
-                v.setVisibility(VISIBLE);
-                if (bean.getType() == 0)
-                    return false;//如果本来就是物品栏的什么都不做
-                break;
+    public class MyDragListener implements OnDragListener {
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            LogUtil.e(view + "----" + dragEvent.getAction());
+            return ((BaseDragView) view).onDrag(view, dragEvent);
         }
-        return true;
     }
-
 }

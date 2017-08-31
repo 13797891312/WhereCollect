@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.view;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -16,7 +17,7 @@ import com.gongwu.wherecollect.entity.GoodsBean;
  * @author zhaojin
  * @since JDK 1.7
  */
-public class GoodsImageView extends LinearLayout implements View.OnLongClickListener {
+public class GoodsImageView extends LinearLayout implements View.OnLongClickListener ,BaseDragView{
     private GoodsBean bean;
 
     public GoodsImageView(Context context) {
@@ -44,6 +45,11 @@ public class GoodsImageView extends LinearLayout implements View.OnLongClickList
         this.setTag(bean);
         startDrag(null, new DragShadowBuilder(this), this, 0);
         setVisibility(INVISIBLE);
+        return true;
+    }
+
+    @Override
+    public boolean onDrag(View view, DragEvent dragEvent) {
         return true;
     }
 }

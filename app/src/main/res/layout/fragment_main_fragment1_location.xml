@@ -4,6 +4,7 @@
              android:layout_height="match_parent"
              tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
     <com.gongwu.wherecollect.view.EditLocationView
+        android:id="@+id/editLocationView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </com.gongwu.wherecollect.view.EditLocationView>

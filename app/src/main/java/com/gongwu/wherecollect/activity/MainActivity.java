@@ -12,6 +12,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.afragment.MainFragment2;
+import com.gongwu.wherecollect.afragment.MainLocationFragment;
 import com.zhaojin.myviews.MyFragmentLayout;
 
 import java.util.ArrayList;
@@ -85,5 +86,6 @@ public class MainActivity extends BaseViewActivity {
     protected void onDestroy() {
         super.onDestroy();
         myFragmentLayout = null;
+        MainLocationFragment.editLocationView = null;
     }
 }
