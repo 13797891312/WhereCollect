@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+//def API_HOST_RELEASE = "\"http://123.57.52.110:9201/\""
+def API_HOST_RELEASE = "\"https://www.shouner.com/\""
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -19,12 +22,14 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        buildConfigField("String", "URL", "${API_HOST_RELEASE}")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled true
             buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
             signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -65,4 +70,11 @@ dependencies {
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_social_shareview.jar')
     compile files('libs/umeng_social_tool.jar')
+    compile files('libs/volley-android-pro.jar')
+    compile files('libs/httpmime-4.1.3.jar')
+    android {
+        useLibrary 'org.apache.http.legacy'
+    }
+    compile files('libs/gson-2.2.2.jar')
+    compile files('libs/eventbus-3.0.0.jar')
 }

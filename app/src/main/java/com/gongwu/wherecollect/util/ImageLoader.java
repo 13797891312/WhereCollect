@@ -52,10 +52,9 @@ public class ImageLoader {
      * @param iv
      * @param url
      * @param errorRes     加载错误后的图片
-     * @param loadingResId 图片加载中的占位符
      */
-    public static void load(final Context context, final ImageView iv, String url, int
-            errorRes, int loadingResId) {
+    public static void loadCircle(final Context context, final ImageView iv, String url, int
+            errorRes) {
         Glide.with(context)
                 .load(url)
                 .asBitmap()

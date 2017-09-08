@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:clipToPadding="true"
+                android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#00000000"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/male"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_40"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/select_changheader_top_btn_bg"
+            android:gravity="center"
+            android:text="男"
+            android:textColor="@color/black_87"
+            android:textScaleX="1.05"
+            android:textSize="@dimen/f_15"/>
+
+        <View
+            android:id="@+id/diver"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/white_54"/>
+
+        <TextView
+            android:id="@+id/camare_video"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_40"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/select_changheader_btn"
+            android:gravity="center"
+            android:text="录 像"
+            android:textColor="@color/black_87"
+            android:textScaleX="1.05"
+            android:textSize="@dimen/f_15"
+            android:visibility="gone"/>
+        <View
+            android:id="@+id/diver"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/white_54"/>
+        <TextView
+            android:id="@+id/female"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_40"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/select_changheader_bottom_btn_bg"
+            android:gravity="center"
+            android:text="女"
+            android:textColor="@color/black_87"
+            android:textScaleX="1.05"
+            android:textSize="@dimen/f_15"/>
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_40"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/select_changheader_btn_bg"
+            android:gravity="center"
+            android:text="取 消"
+            android:textColor="@color/black_54"
+            android:textScaleX="1.05"
+            android:textSize="@dimen/f_15"/>
+    </LinearLayout>
+
+</RelativeLayout>

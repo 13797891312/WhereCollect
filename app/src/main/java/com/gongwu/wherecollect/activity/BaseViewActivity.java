@@ -9,11 +9,15 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.LinearLayout;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.view.TitleLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 /**
@@ -55,6 +59,14 @@ public class BaseViewActivity extends FragmentActivity {
         return screenScale;
     }
 
+    // 获取状态栏高度。不能在onCreate回调方法中获取
+    public static int getStateHeight(Context context) {
+        Rect frame = new Rect();
+        ((Activity) context).getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        int statusBarHeight = frame.top;
+        return statusBarHeight;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -72,6 +84,11 @@ public class BaseViewActivity extends FragmentActivity {
     public void setContentView(int layoutResID) {
         View.inflate(this, layoutResID, contentView);
     }
+
+//   @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onMessageEvent(Object object) {
+//
+//   };
 
     @Override
     protected void onDestroy() {
@@ -128,13 +145,5 @@ public class BaseViewActivity extends FragmentActivity {
         } else {
             return mIsDestoryed;// 在onDestroy中设置true
         }
-    }
-
-    // 获取状态栏高度。不能在onCreate回调方法中获取
-    public static int getStateHeight(Context context) {
-        Rect frame = new Rect();
-        ((Activity) context).getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-        int statusBarHeight = frame.top;
-        return statusBarHeight;
     }
 }

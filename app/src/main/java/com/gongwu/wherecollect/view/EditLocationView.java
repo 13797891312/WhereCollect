@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.gongwu.wherecollect.R;
-import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.adapter.EditLocationGoodsAdapter;
 import com.gongwu.wherecollect.adapter.EditLocationTabAdapter;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
@@ -150,60 +149,8 @@ public class EditLocationView extends LinearLayout implements TagViewPager.OnSel
     }
 
     /**
-     * 拖拽删除布局
-     *
-     * @param view
-     * @param dragEvent
-     */
-    private void deleteLayoutListener(View view, DragEvent dragEvent) {
-    }
-
-    /**
-     * 拖拽到viewpager布局
-     *
-     * @param view
-     * @param dragEvent
-     */
-    private void viewPagerListener(View view, DragEvent dragEvent) {
-        View v = ((View) dragEvent.getLocalState());
-        GoodsBean bean = (GoodsBean) v.getTag();
-        EditLocationPage page = (EditLocationPage) pageView.getPrimaryItem();
-        switch (dragEvent.getAction()) {
-            case DragEvent.ACTION_DRAG_STARTED:
-                //判断viewpager是否有这个数据，有的话说明是在viewpger内抬起的，就显示删除布局
-                if (page.queryGoods(bean)) {
-                    deleteLayout.setVisibility(View.VISIBLE);
-                } else {
-                    deleteLayout.setVisibility(View.GONE);
-                }
-                break;
-            case DragEvent.ACTION_DRAG_ENTERED://进入某布局
-                break;
-            case DragEvent.ACTION_DRAG_LOCATION://位置
-                break;
-            case DragEvent.ACTION_DROP://在某布局结束
-                ((ViewGroup) v.getParent()).removeView(v);
-                bean.setType(1);//设置有归属
-                bean.setX(dragEvent.getX() - bean.getWidth() / 2);//有点偏移需要减去自身宽的一半
-                bean.setY(dragEvent.getY() - BaseViewActivity.getStateHeight(context));
-                page.addGoods(bean);
-                recyclerAdapter2.removeBean(bean);
-                //落下后删除布局隐藏
-                if (deleteLayout.getVisibility() == View.VISIBLE) {
-                    deleteLayout.setVisibility(View.GONE);
-                }
-                break;
-            case DragEvent.ACTION_DRAG_EXITED://离开某布局
-                break;
-            case DragEvent.ACTION_DRAG_ENDED://结束
-                v.setVisibility(VISIBLE);
-                break;
-        }
-    }
-
-    /**
      * 拖拽监听
-     * 总监听，所有拖拽事件逻辑由这里分发到各个子View
+     * 总监听，所有拖拽事件逻辑由这里分发到各个子V
      */
     public class MyDragListener implements OnDragListener {
         @Override

@@ -67,4 +67,15 @@ public class TitleLayout extends LinearLayout {
             canBank = false;
         }
     }
+
+    /**
+     * 右侧文字按钮
+     *
+     * @param listener
+     */
+    public void setTextBtnListener(String text, OnClickListener listener) {
+        textBtn.setOnClickListener(listener);
+        textBtn.setText(text);
+        textBtn.setVisibility(VISIBLE);
+    }
 }

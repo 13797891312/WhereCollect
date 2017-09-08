@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -13,8 +14,16 @@ import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.afragment.MainFragment2;
 import com.gongwu.wherecollect.afragment.MainLocationFragment;
+import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.PermissionUtil;
 import com.zhaojin.myviews.MyFragmentLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +50,26 @@ public class MainActivity extends BaseViewActivity {
         titleLayout.setTitle("主界面");
         titleLayout.setBack(false, null);
         titleLayout.setVisibility(View.GONE);
+        EventBus.getDefault().register(this);
+        checkSDcard();
         initView();
+        if (MyApplication.getUser(this) == null) {
+            //TODO  没有登陆
+            Intent intent=new Intent(this,LoginActivity.class);
+            startActivity(intent);
+        } else {
+            //TODO 有登陆过
+        }
+    }
+
+    /**
+     * 检测是否有SD卡或者储存权限
+     */
+    private void checkSDcard() {
+        File file = new File(MyApplication.CACHEPATH);
+        if (!file.exists()) {
+            new PermissionUtil(this, getResources().getString(R.string.permission_sdcard));
+        }
     }
 
     private void initView() {
@@ -82,9 +110,20 @@ public class MainActivity extends BaseViewActivity {
         idDrawerlayout.openDrawer(Gravity.RIGHT);
     }
 
+    /**
+     * 用户登录会收到消息
+     *
+     * @param userBean
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(UserBean userBean) {
+        ((MainFragment2) fragments.get(1)).refrashUi();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         myFragmentLayout = null;
         MainLocationFragment.editLocationView = null;
     }
