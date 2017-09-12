@@ -44,6 +44,23 @@ public class ImageLoader {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(iv);
     }
+    /**
+     * 普通加载图片,设置错误图片
+     *
+     * @param context
+     * @param iv
+     * @param url
+     * @param errorRes 加载错误后的图片
+     */
+    public static void load(Context context, ImageView iv, String url, int errorRes,int r) {
+        Glide.with(context)
+                .load(url)
+                .dontAnimate()
+                .error(errorRes)
+                .transform(new GlideRoundTransform(context,r))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(iv);
+    }
 
     /**
      * 加载圆形图标,设置错误图片

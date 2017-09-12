@@ -5,15 +5,18 @@
              tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="@dimen/title_hight"
-                  android:background="@color/maincolor"
+                  android:background="@color/colorPrimary"
+                  android:divider="@drawable/shape_divider_line"
+                  android:dividerPadding="1px"
                   android:gravity="center_vertical"
-                  android:orientation="horizontal">
+                  android:orientation="vertical"
+                  android:showDividers="end">
         <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
+                  android:layout_height="match_parent"
                   android:gravity="center"
-                  android:text="我"
-                  android:textColor="@color/white"
-                  android:textSize="@dimen/f_18"/>
+                  android:text="我的"
+                  android:textColor="@color/black_txt"
+                  android:textSize="@dimen/f_17"/>
     </LinearLayout>
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -30,28 +33,29 @@
                 style="@style/person_details_layout_style">
                 <ImageView android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
-                           android:layout_marginLeft="@dimen/dip_8"
+                           android:layout_marginLeft="@dimen/dip_4"
                            android:layout_marginRight="@dimen/dip_12"
-                           android:src="@drawable/icon_2_select_new"/>
+                           android:src="@drawable/icon_my_tx"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dip_50"
+                    android:layout_height="@dimen/dip_60"
                     android:layout_weight="1">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="头像"
-                        android:textColor="@color/black_87"
+                        android:textColor="@color/black_54"
                         android:textSize="@dimen/f_15"/>
 
                     <ImageView
                         android:id="@+id/person_iv"
-                        android:layout_width="40dip"
-                        android:layout_height="40dip"
+                        android:layout_width="44dip"
+                        android:layout_height="44dip"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dip_12"
                         android:src="@drawable/ic_launcher"/>
                     <View android:layout_width="match_parent"
                           android:layout_height="2px"
@@ -65,20 +69,20 @@
                 style="@style/person_details_layout_style">
                 <ImageView android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
-                           android:layout_marginLeft="@dimen/dip_8"
+                           android:layout_marginLeft="@dimen/dip_4"
                            android:layout_marginRight="@dimen/dip_12"
-                           android:src="@drawable/icon_2_select_new"/>
+                           android:src="@drawable/icon_my_nc"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dip_44"
+                    android:layout_height="@dimen/dip_45"
                     android:layout_weight="1">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="昵称"
-                        android:textColor="@color/black_87"
+                        android:textColor="@color/black_54"
                         android:textSize="@dimen/f_15"/>
                     <TextView
                         android:id="@+id/tv_nick"
@@ -86,6 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dip_16"
                         android:text="赵进"
                         android:textColor="@color/black_87"
                         android:textSize="@dimen/f_15"/>
@@ -101,20 +106,20 @@
                 style="@style/person_details_layout_style">
                 <ImageView android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
-                           android:layout_marginLeft="@dimen/dip_8"
+                           android:layout_marginLeft="@dimen/dip_4"
                            android:layout_marginRight="@dimen/dip_12"
-                           android:src="@drawable/icon_2_select_new"/>
+                           android:src="@drawable/icon_my_xb"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dip_44"
+                    android:layout_height="@dimen/dip_45"
                     android:layout_weight="1">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="性别"
-                        android:textColor="@color/black_87"
+                        android:textColor="@color/black_54"
                         android:textSize="@dimen/f_15"/>
                     <TextView
                         android:id="@+id/tv_sex"
@@ -122,6 +127,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dip_16"
                         android:text="男"
                         android:textColor="@color/black_87"
                         android:textSize="@dimen/f_15"/>
@@ -137,20 +143,20 @@
                 style="@style/person_details_layout_style">
                 <ImageView android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
-                           android:layout_marginLeft="@dimen/dip_8"
+                           android:layout_marginLeft="@dimen/dip_4"
                            android:layout_marginRight="@dimen/dip_12"
-                           android:src="@drawable/icon_2_select_new"/>
+                           android:src="@drawable/icon_my_sr"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dip_44"
+                    android:layout_height="@dimen/dip_45"
                     android:layout_weight="1">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="生日"
-                        android:textColor="@color/black_87"
+                        android:textColor="@color/black_54"
                         android:textSize="@dimen/f_15"/>
                     <TextView
                         android:id="@+id/tv_birthday"
@@ -158,6 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dip_16"
                         android:text="1987-12-18"
                         android:textColor="@color/black_87"
                         android:textSize="@dimen/f_15"/>
@@ -166,15 +173,15 @@
             </LinearLayout>
             <TextView android:id="@+id/tv_detail"
                       android:layout_width="match_parent"
-                      android:layout_height="@dimen/dip_44"
+                      android:layout_height="@dimen/dip_45"
                       android:layout_marginTop="@dimen/dip_16"
                       android:background="@drawable/select_white_bg"
                       android:drawableRight="@drawable/icon_next_black"
                       android:gravity="center_vertical"
-                      android:paddingLeft="@dimen/dip_20"
+                      android:paddingLeft="@dimen/dip_16"
                       android:paddingRight="@dimen/dip_16"
                       android:text="账号信息"
-                      android:textColor="@color/black_87"
+                      android:textColor="@color/black_54"
                       android:textSize="@dimen/f_15"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
@@ -182,14 +189,14 @@
                           android:orientation="vertical">
                 <TextView android:id="@+id/tv_feedBack"
                           android:layout_width="match_parent"
-                          android:layout_height="@dimen/dip_44"
+                          android:layout_height="@dimen/dip_45"
                           android:background="@drawable/select_white_bg"
                           android:drawableRight="@drawable/icon_next_black"
                           android:gravity="center_vertical"
-                          android:paddingLeft="@dimen/dip_20"
+                          android:paddingLeft="@dimen/dip_16"
                           android:paddingRight="@dimen/dip_16"
                           android:text="意见反馈"
-                          android:textColor="@color/black_87"
+                          android:textColor="@color/black_54"
                           android:textSize="@dimen/f_15"/>
                 <View android:layout_width="match_parent"
                       android:layout_height="2px"
@@ -197,34 +204,25 @@
                       android:background="@color/black_12"></View>
                 <TextView android:id="@+id/tv_help"
                           android:layout_width="match_parent"
-                          android:layout_height="@dimen/dip_44"
+                          android:layout_height="@dimen/dip_45"
                           android:background="@drawable/select_white_bg"
                           android:drawableRight="@drawable/icon_next_black"
                           android:gravity="center_vertical"
-                          android:paddingLeft="@dimen/dip_20"
+                          android:paddingLeft="@dimen/dip_16"
                           android:paddingRight="@dimen/dip_16"
                           android:text="帮助与关注"
-                          android:textColor="@color/black_87"
+                          android:textColor="@color/black_54"
                           android:textSize="@dimen/f_15"/>
             </LinearLayout>
             <TextView android:id="@+id/tv_loginOut"
                       android:layout_width="match_parent"
-                      android:layout_height="@dimen/dip_44"
-                      android:layout_marginTop="@dimen/dip_16"
+                      android:layout_height="@dimen/dip_45"
+                      android:layout_marginTop="30dp"
                       android:background="@drawable/select_white_bg"
                       android:gravity="center"
                       android:text="退出登录"
                       android:textColor="@color/holo_red_light"
-                      android:textSize="@dimen/f_15"/>
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_gravity="center_horizontal"
-                      android:layout_marginTop="@dimen/dip_16"
-                      android:text="去哪儿V2.0.0"
-                      android:textColor="@color/black_26"
-                      android:textSize="@dimen/f_12"/>
-
+                      android:textSize="@dimen/f_17"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

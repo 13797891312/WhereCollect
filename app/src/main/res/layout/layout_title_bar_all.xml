@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/title_hight"
-                android:background="@color/maincolor"
+                android:background="@color/colorPrimary"
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/title_hight"
                 android:orientation="horizontal">
@@ -12,16 +12,16 @@
               android:layout_centerInParent="true"
               android:gravity="center_vertical"
               android:text="标题"
-              android:textColor="@color/white"
-              android:textSize="@dimen/f_16"/>
+              android:textColor="@color/black_txt"
+              android:textSize="@dimen/f_17"/>
     <ImageButton android:id="@+id/back_btn"
                  android:layout_width="@dimen/title_hight"
                  android:layout_height="@dimen/title_hight"
                  android:layout_alignParentLeft="true"
                  android:layout_alignParentStart="true"
                  android:layout_alignParentTop="true"
-                 android:background="@drawable/select_maincolor_bg" android:paddingRight="@dimen/dip_4"
-                 android:src="@drawable/icon_back_white" android:visibility="gone"/>
+                 android:background="@drawable/select_white_bg" android:paddingRight="@dimen/dip_4"
+                 android:src="@drawable/back_icon" android:visibility="gone"/>
     <View android:id="@+id/line_view"
           android:layout_width="1px"
           android:layout_height="match_parent"
@@ -31,10 +31,10 @@
               android:layout_width="@dimen/title_hight"
               android:layout_height="match_parent"
               android:layout_alignParentRight="true"
-              android:background="@drawable/select_maincolor_bg"
+              android:background="@drawable/select_white_bg"
               android:gravity="center"
               android:text="提交"
-              android:textColor="@color/white"
-              android:textSize="@dimen/f_16"
+              android:textColor="@color/black_txt"
+              android:textSize="@dimen/f_17"
               android:visibility="gone"/>
 </RelativeLayout>

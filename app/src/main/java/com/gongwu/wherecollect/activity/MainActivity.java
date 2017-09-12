@@ -7,7 +7,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.afragment.BaseFragment;
@@ -18,6 +17,7 @@ import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.util.PermissionUtil;
 import com.zhaojin.myviews.MyFragmentLayout;
+import com.zhaojin.myviews.MyFragmentLayout1;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,14 +32,14 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseViewActivity {
     public List<Fragment> fragments = new ArrayList();
     @Bind(R.id.myFragmentLayout)
-    MyFragmentLayout myFragmentLayout;
+    MyFragmentLayout1 myFragmentLayout;
     @Bind(R.id.activity_main)
     RelativeLayout activityMain;
     @Bind(R.id.id_drawerlayout)
     DrawerLayout idDrawerlayout;
     private int tabImages[][] = {
-            {R.drawable.icon_1_select_new, R.drawable.icon_1_unselect_new},
-            {R.drawable.icon_2_select_new, R.drawable.icon_2_unselect_new}};
+            {R.drawable.icon_tab1_active, R.drawable.icon_tab1_normal},
+            {R.drawable.icon_tab2_active, R.drawable.icon_tab2_normal}};
     private String title[] = {"查看", "我的"};
 
     @Override
@@ -55,7 +55,7 @@ public class MainActivity extends BaseViewActivity {
         initView();
         if (MyApplication.getUser(this) == null) {
             //TODO  没有登陆
-            Intent intent=new Intent(this,LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         } else {
             //TODO 有登陆过
@@ -73,26 +73,20 @@ public class MainActivity extends BaseViewActivity {
     }
 
     private void initView() {
-        final int mainColor = getResources().getColor(R.color.maincolor);
-        final int black26Color = getResources().getColor(R.color.black_26);
         fragments.add(MainFragment1.newInstance());
         fragments.add(MainFragment2.newInstance());
-        myFragmentLayout = (MyFragmentLayout) this.findViewById(R.id.myFragmentLayout);
+        myFragmentLayout = (MyFragmentLayout1) this.findViewById(R.id.myFragmentLayout);
         myFragmentLayout.setScorllToNext(true);
         myFragmentLayout.setScorll(true);
         myFragmentLayout.setWhereTab(0);
-        myFragmentLayout.setOnChangeFragmentListener(new MyFragmentLayout.ChangeFragmentListener() {
+        myFragmentLayout.setOnChangeFragmentListener(new MyFragmentLayout1.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int positon,
                                View lastTabView, View currentTabView) {
                 // TODO Auto-generated method stub
                 titleLayout.setTitle(title[positon]);
-                ((TextView) lastTabView.findViewById(R.id.tab_text))
-                        .setTextColor(black26Color);
                 ((ImageView) lastTabView.findViewById(R.id.tab_img))
                         .setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(R.id.tab_text))
-                        .setTextColor(mainColor);
                 ((ImageView) currentTabView.findViewById(R.id.tab_img))
                         .setImageResource(tabImages[positon][0]);
                 ((BaseFragment) fragments.get(positon)).onShow();

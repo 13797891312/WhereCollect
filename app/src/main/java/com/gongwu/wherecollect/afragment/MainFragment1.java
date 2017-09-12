@@ -69,7 +69,7 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
         myFragmentLayout.setScorllToNext(true);
         myFragmentLayout.setScorll(true);
         myFragmentLayout.setWhereTab(1);
-        myFragmentLayout.setTabHeight(8, getResources().getColor(R.color.white), true, 12);
+        myFragmentLayout.setTabHeight(10, getResources().getColor(R.color.maincolor), true, 0);
         myFragmentLayout.setOnChangeFragmentListener(new MyFragmentLayout_line.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int positon,

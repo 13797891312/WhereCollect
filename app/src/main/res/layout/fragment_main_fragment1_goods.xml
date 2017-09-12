@@ -3,8 +3,18 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="物品"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/goods_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingLeft="9dp">
+    </android.support.v7.widget.RecyclerView>
+    <com.gongwu.wherecollect.view.ErrorView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </com.gongwu.wherecollect.view.ErrorView>
 
 </FrameLayout>

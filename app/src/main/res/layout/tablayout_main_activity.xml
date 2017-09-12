@@ -2,28 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="@dimen/dip_54"
+              android:layout_alignParentBottom="true"
               android:background="@drawable/shape_main_tab"
               android:gravity="center_vertical"
               android:minHeight="@dimen/dip_54"
-              android:orientation="horizontal"
-              android:paddingTop="1dp">
+              android:orientation="horizontal">
 
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/select_tab_bg"
+        android:background="@color/white_76"
         android:gravity="center"
         android:orientation="vertical"
+        android:paddingRight="@dimen/dip_16"
         android:paddingTop="2dp">
 
         <ImageView
             android:id="@+id/tab_img"
-            android:layout_width="30.0dip"
-            android:layout_height="24.0dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_2_select_new"/>
+            android:src="@drawable/icon_tab1_active"/>
 
         <TextView
             android:id="@+id/tab_text"
@@ -31,16 +32,17 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="查看"
-            android:textColor="@color/maincolor"
-            android:textSize="@dimen/f_12"/>
+            android:textColor="@color/black_txt"
+            android:textSize="@dimen/f_13"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/select_tab_bg"
+        android:background="@color/white_76"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:paddingLeft="@dimen/dip_16"
         android:paddingTop="2dp">
 
         <RelativeLayout
@@ -56,11 +58,11 @@
 
                 <ImageView
                     android:id="@+id/tab_img"
-                    android:layout_width="30.0dip"
-                    android:layout_height="24.0dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_1_unselect_new"/>
+                    android:src="@drawable/icon_tab2_normal"/>
 
                 <TextView
                     android:id="@+id/tab_text"
@@ -68,8 +70,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="我的"
-                    android:textColor="@color/black_26"
-                    android:textSize="@dimen/f_12"/>
+                    android:textColor="@color/black_txt"
+                    android:textSize="@dimen/f_13"/>
             </LinearLayout>
 
             <!--<TextView-->

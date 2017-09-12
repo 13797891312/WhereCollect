@@ -14,6 +14,33 @@ public class GoodsBean {
     private int height = 100;
     private int imageResouseId = R.drawable.icon_wb;
     private int type = 0;//0为未归属，1未有归属
+    private String name;
+    private String loction;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getLoction() {
+        return loction;
+    }
+
+    public void setLoction(String loction) {
+        this.loction = loction;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getType() {
         return type;

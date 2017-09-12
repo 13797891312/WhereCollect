@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.afragment.MainLocationFragment;
 import com.gongwu.wherecollect.entity.GoodsBean;
@@ -45,7 +44,6 @@ public class EditLocationPage extends RelativeLayout implements BaseDragView {
             iv.setOnDragListener(listener);
         }
         iv.setGoods(bean);
-        iv.setBackgroundColor(getResources().getColor(R.color.black));
         addView(iv);
     }
 
@@ -69,7 +67,7 @@ public class EditLocationPage extends RelativeLayout implements BaseDragView {
     public boolean onDrag(View view, DragEvent dragEvent) {
         View v = ((View) dragEvent.getLocalState());
         GoodsBean bean = (GoodsBean) v.getTag();
-        EditLocationPage page = (EditLocationPage)   MainLocationFragment.editLocationView.pageView.getPrimaryItem();
+        EditLocationPage page = (EditLocationPage) MainLocationFragment.editLocationView.pageView.getPrimaryItem();
         switch (dragEvent.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
                 //判断viewpager是否有这个数据，有的话说明是在viewpger内抬起的，就显示删除布局

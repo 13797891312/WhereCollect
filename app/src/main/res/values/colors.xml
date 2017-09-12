@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#02C7AF</color>
-    <color name="colorPrimaryDark">#02C7AF</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="maincolor">#02C7AF</color>
+    <color name="maincolor">#25B65A</color>
     <color name="maincolor_press">#2CB8AE</color>
     <color name="btn_enable">#DDDDDD</color>
-    <color name="windowsbg">#EDEEF0</color>
+    <color name="windowsbg">#f3f1f7</color>
+    <color name="black_txt">#343939</color>
 
 
     <color name="trans">#00000000</color>

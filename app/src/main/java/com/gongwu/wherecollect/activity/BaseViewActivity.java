@@ -71,6 +71,9 @@ public class BaseViewActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+          getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
         contentView = (LinearLayout) View.inflate(this, R.layout.activity_base_layout, null);
         titleLayout = (TitleLayout) contentView.findViewById(R.id.title_layout);
         super.setContentView(contentView);

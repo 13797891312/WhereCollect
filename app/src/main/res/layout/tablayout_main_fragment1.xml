@@ -3,7 +3,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" android:background="@color/maincolor">
+    android:layout_height="wrap_content" android:background="@color/colorPrimary">
     <FrameLayout
         android:id="@+id/root"
         android:layout_width="120dp"
@@ -33,8 +33,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="物品"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/f_14"/>
+                    android:textColor="@color/black_txt"
+                    android:textSize="@dimen/f_17"/>
             </LinearLayout>
 
             <LinearLayout
@@ -52,17 +52,32 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="位置"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/f_14"/>
+                    android:textColor="@color/black_txt"
+                    android:textSize="@dimen/f_17"/>
             </LinearLayout>
         </LinearLayout>
 
     </FrameLayout>
     <ImageButton
-        android:id="@+id/serch_btn"
-        android:layout_width="@dimen/dip_40"
-        android:layout_height="@dimen/dip_44"
+        android:id="@+id/fiter_btn"
+        android:layout_width="@dimen/title_hight"
+        android:layout_height="@dimen/title_hight"
         android:layout_alignParentRight="true"
-        android:background="@drawable/select_maincolor_bg"
-        android:src="@drawable/icon_serch"/>
+        android:background="@drawable/select_white_bg"
+        android:paddingTop="2dp"
+        android:src="@drawable/icon_fitler"/>
+    <ImageButton
+        android:id="@+id/serch_btn"
+        android:layout_width="@dimen/title_hight"
+        android:layout_height="@dimen/title_hight"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="@dimen/dip_2"
+        android:background="@drawable/select_white_bg"
+        android:paddingTop="2dp"
+        android:src="@drawable/icon_search"/>
+    <View android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:layout_alignBottom="@id/serch_btn"
+          android:background="@drawable/shape_divider_line"
+    ></View>
 </RelativeLayout>
