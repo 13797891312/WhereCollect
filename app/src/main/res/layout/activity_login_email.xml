@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
                 android:hint="密码(密码长度为6-16位)"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:maxLength="16"
                 android:padding="8dp"

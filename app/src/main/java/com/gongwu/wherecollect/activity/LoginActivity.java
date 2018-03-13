@@ -15,6 +15,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
@@ -47,14 +48,29 @@ public class LoginActivity extends BaseViewActivity {
     LinearLayout qqLayout;
     @Bind(R.id.msg_layout)
     LinearLayout msgLayout;
+    @Bind(R.id.other_layout)
+    LinearLayout otherLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        titleLayout.setBack(true, null);
+        titleLayout.setBack(false, null);
         titleLayout.setTitle("登录");
+        titleLayout.textBtnLeft.setText("试用一下");
+        titleLayout.textBtnLeft.setVisibility(View.VISIBLE);
+        titleLayout.textBtnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MyApplication.getUser(context) == null) {
+                    loginTest();
+                } else {
+                    finish();
+                }
+            }
+        });
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -65,17 +81,16 @@ public class LoginActivity extends BaseViewActivity {
 
     public void otherLogin(SHARE_MEDIA sm) {
         UMShareAPI.get(this).getPlatformInfo(this, sm, listener);
-        Config.DEBUG = BuildConfig.LOGSHOW;
     }
 
-    @OnClick({R.id.wx_layout, R.id.agree, R.id.wb_layout, R.id.qq_layout, R.id.msg_layout})
+    @OnClick({R.id.wx_layout, R.id.agree, R.id.wb_layout, R.id.qq_layout, R.id.msg_layout, R.id.other_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.wx_layout:
                 otherLogin(SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.agree:
-                ToastUtil.show(this, "服务条款", Toast.LENGTH_SHORT);
+                WebActivity.start(this, "收哪儿服务条款", "http://www.shouner.com/privacy");
                 break;
             case R.id.wb_layout:
                 otherLogin(SHARE_MEDIA.SINA);
@@ -87,11 +102,14 @@ public class LoginActivity extends BaseViewActivity {
                 Intent intent = new Intent(this, LoginEmailActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.other_btn:
+                otherLayout.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(UserBean userBean) {
+    public void onMessageEvent(EventBusMsg.ChangeUser msg) {
         finish();
     }
 
@@ -100,7 +118,80 @@ public class LoginActivity extends BaseViewActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-     class UmAuthListener implements UMAuthListener {
+
+    public void login(String type, Map<String, String> infoMap) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("avatar", infoMap.get("iconurl"));
+        map.put("gender", infoMap.get("gender"));
+        map.put("loginway", type);
+        map.put("nickname", infoMap.get("name"));
+        map.put("openid", infoMap.get("uid"));
+        map.put("password", infoMap.get("uid"));
+        map.put("uid", infoMap.get("uid"));
+        map.put("unionid", infoMap.get("uid"));
+        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                logoutTest(MyApplication.getUser(context));
+                SaveDate.getInstence(LoginActivity.this).setUser(r.getResult());
+                UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                MyApplication.setUser(user);
+                EventBus.getDefault().post(user);
+                EventBus.getDefault().post(new EventBusMsg.ChangeUser());
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+        HttpClient.login(this, map, listenner);
+    }
+
+    /**
+     * 注册测试账号
+     */
+    private void loginTest() {
+        Map<String, String> map = new TreeMap<>();
+        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "初始化...")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                SaveDate.getInstence(context).setUser(r.getResult());
+                UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                MyApplication.setUser(user);
+                EventBus.getDefault().post(user);
+                EventBus.getDefault().post(new EventBusMsg.ChangeUser());
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
+                ((LoginActivity) context).finish();
+            }
+        };
+        HttpClient.registerTest(context, map, listenner);
+    }
+
+    /**
+     * 注销测试账号
+     */
+    private void logoutTest(UserBean testUser) {
+        if (testUser == null) {
+            return;
+        }
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", testUser.getId());
+        PostListenner listenner = new PostListenner(this) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+            }
+        };
+        HttpClient.logoutTest(this, map, listenner);
+    }
+
+    @Override
+    public void onBackPressed() {
+    }
+
+    class UmAuthListener implements UMAuthListener {
         Context context;
 
         public UmAuthListener(Context context) {
@@ -114,7 +205,17 @@ public class LoginActivity extends BaseViewActivity {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             LogUtil.e(map.toString());
-            login("qq",map);
+            switch (share_media) {
+                case QQ:
+                    login("qq", map);
+                    break;
+                case WEIXIN:
+                    login("wechat", map);
+                    break;
+                case SINA:
+                    login("sina", map);
+                    break;
+            }
         }
 
         @Override
@@ -125,31 +226,5 @@ public class LoginActivity extends BaseViewActivity {
         @Override
         public void onCancel(SHARE_MEDIA share_media, int i) {
         }
-    }
-
-    public void login(String type,Map<String,String> infoMap){
-        Map<String, String> map = new TreeMap<>();
-        map.put("avatar", infoMap.get("iconurl"));
-        map.put("gender", infoMap.get("gender"));
-        map.put("loginway", type);
-        map.put("nickname", infoMap.get("name"));
-        map.put("openid", infoMap.get("uid"));
-        map.put("password", infoMap.get("uid"));
-        map.put("uid", infoMap.get("uid"));
-        map.put("unionid", infoMap.get("uid"));
-        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在登陆")) {
-            @Override
-            protected void code2000(final ResponseResult r) {
-                super.code2000(r);
-                SaveDate.getInstence(LoginActivity.this).setUser(r.getResult());
-                UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
-                MyApplication.setUser(user);
-                EventBus.getDefault().post(user);
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        };
-        HttpClient.login(this, map, listenner);
     }
 }

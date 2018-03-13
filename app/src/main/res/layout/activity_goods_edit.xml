@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/goods_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-100dp"
+        android:minHeight="400dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/test"/>
+    <com.handmark.pulltorefresh.library.PullToScrollView
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_goods_add"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollbars="none"
+        tools:context="com.gongwu.wherecollect.object.ObjectsAddActivity">
+        <requestFocus/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <View android:id="@+id/image_click"
+                  android:layout_width="match_parent"
+                  android:layout_height="200dp"></View>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
+                <TextView android:id="@+id/time_tv"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center_horizontal"
+                          android:layout_marginTop="16dp"
+                          android:text="创建于：2017/09/10 12：30"
+                          android:textColor="#999999"
+                          android:textSize="11sp"/>
+                <EditText android:id="@+id/name_tv"
+                          android:layout_width="match_parent"
+                          android:layout_height="45dp"
+                          android:layout_marginLeft="16dp"
+                          android:singleLine="true"
+                          android:imeOptions="actionDone"
+                          android:layout_marginRight="16dp"
+                          android:layout_marginTop="16dp"
+                          android:background="@drawable/select_edit_bg"
+                          android:gravity="center_vertical"
+                          android:hint="未定义"
+                          android:paddingLeft="16dp"
+                          android:paddingRight="16dp"
+                          android:text="一个不怎么使用的杯子"
+                          android:textColor="@color/black_txt"
+                          android:textColorHint="#83868d"
+                          android:textSize="15sp"/>
+                <com.gongwu.wherecollect.view.ObjectInfoEditView
+                    android:id="@+id/goodsInfo_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </com.gongwu.wherecollect.view.ObjectInfoEditView>
+
+                <Button android:id="@+id/commit_btn"
+                        android:layout_width="240dp"
+                        android:layout_height="@dimen/dip_40"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dip_24"
+                        android:background="@drawable/select_maincolor_r12px_bg"
+                        android:text="确认更改"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </com.handmark.pulltorefresh.library.PullToScrollView>
+</RelativeLayout>

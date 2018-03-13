@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:hint="邮箱"
+            android:singleLine="true"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:padding="8dp"

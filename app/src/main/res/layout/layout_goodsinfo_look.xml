@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    <LinearLayout android:id="@+id/star_layout"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="24dp"
+                  android:gravity="center_vertical"
+                  android:orientation="horizontal">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="星级 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <RatingBar android:id="@+id/rating_star"
+                   style="@style/RadingStyle"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="8dp"
+                   android:isIndicator="true"
+                   android:minHeight="16dp"
+                   android:stepSize="1"/>
+    </LinearLayout>
+    <RelativeLayout android:id="@+id/fenlei_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+        <TextView android:id="@+id/fenlei_textview"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="物品分类 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <com.gongwu.wherecollect.view.FlowViewGroup
+            android:id="@+id/fenlei_flow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dip_16"
+            android:layout_toRightOf="@+id/fenlei_textview">
+        </com.gongwu.wherecollect.view.FlowViewGroup>
+    </RelativeLayout>
+    <LinearLayout android:id="@+id/location_layout"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:orientation="horizontal"
+                  android:paddingBottom="8dp"
+                  android:paddingTop="8dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="位置 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <com.gongwu.wherecollect.view.FlowViewGroup
+            android:id="@+id/location_flow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.gongwu.wherecollect.view.FlowViewGroup>
+        <ImageView android:id="@+id/location_btn"
+                   android:layout_width="@dimen/dip_40"
+                   android:layout_height="match_parent"
+                   android:layout_marginRight="@dimen/dip_8"
+                   android:scaleType="center"
+                   android:src="@drawable/icon_location"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/jiage_layout"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:orientation="horizontal"
+                  android:paddingBottom="8dp"
+                  android:paddingRight="@dimen/dip_16"
+                  android:paddingTop="8dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="价格 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <EditText
+            android:id="@+id/jiage_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:background="@color/trans"
+            android:enabled="false"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:textColor="@color/black_txt"
+            android:textColorHint="#83868d"
+            android:textSize="15sp"/>
+    </LinearLayout>
+    <RelativeLayout android:id="@+id/yanse_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp"
+                    android:paddingRight="@dimen/dip_16"
+                    android:paddingTop="8dp">
+        <TextView android:id="@+id/yanse_textview"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="颜色 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <com.gongwu.wherecollect.view.FlowViewGroup
+            android:id="@+id/yanse_flow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/yanse_textview">
+        </com.gongwu.wherecollect.view.FlowViewGroup>
+    </RelativeLayout>
+    <LinearLayout android:id="@+id/jijie_layout"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:orientation="horizontal"
+                  android:paddingBottom="8dp"
+                  android:paddingTop="8dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="季节 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <com.gongwu.wherecollect.view.FlowViewGroup
+            android:id="@+id/jijie_flow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dip_16"
+            android:layout_weight="1">
+        </com.gongwu.wherecollect.view.FlowViewGroup>
+
+    </LinearLayout>
+    <RelativeLayout android:id="@+id/qudao_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+        <TextView android:id="@+id/qudao_textview"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="购货渠道 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <com.gongwu.wherecollect.view.FlowViewGroup
+            android:id="@+id/qudao_flow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dip_16"
+            android:layout_toRightOf="@id/qudao_textview">
+        </com.gongwu.wherecollect.view.FlowViewGroup>
+    </RelativeLayout>
+    <RelativeLayout android:id="@+id/qita_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+        <TextView android:id="@+id/qita_textview"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="16dp"
+                  android:text="其他 :"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <TextView android:id="@+id/qita_tv"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/dip_8"
+                  android:layout_marginRight="@dimen/dip_16"
+                  android:layout_toRightOf="@id/qita_textview"
+                  android:textColor="@color/black_26"
+                  android:textSize="15sp"/>
+    </RelativeLayout>
+</LinearLayout>

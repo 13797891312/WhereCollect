@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <LinearLayout android:layout_width="40dp"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+        <TextView android:id="@+id/close_tv"
+                  android:layout_width="40dp"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/shape_furniture_textview"
+                  android:gravity="center"
+                  android:paddingBottom="@dimen/dip_8"
+                  android:paddingLeft="8dp"
+                  android:paddingRight="8dp"
+                  android:paddingTop="@dimen/dip_8"
+                  android:text="编辑结构"
+                  android:textColor="@color/white"
+                  android:textSize="@dimen/f_15"/>
+        <View android:id="@+id/dissView"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"></View>
+    </LinearLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/bgcolor2">
+        <com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout
+            android:id="@+id/tablelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="2.5dp"
+            android:layout_marginRight="2.5dp"
+            android:layout_marginTop="@dimen/dip_16"></com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout>
+    </RelativeLayout>
+</LinearLayout>

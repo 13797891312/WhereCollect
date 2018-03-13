@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.io.File;
@@ -27,7 +28,6 @@ import javax.microedition.khronos.egl.EGLSurface;
  * @since JDK 1.7
  */
 public class ImageLoader {
-
     /**
      * 普通加载图片,设置错误图片
      *
@@ -39,11 +39,43 @@ public class ImageLoader {
     public static void load(Context context, ImageView iv, String url, int errorRes) {
         Glide.with(context)
                 .load(url)
-                .dontAnimate()
                 .error(errorRes)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(iv);
     }
+    /**
+     * 普通加载图片,不设置错误图片
+     *
+     * @param context
+     * @param iv
+     * @param url
+     */
+    public static void load(Context context, ImageView iv, String url) {
+        Glide.with(context)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(iv);
+    }
+
+    /**
+     * 普通加载图片,设置错误图片
+     *
+     * @param context
+     * @param iv
+     * @param url
+     * @param errorRes 加载错误后的图片
+     * @param radio    圆角
+     */
+    public static void load(Context context, ImageView iv, int radio, String url, int errorRes) {
+        Glide.with(context)
+                .load(url)
+                .dontAnimate()
+                .error(errorRes)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new CenterCrop(context), new GlideRoundTransform(context,radio))
+                .into(iv);
+    }
+
     /**
      * 普通加载图片,设置错误图片
      *
@@ -52,12 +84,12 @@ public class ImageLoader {
      * @param url
      * @param errorRes 加载错误后的图片
      */
-    public static void load(Context context, ImageView iv, String url, int errorRes,int r) {
+    public static void load(Context context, ImageView iv, String url, int errorRes, int r) {
         Glide.with(context)
                 .load(url)
                 .dontAnimate()
                 .error(errorRes)
-                .transform(new GlideRoundTransform(context,r))
+                .transform(new GlideRoundTransform(context, r))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(iv);
     }
@@ -68,7 +100,7 @@ public class ImageLoader {
      * @param context
      * @param iv
      * @param url
-     * @param errorRes     加载错误后的图片
+     * @param errorRes 加载错误后的图片
      */
     public static void loadCircle(final Context context, final ImageView iv, String url, int
             errorRes) {
@@ -80,29 +112,6 @@ public class ImageLoader {
                 .placeholder(errorRes)
                 .dontAnimate()
                 .error(errorRes)
-                .into(new BitmapImageViewTarget(iv) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(context.getResources(),
-                                        resource);
-                        circularBitmapDrawable.setCircular(true);
-                        iv.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
-    }
-
-    /**
-     * 加载原型图片，通过ID
-     *
-     * @param context
-     * @param resId
-     * @param iv
-     */
-    public static void loadCircle(final Context context, int resId, final ImageView iv) {
-        Glide.with(context)
-                .load(resId)
-                .asBitmap()
                 .into(new BitmapImageViewTarget(iv) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -154,16 +163,6 @@ public class ImageLoader {
                 .into(iv);
     }
 
-
-    public static void loadUrlAsBitmap(String url, final ImageView iv, Context context) {
-        Glide.with(context)
-                .load(url.replace("\\", "/"))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .dontAnimate()
-//                .error(R.drawable.icon_image_loading)
-                .override(720, ImageLoader.getMaxBitmap())
-                .into(iv);
-    }
 
     public static void loadUrlAsBitmap(File file, final ImageView iv, Context context) {
         Glide.with(context)

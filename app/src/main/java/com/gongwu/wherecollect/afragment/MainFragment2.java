@@ -1,27 +1,39 @@
 package com.gongwu.wherecollect.afragment;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
+import android.volley.request.QiNiuUploadUtil;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AccountInfoActivity;
 import com.gongwu.wherecollect.activity.FeedBackActivity;
 import com.gongwu.wherecollect.activity.LoginActivity;
+import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.activity.WebActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.record.RecordListActivity;
+import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.util.ShareUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.ChangeHeaderImgDialog;
 import com.gongwu.wherecollect.view.ChangeSexDialog;
@@ -31,8 +43,10 @@ import com.zhaojin.myviews.Loading;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -58,6 +72,15 @@ public class MainFragment2 extends BaseFragment {
     TextView tvHelp;
     @Bind(R.id.tv_loginOut)
     TextView tvLoginOut;
+    String token = "";
+    @Bind(R.id.roomrecord_red)
+    View roomrecordRed;
+    @Bind(R.id.tv_share)
+    TextView tvShare;
+    @Bind(R.id.share_red)
+    View shareRed;
+    @Bind(R.id.version_tv)
+    TextView versionTv;
     private ChangeHeaderImgDialog changeHeaderdialog;
 
     public MainFragment2() {
@@ -89,6 +112,10 @@ public class MainFragment2 extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_main_fragment2, container, false);
         ButterKnife.bind(this, view);
         refrashUi();
+        setRedStatus();
+        versionTv.setText(String.format("收哪儿v%s（%d）", StringUtils.getCurrentVersionName(getActivity()), StringUtils
+                .getCurrentVersion
+                        (getActivity())));
         return view;
     }
 
@@ -99,7 +126,7 @@ public class MainFragment2 extends BaseFragment {
         UserBean user = MyApplication.getUser(getActivity());
         if (user == null)
             return;
-        ImageLoader.loadCircle(getActivity(), personIv, user.getAvatar(), R.drawable.ic_launcher);
+        ImageLoader.loadCircle(getActivity(), personIv, user.getAvatar(), R.mipmap.ic_launcher);
         tvNick.setText(user.getNickname());
         tvSex.setText(user.getGender());
         tvBirthday.setText(user.getBirthday());
@@ -114,7 +141,7 @@ public class MainFragment2 extends BaseFragment {
     @OnClick({R.id.head_layout, R.id.nick_layout, R.id.sex_layout, R.id.birth_layout, R.id.tv_detail, R.id
             .tv_feedBack, R.id
             .tv_help, R.id
-            .tv_loginOut})
+            .tv_loginOut, R.id.layout_share, R.id.layout_roomrecord})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -124,6 +151,7 @@ public class MainFragment2 extends BaseFragment {
                     public void getResult(File file) {
                         super.getResult(file);
                         ImageLoader.loadCircleFromFile(getActivity(), file, personIv);
+                        upLoadImg(file);
                     }
                 };
                 break;
@@ -161,10 +189,38 @@ public class MainFragment2 extends BaseFragment {
                 WebActivity.start(getActivity(), "帮助中心", "http://www.shouner.com/help");
                 break;
             case R.id.tv_loginOut:
-                MyApplication.setUser(null);
-                SaveDate.getInstence(getActivity()).setUser("");
-                intent = new Intent(getActivity(), LoginActivity.class);
+                DialogUtil.show("提示", "退出将会清空缓存数据,确定退出？", "确定", "取消", getActivity(), new DialogInterface.OnClickListener
+                        () {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent;
+                        MyApplication.setUser(null);
+                        SaveDate.getInstence(getActivity()).setUser("");
+                        intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }, null);
+                break;
+            case R.id.layout_roomrecord:
+                if (roomrecordRed.getVisibility() == View.VISIBLE) {
+                    SaveDate.getInstence(getActivity()).setRecordRed(MyApplication.getUser(getActivity()).getId(),
+                            true);
+                    setRedStatus();
+                }
+                intent = new Intent(getActivity(), RecordListActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.layout_share:
+                if (shareRed.getVisibility() == View.VISIBLE) {
+                    showFirstShare();
+                } else {
+                    ShareUtil.openShareDialog(getActivity());
+                }
+                if (SaveDate.getInstence(getActivity()).getRecordSaved(MyApplication.getUser(getActivity()).getId())) {
+                    SaveDate.getInstence(getActivity()).setShareClicked(MyApplication.getUser(getActivity()).getId(),
+                            true);
+                    setRedStatus();
+                }
                 break;
         }
     }
@@ -199,6 +255,9 @@ public class MainFragment2 extends BaseFragment {
                     case "birthday":
                         tvBirthday.setText(value);
                         user.setBirthday(value);
+                        break;
+                    case "avatar":
+                        user.setAvatar(value);
                         break;
                 }
                 String stringUser = JsonUtils.jsonFromObject(user);
@@ -239,5 +298,84 @@ public class MainFragment2 extends BaseFragment {
         if (changeHeaderdialog != null) {
             changeHeaderdialog.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    /**
+     * 上传图片
+     */
+    private void upLoadImg(final File file) {
+        List<File> temp = new ArrayList<>();
+        temp.add(file);
+        QiNiuUploadUtil uploadUtil = new QiNiuUploadUtil(getActivity(), temp, "user/head/") {
+            @Override
+            protected void finish(List<String> list) {
+                super.finish(list);
+                changeInfo("avatar", list.get(0));
+            }
+        };
+        uploadUtil.start();
+    }
+
+    /**
+     * 查询小红点的显示与否
+     */
+    public boolean setRedStatus() {
+        if(MyApplication.getUser(getActivity()).isTest()){
+            ((MainActivity) getActivity()).setRed(true);
+            return true;
+        }
+        boolean isHasRed = false;
+        UserBean userBean = MyApplication.getUser(getActivity());
+        if (SaveDate.getInstence(getActivity()).getRecordSaved(userBean.getId())//保存过室迹
+                && !SaveDate.getInstence(getActivity()).getRecordRed(userBean.getId())) {//没消除过红点
+            roomrecordRed.setVisibility(View.VISIBLE);
+            isHasRed = true;
+        } else {
+            roomrecordRed.setVisibility(View.GONE);
+        }
+        if (SaveDate.getInstence(getActivity()).getRecordSaved(userBean.getId())
+                && !SaveDate.getInstence(getActivity()).getShareClicked(userBean.getId())) {//如果点击过分享
+            shareRed.setVisibility(View.VISIBLE);
+            isHasRed = true;
+        } else {
+            shareRed.setVisibility(View.GONE);
+        }
+        ((MainActivity) getActivity()).setRed(isHasRed);
+        return isHasRed;
+    }
+
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha 屏幕透明度0.0-1.0 1表示完全不透明
+     */
+    public void setBackgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow()
+                .getAttributes();
+        lp.alpha = bgAlpha;
+        getActivity().getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 第一次用本功能的提示
+     */
+    private void showFirstShare() {
+        View view = View.inflate(getActivity(), R.layout.layout_popwindow_share_help, null);
+        ((TextView) view.findViewById(R.id.textview)).setText(Html.fromHtml("所以如果喜欢，<font " +
+                "color='#25B65A'>也请将我们推荐给你身边的好友</font>，一起见证我们的成长。"));
+        PopupWindow popupWindow = new PopupWindow(view, FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams
+                .WRAP_CONTENT);
+        popupWindow.setAnimationStyle(R.style.pop_bottomin_bottomout);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setFocusable(true);
+        popupWindow.showAtLocation(getActivity().findViewById(R.id.base_layout), Gravity.BOTTOM, 0, 0);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                setBackgroundAlpha(1.0f);
+                ShareUtil.openShareDialog(getActivity());
+            }
+        });
+        setBackgroundAlpha(0.5f);
     }
 }

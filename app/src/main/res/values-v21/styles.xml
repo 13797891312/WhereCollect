@@ -15,4 +15,17 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+
+    <style name="Transparent">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+    <!-- ######全屏dialog黑背景###### -->
+    <style name="blackDialog" parent="Transparent">
+        <item name="android:windowBackground">@color/black</item>
+    </style>
 </resources>

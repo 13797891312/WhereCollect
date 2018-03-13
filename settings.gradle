@@ -1,2 +1,7 @@
 include ':app'
 include ':public_library'
+include ':listView'
+include ':showcase'
+include ':recyclerview-swipe'
+include ':nice-spinner-master'
+include ':volley-master'

@@ -15,6 +15,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
@@ -76,19 +77,24 @@ public class AccountInfoActivity extends BaseViewActivity {
      */
     private void refreshUi() {
         UserBean user = MyApplication.getUser(this);
+        if (user.isPassLogin()) {
+            tvChangePWD.setVisibility(View.VISIBLE);
+        } else {
+            tvChangePWD.setVisibility(View.GONE);
+        }
         if (user == null)
             return;
-        if (user.getQq()!=null&&(!TextUtils.isEmpty(user.getQq().getOpenid()))) {
+        if (user.getQq() != null && (!TextUtils.isEmpty(user.getQq().getOpenid()))) {
             tvQq.setText(user.getQq().getNickname());
         } else {
             tvPhone.setText("未绑定");
         }
-        if (user.getWeixin()!=null&&(!TextUtils.isEmpty(user.getWeixin().getOpenid()))) {
+        if (user.getWeixin() != null && (!TextUtils.isEmpty(user.getWeixin().getOpenid()))) {
             tvWx.setText(user.getWeixin().getNickname());
         } else {
             tvWx.setText("未绑定");
         }
-        if (user.getSina()!=null&&(!TextUtils.isEmpty(user.getSina().getOpenid()))) {
+        if (user.getSina() != null && (!TextUtils.isEmpty(user.getSina().getOpenid()))) {
             tvWb.setText(user.getSina().getNickname());
         } else {
             tvWb.setText("未绑定");
@@ -136,11 +142,17 @@ public class AccountInfoActivity extends BaseViewActivity {
 
     /**
      * 用户登录会收到消息
-     *
-     * @param userBean
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(UserBean userBean) {
+    public void onMessageEvent(EventBusMsg.ChangeUser msg) {
+        refreshUi();
+    }
+
+    /**
+     * 用户资料改变
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.ChangeUserInfo msg) {
         refreshUi();
     }
 
@@ -162,11 +174,14 @@ public class AccountInfoActivity extends BaseViewActivity {
             case "WECHAT":
                 key = "weixin";
                 break;
+            case "SINA":
+                key = "sina";
+                break;
         }
         Map<String, String> map = new HashMap<>();
         map.put("type", type);
         map.put("uid", MyApplication.getUser(this).getId());
-        map.put(key,JsonUtils.jsonFromObject(otherMap));
+        map.put(key, JsonUtils.jsonFromObject(otherMap));
         PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在发送")) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -184,6 +199,12 @@ public class AccountInfoActivity extends BaseViewActivity {
                         wb.setOpenid(otherMap.get("openid"));
                         wb.setUnionid(otherMap.get("openid"));
                         MyApplication.getUser(AccountInfoActivity.this).setWeixin(wb);
+                        break;
+                    case "SINA":
+                        UserBean.SinaBean sb = new UserBean.SinaBean();
+                        sb.setNickname(otherMap.get("nickname"));
+                        sb.setOpenid(otherMap.get("openid"));
+                        MyApplication.getUser(AccountInfoActivity.this).setSina(sb);
                         break;
                 }
                 SaveDate.getInstence(AccountInfoActivity.this).setUser(JsonUtils.jsonFromObject
@@ -226,7 +247,17 @@ public class AccountInfoActivity extends BaseViewActivity {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             LogUtil.e(map.toString());
-            bindOther("QQ", map);
+            switch (share_media) {
+                case QQ:
+                    bindOther("QQ", map);
+                    break;
+                case WEIXIN:
+                    bindOther("WECHAT", map);
+                    break;
+                case SINA:
+                    bindOther("SINA", map);
+                    break;
+            }
         }
 
         @Override

@@ -13,32 +13,20 @@
     <ImageView android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginTop="@dimen/dip_32"
-               android:src="@drawable/icon_yun"/>
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dip_32"
-              android:text="收哪儿·云"
-              android:textColor="@color/black_87"
-              android:textSize="@dimen/f_16"/>
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dip_4"
-              android:text="(免费云端数据同步服务)"
-              android:textColor="@color/black_26"
-              android:textSize="@dimen/f_14"/>
+               android:src="@drawable/login_bg"/>
     <RelativeLayout android:id="@+id/wx_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dip_44"
                     android:layout_marginLeft="@dimen/dip_32"
                     android:layout_marginRight="@dimen/dip_32"
-                    android:layout_marginTop="@dimen/dip_24"
+                    android:layout_marginTop="@dimen/dip_32"
                     android:background="@drawable/select_maincolor_r4_bg">
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_centerInParent="true"
                   android:drawableLeft="@drawable/icon_wx"
                   android:drawablePadding="@dimen/dip_4"
-                  android:text="微信登陆"
+                  android:text="微信登录"
                   android:textColor="@color/white"
                   android:textSize="@dimen/f_16"/>
     </RelativeLayout>
@@ -50,13 +38,13 @@
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="点击登录表示已阅读并同意"
-                  android:textColor="@color/black_26"
+                  android:textColor="@color/black_87"
                   android:textSize="@dimen/f_12"/>
         <TextView android:id="@+id/agree"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="《服务条款》"
-                  android:textColor="@color/black_87"
+                  android:textColor="#666666"
                   android:textSize="@dimen/f_12"/>
     </LinearLayout>
     <View android:layout_width="wrap_content"
@@ -72,7 +60,8 @@
         <View android:layout_width="@dimen/dip_50"
               android:layout_height="1px"
               android:background="@color/black_12"></View>
-        <TextView android:layout_width="match_parent"
+        <TextView android:id="@+id/other_btn"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="@dimen/dip_8"
                   android:layout_marginRight="@dimen/dip_8"
@@ -84,26 +73,23 @@
               android:background="@color/black_12"></View>
     </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent"
+    <LinearLayout android:id="@+id/other_layout"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/dip_50"
+                  android:orientation="horizontal"
                   android:paddingLeft="@dimen/dip_16"
                   android:paddingRight="@dimen/dip_16"
-                  android:layout_marginBottom="@dimen/dip_50"
-                  android:orientation="horizontal">
+                  android:visibility="invisible">
         <LinearLayout android:id="@+id/wb_layout"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_weight="1"
                       android:gravity="center"
                       android:orientation="vertical">
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:drawablePadding="@dimen/dip_2"
-                      android:drawableTop="@drawable/icon_wb"
-                      android:gravity="center"
-                      android:text="微博"
-                      android:textColor="@color/black_26"
-                      android:textSize="@dimen/f_14"/>
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/weibo_login_icon"/>
         </LinearLayout>
         <LinearLayout android:id="@+id/qq_layout"
                       android:layout_width="wrap_content"
@@ -111,14 +97,9 @@
                       android:layout_weight="1"
                       android:gravity="center"
                       android:orientation="vertical">
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:drawablePadding="@dimen/dip_2"
-                      android:drawableTop="@drawable/icon_qq"
-                      android:gravity="center"
-                      android:text="QQ"
-                      android:textColor="@color/black_26"
-                      android:textSize="@dimen/f_14"/>
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/qq_login_icon"/>
         </LinearLayout>
         <LinearLayout android:id="@+id/msg_layout"
                       android:layout_width="wrap_content"
@@ -126,14 +107,9 @@
                       android:layout_weight="1"
                       android:gravity="center"
                       android:orientation="vertical">
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:drawablePadding="@dimen/dip_2"
-                      android:drawableTop="@drawable/icon_msg"
-                      android:gravity="center"
-                      android:text="邮箱"
-                      android:textColor="@color/black_26"
-                      android:textSize="@dimen/f_14"/>
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/mail_login_icon"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

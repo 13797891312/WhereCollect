@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    <ImageView android:layout_width="match_parent"
+               android:background="@drawable/icon_share_help2"
+               android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
+                  android:text="作为一款免费APP，我们的成长，离不开用户对我们的口口相传。"
+                  android:textColor="@color/black_txt"
+                  android:textSize="16sp"/>
+        <TextView android:id="@+id/textview"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginBottom="24dp"
+                  android:layout_marginTop="20dp"
+                  android:textColor="@color/black_txt"
+                  android:textSize="16sp"/>
+    </LinearLayout>
+</LinearLayout>

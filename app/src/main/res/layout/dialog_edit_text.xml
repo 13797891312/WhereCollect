@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:textSize="@dimen/f_16"/>
 
     <View

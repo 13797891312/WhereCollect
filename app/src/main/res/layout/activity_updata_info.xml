@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                tools:context="com.gongwu.wherecollect.activity.UpdataInfoActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:orientation="vertical"
+    >
+
+        <ImageView android:layout_width="80dp"
+                   android:layout_height="80dp"
+                   android:layout_gravity="center_horizontal"
+                   android:src="@drawable/icon_app"/>
+        <TextView android:id="@+id/tv_info"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginTop="24dp"
+                  android:text="试用数据导入成功"
+                  android:textColor="@color/black_54"
+                  android:textSize="16sp"/>
+        <Button android:id="@+id/commit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/select_maincolor_r4_bg"
+                android:text="试用看看"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="20dp"
+                  android:layout_marginTop="32dp"
+                  android:text="本次更新内容："
+                  android:textColor="#aaaaaa"
+                  android:textSize="15sp"
+                  android:visibility="gone"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="32dp"
+                  android:layout_marginRight="32dp"
+                  android:layout_marginTop="16dp"
+                  android:gravity="left"
+                  android:text="1.全新家具隔层查看方式，定位寻找更直观;\n2.家具库扩充实景图，一步添加更方便;\n3.室迹分享功能，可轻松展现家中小变化，记录窝的轻成长;"
+                  android:textColor="#aaaaaa"
+                  android:textSize="15sp"
+                  android:visibility="gone"/>
+
+    </LinearLayout>
+</RelativeLayout>

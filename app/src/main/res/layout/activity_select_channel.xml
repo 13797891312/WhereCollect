@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_select_channel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.gongwu.wherecollect.object.SelectChannelActivity">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="@dimen/dip_16"
+                  android:background="@drawable/shape_white_r4dp"
+                  android:divider="@drawable/shape_divider_line"
+                  android:dividerPadding="2px"
+                  android:focusable="true"
+                  android:focusableInTouchMode="true"
+                  android:orientation="vertical"
+                  android:showDividers="middle">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="@dimen/dip_8"
+                      android:layout_marginRight="@dimen/dip_8"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/icon_search"/>
+            <EditText android:id="@+id/seach_edit"
+                      android:layout_width="wrap_content"
+                      android:layout_height="@dimen/dip_40"
+                      android:layout_marginLeft="@dimen/dip_8"
+                      android:layout_weight="1"
+                      android:background="@color/trans"
+                      android:focusable="true"
+                      android:gravity="center_vertical"
+                      android:hint="输入搜索渠道"
+                      android:imeOptions="actionDone"
+                      android:singleLine="true"
+                      android:textColor="@color/black_txt"
+                      android:textSize="16sp"/>
+            <ImageView android:id="@+id/clear"
+                       android:layout_width="wrap_content"
+                       android:layout_height="@dimen/dip_40"
+                       android:scaleType="center"
+                       android:src="@drawable/icon_delete"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/guishu_layout"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="@dimen/dip_8"
+                      android:layout_marginRight="@dimen/dip_8"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="归属:"
+                      android:textColor="@color/black_26"
+                      android:textSize="16sp"/>
+            <TextView android:id="@+id/guishu_txt"
+                      android:layout_width="wrap_content"
+                      android:layout_height="@dimen/dip_40"
+                      android:layout_marginLeft="@dimen/dip_8"
+                      android:layout_weight="1"
+                      android:drawableRight="@drawable/icon_next_black"
+                      android:gravity="center_vertical"
+                      android:text="自定义"
+                      android:textColor="@color/black_26"
+                      android:textSize="16sp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:paddingLeft="17dp"
+                    android:paddingRight="17dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="快速添加"
+                  android:textColor="#A3A7AE"
+                  android:textSize="12sp"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentRight="true"
+                  android:text="归属"
+                  android:textColor="#A3A7AE"
+                  android:textSize="12sp"/>
+    </RelativeLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@color/white"
+                  android:orientation="vertical">
+        <ListView android:id="@+id/serchListView"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@color/white"
+                  android:divider="@color/trans"
+                  android:dividerHeight="0px"
+                  android:scrollbars="none"></ListView>
+        <com.gongwu.wherecollect.view.CatagreyListView
+            android:id="@+id/guishuListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:divider="@color/trans"
+            android:dividerHeight="0px"
+            android:scrollbars="none"
+            android:visibility="gone"></com.gongwu.wherecollect.view.CatagreyListView>
+        <com.gongwu.wherecollect.view.ErrorView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+        </com.gongwu.wherecollect.view.ErrorView>
+    </LinearLayout>
+</LinearLayout>

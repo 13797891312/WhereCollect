@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.entity;
+import android.text.TextUtils;
 /**
  * Function:
  * Date: 2017/9/6
@@ -48,12 +49,22 @@ public class UserBean {
     private QqBean qq;
     private SinaBean sina;
     private String id = "";
+    private String _id = "";
     private String gender = "";
     private String avatar = "";
     private String nickname = "";
     private String mail = "";
     private String birthday = "";
-    private String mobile="";
+    private String mobile = "";
+    private boolean isPassLogin;
+
+    public boolean isPassLogin() {
+        return isPassLogin;
+    }
+
+    public void setPassLogin(boolean passLogin) {
+        isPassLogin = passLogin;
+    }
 
     public String getMobile() {
         return mobile;
@@ -61,6 +72,10 @@ public class UserBean {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public boolean isTest() {
+        return !TextUtils.isEmpty(_id);
     }
 
     public String getBirthday() {
@@ -176,6 +191,9 @@ public class UserBean {
     }
 
     public String getId() {
+        if (TextUtils.isEmpty(id)) {
+            return _id;
+        }
         return id;
     }
 

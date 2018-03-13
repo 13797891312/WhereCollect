@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 //def API_HOST_RELEASE = "\"http://123.57.52.110:9201/\""
+//def API_HOST_RELEASE = "\"http://www.shouner.com:9202/\""
 def API_HOST_RELEASE = "\"https://www.shouner.com/\""
 
 android {
@@ -18,25 +19,64 @@ android {
 
     defaultConfig {
         applicationId "com.gongwu.wherecollect"
-        minSdkVersion 14
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 2
+        versionName "3.01"
         buildConfigField("String", "URL", "${API_HOST_RELEASE}")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
+
     }
     buildTypes {
-        release {
+        release_官方 {
             minifyEnabled true
             buildConfigField("boolean", "LOGSHOW", "false")
             buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"shounaer\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_华为 {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"huawei\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_小米 {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"xiaomi\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_vivo {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"vivo\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_oppo {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"oppo\"")
             signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         debug {
             minifyEnabled false
+            buildConfigField("String", "CHANNEL", "shounaer")
             buildConfigField("boolean", "LOGSHOW", "true")
+            buildConfigField("String", "CHANNEL", "\"shounaer\"")
             signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -51,18 +91,22 @@ android {
 
 dependencies {
     compile project(':public_library')
+    compile project(':listView')
+    compile project(':volley-master')
+    compile project(':showcase')
+    compile project(':nice-spinner-master')
+    compile project(':recyclerview-swipe')
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    compile 'com.android.support:gridlayout-v7:25.+'
+    compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.jakewharton:butterknife:7.+'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:support-v4:25.+'
+    compile 'com.yanzhenjie:loading:1.0.2'
+    compile 'com.android.support:cardview-v7:25.+'
     testCompile 'junit:junit:4.12'
     compile files('libs/glide.jar')
     compile files('libs/SocialSDK_QQ_Simplify.jar')
-    compile files('libs/SocialSDK_Sina_Simplify.jar')
     compile files('libs/SocialSDK_WeChat_Simplify.jar')
     compile files('libs/umeng_shareboard_widget.jar')
     compile files('libs/umeng_social_api.jar')
@@ -70,11 +114,14 @@ dependencies {
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_social_shareview.jar')
     compile files('libs/umeng_social_tool.jar')
-    compile files('libs/volley-android-pro.jar')
-    compile files('libs/httpmime-4.1.3.jar')
-    android {
-        useLibrary 'org.apache.http.legacy'
-    }
     compile files('libs/gson-2.2.2.jar')
     compile files('libs/eventbus-3.0.0.jar')
+    compile 'org.litepal.android:core:1.3.2'
+    compile 'com.qiniu:qiniu-android-sdk:7.3.+'
+    compile files('libs/barcode_core.jar')
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    //    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    compile 'com.github.yalantis:ucrop:2.2.1'
+    compile files('libs/SocialSDK_Sina_Simplify.jar')
 }

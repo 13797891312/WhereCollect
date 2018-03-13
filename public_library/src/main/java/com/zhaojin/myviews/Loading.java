@@ -32,7 +32,7 @@ public class Loading extends Dialog {
         if (loading == null) {
             loading = Loading.createDialog(context);
         }
-        loading.setMessage(text);
+        loading.setMessage("");
         loading.setCancelable(true);
         loading.setCanceledOnTouchOutside(false);
         try {

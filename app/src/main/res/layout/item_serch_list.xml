@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    <TextView android:id="@+id/name_tv"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:gravity="center_vertical"
+              android:maxLines="1"
+              android:paddingLeft="@dimen/dip_16"
+              android:paddingRight="@dimen/dip_16"
+              android:text="鞋子"
+              android:textColor="@color/black_txt"
+              android:textSize="15sp"/>
+    <View android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:layout_marginLeft="@dimen/dip_16"
+          android:layout_marginRight="@dimen/dip_16"
+          android:background="@color/divider"></View>
+</LinearLayout>

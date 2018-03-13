@@ -2,6 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:background="@color/bgcolor2"
              tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="@dimen/title_hight"
@@ -20,10 +21,12 @@
     </LinearLayout>
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dip_60"
-                android:fillViewport="true">
+                android:layout_marginTop="@dimen/title_hight"
+                android:fillViewport="true"
+                android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_marginTop="12dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:showDividers="middle">
@@ -47,7 +50,7 @@
                         android:layout_centerVertical="true"
                         android:text="头像"
                         android:textColor="@color/black_54"
-                        android:textSize="@dimen/f_15"/>
+                        android:textSize="@dimen/f_16"/>
 
                     <ImageView
                         android:id="@+id/person_iv"
@@ -56,7 +59,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/dip_12"
-                        android:src="@drawable/ic_launcher"/>
+                        android:src="@mipmap/ic_launcher"/>
                     <View android:layout_width="match_parent"
                           android:layout_height="2px"
                           android:layout_alignParentBottom="true"
@@ -83,7 +86,7 @@
                         android:layout_centerVertical="true"
                         android:text="昵称"
                         android:textColor="@color/black_54"
-                        android:textSize="@dimen/f_15"/>
+                        android:textSize="@dimen/f_16"/>
                     <TextView
                         android:id="@+id/tv_nick"
                         android:layout_width="wrap_content"
@@ -120,7 +123,7 @@
                         android:layout_centerVertical="true"
                         android:text="性别"
                         android:textColor="@color/black_54"
-                        android:textSize="@dimen/f_15"/>
+                        android:textSize="@dimen/f_16"/>
                     <TextView
                         android:id="@+id/tv_sex"
                         android:layout_width="wrap_content"
@@ -157,7 +160,7 @@
                         android:layout_centerVertical="true"
                         android:text="生日"
                         android:textColor="@color/black_54"
-                        android:textSize="@dimen/f_15"/>
+                        android:textSize="@dimen/f_16"/>
                     <TextView
                         android:id="@+id/tv_birthday"
                         android:layout_width="wrap_content"
@@ -171,10 +174,41 @@
                 </RelativeLayout>
 
             </LinearLayout>
+
+            <LinearLayout android:id="@+id/layout_roomrecord"
+                          android:layout_width="match_parent"
+                          android:layout_height="@dimen/dip_45"
+                          android:layout_marginTop="@dimen/dip_12"
+                          android:background="@drawable/select_white_bg"
+                          android:gravity="center_vertical"
+                          android:orientation="horizontal"
+                          android:paddingLeft="@dimen/dip_16"
+                          android:paddingRight="@dimen/dip_16">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2px"
+                    android:gravity="center_vertical"
+                    android:text="室迹通览"
+                    android:textColor="@color/black_54"
+                    android:textSize="@dimen/f_16"/>
+                <View android:id="@+id/roomrecord_red"
+                      android:layout_width="6dp"
+                      android:layout_height="6dp"
+                      android:layout_marginLeft="8dp"
+                      android:background="@drawable/shape_circle_msg_count_red"></View>
+                <View android:layout_width="wrap_content"
+                      android:layout_height="1px"
+                      android:layout_weight="1"></View>
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/icon_next_black"/>
+            </LinearLayout>
+
             <TextView android:id="@+id/tv_detail"
                       android:layout_width="match_parent"
                       android:layout_height="@dimen/dip_45"
-                      android:layout_marginTop="@dimen/dip_16"
+                      android:layout_marginTop="@dimen/dip_12"
                       android:background="@drawable/select_white_bg"
                       android:drawableRight="@drawable/icon_next_black"
                       android:gravity="center_vertical"
@@ -182,10 +216,10 @@
                       android:paddingRight="@dimen/dip_16"
                       android:text="账号信息"
                       android:textColor="@color/black_54"
-                      android:textSize="@dimen/f_15"/>
+                      android:textSize="@dimen/f_16"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:layout_marginTop="@dimen/dip_16"
+                          android:layout_marginTop="@dimen/dip_12"
                           android:orientation="vertical">
                 <TextView android:id="@+id/tv_feedBack"
                           android:layout_width="match_parent"
@@ -197,11 +231,12 @@
                           android:paddingRight="@dimen/dip_16"
                           android:text="意见反馈"
                           android:textColor="@color/black_54"
-                          android:textSize="@dimen/f_15"/>
+                          android:textSize="@dimen/f_16"/>
                 <View android:layout_width="match_parent"
                       android:layout_height="2px"
                       android:layout_alignParentBottom="true"
-                      android:background="@color/black_12"></View>
+                      android:background="@color/black_12"
+                      android:visibility="gone"></View>
                 <TextView android:id="@+id/tv_help"
                           android:layout_width="match_parent"
                           android:layout_height="@dimen/dip_45"
@@ -212,7 +247,33 @@
                           android:paddingRight="@dimen/dip_16"
                           android:text="帮助与关注"
                           android:textColor="@color/black_54"
-                          android:textSize="@dimen/f_15"/>
+                          android:textSize="@dimen/f_15"
+                          android:visibility="gone"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/layout_share"
+                          android:layout_width="match_parent"
+                          android:layout_height="@dimen/dip_45"
+                          android:layout_marginTop="@dimen/dip_12"
+                          android:background="@drawable/select_white_bg"
+                          android:gravity="center_horizontal"
+                          android:orientation="horizontal"
+                          android:paddingLeft="@dimen/dip_16"
+                          android:paddingRight="@dimen/dip_16">
+                <TextView
+                    android:id="@+id/tv_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2px"
+                    android:gravity="center_vertical"
+                    android:text="推荐给好友"
+                    android:textColor="@color/black_54"
+                    android:textSize="@dimen/f_16"/>
+                <View android:id="@+id/share_red"
+                      android:layout_width="6dp"
+                      android:layout_height="6dp"
+                      android:layout_gravity="center_vertical"
+                      android:layout_marginLeft="8dp"
+                      android:background="@drawable/shape_circle_msg_count_red"></View>
             </LinearLayout>
             <TextView android:id="@+id/tv_loginOut"
                       android:layout_width="match_parent"
@@ -223,6 +284,14 @@
                       android:text="退出登录"
                       android:textColor="@color/holo_red_light"
                       android:textSize="@dimen/f_17"/>
+            <TextView android:id="@+id/version_tv"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="80dp"
+                      android:layout_gravity="center_horizontal"
+                      android:layout_marginTop="16dp"
+                      android:textColor="@color/black_26"
+                      android:textSize="14sp"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

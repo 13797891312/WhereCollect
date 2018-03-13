@@ -4,5 +4,53 @@
               android:layout_height="match_parent"
               android:background="@color/white"
               android:orientation="vertical">
+    <TextView android:layout_width="match_parent"
+              android:layout_height="@dimen/title_hight"
+              android:gravity="center_vertical"
+              android:paddingLeft="16dp"
+              android:text="筛选"
+              android:textColor="@color/black_txt"
+              android:textSize="17sp"/>
+    <View android:layout_width="match_parent"
+          android:layout_height="2px"
+          android:background="@drawable/shape_divider_line"></View>
+
+    <ListView android:id="@+id/listView"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:background="@color/white"
+              android:divider="@drawable/shape_divider_line"
+              android:dividerHeight="1px"
+              android:scrollbars="none"></ListView>
+    <com.gongwu.wherecollect.view.ErrorView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.gongwu.wherecollect.view.ErrorView>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:background="#f1f2f7"
+                  android:divider="@color/black_12"
+                  android:dividerPadding="1px"
+                  android:orientation="horizontal"
+                  android:showDividers="middle">
+        <TextView android:id="@+id/reset"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:gravity="center"
+                  android:text="重置"
+                  android:textColor="#f15f5f"
+                  android:textSize="15sp"/>
+        <TextView android:id="@+id/summit"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:gravity="center"
+                  android:text="确定"
+                  android:textColor="#2E2A28"
+                  android:textSize="15sp"/>
+    </LinearLayout>
 
 </LinearLayout>

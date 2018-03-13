@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ToastUtil;
@@ -52,8 +53,8 @@ public class BindEmailActivity extends BaseViewActivity implements TextWatcher {
 
     @OnClick(R.id.confirm)
     public void onClick() {
-        if(pwdEdit.getText().length()<6||pwdEdit.getText().length()>16){
-            ToastUtil.show(this,"密码为6-16位，请输入正确的密码", Toast.LENGTH_LONG);
+        if (pwdEdit.getText().length() < 6 || pwdEdit.getText().length() > 16) {
+            ToastUtil.show(this, "密码为6-16位，请输入正确的密码", Toast.LENGTH_LONG);
             return;
         }
         bind();
@@ -65,14 +66,14 @@ public class BindEmailActivity extends BaseViewActivity implements TextWatcher {
         map.put("password", pwdEdit.getText().toString());
         map.put("type", "MAIL");
         map.put("uid", MyApplication.getUser(this).getId());
-        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在登陆")) {
+        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 MyApplication.getUser(BindEmailActivity.this).setMail(emailEdit.getText().toString());
                 SaveDate.getInstence(BindEmailActivity.this).setUser(JsonUtils.jsonFromObject
                         (MyApplication.getUser(BindEmailActivity.this)));
-                EventBus.getDefault().post(MyApplication.getUser(BindEmailActivity.this));
+                EventBus.getDefault().post(new EventBusMsg.ChangeUserInfo());
                 finish();
             }
         };

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_fureniture_add"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingLeft="40dp"
+    android:paddingRight="40dp"
+    tools:context="com.gongwu.wherecollect.furnitureEdit.FurenitureAddActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="除了可以自己添加家具外,你还可以"
+        android:textColor="#999999"
+        android:textSize="14sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="联系设计师或家具厂商,为我匹配个性化数据"
+        android:textColor="#343936"
+        android:textSize="15sp"/>
+
+    <Button android:id="@+id/btn1"
+            android:layout_width="130dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/select_maincolor_rmax_bg"
+            android:text="联系设计师"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+
+    <View android:layout_width="250dp"
+          android:layout_height="1px"
+          android:layout_marginTop="47dp"
+          android:background="#eae2e2"
+    ></View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="给收哪儿开发者发送请求,以充实大众化模板"
+        android:textColor="#343936"
+        android:textSize="15sp"/>
+    <Button android:id="@+id/btn2"
+            android:layout_width="130dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/select_winbg_rmax_bg"
+            android:text="联系开发者"
+            android:textColor="#776c6c"
+            android:textSize="15sp"/>
+
+</LinearLayout>

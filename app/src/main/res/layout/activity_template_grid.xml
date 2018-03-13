@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_template_grid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.gongwu.wherecollect.furnitureEdit.TemplateGridActivity">
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/gridlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:columnCount="6"
+        app:rowCount="15"></android.support.v7.widget.GridLayout>
+    <View android:id="@+id/dragview"
+          android:layout_width="1dp"
+          android:layout_height="1dp"></View>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="50dp"
+              android:text="快速规划家具内部结构"
+              android:textColor="@color/black_26"
+              android:textSize="@dimen/f_13"/>
+    <Button android:id="@+id/submit_btn"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/select_maincolor_r12px_bg"
+            android:enabled="false"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+</LinearLayout>

@@ -3,13 +3,14 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/goods_recyclerview"
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:id="@id/swipe_target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:paddingLeft="9dp">
-    </android.support.v7.widget.RecyclerView>
+        android:paddingLeft="5dp"
+        android:scrollbars="none">
+    </com.handmark.pulltorefresh.library.PullToRefreshGridView>
     <com.gongwu.wherecollect.view.ErrorView
         android:id="@+id/empty"
         android:layout_width="match_parent"

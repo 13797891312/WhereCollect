@@ -5,30 +5,27 @@
     android:id="@+id/activity_feed_back"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.gongwu.wherecollect.activity.FeedBackActivity">
 
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/dip_16"
-              android:layout_marginTop="@dimen/dip_16"
-              android:text="标题"
-              android:textColor="@color/black_26"
-              android:textSize="@dimen/f_15"/>
     <EditText
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_hight"
         android:layout_marginTop="@dimen/dip_4"
         android:background="@color/white"
-        android:hint="请填写标题"
+        android:hint="标题"
         android:paddingLeft="@dimen/dip_16"
         android:paddingRight="@dimen/dip_16"
         android:singleLine="true"
         android:textColor="@color/black_87"
         android:textSize="@dimen/f_15">
     </EditText>
+    <View android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:background="@color/black_12"></View>
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -53,13 +50,15 @@
         android:textColor="@color/black_87"
         android:textSize="@dimen/f_15">
     </EditText>
-
+    <View android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:background="@color/black_12"></View>
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginLeft="@dimen/dip_16"
               android:layout_marginTop="@dimen/dip_16"
-              android:text="联系方式"
+              android:text="联系邮箱"
               android:textColor="@color/black_26"
               android:textSize="@dimen/f_15"/>
     <EditText
@@ -68,12 +67,25 @@
         android:layout_height="@dimen/title_hight"
         android:layout_marginTop="@dimen/dip_4"
         android:background="@color/white"
-        android:hint="请填写您的联系方式"
+        android:hint="请填写您的联系邮箱"
         android:paddingLeft="@dimen/dip_16"
         android:paddingRight="@dimen/dip_16"
         android:singleLine="true"
         android:textColor="@color/black_87"
         android:textSize="@dimen/f_15">
     </EditText>
+    <View android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:background="@color/black_12"></View>
+
+    <Button android:id="@+id/commit"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/select_maincolor_r4_bg"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
 
 </LinearLayout>

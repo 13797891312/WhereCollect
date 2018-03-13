@@ -52,7 +52,7 @@ public class ForgetPWDActivity extends BaseViewActivity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
         ButterKnife.bind(this);
-        titleLayout.setTitle("绑定手机");
+        titleLayout.setTitle("修改密码");
         titleLayout.setBack(true, null);
         context = this;
         type = getIntent().getIntExtra("type", 0);

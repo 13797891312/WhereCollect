@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.zhaojin.myviews.TagViewPagerPhotos
+        android:id="@+id/showPhotos_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.zhaojin.myviews.TagViewPagerPhotos>
+
+    <ImageView
+        android:id="@+id/image_pager_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="12.0dip"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@drawable/icon_image_selector"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/shape_save"
+        android:clickable="true"
+        android:paddingBottom="2dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:text="保存"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_16"/>
+</RelativeLayout>

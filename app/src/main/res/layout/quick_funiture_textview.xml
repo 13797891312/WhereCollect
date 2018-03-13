@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="match_parent"
+          android:layout_height="30dp"
+          android:gravity="center"
+          android:minHeight="30dp"
+          android:textColor="@color/select_text_select_quick_funiture"
+          android:orientation="vertical"
+          android:paddingLeft="@dimen/dip_12"
+          android:paddingRight="@dimen/dip_12"
+          android:text="消毒柜"
+          android:textSize="@dimen/f_14">
+</TextView>

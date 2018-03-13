@@ -38,10 +38,9 @@ public class WebActivity extends BaseViewActivity {
         titleLayout.setTitle(title);
         titleLayout.setBack(true, null);
         webView = (WebView) findViewById(R.id.webView1);
-        loading = Loading.show(loading, this, "正在加载...");
+        loading = Loading.show(loading, this, "");
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);

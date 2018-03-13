@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/activity_goods_add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:fillViewport="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollbars="none"
+            tools:context="com.gongwu.wherecollect.object.ObjectsAddActivity">
+    <requestFocus/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <EditText android:layout_width="match_parent"
+                  android:id="@+id/name_tv"
+                  android:layout_height="45dp"
+                  android:layout_marginLeft="16dp"
+                  android:layout_marginRight="16dp"
+                  android:imeOptions="actionDone"
+                  android:layout_marginTop="24dp"
+                  android:background="@drawable/select_edit_bg"
+                  android:gravity="center_vertical"
+                  android:hint="物品描述;多件物品共享描述"
+                  android:paddingLeft="16dp"
+                  android:paddingRight="16dp"
+                  android:textColor="@color/black_txt"
+                  android:textColorHint="#83868d"
+                  android:textSize="15sp"/>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="12dp"
+                      android:layout_marginTop="16dp"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="16dp"
+                      android:text="关联物品 :"
+                      android:textColor="@color/black_txt"
+                      android:textSize="15sp"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="8dp"
+                      android:text="(最多可批量添加10件物品)"
+                      android:textColor="#999999"
+                      android:textSize="12sp"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/camare_layout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+            <ImageView
+                android:id="@+id/camare_iv"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_camera"/>
+        </RelativeLayout>
+
+        <com.gongwu.wherecollect.view.AddPhoteGridLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/GridLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:columnCount="4">
+        </com.gongwu.wherecollect.view.AddPhoteGridLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center_horizontal"
+                      android:layout_marginTop="24dp"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="为了方便还可以添加"
+                      android:textColor="#999999"
+                      android:textSize="12sp"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="6dp"
+                      android:text="这些公共属性"
+                      android:textColor="@color/maincolor"
+                      android:textSize="12sp"/>
+        </LinearLayout>
+       <com.gongwu.wherecollect.view.ObjectInfoEditView
+           android:id="@+id/goodsInfo_view"
+            android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+       </com.gongwu.wherecollect.view.ObjectInfoEditView>
+
+        <Button style="?android:attr/borderlessButtonStyle"
+                android:layout_width="240dp"
+                android:id="@+id/commit_btn"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/select_maincolor_r4_bg"
+                android:text="确认添加"
+                android:textColor="@color/white"
+                android:textSize="15sp"/>
+    </LinearLayout>
+</ScrollView>

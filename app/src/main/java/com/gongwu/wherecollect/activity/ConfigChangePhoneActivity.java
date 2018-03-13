@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.zhaojin.myviews.Loading;
@@ -138,7 +139,7 @@ public class ConfigChangePhoneActivity extends BaseViewActivity {
                 MyApplication.getUser(ConfigChangePhoneActivity.this).setMobile(newPhone.getText().toString());
                 SaveDate.getInstence(ConfigChangePhoneActivity.this).setUser(JsonUtils.jsonFromObject(MyApplication
                         .getUser(ConfigChangePhoneActivity.this)));
-                EventBus.getDefault().post(MyApplication.getUser(ConfigChangePhoneActivity.this));
+                EventBus.getDefault().post(new EventBusMsg.ChangeUserInfo());
                 finish();
             }
         };

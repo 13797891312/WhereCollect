@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class MyFragmentLayout_line extends LinearLayout implements
         OnPageChangeListener {
-    public ViewPager viewPager;
+    public HackyViewPager viewPager;
     public int tabWidth = 0;
     ViewTreeObserver vto;
     private List<Fragment> list;
@@ -93,7 +93,7 @@ public class MyFragmentLayout_line extends LinearLayout implements
         this.list = list;
         fragmentAdapter = new Fragment_viewpager_Adapter(
                 context.getSupportFragmentManager());
-        viewPager = new MyViewPager(context);
+        viewPager = new HackyViewPager(context);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
         params.weight = 1;
         viewPager.setLayoutParams(params);

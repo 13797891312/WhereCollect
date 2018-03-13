@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context="com.gongwu.wherecollect.activity.SearchActivity">
+    <requestFocus/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="@dimen/title_hight"
+                    android:background="@color/colorPrimary"
+                    android:orientation="vertical">
+        <ImageButton android:id="@+id/back"
+                     android:layout_width="@dimen/title_hight"
+                     android:layout_height="@dimen/title_hight"
+                     android:layout_alignParentLeft="true"
+                     android:layout_alignParentStart="true"
+                     android:layout_alignParentTop="true"
+                     android:background="@drawable/select_white_bg" android:paddingRight="@dimen/dip_4"
+                     android:src="@drawable/back_icon" android:visibility="visible"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_marginBottom="10dp"
+                      android:layout_marginTop="10dp"
+                      android:layout_toLeftOf="@+id/serch"
+                      android:layout_toRightOf="@+id/back"
+                      android:background="@drawable/shape_serch_bg"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+            <EditText android:id="@+id/serch_edit"
+                      android:layout_width="0dp"
+                      android:layout_height="match_parent"
+                      android:layout_weight="1"
+                      android:background="@color/trans"
+                      android:imeOptions="actionSearch"
+                      android:paddingLeft="16dp"
+                      android:paddingRight="16dp"
+                      android:singleLine="true"
+                      android:textColor="@color/black_txt"
+                      android:textSize="15sp"/>
+            <ImageButton android:id="@+id/delete_btn"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginRight="8dp"
+                         android:background="@color/trans"
+                         android:scaleType="fitXY"
+                         android:src="@drawable/icon_delete"
+                         android:visibility="gone"/>
+        </LinearLayout>
+        <ImageButton android:id="@+id/serch"
+                     android:layout_width="@dimen/title_hight"
+                     android:layout_height="@dimen/title_hight"
+                     android:layout_alignParentRight="true"
+                     android:background="@drawable/select_white_bg"
+                     android:src="@drawable/icon_search"/>
+        <View android:layout_width="match_parent"
+              android:layout_height="1px"
+              android:layout_alignParentBottom="true"
+              android:background="@color/divider"></View>
+    </RelativeLayout>
+    <ListView android:id="@+id/searchListView"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:background="@color/white"
+              android:divider="@color/black_12"
+              android:dividerHeight="1px"
+              android:visibility="gone"></ListView>
+    <LinearLayout android:id="@+id/search_layout"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="32dp"
+                  android:background="@color/windowsbg"
+                  android:gravity="bottom"
+                  android:paddingBottom="@dimen/dip_4"
+                  android:paddingLeft="@dimen/dip_16"
+                  android:text="最近的搜索"
+                  android:textColor="@color/black_txt"
+                  android:textSize="15sp"/>
+        <ListView android:id="@+id/listView"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_weight="1"
+                  android:background="@color/white"
+                  android:divider="@color/trans"
+                  android:dividerHeight="0dp"></ListView>
+        <TextView android:id="@+id/clear"
+                  android:layout_width="wrap_content"
+                  android:layout_height="40dp"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginBottom="8dp"
+                  android:gravity="center"
+                  android:text="清空记录"
+                  android:textColor="@color/black_26"
+                  android:textSize="14sp"/>
+    </LinearLayout>
+</LinearLayout>

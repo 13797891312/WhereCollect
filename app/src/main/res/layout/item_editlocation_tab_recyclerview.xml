@@ -13,5 +13,5 @@
               android:paddingRight="@dimen/dip_12"
               android:text="客厅"
               android:textColor="@color/select_text_select"
-              android:textSize="@dimen/f_12"/>
+              android:textSize="@dimen/f_15"/>
 </LinearLayout>

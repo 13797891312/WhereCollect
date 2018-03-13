@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:paddingBottom="12dp"
+              android:paddingLeft="12dp"
+              android:paddingRight="12dp"
+              android:paddingTop="12dp">
+    <ImageView android:id="@+id/image"
+               android:layout_width="70dp"
+               android:layout_height="70dp"
+               android:layout_centerInParent="true"
+               android:layout_marginRight="12dp"
+               android:gravity="center"
+               android:src="@drawable/icon_wb"></ImageView>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <TextView android:id="@+id/name_tv"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:ellipsize="middle"
+                  android:maxLines="1"
+                  android:text="一个不怎么常用的杯子"
+                  android:textColor="#343036"
+                  android:textSize="15dp"/>
+
+        <com.gongwu.wherecollect.view.FlowViewGroup
+            android:id="@+id/tag_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <!--<TextView android:id="@+id/location_tv"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/shape_oringe_stock_bg"-->
+            <!--android:ellipsize="middle"-->
+            <!--android:maxLines="1"-->
+            <!--android:drawableLeft="@drawable/icon_gfrz"-->
+            <!--android:paddingLeft="8dp"-->
+            <!--android:paddingRight="8dp"-->
+            <!--android:text="官方认证"-->
+            <!--android:textColor="#ff9626"-->
+            <!--android:textSize="@dimen/f_12"/>-->
+        </com.gongwu.wherecollect.view.FlowViewGroup>
+    </LinearLayout>
+</LinearLayout>

@@ -10,10 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.afragment.MainGoodsFragment;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ToastUtil;
@@ -83,10 +86,11 @@ public class RegisteActivity extends BaseViewActivity implements TextWatcher {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
+                logoutTest(MyApplication.getUser(RegisteActivity.this));
                 SaveDate.getInstence(RegisteActivity.this).setUser(r.getResult());
                 UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
                 MyApplication.setUser(user);
-                EventBus.getDefault().post(user);
+                EventBus.getDefault().post(new EventBusMsg.ChangeUser());
                 Intent intent = new Intent(RegisteActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -106,5 +110,23 @@ public class RegisteActivity extends BaseViewActivity implements TextWatcher {
     @Override
     public void afterTextChanged(Editable editable) {
         setBtn();
+    }
+
+    /**
+     * 注销测试账号
+     */
+    private void logoutTest(UserBean testUser) {
+        if (testUser == null) {
+            return;
+        }
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", testUser.getId());
+        PostListenner listenner = new PostListenner(this) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+            }
+        };
+        HttpClient.logoutTest(this, map, listenner);
     }
 }

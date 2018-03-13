@@ -21,11 +21,17 @@ import butterknife.ButterKnife;
 public class TitleLayout extends LinearLayout {
     @Bind(R.id.textBtn)
     public TextView textBtn;
+    @Bind(R.id.image_btn)
+    public ImageButton imageBtn;
+    @Bind(R.id.textBtn_left)
+    public TextView textBtnLeft;
     Context context;
     @Bind(R.id.back_btn)
     ImageButton backBtn;
     @Bind(R.id.title_tv)
-    TextView titleTv;
+    public TextView titleTv;
+    @Bind(R.id.back_text)
+    public TextView backText;
 
     public TitleLayout(Context context) {
         this(context, null);

@@ -1,13 +1,26 @@
 package com.gongwu.wherecollect.afragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.gongwu.wherecollect.LocationEdit.LocationEditActivity;
+import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.activity.BaseViewActivity;
+import com.gongwu.wherecollect.activity.LoginActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
+import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.util.DialogUtil;
+import com.umeng.analytics.MobclickAgent;
 import com.zhaojin.myviews.MyFragmentLayout_line;
 
 import java.util.ArrayList;
@@ -20,7 +33,10 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
     View view;
     @Bind(R.id.myFragmentLayout)
     MyFragmentLayout_line myFragmentLayout;
-    ImageButton serchBtn;
+    ImageButton serchBtn, filterBtn;
+    RelativeLayout shijiBtn;
+    View shijired;
+    TextView editBtn;
 
     public MainFragment1() {
         // Required empty public constructor
@@ -52,7 +68,20 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
         ButterKnife.bind(this, view);
         initFragment();
         serchBtn = (ImageButton) view.findViewById(R.id.serch_btn);
+        filterBtn = (ImageButton) view.findViewById(R.id.fiter_btn);
+        shijiBtn = (RelativeLayout) view.findViewById(R.id.shiji_layout);
+        shijired = view.findViewById(R.id.shiji_red_circle);
+        editBtn = (TextView) view.findViewById(R.id.text_edit);
+        editBtn.setOnClickListener(this);
+        filterBtn.setOnClickListener(this);
         serchBtn.setOnClickListener(this);
+        shijiBtn.setOnClickListener(this);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                myFragmentLayout.setCurrenItem(1);
+            }
+        });
         return view;
     }
 
@@ -69,11 +98,26 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
         myFragmentLayout.setScorllToNext(true);
         myFragmentLayout.setScorll(true);
         myFragmentLayout.setWhereTab(1);
-        myFragmentLayout.setTabHeight(10, getResources().getColor(R.color.maincolor), true, 0);
+        myFragmentLayout.setTabHeight((int) (3 * BaseViewActivity.getScreenScale(getActivity())), getResources()
+                .getColor(R.color
+                .maincolor), true, 0);
         myFragmentLayout.setOnChangeFragmentListener(new MyFragmentLayout_line.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int positon,
                                View lastTabView, View currentTabView) {
+                if (positon == 0) {
+                    serchBtn.setVisibility(View.VISIBLE);
+                    filterBtn.setVisibility(View.VISIBLE);
+                    shijiBtn.setVisibility(View.GONE);
+                    editBtn.setVisibility(View.GONE);
+                    ((MainLocationFragment) fragments.get(1)).hideObjectList();
+                } else {
+                    serchBtn.setVisibility(View.INVISIBLE);
+                    filterBtn.setVisibility(View.INVISIBLE);
+                    shijiBtn.setVisibility(View.VISIBLE);
+                    editBtn.setVisibility(View.VISIBLE);
+                }
+                ((BaseFragment) fragments.get(positon)).onShow();
             }
         });
         myFragmentLayout.setAdapter(fragments, R.layout.tablayout_main_fragment1, 0x202);
@@ -82,9 +126,71 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.shiji_layout:
+                if (MyApplication.getUser(getActivity()).isTest()) {
+                    DialogUtil.show("提醒", "该功能登陆后才可使用", "去登陆", "取消", getActivity(), new DialogInterface
+                            .OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }, null);
+                    return;
+                }
+                ((MainLocationFragment) fragments.get(1)).shijiClick();
+                break;
             case R.id.serch_btn:
                 ((MainActivity) getActivity()).searchClick();
                 break;
+            case R.id.fiter_btn:
+                ((MainActivity) getActivity()).filterClick();
+                break;
+            case R.id.text_edit:
+                if (MyApplication.getUser(getActivity()).isTest()) {
+                    DialogUtil.show("注意", "目前为试用账号，登陆后将清空试用账号所有数据", "去登录", "知道了", getActivity(), new DialogInterface
+                            .OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getActivity(), LocationEditActivity.class);
+                            startActivity(intent);
+                            MobclickAgent.onEvent(getActivity(), "050101");
+                        }
+                    }).setCancelable(true);
+                } else {
+                    Intent intent = new Intent(getActivity(), LocationEditActivity.class);
+                    startActivity(intent);
+                    MobclickAgent.onEvent(getActivity(), "050101");
+                }
+                break;
         }
+    }
+
+    /**
+     * 定位到某个物品
+     *
+     * @param objectBean
+     */
+    public void findObject(final ObjectBean objectBean) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                myFragmentLayout.setCurrenItem(1);
+                ((MainLocationFragment) fragments.get(1)).findObject(objectBean);
+            }
+        });
+    }
+
+    /**
+     * 设置左上角室迹按钮的红点展示与隐藏
+     */
+    public void setRedStatus(boolean isHasRed) {
+        shijired.setVisibility(isHasRed ? View.VISIBLE : View.GONE);
     }
 }

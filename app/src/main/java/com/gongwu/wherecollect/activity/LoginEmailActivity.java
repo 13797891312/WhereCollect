@@ -14,6 +14,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.zhaojin.myviews.Loading;
@@ -56,14 +57,16 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
         Map<String, String> map = new TreeMap<>();
         map.put("mail", emailEdit.getText().toString());
         map.put("password", pwdEdit.getText().toString());
-        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在登陆")) {
+        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
-                SaveDate.getInstence(LoginEmailActivity.this).setUser(r.getResult());
+                logoutTest(MyApplication.getUser(context));
                 UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                user.setPassLogin(true);
+                SaveDate.getInstence(LoginEmailActivity.this).setUser(JsonUtils.jsonFromObject(user));
                 MyApplication.setUser(user);
-                EventBus.getDefault().post(user);
+                EventBus.getDefault().post(new EventBusMsg.ChangeUser());
                 Intent intent = new Intent(LoginEmailActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -115,7 +118,7 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(UserBean userBean) {
+    public void onMessageEvent(EventBusMsg.ChangeUser msg) {
         finish();
     }
 
@@ -125,5 +128,23 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 注销测试账号
+     */
+    private void logoutTest(UserBean testUser) {
+        if (testUser == null) {
+            return;
+        }
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", testUser.getId());
+        PostListenner listenner = new PostListenner(this) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+            }
+        };
+        HttpClient.logoutTest(this, map, listenner);
     }
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_import_obects"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        tools:context="com.gongwu.wherecollect.importObject.ImportObectsActivity">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical">
+            <TextView android:id="@+id/textview1"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="9dp"
+                      android:layout_marginLeft="13dp"
+                      android:layout_marginTop="12dp"
+                      android:text="最近添加"
+                      android:textColor="#333333"
+                      android:textSize="15sp"
+                      android:visibility="gone"/>
+            <com.gongwu.wherecollect.view.EbagGridView
+                android:id="@+id/gridview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="4">
+            </com.gongwu.wherecollect.view.EbagGridView>
+            <TextView android:id="@+id/textview2"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="9dp"
+                      android:layout_marginLeft="13dp"
+                      android:layout_marginTop="16dp"
+                      android:text="未标记位置"
+                      android:textColor="#333333"
+                      android:textSize="15sp"
+                      android:visibility="gone"/>
+            <com.gongwu.wherecollect.view.EbagGridView
+                android:id="@+id/gridview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="4">
+            </com.gongwu.wherecollect.view.EbagGridView>
+            <com.gongwu.wherecollect.view.ErrorView
+                android:id="@+id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+            </com.gongwu.wherecollect.view.ErrorView>
+        </LinearLayout>
+    </ScrollView>
+    <TextView android:id="@+id/add_btn"
+              android:layout_width="wrap_content"
+              android:layout_height="40dp"
+              android:layout_gravity="center_horizontal"
+              android:gravity="center"
+              android:layout_marginBottom="8dp"
+              android:text="添加新物品"
+              android:textColor="@color/maincolor"
+              android:textSize="15sp"/>
+</LinearLayout>

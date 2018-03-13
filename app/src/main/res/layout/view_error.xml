@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_centerInParent="true"
+                  android:layout_gravity="center_horizontal"
                   android:gravity="center_horizontal"
                   android:orientation="vertical"
+                  android:id="@+id/linearLayout"
                   android:paddingBottom="@dimen/dip_8"
                   android:paddingTop="@dimen/dip_8">
         <TextView
@@ -19,10 +18,31 @@
             android:layout_alignBottom="@+id/imageView_nodata"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="4dp"
-            android:text="暂无数据"
+            android:text="空空如也~"
             android:textColor="@color/black_26"
             android:textSize="@dimen/f_17"/>
+
+
     </LinearLayout>
 
-
-</LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:orientation="vertical"
+                  android:paddingBottom="10dp"
+                  android:id="@+id/quick_layout"
+                  android:visibility="gone"
+                  android:layout_centerHorizontal="true"
+                  android:layout_below="@+id/linearLayout"
+                  android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="快速构建你的家"
+        android:textColor="@color/maincolor"
+        android:textSize="@dimen/f_17"/>
+        <View android:layout_width="match_parent"
+              android:background="@color/maincolor"
+              android:layout_marginTop="2dp"
+              android:layout_height="1dp"></View>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:orientation="horizontal">
+        <com.gongwu.wherecollect.LocationLook.LocationIndicatorView
+            android:id="@+id/indicatorView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/dip_12">
+        </com.gongwu.wherecollect.LocationLook.LocationIndicatorView>
+    </LinearLayout>
+    <com.zhaojin.myviews.TagViewPager
+        android:id="@+id/tagViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true">
+    </com.zhaojin.myviews.TagViewPager>
+    <View android:layout_width="match_parent"
+          android:layout_height="4dp"
+          android:background="@drawable/shape_yinying"></View>
+    <LinearLayout android:id="@+id/btn_layout"
+                  android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:background="@color/white"
+                  android:orientation="horizontal">
+        <TextView android:id="@+id/impor_btn"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:background="@drawable/select_white_bg"
+                  android:enabled="false"
+                  android:gravity="center"
+                  android:text="请选择家具以归入物品"
+                  android:textColor="@color/black_54"
+                  android:textSize="16sp"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_custom_template"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.gongwu.wherecollect.furnitureEdit.CreateTemplateActivity">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:id="@+id/help_layout"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.4">
+        <com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout
+            android:id="@+id/tablelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/textlayout"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="2.5dp"
+            android:layout_marginRight="2.5dp"
+            android:layout_marginTop="@dimen/dip_16"></com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout>
+        <RelativeLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:id="@+id/textlayout"
+                        android:layout_marginTop="34dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal">
+            <TextView android:id="@+id/ckb_tv"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="设置长宽比例"
+                      android:textColor="#25b65a"
+                      android:textSize="15sp"/>
+            <TextView android:id="@+id/nbjg_tv"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="40dp"
+                      android:layout_toRightOf="@+id/ckb_tv"
+                      android:text="快速重建结构"
+                      android:textColor="#25b65a"
+                      android:textSize="15sp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_weight="1"
+                  android:orientation="vertical">
+        <EditText android:id="@+id/gcmc"
+                  android:layout_width="310dp"
+                  android:layout_height="36dp"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginTop="40dp"
+                  android:background="@drawable/select_edit_bg1"
+                  android:enabled="false"
+                  android:gravity="center"
+                  android:hint="隔层名称"
+                  android:imeOptions="actionDone"
+                  android:maxLength="8"
+                  android:singleLine="true"
+                  android:textColorHint="#b7b9b4"
+                  android:textSize="15sp"/>
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:paddingLeft="40dp"
+                        android:paddingRight="40dp">
+            <TextView android:id="@+id/sxcf"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:drawableTop="@drawable/select_sxcf_image"
+                      android:enabled="false"
+                      android:text="上下拆分"
+                      android:textColor="#b7b9b4"
+                      android:textSize="12sp"/>
+            <TextView android:id="@+id/zycf"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerInParent="true"
+                      android:drawableTop="@drawable/select_zycf_image"
+                      android:enabled="false"
+                      android:text="左右拆分"
+                      android:textColor="#b7b9b4"
+                      android:textSize="12sp"/>
+            <TextView android:id="@+id/hbgc"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_alignParentRight="true"
+                      android:drawableTop="@drawable/select_hbgc_image"
+                      android:enabled="false"
+                      android:text="合并隔层"
+                      android:textColor="#b7b9b4"
+                      android:textSize="12sp"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <View android:layout_width="match_parent"
+              android:layout_height="4dp"
+              android:background="@drawable/shape_yinying"></View>
+        <LinearLayout android:id="@+id/btn_layout"
+                      android:layout_width="match_parent"
+                      android:layout_height="42dp"
+                      android:background="@color/white"
+                      android:orientation="horizontal">
+            <RelativeLayout android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                <TextView android:id="@+id/last_btn"
+                          android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                          android:layout_centerInParent="true"
+                          android:drawableLeft="@drawable/select_back_image"
+                          android:drawablePadding="8dp"
+                          android:enabled="false"
+                          android:gravity="center"
+                          android:paddingRight="20dp"
+                          android:text="撤销"
+                          android:textColor="@color/envble_text_maincolor"
+                          android:textSize="15sp"/>
+            </RelativeLayout>
+            <View android:layout_width="1px"
+                  android:layout_height="match_parent"
+                  android:layout_marginBottom="10dp"
+                  android:layout_marginTop="10dp"
+                  android:background="@color/black_26"></View>
+            <RelativeLayout android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+                <TextView android:id="@+id/next_btn"
+                          android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                          android:layout_centerInParent="true"
+                          android:drawablePadding="8dp"
+                          android:drawableRight="@drawable/select_next_image"
+                          android:enabled="false"
+                          android:gravity="center"
+                          android:paddingLeft="20dp"
+                          android:text="前进"
+                          android:textColor="@color/envble_text_maincolor"
+                          android:textSize="15sp"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

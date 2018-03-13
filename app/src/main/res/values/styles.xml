@@ -34,4 +34,47 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="Transparent">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+    <!-- ######全屏dialog黑背景###### -->
+    <style name="blackDialog" parent="Transparent">
+        <item name="android:windowBackground">@color/black</item>
+    </style>
+
+    <style name="RadingStyle" parent="@android:style/Widget.Holo.RatingBar.Indicator">
+        <!-- 定义星星图片 -->
+        <item name="android:progressDrawable">@drawable/rating</item>
+        <!-- 根据自定义星星图片的大小,设置相应的值,否则可能显示不全 -->
+    </style>
+
+
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!--边框-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">false</item>
+        <!--半透明-->
+        <item name="android:windowNoTitle">true</item>
+        <!--无标题-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--背景透明-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--模糊-->
+    </style>
+
+    <style name="pop_topin_topout">
+        <item name="android:windowEnterAnimation">@anim/push_top_in</item>
+        <item name="android:windowExitAnimation">@anim/push_top_out</item>
+    </style>
+    <style name="pop_bottomin_bottomout">
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in1</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_out1</item>
+    </style>
+
 </resources>

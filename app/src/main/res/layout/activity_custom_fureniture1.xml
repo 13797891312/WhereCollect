@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_custom_fureniture1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.gongwu.wherecollect.furnitureEdit.CreateFurenitureActivity">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp">
+
+        <EditText android:id="@+id/edit_name"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@+id/textView"
+                  android:layout_centerHorizontal="true"
+                  android:background="@color/trans"
+                  android:hint="请输入家具名称"
+                  android:imeOptions="actionDone"
+                  android:maxWidth="200dp"
+                  android:paddingBottom="8dp"
+                  android:paddingTop="2dp"
+                  android:singleLine="true"
+                  android:textColor="#666666"
+                  android:textSize="15sp"/>
+        <TextView android:id="@+id/textView"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignLeft="@+id/edit_name"
+                  android:layout_alignParentTop="true"
+                  android:layout_marginBottom="@dimen/dip_4"
+                  android:layout_marginLeft="2dp"
+                  android:paddingLeft="2dp"
+                  android:text="第1步"
+                  android:textColor="#B7B9B4"
+                  android:textSize="12sp"/>
+        <View android:layout_width="200dp"
+              android:layout_height="1px"
+              android:layout_below="@+id/edit_name"
+              android:layout_centerHorizontal="true"
+              android:background="#d2d2d2"></View>
+    </RelativeLayout>
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="66dp"
+                  android:orientation="horizontal">
+        <RelativeLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+            <TextView android:id="@+id/textView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_alignLeft="@+id/image_bg"
+                      android:layout_alignParentTop="true"
+                      android:layout_marginBottom="@dimen/dip_4"
+                      android:layout_marginLeft="2dp"
+                      android:paddingLeft="2dp"
+                      android:text="第2步"
+                      android:textColor="#B7B9B4"
+                      android:textSize="12sp"/>
+            <ImageView android:id="@+id/image_bg"
+                       android:layout_width="70dp"
+                       android:layout_height="70dp"
+                       android:layout_below="@+id/textView"
+                       android:layout_centerHorizontal="true"
+                       android:scaleType="centerCrop"
+                       android:src="@drawable/icon_placeholder"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_bg"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@color/trans"
+                android:text="添加展示图"
+                android:textColor="#666666"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+            <TextView android:id="@+id/textView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_alignLeft="@+id/image_custom"
+                      android:layout_alignParentTop="true"
+                      android:layout_marginBottom="@dimen/dip_4"
+                      android:layout_marginLeft="2dp"
+                      android:paddingLeft="2dp"
+                      android:text="第3步"
+                      android:textColor="#B7B9B4"
+                      android:textSize="12sp"/>
+            <ImageView android:id="@+id/image_custom"
+                       android:layout_width="70dp"
+                       android:layout_height="70dp"
+                       android:layout_below="@+id/textView"
+                       android:layout_centerHorizontal="true"
+                       android:src="@drawable/icon_templatate_placeholder"/>
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_custom"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@color/trans"
+                android:text="编辑内部结构"
+                android:textColor="#666666"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <Button android:id="@+id/commit"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/select_maincolor_r4_bg"
+            android:text="添加家具"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+</LinearLayout>

@@ -96,9 +96,9 @@ public class JsonUtils {
         return retList;
     }
 
-    public static Map<String, String> mapFromJson(String data) {
+    public static Map<String, Object> mapFromJson(String data) {
         try {
-            Map<String, String> map = sGson.fromJson(data, new TypeToken<Map<String, String>>() {
+            Map<String, Object> map = sGson.fromJson(data, new TypeToken<Map<String, Object>>() {
             }.getType());
             return map;
         } catch (Exception e) {

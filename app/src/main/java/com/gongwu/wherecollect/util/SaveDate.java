@@ -26,14 +26,35 @@ public class SaveDate {
     }
     //#########################get/set方法区 开始################################################
 
+    public boolean getRecordSaved(String uid) {
+        return sharedPreferences.getBoolean(String.format("recordsaved%s", uid), false);
+    }
+
+    public boolean getRecordRed(String uid) {
+        return sharedPreferences.getBoolean(String.format("recordvisible%s", uid), false);
+    }
+
+    /**
+     * @return 储存版本，版本升级后用来比较版本
+     */
+    public int getVersion() {
+        return sharedPreferences.getInt("version", 0);
+    }
+
+    public void setVersion(int version) {
+        Editor ed = sharedPreferences.edit();
+        ed.putInt("version", version);
+        ed.commit();
+    }
+
     /**
      * @return isOnce
      */
-    public boolean isOnce() {
+    public boolean isOnceShiji() {
         return sharedPreferences.getBoolean("isOnce", true);
     }
 
-    public void setIsOnce(boolean isOnce) {
+    public void setIsOnceShiji(boolean isOnce) {
         Editor ed = sharedPreferences.edit();
         ed.putBoolean("isOnce", isOnce);
         ed.commit();
@@ -48,6 +69,7 @@ public class SaveDate {
         ed.putString("phone", phone);
         ed.commit();
     }
+    //############################################
 
     public String getUser() {
         return sharedPreferences.getString("user", "");
@@ -67,5 +89,150 @@ public class SaveDate {
         Editor ed = sharedPreferences.edit();
         ed.putString("pwd", str);
         ed.commit();
+    }
+
+    /**
+     * 缓存物品列表
+     *
+     * @return
+     */
+    public String getObjectList() {
+        return sharedPreferences.getString("objectList", "");
+    }
+
+    /**
+     * 缓存物品列表
+     */
+    public void setObjectList(String str) {
+        Editor ed = sharedPreferences.edit();
+        ed.putString("objectList", str);
+        ed.commit();
+    }
+
+    /**
+     * 缓存物品筛选条件
+     *
+     * @return
+     */
+    public String getObjectFilter(String uid) {
+        return sharedPreferences.getString(String.format("objectFilter%s", uid), "");
+    }
+
+    /**
+     * 缓存物品筛选条件
+     */
+    public void setObjectFilter(String id, String str) {
+        Editor ed = sharedPreferences.edit();
+        ed.putString(String.format("objectFilter%s", id), str);
+        ed.commit();
+    }
+
+    /**
+     * 缓存空间桌布
+     *
+     * @return
+     */
+    public String getSpace() {
+        return sharedPreferences.getString("space", "");
+    }
+
+    /**
+     * 缓存空间桌布
+     *
+     * @return
+     */
+    public void setSpace(String space) {
+        Editor ed = sharedPreferences.edit();
+        ed.putString("space", space);
+        ed.commit();
+    }
+    //############################################
+
+    /**
+     * 获取缓存位置
+     *
+     * @return
+     */
+    public String getLocation(String code) {
+        return sharedPreferences.getString(String.format("location%s", code), "");
+    }
+
+    /**
+     * 缓存位置
+     */
+    public void setLocation(String code, String location) {
+        Editor ed = sharedPreferences.edit();
+        ed.putString(String.format("location%s", code), location);
+        ed.commit();
+    }
+
+    /**
+     * 缓存位置
+     */
+    public void setObjectWithCode(String code, String objectListJson) {
+        Editor ed = sharedPreferences.edit();
+        ed.putString(String.format("object%s", code), objectListJson);
+        ed.commit();
+    }
+
+    /**
+     * 获取空间里物品总览
+     *
+     * @return
+     */
+    public String getObjectWithCode(String code) {
+        return sharedPreferences.getString(String.format("object%s", code), "");
+    }
+
+    /**
+     * 是否在本机保存过室迹
+     *
+     * @param uid
+     */
+    public void setRecordSaved(String uid, boolean issaved) {
+        Editor ed = sharedPreferences.edit();
+        ed.putBoolean(String.format("recordsaved%s", uid), issaved);
+        ed.commit();
+    }
+
+    /**
+     * 是否已经显示过了室迹通览的红点
+     *
+     * @param uid
+     */
+    public void setRecordRed(String uid, boolean visible) {
+        Editor ed = sharedPreferences.edit();
+        ed.putBoolean(String.format("recordvisible%s", uid), visible);
+        ed.commit();
+    }
+
+    /**
+     * 是否已经显示过了室迹通览的红点
+     *
+     * @param uid
+     */
+    public void setShareClicked(String uid, boolean clicked) {
+        Editor ed = sharedPreferences.edit();
+        ed.putBoolean(String.format("shareclicked%s", uid), clicked);
+        ed.commit();
+    }
+
+    public boolean getShareClicked(String uid) {
+        return sharedPreferences.getBoolean(String.format("shareclicked%s", uid), false);
+    }
+
+    /**
+     * 是否已经提示过快速导入空间家具
+     *
+     * @param uid
+     */
+    public void setQuickAdd(String uid, boolean isQuickAdd) {
+        Editor ed = sharedPreferences.edit();
+        ed.putBoolean(String.format("quickadd%s", uid), isQuickAdd);
+        ed.commit();
+    }
+
+    public boolean getQuickAdd(String uid) {
+        return sharedPreferences.getBoolean(String.format("quickadd%s", uid), false);
     }
 }

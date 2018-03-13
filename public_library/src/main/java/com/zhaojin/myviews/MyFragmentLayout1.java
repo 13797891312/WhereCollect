@@ -1,5 +1,4 @@
 package com.zhaojin.myviews;
-
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * @author 赵进
@@ -40,20 +40,7 @@ public class MyFragmentLayout1 extends RelativeLayout implements
     private boolean isScorllToNext = true;
     private int whereTab = 0;
     private ChangeFragmentListener changeListener;
-
-    public interface ChangeFragmentListener {
-        /**
-         * @param positon        切换到哪项
-         * @param lastTabView    上一项的tab视图，用来改变没选中tab状态
-         * @param currentTabView 当前想的tab视图,用来改变选中的tab样式
-         */
-        public void change(int lastPositon, int positon, View lastTabView,
-                           View currentTabView);
-    }
-
-    public void setOnChangeFragmentListener(ChangeFragmentListener listener) {
-        this.changeListener = listener;
-    }
+    private List<OnClickListener> listeners = new ArrayList<>();
 
     public MyFragmentLayout1(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -69,6 +56,10 @@ public class MyFragmentLayout1 extends RelativeLayout implements
         if (!isInEditMode()) {
             this.context = (FragmentActivity) context;
         }
+    }
+
+    public void setOnChangeFragmentListener(ChangeFragmentListener listener) {
+        this.changeListener = listener;
     }
 
     public View getTabLayout() {
@@ -90,7 +81,7 @@ public class MyFragmentLayout1 extends RelativeLayout implements
      */
     public void setAdapter(List<Fragment> list, int tabLayoutId, int id) {
         tabLayout = (LinearLayout) View.inflate(context, tabLayoutId, null);
-        RelativeLayout.LayoutParams lp=new LayoutParams(LayoutParams.MATCH_PARENT,
+        RelativeLayout.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         tabLayout.setLayoutParams(lp);
@@ -108,83 +99,39 @@ public class MyFragmentLayout1 extends RelativeLayout implements
             this.addView(tabLayout);
             this.addView(viewPager);
         }
+        listeners.clear();
         for (int i = 0; i < tabLayout.getChildCount(); i++) {
             View view = tabLayout.getChildAt(i);
             view.setClickable(true);
-            view.setOnClickListener(new tabClickLisener(i));
+            listeners.add(new tabClickLisener(i));
+            view.setOnClickListener(listeners.get(i));
         }
         viewPager.setAdapter(fragmentAdapter);
         viewPager.setOnPageChangeListener(this);
     }
 
+    /**
+     * @param position
+     * @param onClickListener
+     */
     public void overrideTabClickListenner(int position, OnClickListener onClickListener) {
-        tabLayout.getChildAt(position).setOnClickListener(onClickListener);
-    }
-
-    ;
-
-    private class Fragment_viewpager_Adapter extends FragmentStatePagerAdapter {
-
-        public Fragment_viewpager_Adapter(FragmentManager fm) {
-            super(fm);
-            // TODO Auto-generated constructor stub
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return list.size();
-        }
-
-        @Override
-        public Fragment getItem(int arg0) {
-            // TODO Auto-generated method stub
-            return list.get(arg0);
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            // TODO Auto-generated method stub
-            super.destroyItem(container, position, object);
-//			((ViewGroup) list.get(position).getView()).removeAllViews();
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            // TODO Auto-generated method stub
-            return PagerAdapter.POSITION_NONE;
-        }
-    }
-
-    class tabClickLisener implements OnClickListener {
-        private int position;
-
-        public tabClickLisener(int position) {
-            // TODO Auto-generated constructor stub
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            if (list.size() == tabLayout.getChildCount()) {
-                viewPager.setCurrentItem(position, isScorll);
-            } else
-                Toast.makeText(context, "page项数量不等于tab项数量", Toast.LENGTH_SHORT)
-                        .show();
+        if (onClickListener != null) {
+            tabLayout.getChildAt(position).setOnClickListener(onClickListener);
+        }else{
+            tabLayout.setOnClickListener(listeners.get(position));
         }
     }
 
     @Override
     public void onPageScrollStateChanged(int arg0) {
         // TODO Auto-generated method stub
-
     }
+
+    ;
 
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -220,6 +167,13 @@ public class MyFragmentLayout1 extends RelativeLayout implements
         return isScorllToNext;
     }
 
+    /**
+     * @param isScorllToNext 是否可以滑动切换，默认为true
+     */
+    public void setScorllToNext(boolean isScorllToNext) {
+        this.isScorllToNext = isScorllToNext;
+    }
+
     public int getWhereTab() {
         return whereTab;
     }
@@ -231,15 +185,65 @@ public class MyFragmentLayout1 extends RelativeLayout implements
         this.whereTab = whereTab;
     }
 
-    /**
-     * @param isScorllToNext 是否可以滑动切换，默认为true
-     */
-    public void setScorllToNext(boolean isScorllToNext) {
-        this.isScorllToNext = isScorllToNext;
+    public interface ChangeFragmentListener {
+        /**
+         * @param positon        切换到哪项
+         * @param lastTabView    上一项的tab视图，用来改变没选中tab状态
+         * @param currentTabView 当前想的tab视图,用来改变选中的tab样式
+         */
+        public void change(int lastPositon, int positon, View lastTabView,
+                           View currentTabView);
     }
+    private class Fragment_viewpager_Adapter extends FragmentStatePagerAdapter {
+        public Fragment_viewpager_Adapter(FragmentManager fm) {
+            super(fm);
+            // TODO Auto-generated constructor stub
+        }
 
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return list.size();
+        }
+
+        @Override
+        public Fragment getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return list.get(arg0);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            // TODO Auto-generated method stub
+            super.destroyItem(container, position, object);
+            //			((ViewGroup) list.get(position).getView()).removeAllViews();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            // TODO Auto-generated method stub
+            return PagerAdapter.POSITION_NONE;
+        }
+    }
+    class tabClickLisener implements OnClickListener {
+        private int position;
+
+        public tabClickLisener(int position) {
+            // TODO Auto-generated constructor stub
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            if (list.size() == tabLayout.getChildCount()) {
+                viewPager.setCurrentItem(position, isScorll);
+            } else
+                Toast.makeText(context, "page项数量不等于tab项数量", Toast.LENGTH_SHORT)
+                        .show();
+        }
+    }
     class MyViewPager extends ViewPager {
-
         public MyViewPager(Context context) {
             super(context);
             // TODO Auto-generated constructor stub

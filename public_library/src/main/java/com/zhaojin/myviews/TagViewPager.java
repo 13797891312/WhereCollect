@@ -2,7 +2,6 @@ package com.zhaojin.myviews;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -24,7 +23,7 @@ import java.util.List;
  */
 public class TagViewPager extends RelativeLayout implements
         OnPageChangeListener, Runnable {
-    public ViewPager viewPager;
+    public HackyViewPager viewPager;
     OnGetView onGetView;
     private boolean isAutoNext = false;
     private int autoNextTime = 5000;
@@ -67,6 +66,7 @@ public class TagViewPager extends RelativeLayout implements
      * @param id2 小圆没选中图标资源ID
      */
     public void init(int id1, int id2) {
+        removeAllViews();
         this.tagImageId_seleced = id1;
         this.tagImageId_nomorl = id2;
         tagImageLayout = new LinearLayout(context);
@@ -79,7 +79,7 @@ public class TagViewPager extends RelativeLayout implements
         this.addView(tagImageLayout);
         tagImageLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
         tagImageLayout.setBottom(marginButtom);
-        viewPager = new ViewPager(context);
+        viewPager = new HackyViewPager(context);
         viewPager.setOnPageChangeListener(this);
         viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
@@ -96,6 +96,7 @@ public class TagViewPager extends RelativeLayout implements
      */
     public void init(int id1, int id2, int size, int imageMargin, int gravity,
                      int layoutMargin) {
+        removeAllViews();
         this.tagImageId_seleced = id1;
         this.tagImageId_nomorl = id2;
         this.margin = imageMargin;
@@ -114,7 +115,7 @@ public class TagViewPager extends RelativeLayout implements
         }
         tagImageLayout.setLayoutParams(params);
         this.addView(tagImageLayout);
-        viewPager = new ViewPager(context);
+        viewPager = new HackyViewPager(context);
         viewPager.setOnPageChangeListener(this);
         viewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
@@ -307,20 +308,19 @@ public class TagViewPager extends RelativeLayout implements
     public void setOnPrimaryItemListener(OnPrimaryItemListener primaryItemListener) {
         this.primaryItemListener = primaryItemListener;
     }
+
     public interface OnSelectedListoner {
         /**
          * @param position 当前切换到哪项
          */
         public void onSelected(int position);
     }
-
     /**
      * 当前页面切换完毕监听
      */
     public interface OnPrimaryItemListener {
         public void onPrimaryItem(int position, View view);
     }
-
     public interface OnGetView {
         /**
          * @param container
@@ -363,10 +363,12 @@ public class TagViewPager extends RelativeLayout implements
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             if (scollStatus == 0 && primaryItemListener != null) {
                 primaryItemListener.onPrimaryItem(position, ((View) object));
-                scollStatus=-1;
+                scollStatus = -1;
             }
             mCurrentView = (View) object;
-            mCurrentView.setTag(position);
+            if (mCurrentView != null) {
+                mCurrentView.setTag(position);
+            }
         }
     }
 }

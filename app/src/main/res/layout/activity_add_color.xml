@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_color"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/dip_16"
+    tools:context="com.gongwu.wherecollect.object.SelectColorActivity">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="80dp"
+                  android:background="@drawable/shape_white_r4dp"
+                  android:gravity="center_vertical"
+                  android:orientation="vertical">
+        <EditText android:id="@+id/add_edit"
+                  android:layout_width="wrap_content"
+                  android:layout_height="0dp"
+                  android:layout_marginLeft="@dimen/dip_8"
+                  android:layout_weight="1"
+                  android:background="@color/trans"
+                  android:hint="自定义颜色"
+                  android:imeOptions="actionDone"
+                  android:inputType="text"
+                  android:maxLength="5"
+                  android:maxLines="1"
+                  android:paddingRight="@dimen/dip_16"
+                  android:textSize="@dimen/f_15"
+                  android:visibility="visible"/>
+        <View android:layout_width="match_parent"
+              android:layout_height="1px"
+              android:background="@color/black_12"></View>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contentList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+    </LinearLayout>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/dip_16"
+              android:text="快速添加"
+              android:textColor="@color/black_26"
+              android:textSize="@dimen/f_13"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
