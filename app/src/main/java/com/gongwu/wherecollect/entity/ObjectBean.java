@@ -83,6 +83,7 @@ public class ObjectBean implements Serializable {
     private boolean isOpen = true;//自己添加的参数，快速添加时用的，别处没用
     private boolean isLayer = false;//自己添加的参数，迁移隔层时用，别处没用
     private List<String> tags;
+    private String price;
     /**
      * x : 0
      * y : 0
@@ -279,6 +280,14 @@ public class ObjectBean implements Serializable {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getChannel() {

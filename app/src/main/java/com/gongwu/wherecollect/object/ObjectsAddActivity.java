@@ -162,9 +162,9 @@ public class ObjectsAddActivity extends BaseViewActivity {
         if (!TextUtils.isEmpty(book.getChannel())) {
             tempBean.setChannel(book.getChannel());
         }
-        if (book.getPrice() != 0) {
-            tempBean.setPrice_max((int) book.getPrice());
-        }
+//        if (book.getPrice() != 0) {
+//            tempBean.setPrice_max((int) book.getPrice());
+//        }
         if (book.getCategory() != null) {
             List<BaseBean> temp = new ArrayList<>();
             temp.add(book.getCategory());

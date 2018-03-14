@@ -62,17 +62,18 @@ public class BookBean implements Serializable{
         this.pic = pic;
     }
 
-    public float getPrice() {
-        if(TextUtils.isEmpty(price)){
-            return 0;
-        }else{
-            try {
-                return Float.parseFloat(price.split("元")[0]);
-            }catch (Exception e){
-                e.toString();
-                return 0;
-            }
-        }
+    public String getPrice() {
+//        if(TextUtils.isEmpty(price)){
+//            return 0;
+//        }else{
+//            try {
+//                return Float.parseFloat(price.split("元")[0]);
+//            }catch (Exception e){
+//                e.toString();
+//                return 0;
+//            }
+//        }
+        return price;
     }
 
     public void setPrice(String price) {

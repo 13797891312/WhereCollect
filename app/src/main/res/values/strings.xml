@@ -22,4 +22,7 @@
     <string name="confirm">确定</string>
     <string name="scaning">扫描二维码</string>
     <string name="two_code_card">二维码名片</string>
+    <string name="add_more_text">批量添加</string>
+    <string name="add_goods_text">添加物品</string>
+    <string name="add_goods_other_content_text">添加属性</string>
 </resources>

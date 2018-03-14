@@ -77,4 +77,9 @@
         <item name="android:windowExitAnimation">@anim/push_bottom_out1</item>
     </style>
 
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
 </resources>

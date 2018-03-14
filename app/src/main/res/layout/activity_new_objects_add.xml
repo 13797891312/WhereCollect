@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_goods_add"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:scrollbars="none"
+    tools:context="com.gongwu.wherecollect.object.ObjectsAddActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/add_shopping_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/select_changheader_btn_other"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dip_44"
+                    android:layout_height="@dimen/dip_44"
+                    android:src="@drawable/import_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_10"
+                    android:text="一键导入"
+                    android:textColor="@color/black_other"
+                    android:textSize="@dimen/f_15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_20"
+                    android:gravity="center"
+                    android:text="网购类物品,根据提示可\n一键添加"
+                    android:textColor="@color/black_other_one"
+                    android:textSize="@dimen/dip_12" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/black_12" />
+
+            <LinearLayout
+                android:id="@+id/add_book_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/select_changheader_btn_other"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dip_44"
+                    android:layout_height="@dimen/dip_44"
+                    android:src="@drawable/scan_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_10"
+                    android:text="图书扫码"
+                    android:textColor="@color/black_other"
+                    android:textSize="@dimen/f_15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_20"
+                    android:gravity="center"
+                    android:text="图书类物品,直接扫描条\n形码添加"
+                    android:textColor="@color/black_other_one"
+                    android:textSize="@dimen/dip_12" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black_12" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dip_18"
+            android:layout_marginTop="@dimen/dip_12"
+            android:gravity="center"
+            android:text="名称和图片至少添加一项"
+            android:textColor="@color/black_other_one"
+            android:textSize="@dimen/dip_12" />
+
+        <EditText
+            android:id="@+id/goods_name_et"
+            android:layout_width="@dimen/dip_210"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/dip_18"
+            android:gravity="center"
+            android:hint="物品名称"
+            android:imeOptions="actionDone"
+            android:lines="1"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:textColor="@color/black_txt"
+            android:textColorHint="@color/divider"
+            android:textSize="@dimen/f_17"
+            android:theme="@style/MyEditText" />
+
+        <ImageView
+            android:id="@+id/camera_iv"
+            android:layout_width="@dimen/dip_30"
+            android:layout_height="@dimen/dip_30"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/dip_28"
+            android:src="@drawable/camera" />
+
+        <LinearLayout
+            android:id="@+id/add_other_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/black_12" />
+
+            <TextView
+                android:id="@+id/add_other_content_tv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_50"
+                android:background="@drawable/select_changheader_btn_other"
+                android:drawableRight="@drawable/icon_next_black"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dip_18"
+                android:paddingRight="@dimen/dip_18"
+                android:text="添加其他属性"
+                android:textColor="@color/black_other"
+                android:textSize="@dimen/f_15" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/black_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/add_other_content_edit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dip_50"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dip_18"
+                android:paddingRight="@dimen/dip_18"
+                android:text="其他属性"
+                android:textColor="@color/black_other"
+                android:textSize="@dimen/f_13" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_marginRight="@dimen/dip_18"
+                android:layout_weight="1"
+                android:background="@color/black_26" />
+
+            <ImageView
+                android:id="@+id/add_other_content_edit_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dip_18"
+                android:src="@drawable/edit_icon" />
+        </LinearLayout>
+
+        <com.gongwu.wherecollect.view.ObjectInfoLookView
+            android:id="@+id/goodsInfo_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"></com.gongwu.wherecollect.view.ObjectInfoLookView>
+
+        <Button
+            android:id="@+id/commit_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="240dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/select_maincolor_r4_25dp_bg"
+            android:enabled="false"
+            android:text="确定添加"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+</ScrollView>

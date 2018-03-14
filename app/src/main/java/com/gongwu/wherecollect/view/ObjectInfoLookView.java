@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.view;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import java.util.Comparator;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function:
  * Date: 2017/9/13
@@ -100,8 +102,12 @@ public class ObjectInfoLookView extends LinearLayout {
      * 设置价格
      */
     private void setjjiage() {
-        if (bean.getPrice_max() != 0) {
-            jiageEdit.setText(bean.getPrice_max() + "元");
+        if (!TextUtils.isEmpty(bean.getPrice())) {
+            jiageEdit.setText(bean.getPrice());
+            jiageLayout.setVisibility(View.VISIBLE);
+            showView();
+        } else {
+            jiageLayout.setVisibility(View.GONE);
         }
     }
 
@@ -111,8 +117,10 @@ public class ObjectInfoLookView extends LinearLayout {
     private void setQita() {
         if (!TextUtils.isEmpty(bean.getDetail())) {
             qitaTv.setText(bean.getDetail());
+            qitaLayout.setVisibility(View.VISIBLE);
+            showView();
         } else {
-            qitaLayout.setVisibility(GONE);
+            qitaLayout.setVisibility(View.GONE);
         }
     }
 
@@ -120,13 +128,25 @@ public class ObjectInfoLookView extends LinearLayout {
      * 设置星级
      */
     private void setStar() {
-        ratingStar.setRating(bean.getStar());
+        if (bean.getStar() == 0) {
+            starLayout.setVisibility(View.GONE);
+        } else {
+            starLayout.setVisibility(View.VISIBLE);
+            ratingStar.setRating(bean.getStar());
+            showView();
+        }
     }
 
     /**
      * 设置分类
      */
     private void setFenlei() {
+        if (bean.getCategories() != null && bean.getCategories().size() > 0) {
+            fenleiLayout.setVisibility(View.VISIBLE);
+        } else {
+            fenleiLayout.setVisibility(View.GONE);
+            return;
+        }
         fenleiFlow.removeAllViews();
         Collections.sort(bean.getCategories(), new Comparator<BaseBean>() {
             @Override
@@ -146,12 +166,19 @@ public class ObjectInfoLookView extends LinearLayout {
             text.setText(bean.getCategories().get(i).getName());
             text.setBackgroundResource(R.drawable.shape_maingoods2_bg);
         }
+        showView();
     }
 
     /**
      * 设置位置
      */
     private void setLocation() {
+        if (bean.getLocations() == null || bean.getLocations().size() == 0) {
+            locationLayout.setVisibility(View.GONE);
+            return;
+        } else {
+            locationLayout.setVisibility(View.VISIBLE);
+        }
         locationFlow.removeAllViews();
         Collections.sort(bean.getLocations(), new Comparator<BaseBean>() {
             @Override
@@ -176,6 +203,7 @@ public class ObjectInfoLookView extends LinearLayout {
         } else {
             locationBtn.setVisibility(VISIBLE);
         }
+        showView();
     }
 
     /**
@@ -183,8 +211,12 @@ public class ObjectInfoLookView extends LinearLayout {
      */
     private void setColors() {
         yanseFlow.removeAllViews();
-        if (TextUtils.isEmpty(bean.getColor()))
+        if (TextUtils.isEmpty(bean.getColor())) {
+            yanseLayout.setVisibility(View.GONE);
             return;
+        } else {
+            yanseLayout.setVisibility(View.VISIBLE);
+        }
         String[] colors = bean.getColor().split("、");
         for (int i = 0; i < colors.length; i++) {
             TextView text = (TextView) View.inflate(getContext(), R.layout.flow_textview, null);
@@ -198,6 +230,7 @@ public class ObjectInfoLookView extends LinearLayout {
             text.setText(colors[i]);
             text.setBackgroundResource(R.drawable.shape_maingoods2_bg);
         }
+        showView();
     }
 
     /**
@@ -205,8 +238,12 @@ public class ObjectInfoLookView extends LinearLayout {
      */
     private void setJijie() {
         jijieFlow.removeAllViews();
-        if (TextUtils.isEmpty(bean.getSeason()))
+        if (TextUtils.isEmpty(bean.getSeason())) {
+            jijieLayout.setVisibility(View.GONE);
             return;
+        } else {
+            jijieLayout.setVisibility(View.VISIBLE);
+        }
         String[] seasons = bean.getSeason().split("、");
         for (int i = 0; i < seasons.length; i++) {
             TextView text = (TextView) View.inflate(getContext(), R.layout.flow_textview, null);
@@ -220,6 +257,7 @@ public class ObjectInfoLookView extends LinearLayout {
             text.setText(seasons[i]);
             text.setBackgroundResource(R.drawable.shape_maingoods2_bg);
         }
+        showView();
     }
 
     /**
@@ -227,8 +265,12 @@ public class ObjectInfoLookView extends LinearLayout {
      */
     private void setQudao() {
         qudaoFlow.removeAllViews();
-        if (TextUtils.isEmpty(bean.getChannel()))
+        if (TextUtils.isEmpty(bean.getChannel())) {
+            qudaoLayout.setVisibility(View.GONE);
             return;
+        } else {
+            qudaoLayout.setVisibility(View.VISIBLE);
+        }
         String[] channel = bean.getChannel().split(">");
         for (int i = 0; i < channel.length; i++) {
             TextView text = (TextView) View.inflate(getContext(), R.layout.flow_textview, null);
@@ -242,6 +284,7 @@ public class ObjectInfoLookView extends LinearLayout {
             text.setText(channel[i]);
             text.setBackgroundResource(R.drawable.shape_maingoods2_bg);
         }
+        showView();
     }
 
     @OnClick(R.id.location_btn)
@@ -250,5 +293,11 @@ public class ObjectInfoLookView extends LinearLayout {
         intent.putExtra("object", bean);
         getContext().startActivity(intent);
         ((Activity) getContext()).finish();
+    }
+
+    private void showView() {
+        if (this.getVisibility() == View.GONE) {
+            this.setVisibility(View.VISIBLE);
+        }
     }
 }

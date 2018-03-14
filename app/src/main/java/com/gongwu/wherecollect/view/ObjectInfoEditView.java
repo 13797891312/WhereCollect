@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.view;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import java.util.Comparator;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function:
  * Date: 2017/9/13
@@ -109,6 +111,7 @@ public class ObjectInfoEditView extends LinearLayout {
                 if (!TextUtils.isEmpty(jiageEdit.getText())) {
                     bean.setPrice_max(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
                     bean.setPrice_min(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
+                    bean.setPrice(jiageEdit.getText().toString() + "元");
                     if (changeListener != null) {
                         changeListener.change();
                     }

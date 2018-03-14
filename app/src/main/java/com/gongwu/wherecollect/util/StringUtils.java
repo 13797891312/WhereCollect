@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.util;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -16,6 +17,7 @@ import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 public class StringUtils {
     private static SimpleDateFormat dateFormat = null;
 
@@ -501,5 +504,16 @@ public class StringUtils {
         Rect rect = new Rect();
         context.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
         return screenHeight - rect.bottom > 200;
+    }
+
+    /**
+     * px转换dp
+     *
+     * @param px
+     * @param context
+     * @return
+     */
+    public static int pxConvertDp(int px, Context context) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, context.getResources().getDisplayMetrics());
     }
 }

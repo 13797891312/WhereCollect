@@ -60,4 +60,7 @@
     <color name="holo_orange_dark">#ffff8800</color>
     <!-- A dark Holo shade of red -->
     <color name="holo_red_dark">#ffcc0000</color>
+    <color name="black_other">#343936</color>
+    <color name="black_other_one">#999999</color>
+    <color name="btn_enable_other">#b8e7c9</color>
 </resources>
