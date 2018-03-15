@@ -12,6 +12,7 @@ import com.gongwu.wherecollect.R;
 
 import java.util.Calendar;
 import java.util.Date;
+
 /**
  * Created by zhaojin on 2016/8/12.
  */
@@ -32,9 +33,6 @@ public abstract class DateBirthdayDialog {
     public void show() {
         View view = View.inflate(context, R.layout.dialog_birthday_picker, null);
         datePicker = (DatePicker) view.findViewById(R.id.new_act_date_picker);
-        if (Build.VERSION.SDK_INT >= 11) {
-            datePicker.setMaxDate(new Date().getTime());
-        }
         int year;
         int month;
         int day;
@@ -62,8 +60,7 @@ public abstract class DateBirthdayDialog {
         }
         // Build DateTimeDialog
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context,
-                AlertDialog
-                        .THEME_HOLO_LIGHT);
+                AlertDialog.THEME_HOLO_LIGHT);
         builder.setView(view);
         builder.setTitle("选择时间");
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -83,6 +80,12 @@ public abstract class DateBirthdayDialog {
     }
 
     public abstract void result(int year, int month, int day);
+
+    public void setDateMax() {
+        if (Build.VERSION.SDK_INT >= 11) {
+            datePicker.setMaxDate(new Date().getTime());
+        }
+    }
 }
 
 

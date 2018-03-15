@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.object.SelectChannelActivity;
@@ -21,8 +22,10 @@ import com.gongwu.wherecollect.object.SelectFenleiActivity;
 import com.gongwu.wherecollect.object.SelectJijieActivity;
 import com.gongwu.wherecollect.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -65,6 +68,15 @@ public class ObjectInfoEditView extends LinearLayout {
     View qudaoLayout;
     @Bind(R.id.jiage_edit)
     EditText jiageEdit;
+    @Bind(R.id.add_goods_count_layout)
+    View addGoodsCountLaytou;
+    @Bind(R.id.goods_count_edit)
+    EditText goodsCountEdit;
+    @Bind(R.id.purchase_time_tv)
+    TextView purchaseTimeTv;
+    @Bind(R.id.expiry_time_tv)
+    TextView expiryTimeTv;
+
     private ChangeListener changeListener;
 
     public ObjectInfoEditView(Context context) {
@@ -135,6 +147,23 @@ public class ObjectInfoEditView extends LinearLayout {
                 }
             }
         });
+        goodsCountEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                bean.setObject_count(Integer.parseInt(goodsCountEdit.getText().toString()));
+                if (changeListener != null) {
+                    changeListener.change();
+                }
+            }
+        });
     }
 
     /**
@@ -142,6 +171,9 @@ public class ObjectInfoEditView extends LinearLayout {
      */
     public void updataView() {
         setFenlei();//设置分类
+        setGoodsCount();//设置数量
+        setPurchaseTime();//设置购买时间
+        setExpirytime();//设置到期时间
         setColors();//设置颜色
         setJijie();//设置季节
         setQudao();//设置购货渠道
@@ -153,6 +185,28 @@ public class ObjectInfoEditView extends LinearLayout {
     private void setjjiage() {
         if (bean.getPrice_max() != 0) {
             jiageEdit.setText(bean.getPrice_max() + "");
+        }
+    }
+
+    private void setPurchaseTime() {
+        if (!TextUtils.isEmpty(bean.getCreated_at())) {
+            purchaseTimeTv.setText(bean.getCreated_at());
+        }
+    }
+
+    private void setExpirytime() {
+        if (!TextUtils.isEmpty(bean.getDeleted_at())) {
+            expiryTimeTv.setText(bean.getDeleted_at());
+        }
+    }
+
+    /**
+     * 设置物品数量
+     */
+    private void setGoodsCount() {
+        if (bean.getObject_count() > 0) {
+            goodsCountEdit.setText(bean.getObject_count() + "");
+            goodsCountEdit.setSelection(goodsCountEdit.getText().toString().length());
         }
     }
 
@@ -266,7 +320,8 @@ public class ObjectInfoEditView extends LinearLayout {
         }
     }
 
-    @OnClick({R.id.fenlei_layout, R.id.yanse_layout, R.id.jijie_layout, R.id.qudao_layout, R.id.qita_layout})
+    @OnClick({R.id.fenlei_layout, R.id.yanse_layout, R.id.jijie_layout, R.id.qudao_layout, R.id.qita_layout,
+            R.id.purchase_time_layout, R.id.expiry_time_layout})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -291,6 +346,46 @@ public class ObjectInfoEditView extends LinearLayout {
                 ((Activity) getContext()).startActivityForResult(intent, 1);
                 break;
             case R.id.qita_layout:
+                break;
+            case R.id.purchase_time_layout:
+                String start = "";
+                if (TextUtils.isEmpty(bean.getCreated_at())) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                    start = formatter.format(curDate);
+                } else {
+                    start = bean.getCreated_at();
+                }
+                DateBirthdayDialog dialog = new DateBirthdayDialog(getContext(), start) {
+                    @Override
+                    public void result(final int year, final int month, final int day) {
+                        String bd = year + "-" + StringUtils.formatIntTime(month) + "-" +
+                                StringUtils.formatIntTime(day);
+                        purchaseTimeTv.setText(bd);
+                        bean.setCreated_at(bd);
+                    }
+                };
+                dialog.show();
+                break;
+            case R.id.expiry_time_layout:
+                String end = "";
+                if (TextUtils.isEmpty(bean.getDeleted_at())) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                    end = formatter.format(curDate);
+                } else {
+                    end = bean.getDeleted_at();
+                }
+                DateBirthdayDialog expiryDialog = new DateBirthdayDialog(getContext(), end) {
+                    @Override
+                    public void result(final int year, final int month, final int day) {
+                        String bd = year + "-" + StringUtils.formatIntTime(month) + "-" +
+                                StringUtils.formatIntTime(day);
+                        expiryTimeTv.setText(bd);
+                        bean.setDeleted_at(bd);
+                    }
+                };
+                expiryDialog.show();
                 break;
         }
     }

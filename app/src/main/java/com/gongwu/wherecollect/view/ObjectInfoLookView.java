@@ -68,6 +68,18 @@ public class ObjectInfoLookView extends LinearLayout {
     View qudaoLayout;
     @Bind(R.id.location_flow)
     FlowViewGroup locationFlow;
+    @Bind(R.id.add_goods_count_layout)
+    View addGoodsCountLaytou;
+    @Bind(R.id.goods_count_edit)
+    EditText goodsCountEdit;
+    @Bind(R.id.purchase_time_layout)
+    View purchaseTimeLayout;
+    @Bind(R.id.purchase_time_tv)
+    TextView purchaseTimeTv;
+    @Bind(R.id.expiry_time_layout)
+    View expiryTimeLayout;
+    @Bind(R.id.expiry_time_tv)
+    TextView expiryTimeTv;
 
     public ObjectInfoLookView(Context context) {
         this(context, null);
@@ -89,6 +101,9 @@ public class ObjectInfoLookView extends LinearLayout {
      */
     public void updataView() {
         setFenlei();//设置分类
+        setGoodsCount();//设置数量
+        setPurchaseTime();//设置购买时间
+        setExpirytime();//设置到期时间
         setLocation();//设置位置
         setColors();//设置颜色
         setJijie();//设置季节
@@ -96,6 +111,39 @@ public class ObjectInfoLookView extends LinearLayout {
         setStar();//设置星级
         setQita();//其他
         setjjiage();//其他
+    }
+
+    private void setPurchaseTime() {
+        if (!TextUtils.isEmpty(bean.getCreated_at())) {
+            purchaseTimeLayout.setVisibility(VISIBLE);
+            purchaseTimeTv.setText(bean.getCreated_at());
+            showView();
+        } else {
+            purchaseTimeLayout.setVisibility(GONE);
+        }
+    }
+
+    private void setExpirytime() {
+        if (!TextUtils.isEmpty(bean.getDeleted_at())) {
+            expiryTimeLayout.setVisibility(VISIBLE);
+            expiryTimeTv.setText(bean.getDeleted_at());
+            showView();
+        } else {
+            expiryTimeLayout.setVisibility(GONE);
+        }
+    }
+
+    /**
+     * 设置物品数量
+     */
+    private void setGoodsCount() {
+        if (bean.getObject_count() > 0) {
+            goodsCountEdit.setText(bean.getObject_count() + "");
+            addGoodsCountLaytou.setVisibility(View.VISIBLE);
+            showView();
+        } else {
+            addGoodsCountLaytou.setVisibility(View.GONE);
+        }
     }
 
     /**

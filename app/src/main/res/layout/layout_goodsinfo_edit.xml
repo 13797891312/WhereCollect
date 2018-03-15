@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:hedgehog="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical">
-    <LinearLayout android:id="@+id/star_layout"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="24dp"
-                  android:gravity="center_vertical"
-                  android:orientation="horizontal">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="16dp"
-                  android:text="星级 :"
-                  android:textColor="@color/black_txt"
-                  android:textSize="15sp"/>
+    xmlns:hedgehog="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/star_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="星级 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
         <com.gongwu.wherecollect.view.RatingBar
             android:id="@+id/rating_star"
             android:layout_width="wrap_content"
@@ -28,25 +34,139 @@
             hedgehog:starEmpty="@drawable/icon_start_nomal"
             hedgehog:starFill="@drawable/icon_star_seclect"
             hedgehog:starImageHeight="30dp"
-            hedgehog:starImageWidth="30dp"
-            hedgehog:starImagePadding="0dp"/>
+            hedgehog:starImagePadding="0dp"
+            hedgehog:starImageWidth="30dp" />
     </LinearLayout>
-    <RelativeLayout android:id="@+id/fenlei_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:layout_marginTop="6dp"
-                    android:paddingTop="2dp">
-        <TextView android:id="@+id/fenlei_textview"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="16dp"
-                  android:paddingTop="@dimen/dip_2"
-                  android:text="物品分类 :"
-                  android:textColor="@color/black_txt"
-                  android:textSize="15sp"/>
+
+    <LinearLayout
+        android:id="@+id/add_goods_count_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingRight="@dimen/dip_16"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="数量 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/goods_count_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:background="@color/trans"
+            android:enabled="true"
+            android:gravity="center_vertical"
+            android:hint="请输入数量"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLines="1"
+            android:paddingTop="1dp"
+            android:singleLine="true"
+            android:textColor="@color/black_txt"
+            android:textColorHint="#83868d"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/purchase_time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="购买时间 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/purchase_time_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:background="@color/trans"
+            android:textColor="@color/black_txt"
+            android:textColorHint="#83868d"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dip_16"
+            android:src="@drawable/icon_next_black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/expiry_time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="到期时间 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/expiry_time_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:background="@color/trans"
+            android:textColor="@color/black_txt"
+            android:textColorHint="#83868d"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dip_16"
+            android:src="@drawable/icon_next_black" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/fenlei_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="2dp">
+
+        <TextView
+            android:id="@+id/fenlei_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="@dimen/dip_2"
+            android:text="物品分类 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
         <com.gongwu.wherecollect.view.FlowViewGroup
             android:id="@+id/fenlei_flow"
             android:layout_width="match_parent"
@@ -54,30 +174,36 @@
             android:layout_marginLeft="@dimen/dip_8"
             android:layout_marginRight="@dimen/dip_16"
             android:layout_toLeftOf="@+id/fenlei_img"
-            android:layout_toRightOf="@id/fenlei_textview">
-        </com.gongwu.wherecollect.view.FlowViewGroup>
-        <ImageView android:id="@+id/fenlei_img"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_alignParentRight="true"
-                   android:layout_marginRight="@dimen/dip_16"
-                   android:paddingTop="@dimen/dip_2"
-                   android:src="@drawable/icon_next_black"/>
+            android:layout_toRightOf="@id/fenlei_textview"></com.gongwu.wherecollect.view.FlowViewGroup>
+
+        <ImageView
+            android:id="@+id/fenlei_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dip_16"
+            android:paddingTop="@dimen/dip_2"
+            android:src="@drawable/icon_next_black" />
     </RelativeLayout>
-    <LinearLayout android:id="@+id/jiage_layout"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_vertical"
-                  android:orientation="horizontal"
-                  android:paddingBottom="8dp"
-                  android:paddingRight="@dimen/dip_16"
-                  android:paddingTop="8dp">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="16dp"
-                  android:text="价格 :"
-                  android:textColor="@color/black_txt"
-                  android:textSize="15sp"/>
+
+    <LinearLayout
+        android:id="@+id/jiage_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingRight="@dimen/dip_16"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="价格 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
         <EditText
             android:id="@+id/jiage_edit"
             android:layout_width="match_parent"
@@ -87,31 +213,36 @@
             android:enabled="true"
             android:gravity="center_vertical"
             android:hint="请输入价格"
-            android:inputType="number"
-            android:singleLine="true"
             android:imeOptions="actionDone"
+            android:inputType="number"
             android:maxLines="1"
             android:paddingTop="1dp"
+            android:singleLine="true"
             android:textColor="@color/black_txt"
             android:textColorHint="#83868d"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
     </LinearLayout>
-    <RelativeLayout android:id="@+id/yanse_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingRight="@dimen/dip_16"
-                    android:paddingTop="8dp">
-        <TextView android:id="@+id/yanse_textview"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="16dp"
-                  android:paddingTop="@dimen/dip_2"
-                  android:text="颜色 :"
-                  android:textColor="@color/black_txt"
-                  android:textSize="15sp"/>
+
+    <RelativeLayout
+        android:id="@+id/yanse_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingRight="@dimen/dip_16"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/yanse_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="@dimen/dip_2"
+            android:text="颜色 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
         <com.gongwu.wherecollect.view.FlowViewGroup
             android:id="@+id/yanse_flow"
             android:layout_width="match_parent"
@@ -120,57 +251,69 @@
             android:layout_marginRight="@dimen/dip_16"
             android:layout_toLeftOf="@+id/yanse_img"
             android:layout_toRightOf="@id/yanse_textview"
-            android:layout_weight="1">
-        </com.gongwu.wherecollect.view.FlowViewGroup>
-        <ImageView android:id="@+id/yanse_img"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_alignParentRight="true"
-                   android:paddingTop="@dimen/dip_2"
-                   android:src="@drawable/icon_next_black"/>
+            android:layout_weight="1"></com.gongwu.wherecollect.view.FlowViewGroup>
+
+        <ImageView
+            android:id="@+id/yanse_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingTop="@dimen/dip_2"
+            android:src="@drawable/icon_next_black" />
     </RelativeLayout>
-    <LinearLayout android:id="@+id/jijie_layout"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_vertical"
-                  android:orientation="horizontal"
-                  android:paddingBottom="8dp"
-                  android:paddingTop="8dp">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="16dp"
-                  android:text="季节 :"
-                  android:textColor="@color/black_txt"
-                  android:textSize="15sp"/>
+
+    <LinearLayout
+        android:id="@+id/jijie_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="季节 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
         <com.gongwu.wherecollect.view.FlowViewGroup
             android:id="@+id/jijie_flow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dip_8"
             android:layout_marginRight="@dimen/dip_16"
-            android:layout_weight="1">
-        </com.gongwu.wherecollect.view.FlowViewGroup>
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_marginRight="@dimen/dip_16"
-                   android:src="@drawable/icon_next_black"/>
+            android:layout_weight="1"></com.gongwu.wherecollect.view.FlowViewGroup>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dip_16"
+            android:src="@drawable/icon_next_black" />
 
     </LinearLayout>
-    <RelativeLayout android:id="@+id/qudao_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp">
-        <TextView android:id="@+id/qudao_textview"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="16dp"
-                  android:paddingTop="@dimen/dip_2"
-                  android:text="购货渠道 :"
-                  android:textColor="@color/black_txt"
-                  android:textSize="15sp"/>
+
+    <RelativeLayout
+        android:id="@+id/qudao_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/qudao_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="@dimen/dip_2"
+            android:text="购货渠道 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
         <com.gongwu.wherecollect.view.FlowViewGroup
             android:id="@+id/qudao_flow"
             android:layout_width="match_parent"
@@ -178,40 +321,47 @@
             android:layout_marginLeft="@dimen/dip_8"
             android:layout_marginRight="@dimen/dip_16"
             android:layout_toLeftOf="@+id/qudao_img"
-            android:layout_toRightOf="@+id/qudao_textview">
-        </com.gongwu.wherecollect.view.FlowViewGroup>
-        <ImageView android:id="@+id/qudao_img"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_alignParentRight="true"
-                   android:layout_marginRight="@dimen/dip_16"
-                   android:paddingTop="@dimen/dip_2"
-                   android:src="@drawable/icon_next_black"/>
+            android:layout_toRightOf="@+id/qudao_textview"></com.gongwu.wherecollect.view.FlowViewGroup>
+
+        <ImageView
+            android:id="@+id/qudao_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dip_16"
+            android:paddingTop="@dimen/dip_2"
+            android:src="@drawable/icon_next_black" />
     </RelativeLayout>
-    <RelativeLayout android:id="@+id/qita_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp">
-        <TextView android:id="@+id/qita_textview"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="16dp"
-                  android:text="其他 :"
-                  android:textColor="@color/black_txt"
-                  android:textSize="15sp"/>
-        <EditText android:id="@+id/qita_tv"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="@dimen/dip_8"
-                  android:layout_marginRight="@dimen/dip_16"
-                  android:layout_toRightOf="@id/qita_textview"
-                  android:background="@color/trans"
-                  android:hint="请输入其他内容"
-                  android:textColor="@color/black_54"
-                  android:textColorHint="@color/black_26"
-                  android:textSize="15sp"/>
+
+    <RelativeLayout
+        android:id="@+id/qita_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/qita_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="其他 :"
+            android:textColor="@color/black_txt"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/qita_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dip_8"
+            android:layout_marginRight="@dimen/dip_16"
+            android:layout_toRightOf="@id/qita_textview"
+            android:background="@color/trans"
+            android:hint="请输入其他内容"
+            android:textColor="@color/black_54"
+            android:textColorHint="@color/black_26"
+            android:textSize="15sp" />
     </RelativeLayout>
 </LinearLayout>

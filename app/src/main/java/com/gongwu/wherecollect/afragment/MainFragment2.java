@@ -290,6 +290,7 @@ public class MainFragment2 extends BaseFragment {
             }
         };
         dialog.show();
+        dialog.setDateMax();
     }
 
     @Override

@@ -171,6 +171,7 @@ public class NewObjectsAddActivity extends BaseViewActivity {
                 params.height = StringUtils.pxConvertDp(100, context);
                 cameraIv.setLayoutParams(params);
                 ImageLoader.loadFromFile(context, imgFile, cameraIv);
+                setCommitBtnEnable(true);
             }
         };
         selectImgDialog.hintLayout();
