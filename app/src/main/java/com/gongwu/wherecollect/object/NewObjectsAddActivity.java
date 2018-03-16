@@ -74,6 +74,8 @@ public class NewObjectsAddActivity extends BaseViewActivity {
     private final int imgMax = 1;
     private final int BOOK_CODE = 1;
     private final int OTHER_CODE = 0x123;
+    private final int MORE_CODE = 0x124;
+    public static final String MORE_TYPE = "more_type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +123,7 @@ public class NewObjectsAddActivity extends BaseViewActivity {
     }
 
     @OnClick({R.id.add_shopping_layout, R.id.add_book_layout, R.id.camera_iv,
-            R.id.add_other_content_tv, R.id.commit_btn, R.id.add_other_content_edit_iv})
+            R.id.add_other_content_tv, R.id.commit_btn, R.id.add_other_content_edit_iv, R.id.textBtn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.add_shopping_layout:
@@ -147,6 +149,14 @@ public class NewObjectsAddActivity extends BaseViewActivity {
                 break;
             case R.id.commit_btn:
                 //确定添加
+                break;
+            case R.id.textBtn:
+                Intent addMoreIntent = new Intent(context, AddGoodsOtherContentActivity.class);
+                if (tempBean != null) {
+                    addMoreIntent.putExtra("tempBean", tempBean);
+                    addMoreIntent.putExtra("type", MORE_TYPE);
+                }
+                startActivityForResult(addMoreIntent, MORE_CODE);
                 break;
         }
     }

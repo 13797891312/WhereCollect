@@ -63,4 +63,20 @@
     <color name="black_other">#343936</color>
     <color name="black_other_one">#999999</color>
     <color name="btn_enable_other">#b8e7c9</color>
+    <color name="pieChart">#fce0dd</color>
+    <color name="pieChart1">#6dd0e8</color>
+    <color name="pieChart2">#87dff5</color>
+    <color name="pieChart3">#f98ea6</color>
+    <color name="pieChart4">#fab0c1</color>
+    <color name="pieChart5">#f9bfa3</color>
+    <color name="pieChart6">#976B5A</color>
+    <color name="pieChart7">#ED774C</color>
+    <color name="pieChart8">#9CA615</color>
+    <color name="pieChart9">#35BFBB</color>
+    <color name="pieChart10">#B165D2</color>
+    <color name="pieChart11">#E656D1</color>
+    <color name="pieChart12">#99682D</color>
+    <color name="pieChart13">#5AD32C</color>
+    <color name="pieChart14">#2CD3C1</color>
+    <color name="pieChart15">#7165A3</color>
 </resources>

@@ -151,7 +151,8 @@
         <activity android:name=".quickadd.QuickFurnitureSelectListActivity" />
         <activity android:name=".record.RecordLookActivity" />
         <activity android:name=".object.NewObjectsAddActivity" />
-        <activity android:name=".activity.AddGoodsOtherContentActivity"></activity>
+        <activity android:name=".activity.AddGoodsOtherContentActivity" />
+        <activity android:name=".activity.AddMoreGoodsActivity"></activity>
     </application>
 
 </manifest>

@@ -7,12 +7,16 @@ import android.widget.Button;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.object.NewObjectsAddActivity;
 import com.gongwu.wherecollect.view.ObjectInfoEditView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 设置其他属性
+ */
 public class AddGoodsOtherContentActivity extends BaseViewActivity {
 
     @Bind(R.id.goodsInfo_other_view)
@@ -20,6 +24,7 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
     @Bind(R.id.commit_btn)
     Button commitBtn;
     private ObjectBean tempBean;
+    private String startType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
 
     private void initData() {
         tempBean = (ObjectBean) getIntent().getSerializableExtra("tempBean");
+        startType = getIntent().getStringExtra("type");
         if (tempBean != null) {
             goodsInfoView.init(tempBean);
         }
@@ -42,10 +48,14 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.commit_btn:
-                Intent intent = new Intent();
-                intent.putExtra("tempBean", tempBean);
-                setResult(RESULT_OK, intent);
-                finish();
+                if (NewObjectsAddActivity.MORE_TYPE.equals(startType)) {
+                    AddMoreGoodsActivity.start(context,tempBean);
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra("tempBean", tempBean);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
                 break;
         }
     }
