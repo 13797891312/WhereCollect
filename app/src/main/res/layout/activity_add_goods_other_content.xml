@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_goods_add"
     android:layout_width="match_parent"
@@ -8,30 +8,28 @@
     android:fillViewport="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:scrollbars="none"
+    android:orientation="vertical"
     tools:context="com.gongwu.wherecollect.object.ObjectsAddActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
 
         <com.gongwu.wherecollect.view.ObjectInfoEditView
             android:id="@+id/goodsInfo_other_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+    </ScrollView>
 
-        <Button
-            android:id="@+id/commit_btn"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="240dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/select_maincolor_r4_25dp_bg"
-            android:text="确定"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
-    </LinearLayout>
-</ScrollView>
+    <Button
+        android:id="@+id/commit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_maincolor_bg"
+        android:gravity="center"
+        android:text="跳过"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_15" />
+</LinearLayout>

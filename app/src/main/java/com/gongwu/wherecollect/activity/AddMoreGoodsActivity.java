@@ -3,8 +3,8 @@ package com.gongwu.wherecollect.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +35,8 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     private AddGoodsDialog mDialog;
     private List<ObjectBean> mDatas;
     private AddMoreGoodsListAdapter mAdapter;
+    private int currentItem = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +48,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         mDatas = new ArrayList<>();
         initView();
         initData();
-    }
-
-    private void initData() {
-        bean = (ObjectBean) getIntent().getSerializableExtra("bean");
+        initEvent();
     }
 
     private void initView() {
@@ -57,6 +56,28 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         addGoodsTv.setVisibility(View.VISIBLE);
         mAdapter = new AddMoreGoodsListAdapter(context, mDatas);
         mListView.setAdapter(mAdapter);
+    }
+
+    private void initData() {
+        bean = (ObjectBean) getIntent().getSerializableExtra("bean");
+    }
+
+    private void initEvent() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                currentItem = position;
+                mDialog.setObjectBean(mDatas.get(position));
+                mDialog.show();
+            }
+        });
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                return false;
+            }
+        });
     }
 
     @OnClick({R.id.textBtn})
@@ -67,8 +88,18 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                 mDialog = new AddGoodsDialog(context) {
                     @Override
                     public void result(ObjectBean bean) {
-                        mDatas.add(bean);
+                        if (currentItem != -1) {
+                            mDatas.set(currentItem, bean);
+                            currentItem = -1;
+                        } else {
+                            mDatas.add(bean);
+                        }
                         mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void cancel() {
+                        currentItem = -1;
                     }
                 };
                 mDialog.setObjectBean(null);

@@ -5,14 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,9 +14,7 @@ import android.widget.Toast;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
-import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
-import com.zsitech.oncon.barcode.core.CaptureActivity;
 
 import java.io.File;
 import java.util.List;
@@ -63,6 +55,7 @@ public class AddGoodsDialog extends Dialog {
     private void initData() {
         if (!TextUtils.isEmpty(bean.getName())) {
             goodsNameEdit.setText(bean.getName());
+            goodsNameEdit.setSelection(bean.getName().length());
         }
         if (!TextUtils.isEmpty(bean.getObject_url())) {
             ImageLoader.loadFromFile(context, new File(bean.getObject_url()), addGoodsIv);
@@ -73,6 +66,8 @@ public class AddGoodsDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_add_goods_layout);
+        this.setCancelable(false);
+        this.setCanceledOnTouchOutside(false);
         ButterKnife.bind(this);
     }
 
@@ -85,6 +80,7 @@ public class AddGoodsDialog extends Dialog {
             case R.id.code_layout:
                 break;
             case R.id.cancel_tv:
+                cancel();
                 dismiss();
                 break;
             case R.id.submit_tv:
@@ -138,6 +134,10 @@ public class AddGoodsDialog extends Dialog {
     }
 
     public void result(ObjectBean bean) {
+
+    }
+
+    public void cancel() {
 
     }
 }

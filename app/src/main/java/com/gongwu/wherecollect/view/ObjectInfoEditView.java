@@ -363,6 +363,9 @@ public class ObjectInfoEditView extends LinearLayout {
                                 StringUtils.formatIntTime(day);
                         purchaseTimeTv.setText(bd);
                         bean.setCreated_at(bd);
+                        if (changeListener != null) {
+                            changeListener.change();
+                        }
                     }
                 };
                 dialog.show();
@@ -383,6 +386,9 @@ public class ObjectInfoEditView extends LinearLayout {
                                 StringUtils.formatIntTime(day);
                         expiryTimeTv.setText(bd);
                         bean.setDeleted_at(bd);
+                        if (changeListener != null) {
+                            changeListener.change();
+                        }
                     }
                 };
                 expiryDialog.show();

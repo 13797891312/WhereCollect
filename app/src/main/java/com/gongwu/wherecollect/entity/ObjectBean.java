@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.entity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import com.gongwu.wherecollect.util.StringUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Function:物品列表实体
  * Date: 2017/10/19
@@ -374,7 +376,7 @@ public class ObjectBean implements Serializable {
     }
 
     public String getUpdated_at() {
-        return TextUtils.isEmpty(updated_at)?created_at:updated_at;
+        return TextUtils.isEmpty(updated_at) ? created_at : updated_at;
     }
 
     public void setUpdated_at(String updated_at) {
@@ -595,6 +597,7 @@ public class ObjectBean implements Serializable {
             this._id = _id;
         }
     }
+
     public static class Point implements Serializable {
         private float x;
         private float y;
@@ -613,6 +616,38 @@ public class ObjectBean implements Serializable {
 
         public void setY(float y) {
             this.y = y;
+        }
+    }
+
+    public boolean isEmpty() {
+        if (star > 0) {
+            return false;
+        } else if (object_count > 0) {
+            return false;
+        } else if (!TextUtils.isEmpty(created_at)) {
+            return false;
+        } else if (!TextUtils.isEmpty(deleted_at)) {
+            return false;
+        } else if (categories != null && categories.size() > 0) {
+            return false;
+        } else if (!TextUtils.isEmpty(price)) {
+            return false;
+        } else if (!TextUtils.isEmpty(price)) {
+            return false;
+        } else if (colors != null && colors.size() > 0) {
+            return false;
+        } else if (!TextUtils.isEmpty(season)) {
+            return false;
+        } else if (channels != null && channels.size() > 0) {
+            return false;
+        } else if (!TextUtils.isEmpty(detail)) {
+            return false;
+        } else if (!TextUtils.isEmpty(channel)) {
+            return false;
+        } else if (!TextUtils.isEmpty(color)) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

@@ -96,6 +96,15 @@ public class GoodsImageView extends FrameLayout {
                         (DiskCacheStrategy.ALL)
                 .dontAnimate()
                 .into(new BitmapImageViewTarget(head) {
+
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        if (name.getTag().toString().equals(userId)) {
+                            head.setImageBitmap(resource);
+                            name.setVisibility(GONE);
+                        }
+                    }
+
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
@@ -106,9 +115,6 @@ public class GoodsImageView extends FrameLayout {
                             }
                         } catch (Exception e1) {
                             e1.printStackTrace();
-                        }
-                        if (listener != null) {
-                            listener.onError();
                         }
                     }
                 });
