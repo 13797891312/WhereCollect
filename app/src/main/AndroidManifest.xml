@@ -150,9 +150,11 @@
         <activity android:name=".quickadd.QuickSpaceSelectListActivity" />
         <activity android:name=".quickadd.QuickFurnitureSelectListActivity" />
         <activity android:name=".record.RecordLookActivity" />
-        <activity android:name=".object.NewObjectsAddActivity" />
+        <activity android:name=".object.AddGoodsActivity" />
         <activity android:name=".activity.AddGoodsOtherContentActivity" />
-        <activity android:name=".activity.AddMoreGoodsActivity"></activity>
+        <activity android:name=".activity.AddMoreGoodsActivity" />
+        <activity android:name=".activity.AddGoodsRemindActivity" />
+        <activity android:name=".activity.RemindGoodsDetailsActivity"></activity>
     </application>
 
 </manifest>

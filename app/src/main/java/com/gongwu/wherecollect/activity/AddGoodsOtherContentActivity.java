@@ -2,13 +2,12 @@ package com.gongwu.wherecollect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
-import com.gongwu.wherecollect.object.NewObjectsAddActivity;
+import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.view.ObjectInfoEditView;
 
 import butterknife.Bind;
@@ -47,7 +46,7 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
                 commitBtn.setText("下一步");
             }
         }
-        if (!NewObjectsAddActivity.MORE_TYPE.equals(startType)) {
+        if (!AddGoodsActivity.MORE_TYPE.equals(startType)) {
             commitBtn.setText("确定");
         }
     }
@@ -67,7 +66,7 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.commit_btn:
-                if (NewObjectsAddActivity.MORE_TYPE.equals(startType)) {
+                if (AddGoodsActivity.MORE_TYPE.equals(startType)) {
                     AddMoreGoodsActivity.start(context, tempBean);
                 } else {
                     Intent intent = new Intent();

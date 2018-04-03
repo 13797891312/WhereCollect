@@ -52,7 +52,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NewObjectsAddActivity extends BaseViewActivity {
+public class AddGoodsActivity extends BaseViewActivity {
     @Bind(R.id.textBtn)
     TextView addMoreTv;
     @Bind(R.id.goods_name_et)
@@ -80,7 +80,7 @@ public class NewObjectsAddActivity extends BaseViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_objects_add);
+        setContentView(R.layout.activity_add_goods);
         ButterKnife.bind(this);
         titleLayout.setBack(true, null);
         titleLayout.setTitle(getResources().getString(R.string.add_goods_text));
@@ -225,7 +225,7 @@ public class NewObjectsAddActivity extends BaseViewActivity {
                             FileUtil.copyFile(file, newPath);
                             file = new File(newPath);
                             book.setImageFile(file);
-                            NewObjectsAddActivity.this.runOnUiThread(new Runnable() {//回主线程
+                            AddGoodsActivity.this.runOnUiThread(new Runnable() {//回主线程
                                 @Override
                                 public void run() {
                                     DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", (Activity) context, new
@@ -279,7 +279,7 @@ public class NewObjectsAddActivity extends BaseViewActivity {
                             FileUtil.copyFile(file, newPath);
                             file = new File(newPath);
                             book.setImageFile(file);
-                            NewObjectsAddActivity.this.runOnUiThread(new Runnable() {//回主线程
+                            AddGoodsActivity.this.runOnUiThread(new Runnable() {//回主线程
                                 @Override
                                 public void run() {
                                     DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", (Activity) context, new
@@ -398,7 +398,7 @@ public class NewObjectsAddActivity extends BaseViewActivity {
      * @param context
      */
     public static void start(Context context) {
-        Intent intent = new Intent(context, NewObjectsAddActivity.class);
+        Intent intent = new Intent(context, AddGoodsActivity.class);
         context.startActivity(intent);
     }
 

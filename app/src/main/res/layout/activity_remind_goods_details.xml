@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_remind_goods_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dip_8"
+
+    tools:context="com.gongwu.wherecollect.activity.RemindGoodsDetailsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_82"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/remind_goods_titile_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dip_12"
+                android:text="标题"
+                android:textSize="@dimen/f_15" />
+
+            <TextView
+                android:id="@+id/remind_goods_titile_details_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="每三个月提醒一次标题"
+                android:textColor="@color/maincolor"
+                android:textSize="@dimen/f_15" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/dip_60"
+            android:layout_height="@dimen/dip_60"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dip_8">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="关联物品"
+                android:textColor="@color/black"
+                android:textSize="@dimen/f_12" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_12" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_54"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提醒日期"
+            android:textSize="@dimen/f_15" />
+
+        <TextView
+            android:id="@+id/remind_goods_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dip_8"
+            android:text="提醒日期"
+            android:textColor="@color/maincolor"
+            android:textSize="@dimen/f_15" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_12" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_54"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重复(开始日期之后的)"
+            android:textSize="@dimen/f_15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dip_8"
+            android:drawablePadding="@dimen/dip_4"
+            android:drawableRight="@drawable/icon_next_black"
+            android:text="每周"
+            android:textColor="@color/maincolor"
+            android:textSize="@dimen/f_15" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_12" />
+</LinearLayout>

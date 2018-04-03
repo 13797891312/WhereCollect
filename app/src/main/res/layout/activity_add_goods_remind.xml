@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_goods_add"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:scrollbars="none"
+    tools:context="com.gongwu.wherecollect.activity.AddGoodsRemindActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dip_40"
+            android:paddingTop="@dimen/dip_20">
+
+            <LinearLayout
+                android:id="@+id/add_shopping_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/select_changheader_btn_other"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dip_90"
+                    android:layout_height="@dimen/dip_90"
+                    android:src="@drawable/clarm" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_10"
+                    android:layout_marginTop="@dimen/dip_5"
+                    android:text="添加时间提醒"
+                    android:textColor="@color/black_other"
+                    android:textSize="@dimen/f_15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_20"
+                    android:gravity="center"
+                    android:text="到期日、保质期、定期\n更换等用此提醒"
+                    android:textColor="@color/black_other_one"
+                    android:textSize="@dimen/f_11" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/black_12" />
+
+            <LinearLayout
+                android:id="@+id/add_book_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/select_changheader_btn_other"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dip_90"
+                    android:layout_height="@dimen/dip_90"
+                    android:src="@drawable/num" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_10"
+                    android:layout_marginTop="@dimen/dip_5"
+                    android:text="添加数量提醒"
+                    android:textColor="@color/black_other"
+                    android:textSize="@dimen/f_15" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dip_20"
+                    android:gravity="center"
+                    android:text="余量提醒、自动减少设\n置等用此提醒"
+                    android:textColor="@color/black_other_one"
+                    android:textSize="@dimen/f_11" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black_12" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dip_22"
+            android:gravity="center"
+            android:text="提醒模板"
+            android:textColor="@color/maincolor"
+            android:textSize="@dimen/f_13" />
+
+        <View
+            android:layout_width="28dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/dip_20"
+            android:background="@color/maincolor" />
+
+        <com.gongwu.wherecollect.view.EbagListView
+            android:id="@+id/add_goods_remind_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <!--<Button-->
+        <!--android:id="@+id/commit_btn"-->
+        <!--style="?android:attr/borderlessButtonStyle"-->
+        <!--android:layout_width="240dp"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginBottom="24dp"-->
+        <!--android:layout_marginTop="32dp"-->
+        <!--android:background="@drawable/select_maincolor_r4_25dp_bg"-->
+        <!--android:enabled="false"-->
+        <!--android:text="确定添加"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="15sp" />-->
+    </LinearLayout>
+</ScrollView>

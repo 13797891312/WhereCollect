@@ -18,7 +18,7 @@ import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.afragment.MainFragment2;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
-import com.gongwu.wherecollect.object.NewObjectsAddActivity;
+import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.object.ObjectsAddActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
@@ -233,7 +233,7 @@ public class MainActivity extends BaseViewActivity {
                 } else {
                     Intent intent = new Intent(context, ObjectsAddActivity.class);
                     startActivity(intent);
-                    NewObjectsAddActivity.start(context);
+                    AddGoodsActivity.start(context);
                 }
                 break;
         }
