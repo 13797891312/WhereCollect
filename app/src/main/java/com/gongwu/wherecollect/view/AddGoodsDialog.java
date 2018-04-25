@@ -42,7 +42,11 @@ public class AddGoodsDialog extends Dialog {
         this.context = context;
     }
 
-
+    /**
+     * 设置数据
+     *
+     * @param bean
+     */
     public void setObjectBean(ObjectBean bean) {
         if (bean != null) {
             this.bean = bean;
@@ -59,6 +63,8 @@ public class AddGoodsDialog extends Dialog {
         }
         if (!TextUtils.isEmpty(bean.getObject_url())) {
             ImageLoader.loadFromFile(context, new File(bean.getObject_url()), addGoodsIv);
+        } else {
+            addGoodsIv.setImageDrawable(context.getResources().getDrawable(R.drawable.select_pic));
         }
     }
 
@@ -78,6 +84,7 @@ public class AddGoodsDialog extends Dialog {
                 showSelectDialog();
                 break;
             case R.id.code_layout:
+                scanCode();
                 break;
             case R.id.cancel_tv:
                 cancel();
@@ -102,6 +109,9 @@ public class AddGoodsDialog extends Dialog {
     private File imgOldFile;
     private File imgNewFile;
 
+    /**
+     * 图片选择
+     */
     private void showSelectDialog() {
         selectImgDialog = new SelectImgDialog((Activity) context, null, imgMax, imgOldFile) {
             @Override
@@ -138,6 +148,10 @@ public class AddGoodsDialog extends Dialog {
     }
 
     public void cancel() {
+
+    }
+
+    public void scanCode() {
 
     }
 }

@@ -158,7 +158,9 @@ public class ObjectInfoEditView extends LinearLayout {
 
             @Override
             public void afterTextChanged(Editable s) {
-                bean.setObject_count(Integer.parseInt(goodsCountEdit.getText().toString()));
+                if (!TextUtils.isEmpty(goodsCountEdit.getText().toString())) {
+                    bean.setObject_count(Integer.parseInt(goodsCountEdit.getText().toString()));
+                }
                 if (changeListener != null) {
                     changeListener.change();
                 }
