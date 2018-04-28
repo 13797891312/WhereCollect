@@ -6,8 +6,13 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -15,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
+import android.volley.request.QiNiuUploadUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,18 +37,25 @@ import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
+import com.gongwu.wherecollect.view.GoodsImageView;
 import com.gongwu.wherecollect.view.ObjectInfoLookView;
 import com.gongwu.wherecollect.view.SelectImgDialog;
 import com.zhaojin.myviews.Loading;
 import com.zsitech.oncon.barcode.core.CaptureActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +65,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 添加物品
+ */
 public class AddGoodsActivity extends BaseViewActivity {
     @Bind(R.id.textBtn)
     TextView addMoreTv;
@@ -60,13 +76,17 @@ public class AddGoodsActivity extends BaseViewActivity {
     @Bind(R.id.commit_btn)
     Button commitBtn;
     @Bind(R.id.camera_iv)
-    ImageView cameraIv;
+    GoodsImageView cameraIv;
     @Bind(R.id.goodsInfo_view)
     ObjectInfoLookView goodsInfoView;
     @Bind(R.id.add_other_content_edit_layout)
     LinearLayout otherEditLayout;
     @Bind(R.id.add_other_content_layout)
     LinearLayout otherLayout;
+    @Bind(R.id.head)
+    ImageView head;
+    @Bind(R.id.name)
+    TextView name;
 
     private ObjectBean tempBean = new ObjectBean();
     private File imgFile;
@@ -76,6 +96,7 @@ public class AddGoodsActivity extends BaseViewActivity {
     private final int OTHER_CODE = 0x123;
     private final int MORE_CODE = 0x124;
     public static final String MORE_TYPE = "more_type";
+    private Loading loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +115,7 @@ public class AddGoodsActivity extends BaseViewActivity {
     private void initView() {
         addMoreTv.setVisibility(View.VISIBLE);
         addMoreTv.setText(getResources().getString(R.string.add_more_text));
+        head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
     }
 
     /**
@@ -105,8 +127,10 @@ public class AddGoodsActivity extends BaseViewActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count > 0) {
                     setCommitBtnEnable(true);
+                    setCameraIv(true);
                 } else {
                     setCommitBtnEnable(false);
+                    setCameraIv(false);
                 }
             }
 
@@ -120,6 +144,23 @@ public class AddGoodsActivity extends BaseViewActivity {
 
             }
         });
+    }
+
+    private void setCameraIv(boolean isSet) {
+        if (isSet && TextUtils.isEmpty(tempBean.getObject_url())) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setCameraIvParams(100);
+                    cameraIv.setHead("", goodsNameEv.getText().toString().trim(), "");
+                }
+            }, 1000);
+        } else if (!isSet && TextUtils.isEmpty(tempBean.getObject_url())) {
+            setCameraIvParams(30);
+            head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
+            name.setText("");
+        }
+
     }
 
     @OnClick({R.id.add_shopping_layout, R.id.add_book_layout, R.id.camera_iv,
@@ -149,6 +190,12 @@ public class AddGoodsActivity extends BaseViewActivity {
                 break;
             case R.id.commit_btn:
                 //确定添加
+                loading = Loading.show(loading, this, "");
+                if (TextUtils.isEmpty(tempBean.getObject_url())) {
+                    new Thread(runnable).start();
+                } else {
+                    upLoadImg(tempBean.getObjectFiles());
+                }
                 break;
             case R.id.textBtn:
                 Intent addMoreIntent = new Intent(context, AddGoodsOtherContentActivity.class);
@@ -161,8 +208,76 @@ public class AddGoodsActivity extends BaseViewActivity {
         }
     }
 
+    /**
+     * 上传图片
+     */
+    private void upLoadImg(List<File> list) {
+        QiNiuUploadUtil uploadUtil = new QiNiuUploadUtil(this, list, "object/image/") {
+            @Override
+            protected void finish(List<String> list) {
+                super.finish(list);
+                addObjects(list);
+            }
+        };
+        uploadUtil.start();
+    }
+
+    /**
+     * 添加物品
+     */
+    private void addObjects(List<String> list) {
+        if (StringUtils.isEmpty(list)) {
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            sb.append(list.get(i));
+            if (i != list.size() - 1) {
+                sb.append(",");
+            }
+        }
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(this).getId());
+        map.put("ISBN", ISBN);
+        map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get
+                (tempBean.getCategories().size() - 1).getCode());
+        map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean
+                .getChannel().split(">")));
+        map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean
+                .getColor().split("、")));
+        map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
+        map.put("name", goodsNameEv.getText().toString());
+        map.put("price_max", tempBean.getPrice_max() + "");
+        map.put("price_min", tempBean.getPrice_min() + "");
+        map.put("season", tempBean.getSeason());
+        map.put("star", tempBean.getStar() + "");
+        map.put("image_urls", sb.toString());
+        PostListenner listenner = new PostListenner(this) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                setResult(RESULT_OK);
+                finish();
+                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+                if (loading != null) {
+                    loading.dismiss();
+                }
+            }
+        };
+        HttpClient.addObjects(this, map, listenner);
+    }
+
+
     SelectImgDialog selectImgDialog;
 
+    /**
+     * 图片选择dialog
+     */
     private void showSelectDialog() {
         selectImgDialog = new SelectImgDialog(this, null, imgMax, imgOldFile) {
             @Override
@@ -176,17 +291,16 @@ public class AddGoodsActivity extends BaseViewActivity {
             protected void resultFile(File file) {
                 super.resultFile(file);
                 imgFile = file;
-                ViewGroup.LayoutParams params = cameraIv.getLayoutParams();
-                params.width = StringUtils.pxConvertDp(100, context);
-                params.height = StringUtils.pxConvertDp(100, context);
-                cameraIv.setLayoutParams(params);
-                ImageLoader.loadFromFile(context, imgFile, cameraIv);
+                setCameraIvParams(100);
+                cameraIv.setHead("", "", imgFile.getAbsolutePath());
+                tempBean.setObject_url(imgFile.getAbsolutePath());
                 setCommitBtnEnable(true);
             }
         };
         selectImgDialog.hintLayout();
         selectImgDialog.showEditIV(imgOldFile == null ? View.GONE : View.VISIBLE);
     }
+
 
     /**
      * 图书扫描
@@ -315,11 +429,9 @@ public class AddGoodsActivity extends BaseViewActivity {
         tempBean = new ObjectBean();
         if (book.getImageFile() != null) {
             imgOldFile = book.getImageFile();
-            ViewGroup.LayoutParams params = cameraIv.getLayoutParams();
-            params.width = StringUtils.pxConvertDp(100, context);
-            params.height = StringUtils.pxConvertDp(100, context);
-            cameraIv.setLayoutParams(params);
-            ImageLoader.loadFromFile(context, imgOldFile, cameraIv);
+            setCameraIvParams(100);
+            cameraIv.setHead("", "", imgFile.getAbsolutePath());
+            tempBean.setObject_url(imgFile.getAbsolutePath());
         }
         if (!TextUtils.isEmpty(book.getTitle())) {
             goodsNameEv.setText(book.getTitle());
@@ -374,6 +486,14 @@ public class AddGoodsActivity extends BaseViewActivity {
         }
     }
 
+
+    private void setCameraIvParams(int dp) {
+        ViewGroup.LayoutParams params = cameraIv.getLayoutParams();
+        params.width = StringUtils.pxConvertDp(dp, context);
+        params.height = StringUtils.pxConvertDp(dp, context);
+        cameraIv.setLayoutParams(params);
+    }
+
     /**
      * 重写用来回调图书二维码的扫描
      *
@@ -406,4 +526,84 @@ public class AddGoodsActivity extends BaseViewActivity {
         otherLayout.setVisibility(View.GONE);
         otherEditLayout.setVisibility(View.VISIBLE);
     }
+
+    public void viewSaveToImage(View view) {
+        /**
+         * View组件显示的内容可以通过cache机制保存为bitmap
+         * 我们要获取它的cache先要通过setDrawingCacheEnable方法把cache开启，
+         * 然后再调用getDrawingCache方法就可 以获得view的cache图片了
+         * 。buildDrawingCache方法可以不用调用，因为调用getDrawingCache方法时，
+         * 若果 cache没有建立，系统会自动调用buildDrawingCache方法生成cache。
+         * 若果要更新cache, 必须要调用destoryDrawingCache方法把旧的cache销毁，才能建立新的。
+         */
+        //        view.setDrawingCacheEnabled(true);
+        //        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        //设置绘制缓存背景颜色
+        //        view.setDrawingCacheBackgroundColor(Color.WHITE);
+
+        // 把一个View转换成图片
+        Bitmap cachebmp = loadBitmapFromView(view);
+        //保存在本地 产品还没决定要不要保存在本地
+        FileOutputStream fos;
+        File file;
+        try {
+            // 判断手机设备是否有SD卡
+            boolean isHasSDCard = Environment.getExternalStorageState().equals(
+                    android.os.Environment.MEDIA_MOUNTED);
+            if (isHasSDCard) {
+                // SD卡根目录
+                String path = MyApplication.CACHEPATH;
+                file = new File(path, System.currentTimeMillis() + ".jpg");
+                //通过文件的对象file的createNewFile()方法来创建文件
+                file.createNewFile();
+                fos = new FileOutputStream(file);
+            } else {
+                throw new Exception("创建文件失败!");
+            }
+            //压缩图片 30 是压缩率，表示压缩70%; 如果不压缩是100，表示压缩率为0
+            cachebmp.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            fos.flush();
+            fos.close();
+            Message message = handler.obtainMessage();
+            message.obj = file;
+            handler.sendMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        view.destroyDrawingCache();
+    }
+
+    private Bitmap loadBitmapFromView(View v) {
+        int w = v.getWidth();
+        int h = v.getHeight();
+        Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmp);
+
+        c.drawColor(Color.WHITE);
+        /** 如果不设置canvas画布为白色，则生成透明 */
+
+        v.draw(c);
+
+        return bmp;
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            viewSaveToImage(cameraIv);
+        }
+    };
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            File file = (File) msg.obj;
+            List<File> fils = new ArrayList<>();
+            fils.add(file);
+            upLoadImg(fils);
+        }
+    };
+
 }

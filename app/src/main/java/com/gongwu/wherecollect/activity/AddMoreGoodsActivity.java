@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.gongwu.wherecollect.R;
@@ -106,11 +107,18 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         });
     }
 
-    @OnClick({R.id.textBtn})
+    @OnClick({R.id.textBtn, R.id.more_commit_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.textBtn:
                 startDialog();
+                break;
+            case R.id.more_commit_btn:
+                if (mDatas.size() > 0) {
+
+                } else {
+                    Toast.makeText(context, "请先添加物品", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

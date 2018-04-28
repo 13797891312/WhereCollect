@@ -56,7 +56,7 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
         goodsInfoView.setChangeListener(new ObjectInfoEditView.ChangeListener() {
             @Override
             public void change() {
-                commitBtn.setText("下一步");
+                setViewText();
             }
         });
 
@@ -85,8 +85,14 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
             tempBean = (ObjectBean) data.getSerializableExtra("bean");
             goodsInfoView.init(tempBean);
             if (!tempBean.isEmpty()) {
-                commitBtn.setText("下一步");
+                setViewText();
             }
+        }
+    }
+
+    private void setViewText() {
+        if (AddGoodsActivity.MORE_TYPE.equals(startType)) {
+            commitBtn.setText("下一步");
         }
     }
 }

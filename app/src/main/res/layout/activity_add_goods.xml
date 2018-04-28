@@ -129,13 +129,13 @@
             android:textSize="@dimen/f_17"
             android:theme="@style/MyEditText" />
 
-        <ImageView
+        <com.gongwu.wherecollect.view.GoodsImageView
             android:id="@+id/camera_iv"
             android:layout_width="@dimen/dip_30"
             android:layout_height="@dimen/dip_30"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/dip_28"
-            android:src="@drawable/camera" />
+             />
 
         <LinearLayout
             android:id="@+id/add_other_content_layout"

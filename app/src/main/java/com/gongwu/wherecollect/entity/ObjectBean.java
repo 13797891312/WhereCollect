@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.util.StringUtils;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -650,4 +651,12 @@ public class ObjectBean implements Serializable {
             return true;
         }
     }
+
+    public List<File> getObjectFiles() {
+        File file = new File(object_url);
+        List<File> files = new ArrayList<>();
+        files.add(file);
+        return files;
+    }
+
 }

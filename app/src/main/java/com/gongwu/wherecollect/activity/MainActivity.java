@@ -231,8 +231,8 @@ public class MainActivity extends BaseViewActivity {
                         }
                     }).setCancelable(true);
                 } else {
-                    Intent intent = new Intent(context, ObjectsAddActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(context, ObjectsAddActivity.class);
+//                    startActivity(intent);
                     AddGoodsActivity.start(context);
                 }
                 break;
