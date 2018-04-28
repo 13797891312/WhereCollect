@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.object;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.ObjectInfoLookView;
 import com.gongwu.wherecollect.view.ObjectsLookMenuDialog;
 import com.handmark.pulltorefresh.library.PullToScrollView;
+import com.tencent.bugly.beta.download.BetaReceiver;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,6 +41,8 @@ import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class ObjectLookInfoActivity extends BaseViewActivity {
     ObjectBean bean;
     @Bind(R.id.goods_image)
@@ -145,6 +149,18 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         nameTv.setText(bean.getName());
         timeTv.setText(String.format("创建于：%s", bean.getCreated_at()));
         goodsInfoView.init(bean);
+    }
+
+    @OnClick({R.id.edit_goods_iv})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.edit_goods_iv:
+                Intent intent = new Intent(context, AddGoodsActivity.class);
+                intent.putExtra("bean", bean);
+                ((Activity) context).startActivityForResult(intent, 0);
+                MobclickAgent.onEvent(context, "050103");
+                break;
+        }
     }
 
     @Override

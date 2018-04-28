@@ -286,7 +286,7 @@ public class ObjectBean implements Serializable {
     }
 
     public String getPrice() {
-        return price;
+        return TextUtils.isEmpty(price) ? price_max + "" : price;
     }
 
     public void setPrice(String price) {

@@ -656,4 +656,19 @@ public class HttpClient {
                 listenner);
         Queue.getQueue(context).add(request);
     }
+
+    /**
+     * 迁移隔层
+     *
+     * @param context
+     * @param params
+     * @param listenner
+     */
+    public static void addMoreGoods(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v320/add-objects",
+                params,
+                listenner);
+        Queue.getQueue(context).add(request);
+    }
 }

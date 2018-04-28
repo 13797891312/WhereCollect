@@ -151,7 +151,7 @@ public class ObjectInfoLookView extends LinearLayout {
      */
     private void setjjiage() {
         if (!TextUtils.isEmpty(bean.getPrice())) {
-            jiageEdit.setText(bean.getPrice());
+            jiageEdit.setText(bean.getPrice() + "元");
             jiageLayout.setVisibility(View.VISIBLE);
             showView();
         } else {

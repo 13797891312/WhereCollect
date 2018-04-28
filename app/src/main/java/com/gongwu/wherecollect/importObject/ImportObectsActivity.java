@@ -13,6 +13,7 @@ import com.gongwu.wherecollect.activity.LoginActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.object.ObjectsAddActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
@@ -188,13 +189,13 @@ public class ImportObectsActivity extends BaseViewActivity {
                     }, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(context, ObjectsAddActivity.class);
+                    Intent intent = new Intent(context, AddGoodsActivity.class);
                     intent.putExtra("type", 1);
                     startActivityForResult(intent, 43);
                 }
             }).setCancelable(true);
         } else {
-            Intent intent = new Intent(context, ObjectsAddActivity.class);
+            Intent intent = new Intent(context, AddGoodsActivity.class);
             intent.putExtra("type", 1);
             startActivityForResult(intent, 43);
         }

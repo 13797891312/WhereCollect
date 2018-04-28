@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
+import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.object.ObjectEditActivity;
 import com.gongwu.wherecollect.afragment.MainGoodsFragment;
 import com.gongwu.wherecollect.application.MyApplication;
@@ -158,7 +159,7 @@ public class ObjectsLookMenuDialog {
      * 编辑物品
      */
     private void editGoods() {
-        Intent intent = new Intent(context, ObjectEditActivity.class);
+        Intent intent = new Intent(context, AddGoodsActivity.class);
         intent.putExtra("bean", bean);
         ((Activity) context).startActivityForResult(intent, 0);
         MobclickAgent.onEvent(context, "050103");

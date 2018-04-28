@@ -216,7 +216,7 @@
             android:layout_marginTop="32dp"
             android:background="@drawable/select_maincolor_r4_25dp_bg"
             android:enabled="false"
-            android:text="确定添加"
+            android:text="确认添加"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </LinearLayout>

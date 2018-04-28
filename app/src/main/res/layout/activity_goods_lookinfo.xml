@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/goods_image"
         android:layout_width="match_parent"
@@ -10,23 +10,31 @@
         android:layout_marginTop="-100dp"
         android:minHeight="400dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/test"/>
+        android:src="@drawable/test" />
 
     <com.handmark.pulltorefresh.library.PullToScrollView
         android:id="@+id/activity_goods_add"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:fillViewport="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:scrollbars="none">
-        <requestFocus/>
+
+        <requestFocus />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <View android:layout_width="match_parent"
-                  android:layout_height="200dp"></View>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp"></View>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -34,36 +42,74 @@
 
                 android:orientation="vertical"
                 android:paddingBottom="24dp">
-                <TextView android:id="@+id/time_tv"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_gravity="center_horizontal"
-                          android:layout_marginTop="16dp"
-                          android:text="创建于：2017/09/10 12：30"
-                          android:textColor="#999999"
-                          android:textSize="11sp"/>
-                <EditText android:id="@+id/name_tv"
-                          android:layout_width="match_parent"
-                          android:layout_height="45dp"
-                          android:layout_marginLeft="16dp"
-                          android:layout_marginRight="16dp"
-                          android:layout_marginTop="16dp"
-                          android:background="@drawable/select_edit_bg"
-                          android:editable="false"
-                          android:gravity="center_vertical"
-                          android:singleLine="true"
-                          android:paddingLeft="16dp"
-                          android:imeOptions="actionDone"
-                          android:paddingRight="16dp"
-                          android:text="一个不怎么使用的杯子"
-                          android:textColor="@color/black_txt"
-                          android:textColorHint="#83868d"
-                          android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:text="创建于：2017/09/10 12：30"
+                    android:textColor="#999999"
+                    android:textSize="11sp" />
+
+                <EditText
+                    android:id="@+id/name_tv"
+                    android:layout_width="@dimen/dip_210"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/dip_6"
+                    android:layout_marginTop="@dimen/dip_6"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:hint="物品名称"
+                    android:imeOptions="actionDone"
+                    android:lines="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black_txt"
+                    android:textColorHint="@color/divider"
+                    android:textSize="@dimen/f_17"
+                    android:theme="@style/MyEditText" />
+
+                <LinearLayout
+                    android:id="@+id/add_other_content_edit_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dip_50"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dip_18"
+                        android:paddingRight="@dimen/dip_18"
+                        android:text="其他属性"
+                        android:textColor="@color/black_other"
+                        android:textSize="@dimen/f_13" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_marginRight="@dimen/dip_18"
+                        android:layout_weight="1"
+                        android:background="@color/black_26" />
+
+                    <ImageView
+                        android:id="@+id/edit_goods_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dip_18"
+                        android:src="@drawable/edit_icon" />
+                </LinearLayout>
+
                 <com.gongwu.wherecollect.view.ObjectInfoLookView
                     android:id="@+id/goodsInfo_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </com.gongwu.wherecollect.view.ObjectInfoLookView>
+                    android:layout_height="wrap_content"></com.gongwu.wherecollect.view.ObjectInfoLookView>
             </LinearLayout>
         </LinearLayout>
     </com.handmark.pulltorefresh.library.PullToScrollView>

@@ -3,16 +3,22 @@ package com.gongwu.wherecollect.object;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -41,9 +47,7 @@ import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
-import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
-import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.GoodsImageView;
@@ -97,6 +101,9 @@ public class AddGoodsActivity extends BaseViewActivity {
     private final int MORE_CODE = 0x124;
     public static final String MORE_TYPE = "more_type";
     private Loading loading;
+    private int type;//1为导入物品列表跳过来的，添加完了要返回去；
+    private int editGoodsType = 0;//0 为添加物品  1为编辑物品
+    private ObjectBean newBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +112,37 @@ public class AddGoodsActivity extends BaseViewActivity {
         ButterKnife.bind(this);
         titleLayout.setBack(true, null);
         titleLayout.setTitle(getResources().getString(R.string.add_goods_text));
+        type = getIntent().getIntExtra("type", 0);
         initView();
         initEvent();
+        initData();
+    }
+
+    /**
+     * 初始化数据，判断是否是直接添加物品，还是编辑物品
+     */
+    private void initData() {
+        ObjectBean bean = (ObjectBean) getIntent().getSerializableExtra("bean");
+        if (bean != null) {
+            editGoodsType = 1;
+            tempBean = bean;
+            commitBtn.setText("确认更改");
+            titleLayout.setTitle("编辑");
+            addMoreTv.setVisibility(View.GONE);
+            goodsInfoView.setVisibility(View.VISIBLE);
+            goodsInfoView.init(tempBean);
+            showOtherEditLayout();
+            if (!TextUtils.isEmpty(tempBean.getName())) {
+                goodsNameEv.setText(tempBean.getName());
+            }
+            if (!TextUtils.isEmpty(tempBean.getObject_url())) {
+                setCameraIvParams(100);
+                cameraIv.setHead("", "", tempBean.getObject_url());
+                imgOldFile = getFileByUri(tempBean.getObject_url());
+            }
+        } else {
+            editGoodsType = 0;
+        }
     }
 
     /**
@@ -191,6 +227,14 @@ public class AddGoodsActivity extends BaseViewActivity {
             case R.id.commit_btn:
                 //确定添加
                 loading = Loading.show(loading, this, "");
+                if (editGoodsType == 1) {
+                    if (!tempBean.getObject_url().contains("http")) {
+                        upLoadImg(tempBean.getObjectFiles());
+                    } else {
+                        addObject();
+                    }
+                    return;
+                }
                 if (TextUtils.isEmpty(tempBean.getObject_url())) {
                     new Thread(runnable).start();
                 } else {
@@ -216,7 +260,12 @@ public class AddGoodsActivity extends BaseViewActivity {
             @Override
             protected void finish(List<String> list) {
                 super.finish(list);
-                addObjects(list);
+                if (editGoodsType == 1) {
+                    tempBean.setObject_url(list.get(0));
+                    addObject();
+                } else {
+                    addObjects(list);
+                }
             }
         };
         uploadUtil.start();
@@ -247,16 +296,22 @@ public class AddGoodsActivity extends BaseViewActivity {
                 .getColor().split("、")));
         map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
         map.put("name", goodsNameEv.getText().toString());
-        map.put("price_max", tempBean.getPrice_max() + "");
-        map.put("price_min", tempBean.getPrice_min() + "");
+        map.put("price_max", tempBean.getPrice() + "");
+        map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
         map.put("star", tempBean.getStar() + "");
         map.put("image_urls", sb.toString());
+        map.put("count", tempBean.getObject_count() + "");
         PostListenner listenner = new PostListenner(this) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
-                setResult(RESULT_OK);
+                if (type == 0) {
+                    Intent intent = new Intent(context, ImportSelectFurnitureActivity.class);
+                    startActivity(intent);
+                } else {
+                    setResult(RESULT_OK);
+                }
                 finish();
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
             }
@@ -270,6 +325,75 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
         };
         HttpClient.addObjects(this, map, listenner);
+    }
+
+    /**
+     * 编辑其实是先添加一条，再把老的删除
+     */
+    private void addObject() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(this).getId());
+        map.put("detail", tempBean.getDetail());
+        map.put("image_url", tempBean.getObject_url());
+        map.put("object_count", tempBean.getObject_count() + "");
+        map.put("price_max", tempBean.getPrice_max() + "");
+        map.put("price_min", tempBean.getPrice_min() + "");
+        map.put("season", tempBean.getSeason());
+        map.put("name", tempBean.getName());
+        map.put("star", tempBean.getStar() + "");
+        map.put("coordinates", JsonUtils.jsonFromObject(tempBean.getCoordinates()));
+        StringBuilder ca = new StringBuilder();
+        for (int i = 0; i < StringUtils.getListSize(tempBean.getCategories()); i++) {
+            ca.append(tempBean.getCategories().get(i).getCode());
+            if (i != tempBean.getCategories().size() - 1) {
+                ca.append(",");
+            }
+        }
+        map.put("category_codes", ca.toString());
+        StringBuilder lc = new StringBuilder();
+        for (int i = 0; i < StringUtils.getListSize(tempBean.getLocations()); i++) {
+            lc.append(tempBean.getLocations().get(i).getCode());
+            if (i != tempBean.getLocations().size() - 1) {
+                lc.append(",");
+            }
+        }
+        map.put("location_codes", lc.toString());
+        map.put("channel", JsonUtils.jsonFromObject(tempBean.getChannel().split(">")));
+        map.put("color", JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
+        PostListenner listenner = new PostListenner(this, Loading.show(null, this,
+                "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                newBean = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
+                deleteObject();
+            }
+        };
+        HttpClient.getAddObject(this, map, listenner);
+    }
+
+    private void deleteObject() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(this).getId());
+        map.put("object_id", tempBean.get_id());
+        PostListenner listenner = new PostListenner(this, Loading.show(null, this,
+                "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                Intent intent = new Intent();
+                intent.putExtra("bean", newBean);
+                setResult(100, intent);
+                finish();
+            }
+        };
+        HttpClient.deleteGoods(this, map, listenner);
     }
 
 
@@ -432,6 +556,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             setCameraIvParams(100);
             cameraIv.setHead("", "", imgFile.getAbsolutePath());
             tempBean.setObject_url(imgFile.getAbsolutePath());
+            setCommitBtnEnable(true);
         }
         if (!TextUtils.isEmpty(book.getTitle())) {
             goodsNameEv.setText(book.getTitle());
@@ -605,5 +730,67 @@ public class AddGoodsActivity extends BaseViewActivity {
             upLoadImg(fils);
         }
     };
+
+    private File getPath(String path) {
+        Uri uri = Uri.parse(path);
+        String[] projection = {MediaStore.Video.Media.DATA};
+        Cursor cursor;
+        if (Build.VERSION.SDK_INT < 11) {
+            cursor = managedQuery(uri, projection, null, null, null);
+        } else {
+            CursorLoader cursorLoader = new CursorLoader(this, uri, projection, null, null, null);
+            cursor = cursorLoader.loadInBackground();
+        }
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+        cursor.moveToFirst();
+        return new File(cursor.getString(column_index));
+    }
+
+    public File getFileByUri(String s) {
+        Uri uri = Uri.parse(s);
+        String path = null;
+        if ("file".equals(uri.getScheme())) {
+            path = uri.getEncodedPath();
+            if (path != null) {
+                path = Uri.decode(path);
+                ContentResolver cr = this.getContentResolver();
+                StringBuffer buff = new StringBuffer();
+                buff.append("(").append( MediaStore.Images.ImageColumns.DATA).append("=").append("'" + path + "'").append(")");
+                Cursor cur = cr.query( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] {  MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA }, buff.toString(), null, null);
+                int index = 0;
+                int dataIdx = 0;
+                for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+                    index = cur.getColumnIndex( MediaStore.Images.ImageColumns._ID);
+                    index = cur.getInt(index);
+                    dataIdx = cur.getColumnIndex( MediaStore.Images.ImageColumns.DATA);
+                    path = cur.getString(dataIdx);
+                }
+                cur.close();
+                if (index == 0) {
+                } else {
+                    Uri u = Uri.parse("content://media/external/images/media/" + index);
+                    System.out.println("temp uri is :" + u);
+                }
+            }
+            if (path != null) {
+                return new File(path);
+            }
+        } else if ("content".equals(uri.getScheme())) {
+            // 4.2.2以后
+            String[] proj = { MediaStore.Images.Media.DATA };
+            Cursor cursor = this.getContentResolver().query(uri, proj, null, null, null);
+            if (cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                path = cursor.getString(columnIndex);
+            }
+            cursor.close();
+
+            return new File(path);
+        } else {
+//            Log.i(TAG, "Uri Scheme:" + uri.getScheme());
+        }
+        return null;
+    }
 
 }
