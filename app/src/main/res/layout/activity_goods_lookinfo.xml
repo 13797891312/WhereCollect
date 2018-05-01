@@ -72,7 +72,75 @@
                     android:textColorHint="@color/divider"
                     android:textSize="@dimen/f_17"
                     android:theme="@style/MyEditText" />
+                <LinearLayout
+                    android:id="@+id/objrct_position_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    >
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dip_50"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dip_18"
+                        android:paddingRight="@dimen/dip_18"
+                        android:text="位置"
+                        android:textColor="@color/black_other"
+                        android:textSize="@dimen/f_13" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_marginRight="@dimen/dip_18"
+                        android:layout_weight="1"
+                        android:background="@color/black_26" />
+
+                    <ImageView
+                        android:id="@+id/objrct_position_set_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dip_8"
+                        android:layout_marginRight="@dimen/dip_18"
+                        android:src="@drawable/edit_icon" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/objrct_position_hint_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dip_4"
+                        android:layout_marginLeft="@dimen/dip_18"
+                        android:background="@color/select_btn_press"
+                        android:text="未归位" />
+                    <LinearLayout
+                        android:id="@+id/ac_location_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/ac_location_btn"
+                            android:layout_width="@dimen/dip_40"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/dip_8"
+                            android:scaleType="center"
+                            android:layout_marginLeft="16dp"
+                            android:src="@drawable/icon_location" />
+                        <com.gongwu.wherecollect.view.FlowViewGroup
+                            android:id="@+id/ac_location_flow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/add_other_content_edit_layout"
                     android:layout_width="match_parent"
@@ -103,6 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dip_18"
+                        android:padding="@dimen/dip_8"
                         android:src="@drawable/edit_icon" />
                 </LinearLayout>
 

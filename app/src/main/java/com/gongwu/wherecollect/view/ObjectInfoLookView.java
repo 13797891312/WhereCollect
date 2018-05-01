@@ -221,6 +221,7 @@ public class ObjectInfoLookView extends LinearLayout {
      * 设置位置
      */
     private void setLocation() {
+        if (locationIsShow) return;
         if (bean.getLocations() == null || bean.getLocations().size() == 0) {
             locationLayout.setVisibility(View.GONE);
             return;
@@ -333,6 +334,17 @@ public class ObjectInfoLookView extends LinearLayout {
             text.setBackgroundResource(R.drawable.shape_maingoods2_bg);
         }
         showView();
+    }
+
+
+    private boolean locationIsShow = false;
+    /**
+     * 设置物品位置布局的显示或隐藏
+     * true 隐藏  false显示
+     */
+    public void setLocationlayoutVisibility(boolean isShow) {
+        this.locationIsShow = isShow;
+        locationLayout.setVisibility(isShow ? GONE : VISIBLE);
     }
 
     @OnClick(R.id.location_btn)

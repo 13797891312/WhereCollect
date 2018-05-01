@@ -11,11 +11,14 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
+import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
+import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
@@ -25,6 +28,7 @@ import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.view.FlowViewGroup;
 import com.gongwu.wherecollect.view.ObjectInfoLookView;
 import com.gongwu.wherecollect.view.ObjectsLookMenuDialog;
 import com.handmark.pulltorefresh.library.PullToScrollView;
@@ -35,6 +39,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -55,7 +61,16 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
     ObjectInfoLookView goodsInfoView;
     @Bind(R.id.activity_goods_add)
     PullToScrollView activityGoodsAdd;
-
+    @Bind(R.id.ac_location_layout)
+    LinearLayout locationLayout;
+    @Bind(R.id.objrct_position_hint_tv)
+    TextView positionHintTv;
+    @Bind(R.id.ac_location_flow)
+    FlowViewGroup locationFlow;
+    @Bind(R.id.ac_location_btn)
+    ImageView locationBtn;
+    @Bind(R.id.objrct_position_set_iv)
+    ImageView objectPositionConfiIv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,15 +123,14 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
                                     for (int j = 0; j < MainLocationFragment.mlist.size(); j++) {
                                         if (bb.getCode().equals(MainLocationFragment.mlist.get(j).getCode())) {
                                             EventBus.getDefault().post(new EventBusMsg.ImportObject(j));
-                                            return;
                                         }
                                     }
                                 }
                             }
                             bean.getLocations().clear();
                             goodsInfoView.init(bean);
-                            Intent intent = new Intent(context, ImportSelectFurnitureActivity.class);
-                            context.startActivity(intent);
+                            Intent intent = new Intent(ObjectLookInfoActivity.this, ImportSelectFurnitureActivity.class);
+                            startActivity(intent);
                         }
                     };
                     HttpClient.removeObjectFromFurnitrue(context, map, listenner);
@@ -148,18 +162,67 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
         nameTv.setText(bean.getName());
         timeTv.setText(String.format("创建于：%s", bean.getCreated_at()));
+        goodsInfoView.setLocationlayoutVisibility(true);
         goodsInfoView.init(bean);
+        setLocation();
     }
 
-    @OnClick({R.id.edit_goods_iv})
+    @OnClick({R.id.edit_goods_iv,R.id.ac_location_btn,R.id.objrct_position_set_iv})
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.edit_goods_iv:
-                Intent intent = new Intent(context, AddGoodsActivity.class);
+                 intent = new Intent(context, AddGoodsActivity.class);
                 intent.putExtra("bean", bean);
                 ((Activity) context).startActivityForResult(intent, 0);
                 MobclickAgent.onEvent(context, "050103");
                 break;
+            case R.id.ac_location_btn:
+                 intent = new Intent(context, MainActivity.class);
+                intent.putExtra("object", bean);
+                startActivity(intent);
+                break;
+            case R.id.objrct_position_set_iv:
+                editLocatio();
+                break;
+        }
+    }
+
+    /**
+     * 设置位置
+     */
+    private void setLocation() {
+        if (bean.getLocations() == null || bean.getLocations().size() == 0) {
+            locationLayout.setVisibility(View.GONE);
+            positionHintTv.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            locationLayout.setVisibility(View.VISIBLE);
+            positionHintTv.setVisibility(View.GONE);
+        }
+        locationFlow.removeAllViews();
+        Collections.sort(bean.getLocations(), new Comparator<BaseBean>() {
+            @Override
+            public int compare(BaseBean lhs, BaseBean rhs) {
+                return lhs.getLevel() - rhs.getLevel();
+            }
+        });
+        for (int i = 0; i < StringUtils.getListSize(bean.getLocations()); i++) {
+            TextView text = (TextView) View.inflate(context, R.layout.flow_textview, null);
+            locationFlow.addView(text);
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) text.getLayoutParams();
+            lp.bottomMargin = 5;
+            lp.topMargin = 5;
+            lp.rightMargin = 10;
+            lp.leftMargin = 10;
+            text.setLayoutParams(lp);
+            text.setText(bean.getLocations().get(i).getName());
+            text.setBackgroundResource(R.drawable.shape_maingoods2_bg);
+        }
+        if (StringUtils.isEmpty(bean.getLocations())) {
+            locationBtn.setVisibility(View.GONE);
+        } else {
+            locationBtn.setVisibility(View.VISIBLE);
         }
     }
 

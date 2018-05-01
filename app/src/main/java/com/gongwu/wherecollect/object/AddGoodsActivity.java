@@ -130,6 +130,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             titleLayout.setTitle("编辑");
             addMoreTv.setVisibility(View.GONE);
             goodsInfoView.setVisibility(View.VISIBLE);
+            goodsInfoView.setLocationlayoutVisibility(true);
             goodsInfoView.init(tempBean);
             showOtherEditLayout();
             if (!TextUtils.isEmpty(tempBean.getName())) {
@@ -161,7 +162,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         goodsNameEv.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count > 0) {
+                if (goodsNameEv.getText().toString().trim().length() > 0) {
                     setCommitBtnEnable(true);
                     setCameraIv(true);
                 } else {
@@ -339,7 +340,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         map.put("price_max", tempBean.getPrice_max() + "");
         map.put("price_min", tempBean.getPrice_min() + "");
         map.put("season", tempBean.getSeason());
-        map.put("name", tempBean.getName());
+        map.put("name", goodsNameEv.getText().toString().trim());
         map.put("star", tempBean.getStar() + "");
         map.put("coordinates", JsonUtils.jsonFromObject(tempBean.getCoordinates()));
         StringBuilder ca = new StringBuilder();
@@ -367,6 +368,14 @@ public class AddGoodsActivity extends BaseViewActivity {
                 super.code2000(r);
                 newBean = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
                 deleteObject();
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+                if (loading != null) {
+                    loading.dismiss();
+                }
             }
         };
         HttpClient.getAddObject(this, map, listenner);
