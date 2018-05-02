@@ -61,6 +61,9 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     private AddGoodsDialog mDialog;
     private List<ObjectBean> mDatas;
     private AddMoreGoodsListAdapter mAdapter;
+    /**
+     * 记录点击的item
+     */
     private int currentItem = -1;
 
 
@@ -115,12 +118,16 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                 break;
             case R.id.more_commit_btn:
                 if (mDatas.size() > 0) {
-
+                    initImgUrls();
                 } else {
                     Toast.makeText(context, "请先添加物品", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
+    }
+
+    private void initImgUrls() {
+
     }
 
     /**
@@ -131,10 +138,12 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         mDialog = new AddGoodsDialog(context) {
             @Override
             public void result(ObjectBean bean) {
+                //currentItem不为默认值时，修改记录的item的值
                 if (currentItem != -1) {
                     mDatas.set(currentItem, bean);
                     currentItem = -1;
                 } else {
+                    //为默认值，就是新添加的
                     mDatas.add(bean);
                 }
                 mAdapter.notifyDataSetChanged();

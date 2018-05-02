@@ -62,7 +62,9 @@ public class AddGoodsDialog extends Dialog {
             goodsNameEdit.setSelection(bean.getName().length());
         }
         if (!TextUtils.isEmpty(bean.getObject_url())) {
-            ImageLoader.loadFromFile(context, new File(bean.getObject_url()), addGoodsIv);
+            File file = new File(bean.getObject_url());
+            ImageLoader.loadFromFile(context, file, addGoodsIv);
+            imgOldFile = file;
         } else {
             addGoodsIv.setImageDrawable(context.getResources().getDrawable(R.drawable.select_pic));
         }
@@ -107,7 +109,6 @@ public class AddGoodsDialog extends Dialog {
     SelectImgDialog selectImgDialog;
     private final int imgMax = 1;
     private File imgOldFile;
-    private File imgNewFile;
 
     /**
      * 图片选择
@@ -124,8 +125,7 @@ public class AddGoodsDialog extends Dialog {
             @Override
             protected void resultFile(File file) {
                 super.resultFile(file);
-                imgNewFile = file;
-                ImageLoader.loadFromFile(context, imgNewFile, addGoodsIv);
+                ImageLoader.loadFromFile(context, file, addGoodsIv);
                 bean.setObject_url(file.getPath());
             }
         };

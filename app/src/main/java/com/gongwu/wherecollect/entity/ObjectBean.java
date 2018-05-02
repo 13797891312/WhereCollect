@@ -659,4 +659,9 @@ public class ObjectBean implements Serializable {
         return files;
     }
 
+    public File getObjectFile() {
+        File file = new File(object_url);
+        return file;
+    }
+
 }

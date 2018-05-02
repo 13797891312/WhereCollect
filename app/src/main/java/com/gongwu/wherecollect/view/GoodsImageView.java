@@ -123,7 +123,9 @@ public class GoodsImageView extends FrameLayout {
     private int getResId(String userId) {
         int i = 0;
         try {
-            i = Integer.parseInt(userId.substring(userId.length() - 1));
+            if (userId.length()!=0){
+                i = Integer.parseInt(userId.substring(userId.length() - 1));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

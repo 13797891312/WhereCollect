@@ -159,7 +159,7 @@ public class ObjectsLookMenuDialog {
      * 编辑物品
      */
     private void editGoods() {
-        Intent intent = new Intent(context, AddGoodsActivity.class);
+        Intent intent = new Intent(context, ObjectEditActivity.class);
         intent.putExtra("bean", bean);
         ((Activity) context).startActivityForResult(intent, 0);
         MobclickAgent.onEvent(context, "050103");

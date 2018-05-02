@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -128,18 +129,20 @@ public class AddGoodsActivity extends BaseViewActivity {
             tempBean = bean;
             commitBtn.setText("确认更改");
             titleLayout.setTitle("编辑");
+            //隐藏批量按钮
             addMoreTv.setVisibility(View.GONE);
             goodsInfoView.setVisibility(View.VISIBLE);
             goodsInfoView.setLocationlayoutVisibility(true);
             goodsInfoView.init(tempBean);
             showOtherEditLayout();
+            //设置物品名字
             if (!TextUtils.isEmpty(tempBean.getName())) {
                 goodsNameEv.setText(tempBean.getName());
             }
+            //设置图片
             if (!TextUtils.isEmpty(tempBean.getObject_url())) {
                 setCameraIvParams(100);
                 cameraIv.setHead("", "", tempBean.getObject_url());
-                imgOldFile = getFileByUri(tempBean.getObject_url());
             }
         } else {
             editGoodsType = 0;
@@ -228,17 +231,24 @@ public class AddGoodsActivity extends BaseViewActivity {
             case R.id.commit_btn:
                 //确定添加
                 loading = Loading.show(loading, this, "");
+                //编辑物品
                 if (editGoodsType == 1) {
+                    //判断图片是否更改，没更改的情况下 图片地址应该为网络路径
                     if (!tempBean.getObject_url().contains("http")) {
+                        //图片有更改，先上传
                         upLoadImg(tempBean.getObjectFiles());
                     } else {
+                        //无修改图片时，直接调用修改其他属性的接口
                         addObject();
                     }
                     return;
                 }
+                //如果图片没有地址，则自动生成一个图片上传给服务牌
                 if (TextUtils.isEmpty(tempBean.getObject_url())) {
+                    //开启线程 生成图片
                     new Thread(runnable).start();
                 } else {
+                    //图片有地址 直接上传
                     upLoadImg(tempBean.getObjectFiles());
                 }
                 break;
@@ -740,66 +750,5 @@ public class AddGoodsActivity extends BaseViewActivity {
         }
     };
 
-    private File getPath(String path) {
-        Uri uri = Uri.parse(path);
-        String[] projection = {MediaStore.Video.Media.DATA};
-        Cursor cursor;
-        if (Build.VERSION.SDK_INT < 11) {
-            cursor = managedQuery(uri, projection, null, null, null);
-        } else {
-            CursorLoader cursorLoader = new CursorLoader(this, uri, projection, null, null, null);
-            cursor = cursorLoader.loadInBackground();
-        }
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-        cursor.moveToFirst();
-        return new File(cursor.getString(column_index));
-    }
-
-    public File getFileByUri(String s) {
-        Uri uri = Uri.parse(s);
-        String path = null;
-        if ("file".equals(uri.getScheme())) {
-            path = uri.getEncodedPath();
-            if (path != null) {
-                path = Uri.decode(path);
-                ContentResolver cr = this.getContentResolver();
-                StringBuffer buff = new StringBuffer();
-                buff.append("(").append( MediaStore.Images.ImageColumns.DATA).append("=").append("'" + path + "'").append(")");
-                Cursor cur = cr.query( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] {  MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA }, buff.toString(), null, null);
-                int index = 0;
-                int dataIdx = 0;
-                for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
-                    index = cur.getColumnIndex( MediaStore.Images.ImageColumns._ID);
-                    index = cur.getInt(index);
-                    dataIdx = cur.getColumnIndex( MediaStore.Images.ImageColumns.DATA);
-                    path = cur.getString(dataIdx);
-                }
-                cur.close();
-                if (index == 0) {
-                } else {
-                    Uri u = Uri.parse("content://media/external/images/media/" + index);
-                    System.out.println("temp uri is :" + u);
-                }
-            }
-            if (path != null) {
-                return new File(path);
-            }
-        } else if ("content".equals(uri.getScheme())) {
-            // 4.2.2以后
-            String[] proj = { MediaStore.Images.Media.DATA };
-            Cursor cursor = this.getContentResolver().query(uri, proj, null, null, null);
-            if (cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                path = cursor.getString(columnIndex);
-            }
-            cursor.close();
-
-            return new File(path);
-        } else {
-//            Log.i(TAG, "Uri Scheme:" + uri.getScheme());
-        }
-        return null;
-    }
 
 }
