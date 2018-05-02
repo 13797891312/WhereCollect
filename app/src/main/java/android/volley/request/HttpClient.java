@@ -1,9 +1,11 @@
 package android.volley.request;
+
 import android.content.Context;
 
 import com.gongwu.wherecollect.BuildConfig;
 
 import java.util.Map;
+
 /**
  * Function:
  * Date: 2016/5/26
@@ -658,7 +660,7 @@ public class HttpClient {
     }
 
     /**
-     * 迁移隔层
+     * 批量添加
      *
      * @param context
      * @param params

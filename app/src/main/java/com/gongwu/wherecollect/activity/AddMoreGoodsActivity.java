@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
+import android.volley.request.QiNiuUploadUtil;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,15 +24,18 @@ import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
-import com.gongwu.wherecollect.object.AddGoodsActivity;
+import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
-import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.AddGoodsDialog;
 import com.zhaojin.myviews.Loading;
 import com.zsitech.oncon.barcode.core.CaptureActivity;
+
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,7 +60,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     ListView mListView;
     @Bind(R.id.more_commit_btn)
     Button commitBtn;
-    private ObjectBean bean;
+    private ObjectBean tempBean;
     private AddGoodsDialog mDialog;
     private List<ObjectBean> mDatas;
     private AddMoreGoodsListAdapter mAdapter;
@@ -89,7 +92,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     }
 
     private void initData() {
-        bean = (ObjectBean) getIntent().getSerializableExtra("bean");
+        tempBean = (ObjectBean) getIntent().getSerializableExtra("bean");
     }
 
     private void initEvent() {
@@ -127,7 +130,54 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     }
 
     private void initImgUrls() {
+        List<String> name = new ArrayList<>();
+        List<String> files = new ArrayList<>();
+        for (int i = 0; i < mDatas.size(); i++) {
+            ObjectBean bean = mDatas.get(i);
+            name.add(bean.getName());
+            files.add(TextUtils.isEmpty(bean.getObject_url()) ? getResId(i) + "" : bean.getObject_url());
+        }
+        addObjects(name, files);
+    }
 
+    /**
+     * 添加物品
+     */
+    private void addObjects(List<String> name, List<String> files) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("name", JsonUtils.jsonFromObject(name));
+        map.put("image_urls", JsonUtils.jsonFromObject(files));
+        map.put("uid", MyApplication.getUser(this).getId());
+        map.put("user_id", MyApplication.getUser(this).getId());
+        map.put("ISBN", ISBN);
+        map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get
+                (tempBean.getCategories().size() - 1).getCode());
+        map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean
+                .getChannel().split(">")));
+        map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean
+                .getColor().split("、")));
+        map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
+        map.put("price_max", tempBean.getPrice() + "");
+        map.put("price_min", tempBean.getPrice() + "");
+        map.put("season", tempBean.getSeason());
+        map.put("star", tempBean.getStar() + "");
+        map.put("count", tempBean.getObject_count() + "");
+        PostListenner listenner = new PostListenner(this) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                Intent intent = new Intent(context, ImportSelectFurnitureActivity.class);
+                startActivity(intent);
+                finish();
+                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.addMoreGoods(this, map, listenner);
     }
 
     /**
@@ -138,6 +188,11 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         mDialog = new AddGoodsDialog(context) {
             @Override
             public void result(ObjectBean bean) {
+                //上传
+                if (!TextUtils.isEmpty(bean.getObject_url())) {
+                    upLoadImg(bean);
+                    return;
+                }
                 //currentItem不为默认值时，修改记录的item的值
                 if (currentItem != -1) {
                     mDatas.set(currentItem, bean);
@@ -161,6 +216,31 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         };
         mDialog.setObjectBean(null);
         mDialog.show();
+    }
+
+    /**
+     * 上传图片
+     */
+    private void upLoadImg(final ObjectBean objectBean) {
+        List<File> list = new ArrayList<>();
+        list.add(new File(objectBean.getObject_url()));
+        QiNiuUploadUtil uploadUtil = new QiNiuUploadUtil(this, list, "object/image/") {
+            @Override
+            protected void finish(List<String> list) {
+                super.finish(list);
+                //currentItem不为默认值时，修改记录的item的值
+                objectBean.setObject_url(list.get(0));
+                if (currentItem != -1) {
+                    mDatas.set(currentItem, objectBean);
+                    currentItem = -1;
+                } else {
+                    //为默认值，就是新添加的
+                    mDatas.add(objectBean);
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+        };
+        uploadUtil.start();
     }
 
     /**
@@ -269,4 +349,32 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         }
         context.startActivity(intent);
     }
+
+    public String getResId(int position) {
+        switch (position) {
+            case 0:
+                return "#1E90FF";
+            case 1:
+                return "#FF0000";
+            case 2:
+                return "#ED774C";
+            case 3:
+                return "#25B65A";
+            case 4:
+                return "#c0ffbd21";
+            case 5:
+                return "#6DD0E8";
+            case 6:
+                return "#6DD0E8";
+            case 7:
+                return "#B165D2";
+            case 8:
+                return "#F9BFA3";
+            case 9:
+                return "#7165A3";
+            default:
+                return "#35BFBB";
+        }
+    }
+
 }
