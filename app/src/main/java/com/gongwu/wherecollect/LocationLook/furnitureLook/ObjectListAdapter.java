@@ -1,6 +1,8 @@
 package com.gongwu.wherecollect.LocationLook.furnitureLook;
+
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Function:
  * Date: 2017/8/30
@@ -59,7 +62,16 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
         } else {
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.trans));
         }
-        ImageLoader.load(context, holder.image, mlist.get(position).getObject_url(), R.drawable.ic_img_error);
+        ObjectBean tempBean = mlist.get(position);
+        if (tempBean.getObject_url().contains("http")) {
+            ImageLoader.load(context, holder.image, tempBean.getObject_url(), R.drawable.ic_img_error);
+            holder.imageHintTv.setVisibility(View.GONE);
+        } else {
+            holder.imageHintTv.setVisibility(View.VISIBLE);
+            holder.imageHintTv.setText(tempBean.getName());
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
+        }
         holder.name.setText(mlist.get(position).getName());
         holder.itemView.setOnLongClickListener(new MyLongClickListener(holder.getLayoutPosition()));
     }
@@ -115,6 +127,8 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
         TextView name;
         @Bind(R.id.linearLayout)
         RelativeLayout linearLayout;
+        @Bind(R.id.image_hint_tv)
+        TextView imageHintTv;
 
         public CustomViewHolder(View view) {
             super(view);
@@ -129,6 +143,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
             }
         }
     }
+
     class MyLongClickListener implements View.OnLongClickListener {
         private int position;
 

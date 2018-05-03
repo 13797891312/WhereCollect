@@ -1,10 +1,14 @@
 package com.gongwu.wherecollect.LocationLook;
+
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
@@ -17,6 +21,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Function:
  * Date: 2017/8/30
@@ -28,7 +33,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
     public MyOnItemClickListener onItemClickListener;
     Context context;
     List<ObjectBean> mlist;
-    public int selectPostion=-1;
+    public int selectPostion = -1;
 
     public ObjectListAdapter(Context context, List<ObjectBean> list) {
         this.context = context;
@@ -43,12 +48,21 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        if(position==selectPostion){
+        if (position == selectPostion) {
             holder.linearLayout.setBackgroundResource(R.drawable.shape_maincolor_stock);
-        }else{
+        } else {
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.trans));
         }
-        ImageLoader.load(context, holder.image,mlist.get(position).getObject_url(), R.drawable.ic_img_error);
+        ObjectBean tempBean = mlist.get(position);
+        if (tempBean.getObject_url().contains("http")) {
+            ImageLoader.load(context, holder.image, tempBean.getObject_url(), R.drawable.ic_img_error);
+            holder.imageNameTv.setVisibility(View.GONE);
+        } else {
+            holder.imageNameTv.setVisibility(View.VISIBLE);
+            holder.imageNameTv.setText(tempBean.getName());
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
+        }
     }
 
     @Override
@@ -56,8 +70,8 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
         return StringUtils.getListSize(mlist);
     }
 
-    public ObjectBean getItem(int position){
-        if(StringUtils.isEmpty(mlist))return null;
+    public ObjectBean getItem(int position) {
+        if (StringUtils.isEmpty(mlist)) return null;
         return mlist.get(position);
     }
 
@@ -96,11 +110,13 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
         this.onItemClickListener = listener;
     }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.image)
         ImageView image;
         @Bind(R.id.linearLayout)
-        LinearLayout linearLayout;
+        RelativeLayout linearLayout;
+        @Bind(R.id.item_image_name_tv)
+        TextView imageNameTv;
 
         public CustomViewHolder(View view) {
             super(view);

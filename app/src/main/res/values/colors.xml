@@ -79,4 +79,14 @@
     <color name="pieChart13">#5AD32C</color>
     <color name="pieChart14">#2CD3C1</color>
     <color name="pieChart15">#7165A3</color>
+    <color name="goods_color_1">#9076F2</color>
+    <color name="goods_color_2">#F19EC2</color>
+    <color name="goods_color_3">#13B5B1</color>
+    <color name="goods_color_4">#E66868</color>
+    <color name="goods_color_5">#F29B76</color>
+    <color name="goods_color_6">#AFC4D5</color>
+    <color name="goods_color_7">#32B16C</color>
+    <color name="goods_color_8">#13B5B1</color>
+    <color name="goods_color_9">#7ECEF4</color>
+    <color name="goods_color_0">#B5B5B5</color>
 </resources>

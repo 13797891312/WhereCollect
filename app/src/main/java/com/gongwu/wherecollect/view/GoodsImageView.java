@@ -120,38 +120,37 @@ public class GoodsImageView extends FrameLayout {
                 });
     }
 
-    private int getResId(String userId) {
-        int i = 0;
-        try {
-            if (userId.length()!=0){
-                i = Integer.parseInt(userId.substring(userId.length() - 1));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    private int getResId(String position) {
+        int j = Integer.parseInt(position);
+        int i;
+        if (j > 9) {
+            i = j % 10;
+        } else {
+            i = j;
         }
         switch (i) {
             case 0:
-                return R.color.blue;
+                return R.color.goods_color_0;
             case 1:
-                return R.color.red;
+                return R.color.goods_color_1;
             case 2:
-                return R.color.red_light;
+                return R.color.goods_color_2;
             case 3:
-                return R.color.maincolor;
+                return R.color.goods_color_3;
             case 4:
-                return R.color.possible_result_points;
+                return R.color.goods_color_4;
             case 5:
-                return R.color.holo_purple;
+                return R.color.goods_color_5;
             case 6:
-                return R.color.pieChart1;
+                return R.color.goods_color_6;
             case 7:
-                return R.color.pieChart12;
+                return R.color.goods_color_7;
             case 8:
-                return R.color.pieChart5;
+                return R.color.goods_color_8;
             case 9:
-                return R.color.pieChart11;
+                return R.color.goods_color_9;
             default:
-                return R.color.pieChart9;
+                return R.color.goods_color_0;
         }
     }
 

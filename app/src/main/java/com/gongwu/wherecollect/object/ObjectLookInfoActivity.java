@@ -3,6 +3,7 @@ package com.gongwu.wherecollect.object;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,9 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
     ImageView locationBtn;
     @Bind(R.id.objrct_position_set_iv)
     ImageView objectPositionConfiIv;
+    @Bind(R.id.goods_image_tv)
+    TextView goodsImageTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,7 +163,14 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
     private void initValues() {
         if (bean == null)
             return;
-        ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
+        if (bean.getObject_url().contains("#")) {
+            goodsImageTv.setVisibility(View.VISIBLE);
+            goodsImageTv.setText(bean.getName());
+            goodsImage.setImageDrawable(null);
+            goodsImage.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+        } else {
+            ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
+        }
         nameTv.setText(bean.getName());
         timeTv.setText(String.format("创建于：%s", bean.getCreated_at()));
         goodsInfoView.setLocationlayoutVisibility(true);
@@ -167,18 +178,18 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         setLocation();
     }
 
-    @OnClick({R.id.edit_goods_iv,R.id.ac_location_btn,R.id.objrct_position_set_iv})
+    @OnClick({R.id.edit_goods_iv, R.id.ac_location_btn, R.id.objrct_position_set_iv})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
             case R.id.edit_goods_iv:
-                 intent = new Intent(context, AddGoodsActivity.class);
+                intent = new Intent(context, AddGoodsActivity.class);
                 intent.putExtra("bean", bean);
                 ((Activity) context).startActivityForResult(intent, 0);
                 MobclickAgent.onEvent(context, "050103");
                 break;
             case R.id.ac_location_btn:
-                 intent = new Intent(context, MainActivity.class);
+                intent = new Intent(context, MainActivity.class);
                 intent.putExtra("object", bean);
                 startActivity(intent);
                 break;

@@ -1,5 +1,7 @@
 package com.gongwu.wherecollect.importObject;
+
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.gongwu.wherecollect.util.ToastUtil;
 
 import java.util.List;
 import java.util.Map;
+
 public class ImportGridAdapter extends BaseAdapter {
     Activity act;
     List<ObjectBean> dataList;
@@ -37,13 +40,11 @@ public class ImportGridAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
@@ -55,6 +56,7 @@ public class ImportGridAdapter extends BaseAdapter {
             holder = new Holder();
             convertView = View.inflate(act, R.layout.item_import_grid, null);
             holder.iv = (ImageView) convertView.findViewById(R.id.image);
+            holder.nameTV = (TextView) convertView.findViewById(R.id.item_image_name_text);
             holder.selected = (ImageView) convertView
                     .findViewById(R.id.isselected);
             holder.text = (TextView) convertView
@@ -65,7 +67,15 @@ public class ImportGridAdapter extends BaseAdapter {
         }
         holder.selected.setVisibility(View.VISIBLE);
         holder.iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ImageLoader.load(convertView.getContext(), holder.iv, item.getObject_url(), R.drawable.icon_placeholder);
+        if (item.getObject_url().contains("http")) {
+            ImageLoader.load(convertView.getContext(), holder.iv, item.getObject_url(), R.drawable.icon_placeholder);
+            holder.nameTV.setVisibility(View.GONE);
+        } else {
+            holder.nameTV.setVisibility(View.VISIBLE);
+            holder.nameTV.setText(item.getName());
+            holder.iv.setImageDrawable(null);
+            holder.iv.setBackgroundColor(Color.parseColor(item.getObject_url()));
+        }
         if (chooseMap.containsKey(item.get_id())) {
             holder.selected.setVisibility(View.VISIBLE);
             holder.text.setBackgroundColor(convertView.getContext().getResources().getColor(R.color.black_54));
@@ -106,5 +116,6 @@ public class ImportGridAdapter extends BaseAdapter {
         private ImageView iv;
         private ImageView selected;
         private TextView text;
+        private TextView nameTV;
     }
 }

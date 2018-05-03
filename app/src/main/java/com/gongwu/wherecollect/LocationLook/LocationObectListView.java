@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook;
+
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.zhaojin.myviews.HackyViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Function:
  * Date: 2017/11/14
@@ -59,6 +61,10 @@ public class LocationObectListView extends RecyclerView {
                     Intent intent = new Intent(context, ObjectLookInfoActivity.class);
                     intent.putExtra("bean", list.get(positions));
                     context.startActivity(intent);
+                    LocationPage locationPage = MainLocationFragment.pageMap.get(selectPosition);
+                    if (locationPage != null) {
+                        locationPage.cancelFind();
+                    }
                     return;
                 }
                 adapter.selectPostion = positions;
@@ -72,12 +78,14 @@ public class LocationObectListView extends RecyclerView {
 
     /**
      * 获取数据并刷新UI
-     *
      */
-    public void notifyData(List<ObjectBean> temp) {
+    private int selectPosition;
+
+    public void notifyData(List<ObjectBean> temp, int position) {
         if (temp != null) {
             list.clear();
             list.addAll(temp);
+            this.selectPosition = position;
         }
         adapter.selectPostion = -1;
         adapter.notifyDataSetChanged();
@@ -97,8 +105,8 @@ public class LocationObectListView extends RecyclerView {
         setVisibility(View.VISIBLE);
         AnimationUtil.upSlide(this, 150);
         for (int i = 0; i < StringUtils.getListSize(list); i++) {
-            if(list.get(i).get_id().equals(objectBean.get_id())){
-                adapter.onItemClickListener.onItemClick(i,null);
+            if (list.get(i).get_id().equals(objectBean.get_id())) {
+                adapter.onItemClickListener.onItemClick(i, null);
                 this.scrollToPosition(i);
             }
         }

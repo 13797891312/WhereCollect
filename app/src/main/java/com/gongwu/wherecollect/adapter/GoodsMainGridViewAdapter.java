@@ -1,5 +1,7 @@
 package com.gongwu.wherecollect.adapter;
+
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Function:主页物品查看列表
  * Date: 2017/8/30
@@ -62,7 +65,16 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         ObjectBean bean = mlist.get(i);
         holder.nameTv.setText(bean.getName());
         holder.locationTv.setText(getLoction(bean));
-        ImageLoader.load(context, holder.image, bean.getObject_url());
+        holder.image.refreshDrawableState();
+        if (bean.getObject_url().contains("http")) {
+            ImageLoader.load(context, holder.image, bean.getObject_url());
+            holder.imgTv.setVisibility(View.GONE);
+        } else {
+            holder.imgTv.setVisibility(View.VISIBLE);
+            holder.imgTv.setText(bean.getName());
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+        }
         if (i == mlist.size() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
@@ -77,7 +89,7 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
      * @return
      */
     public String getLoction(ObjectBean bean) {
-        if(StringUtils.isEmpty(bean.getLocations())){
+        if (StringUtils.isEmpty(bean.getLocations())) {
             return "未归位";
         }
         Collections.sort(bean.getLocations(), new Comparator<BaseBean>() {
@@ -105,6 +117,8 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         View footer;
         @Bind(R.id.location_tv)
         TextView locationTv;
+        @Bind(R.id.no_url_img_tv)
+        TextView imgTv;
 
         public CustomViewHolder(View view) {
             ButterKnife.bind(this, view);

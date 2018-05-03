@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import butterknife.ButterKnife;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 public class MainLocationFragment extends BaseFragment {
     public static List<ObjectBean> mlist = new ArrayList<>();//静态空间数据
     public static Map<String, List<ObjectBean>> objectMap = new HashMap<>();
@@ -166,7 +168,7 @@ public class MainLocationFragment extends BaseFragment {
                     protected void getNetDataListener(List<ObjectBean> list) {
                         super.getNetDataListener(list);
                         if (position == viewPager.getCurrentItem()) {
-                            objectListView.notifyData(list);
+                            objectListView.notifyData(list,indicatorView.getSelection());
                             EventBus.getDefault().post(new EventBusMsg.getLocationObjectsMsg(position, list));
                         }
                     }

@@ -249,6 +249,7 @@ public class LocationPage extends RelativeLayout implements View.OnDragListener,
      * 取消高亮
      */
     public void cancelFind() {
+
         v.setBackgroundColor(getResources().getColor(R.color.trans));
     }
 

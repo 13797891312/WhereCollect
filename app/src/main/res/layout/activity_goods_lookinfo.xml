@@ -12,6 +12,17 @@
         android:scaleType="centerCrop"
         android:src="@drawable/test" />
 
+    <TextView
+        android:id="@+id/goods_image_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-100dp"
+        android:gravity="center"
+        android:minHeight="400dp"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:visibility="gone" />
+
     <com.handmark.pulltorefresh.library.PullToScrollView
         android:id="@+id/activity_goods_add"
         android:layout_width="match_parent"
@@ -72,13 +83,13 @@
                     android:textColorHint="@color/divider"
                     android:textSize="@dimen/f_17"
                     android:theme="@style/MyEditText" />
+
                 <LinearLayout
                     android:id="@+id/objrct_position_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -101,8 +112,8 @@
                         android:id="@+id/objrct_position_set_iv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dip_8"
                         android:layout_marginRight="@dimen/dip_18"
+                        android:padding="@dimen/dip_8"
                         android:src="@drawable/edit_icon" />
                 </LinearLayout>
 
@@ -110,14 +121,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/objrct_position_hint_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dip_4"
                         android:layout_marginLeft="@dimen/dip_18"
                         android:background="@color/select_btn_press"
+                        android:padding="@dimen/dip_4"
                         android:text="未归位" />
+
                     <LinearLayout
                         android:id="@+id/ac_location_layout"
                         android:layout_width="match_parent"
@@ -130,24 +143,25 @@
                             android:id="@+id/ac_location_btn"
                             android:layout_width="@dimen/dip_40"
                             android:layout_height="match_parent"
+                            android:layout_marginLeft="16dp"
                             android:layout_marginRight="@dimen/dip_8"
                             android:scaleType="center"
-                            android:layout_marginLeft="16dp"
                             android:src="@drawable/icon_location" />
+
                         <com.gongwu.wherecollect.view.FlowViewGroup
                             android:id="@+id/ac_location_flow"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/add_other_content_edit_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"

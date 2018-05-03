@@ -105,6 +105,7 @@ public class AddGoodsActivity extends BaseViewActivity {
     private int type;//1为导入物品列表跳过来的，添加完了要返回去；
     private int editGoodsType = 0;//0 为添加物品  1为编辑物品
     private ObjectBean newBean;
+    private final String IMG_COLOR_CODE = 0 + "";//默认图片颜色的值
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +142,16 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
             //设置图片
             if (!TextUtils.isEmpty(tempBean.getObject_url())) {
-                setCameraIvParams(100);
-                cameraIv.setHead("", "", tempBean.getObject_url());
+                if (tempBean.getObject_url().contains("http")) {
+                    setCameraIvParams(100);
+                    cameraIv.setHead(IMG_COLOR_CODE, "", tempBean.getObject_url());
+                } else if (tempBean.getObject_url().contains("#")) {
+                    setCameraIvParams(100);
+                    cameraIv.name.setVisibility(View.VISIBLE);
+                    cameraIv.name.setText(tempBean.getName());
+                    cameraIv.head.setImageDrawable(null);
+                    cameraIv.head.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+                }
             }
         } else {
             editGoodsType = 0;
@@ -186,19 +195,30 @@ public class AddGoodsActivity extends BaseViewActivity {
         });
     }
 
+    /**
+     * 监听物品edit，动态设置默认图片
+     *
+     * @param isSet
+     */
     private void setCameraIv(boolean isSet) {
         if (isSet && TextUtils.isEmpty(tempBean.getObject_url())) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     setCameraIvParams(100);
-                    cameraIv.setHead("", goodsNameEv.getText().toString().trim(), "");
+                    //未添加图片的时候，给个默认图片
+                    //IMG_COLOR_CODE默认图片颜色的值
+                    cameraIv.setHead(IMG_COLOR_CODE, goodsNameEv.getText().toString().trim(), "");
                 }
             }, 1000);
         } else if (!isSet && TextUtils.isEmpty(tempBean.getObject_url())) {
             setCameraIvParams(30);
             head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
             name.setText("");
+        } else if (isSet && !TextUtils.isEmpty(tempBean.getObject_url())) {
+            if (tempBean.getObject_url().contains("#")) {
+                cameraIv.name.setText(goodsNameEv.getText().toString().trim());
+            }
         }
 
     }
@@ -243,10 +263,10 @@ public class AddGoodsActivity extends BaseViewActivity {
                     }
                     return;
                 }
-                //如果图片没有地址，则自动生成一个图片上传给服务牌
+                //如果图片没有地址，则传一个颜色服务牌
                 if (TextUtils.isEmpty(tempBean.getObject_url())) {
-                    //开启线程 生成图片
-                    new Thread(runnable).start();
+                    //调用接口
+                    addObject();
                 } else {
                     //图片有地址 直接上传
                     upLoadImg(tempBean.getObjectFiles());
@@ -345,7 +365,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("detail", tempBean.getDetail());
-        map.put("image_url", tempBean.getObject_url());
+        map.put("image_url", TextUtils.isEmpty(tempBean.getObject_url()) ? "#B5B5B5" : tempBean.getObject_url());//B5B5B5
         map.put("object_count", tempBean.getObject_count() + "");
         map.put("price_max", tempBean.getPrice_max() + "");
         map.put("price_min", tempBean.getPrice_min() + "");
@@ -435,7 +455,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                 super.resultFile(file);
                 imgFile = file;
                 setCameraIvParams(100);
-                cameraIv.setHead("", "", imgFile.getAbsolutePath());
+                cameraIv.setHead(IMG_COLOR_CODE, "", imgFile.getAbsolutePath());
                 tempBean.setObject_url(imgFile.getAbsolutePath());
                 setCommitBtnEnable(true);
             }
@@ -573,7 +593,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         if (book.getImageFile() != null) {
             imgOldFile = book.getImageFile();
             setCameraIvParams(100);
-            cameraIv.setHead("", "", imgFile.getAbsolutePath());
+            cameraIv.setHead(IMG_COLOR_CODE, "", imgFile.getAbsolutePath());
             tempBean.setObject_url(imgFile.getAbsolutePath());
             setCommitBtnEnable(true);
         }
@@ -670,85 +690,5 @@ public class AddGoodsActivity extends BaseViewActivity {
         otherLayout.setVisibility(View.GONE);
         otherEditLayout.setVisibility(View.VISIBLE);
     }
-
-    public void viewSaveToImage(View view) {
-        /**
-         * View组件显示的内容可以通过cache机制保存为bitmap
-         * 我们要获取它的cache先要通过setDrawingCacheEnable方法把cache开启，
-         * 然后再调用getDrawingCache方法就可 以获得view的cache图片了
-         * 。buildDrawingCache方法可以不用调用，因为调用getDrawingCache方法时，
-         * 若果 cache没有建立，系统会自动调用buildDrawingCache方法生成cache。
-         * 若果要更新cache, 必须要调用destoryDrawingCache方法把旧的cache销毁，才能建立新的。
-         */
-        //        view.setDrawingCacheEnabled(true);
-        //        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        //设置绘制缓存背景颜色
-        //        view.setDrawingCacheBackgroundColor(Color.WHITE);
-
-        // 把一个View转换成图片
-        Bitmap cachebmp = loadBitmapFromView(view);
-        //保存在本地 产品还没决定要不要保存在本地
-        FileOutputStream fos;
-        File file;
-        try {
-            // 判断手机设备是否有SD卡
-            boolean isHasSDCard = Environment.getExternalStorageState().equals(
-                    android.os.Environment.MEDIA_MOUNTED);
-            if (isHasSDCard) {
-                // SD卡根目录
-                String path = MyApplication.CACHEPATH;
-                file = new File(path, System.currentTimeMillis() + ".jpg");
-                //通过文件的对象file的createNewFile()方法来创建文件
-                file.createNewFile();
-                fos = new FileOutputStream(file);
-            } else {
-                throw new Exception("创建文件失败!");
-            }
-            //压缩图片 30 是压缩率，表示压缩70%; 如果不压缩是100，表示压缩率为0
-            cachebmp.compress(Bitmap.CompressFormat.PNG, 90, fos);
-            fos.flush();
-            fos.close();
-            Message message = handler.obtainMessage();
-            message.obj = file;
-            handler.sendMessage(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        view.destroyDrawingCache();
-    }
-
-    private Bitmap loadBitmapFromView(View v) {
-        int w = v.getWidth();
-        int h = v.getHeight();
-        Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bmp);
-
-        c.drawColor(Color.WHITE);
-        /** 如果不设置canvas画布为白色，则生成透明 */
-
-        v.draw(c);
-
-        return bmp;
-    }
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            viewSaveToImage(cameraIv);
-        }
-    };
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            File file = (File) msg.obj;
-            List<File> fils = new ArrayList<>();
-            fils.add(file);
-            upLoadImg(fils);
-        }
-    };
-
 
 }

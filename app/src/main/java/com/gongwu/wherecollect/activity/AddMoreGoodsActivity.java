@@ -351,27 +351,33 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     }
 
     public String getResId(int position) {
-        switch (position) {
+        int i;
+        if (position > 9) {
+            i = position % 10;
+        } else {
+            i = position;
+        }
+        switch (i) {
             case 0:
-                return "#1E90FF";
+                return "#B5B5B5";
             case 1:
-                return "#FF0000";
+                return "#9076F2";
             case 2:
-                return "#ED774C";
+                return "#F19EC2";
             case 3:
-                return "#25B65A";
+                return "#13B5B1";
             case 4:
-                return "#c0ffbd21";
+                return "#E66868";
             case 5:
-                return "#6DD0E8";
+                return "#F29B76";
             case 6:
-                return "#6DD0E8";
+                return "#AFC4D5";
             case 7:
-                return "#B165D2";
+                return "#32B16C";
             case 8:
-                return "#F9BFA3";
+                return "#13B5B1";
             case 9:
-                return "#7165A3";
+                return "#7ECEF4";
             default:
                 return "#35BFBB";
         }

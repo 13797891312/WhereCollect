@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="1dp"
-                android:gravity="center">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="1dp">
 
 
     <ImageView
@@ -11,15 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-    >
-    </ImageView>
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/item_image_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_15"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/item_image_grid_text"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
     <ImageView
         android:id="@+id/isselected"
@@ -28,6 +37,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:scaleType="center"
-        android:src="@drawable/icon_checked"/>
+        android:src="@drawable/icon_checked" />
 
 </RelativeLayout>
