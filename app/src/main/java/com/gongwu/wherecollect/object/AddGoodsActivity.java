@@ -57,6 +57,8 @@ import com.zhaojin.myviews.Loading;
 import com.zsitech.oncon.barcode.core.CaptureActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -71,7 +73,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 添加物品
+ * 添加物品界面
  */
 public class AddGoodsActivity extends BaseViewActivity {
     @Bind(R.id.textBtn)
@@ -115,6 +117,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         titleLayout.setBack(true, null);
         titleLayout.setTitle(getResources().getString(R.string.add_goods_text));
         type = getIntent().getIntExtra("type", 0);
+        EventBus.getDefault().register(this);
         initView();
         initEvent();
         initData();
@@ -691,4 +694,16 @@ public class AddGoodsActivity extends BaseViewActivity {
         otherEditLayout.setVisibility(View.VISIBLE);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String str) {
+        if (EventBusMsg.ACTIVITY_FINISH.contains(str)) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

@@ -8,7 +8,12 @@ import android.widget.Button;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.object.AddGoodsActivity;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.view.ObjectInfoEditView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +38,7 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
         ButterKnife.bind(this);
         titleLayout.setBack(true, null);
         titleLayout.setTitle(getResources().getString(R.string.add_goods_other_content_text));
+        EventBus.getDefault().register(this);
         initData();
         initEvent();
     }
@@ -94,5 +100,18 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
         if (AddGoodsActivity.MORE_TYPE.equals(startType)) {
             commitBtn.setText("下一步");
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String str) {
+        if (EventBusMsg.ACTIVITY_FINISH.contains(str)) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

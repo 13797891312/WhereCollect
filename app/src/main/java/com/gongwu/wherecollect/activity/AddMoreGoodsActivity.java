@@ -170,6 +170,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                 startActivity(intent);
                 finish();
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                EventBus.getDefault().post(EventBusMsg.ACTIVITY_FINISH);
             }
 
             @Override

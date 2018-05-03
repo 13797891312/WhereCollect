@@ -15,6 +15,7 @@ public class EventBusMsg {
     public static String SPACE_EDIT = "space_edit";//空间编辑后的消息
     public static String OBJECT_CHANGE = "object_change";//需要刷新首页物品列表的消息
     public static String OBJECT_FITLER = "object_fitler";//筛选变动
+    public static String ACTIVITY_FINISH = "activity_finish";
     /**
      * 更换账号
      */
