@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AddGoodsOtherContentActivity;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
@@ -403,6 +404,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 newBean = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
+                editCacheGoods(newBean,tempBean.get_id());
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                 Intent intent = new Intent();
                 intent.putExtra("bean", newBean);
@@ -419,6 +421,30 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
         };
         HttpClient.getAddObject(this, map, listenner);
+    }
+
+    private void editCacheGoods(ObjectBean newBean,String code) {
+        for (List<ObjectBean> beanList : MainLocationFragment.objectMap.values()) {
+            for (int i = 0; i < beanList.size(); i++) {
+                ObjectBean objectBean = beanList.get(i);
+                if (objectBean.get_id().equals(code)) {
+                    objectBean.setExpire_date(newBean.getExpire_date());
+                    objectBean.setBuy_date(newBean.getBuy_date());
+                    objectBean.setObject_url(newBean.getObject_url());
+                    objectBean.setStar(newBean.getStar());
+                    objectBean.setObject_count(newBean.getObject_count());
+                    objectBean.setCategories(newBean.getCategories());
+                    objectBean.setPrice(newBean.getPrice());
+                    objectBean.setColor(newBean.getColor());
+                    objectBean.setSeason(newBean.getSeason());
+                    objectBean.setChannel(newBean.getChannel());
+                    objectBean.setDetail(newBean.getDetail());
+                    objectBean.set_id(newBean.get_id());
+                    EventBus.getDefault().post(EventBusMsg.REFRESH_GOODS);
+                }
+            }
+        }
+
     }
 
     SelectImgDialog selectImgDialog;

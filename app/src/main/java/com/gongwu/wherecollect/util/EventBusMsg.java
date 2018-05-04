@@ -16,6 +16,7 @@ public class EventBusMsg {
     public static String OBJECT_CHANGE = "object_change";//需要刷新首页物品列表的消息
     public static String OBJECT_FITLER = "object_fitler";//筛选变动
     public static String ACTIVITY_FINISH = "activity_finish";
+    public static String REFRESH_GOODS = "refresh_goods";
     /**
      * 更换账号
      */

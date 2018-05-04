@@ -15,8 +15,13 @@ import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.object.ObjectLookInfoActivity;
 import com.gongwu.wherecollect.util.AnimationUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.zhaojin.myviews.HackyViewPager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +50,7 @@ public class LocationObectListView extends RecyclerView {
         mLayoutManager = new GridLayoutManager(context, 1, LinearLayoutManager.HORIZONTAL, false);
         setLayoutManager(mLayoutManager);
         adapter = new ObjectListAdapter(context, list);
+        EventBus.getDefault().register(this);
         setAdapter(adapter);
     }
 
@@ -114,5 +120,12 @@ public class LocationObectListView extends RecyclerView {
 
     public static interface OnitemClickLisener {
         public void itemClick(int position, ObjectBean bean, View view);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String str) {
+        if (EventBusMsg.REFRESH_GOODS.contains(str)) {
+            adapter.notifyDataSetChanged();
+        }
     }
 }
