@@ -169,10 +169,11 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
             goodsImage.setImageDrawable(null);
             goodsImage.setBackgroundColor(Color.parseColor(bean.getObject_url()));
         } else {
+            goodsImageTv.setVisibility(View.GONE);
             ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
         }
         nameTv.setText(bean.getName());
-        timeTv.setText(String.format("创建于：%s", bean.getCreated_at()));
+        timeTv.setText(String.format("创建于：%s", bean.getBuy_date()));
         goodsInfoView.setLocationlayoutVisibility(true);
         goodsInfoView.init(bean);
         setLocation();

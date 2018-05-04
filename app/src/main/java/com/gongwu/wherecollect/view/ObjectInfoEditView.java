@@ -123,7 +123,7 @@ public class ObjectInfoEditView extends LinearLayout {
                 if (!TextUtils.isEmpty(jiageEdit.getText())) {
                     bean.setPrice_max(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
                     bean.setPrice_min(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
-                    bean.setPrice(jiageEdit.getText().toString() + "元");
+                    bean.setPrice(jiageEdit.getText().toString());
                     if (changeListener != null) {
                         changeListener.change();
                     }
@@ -191,14 +191,14 @@ public class ObjectInfoEditView extends LinearLayout {
     }
 
     private void setPurchaseTime() {
-        if (!TextUtils.isEmpty(bean.getCreated_at())) {
-            purchaseTimeTv.setText(bean.getCreated_at());
+        if (!TextUtils.isEmpty(bean.getBuy_date())) {
+            purchaseTimeTv.setText(bean.getBuy_date());
         }
     }
 
     private void setExpirytime() {
-        if (!TextUtils.isEmpty(bean.getDeleted_at())) {
-            expiryTimeTv.setText(bean.getDeleted_at());
+        if (!TextUtils.isEmpty(bean.getExpire_date())) {
+            expiryTimeTv.setText(bean.getExpire_date());
         }
     }
 
@@ -351,12 +351,12 @@ public class ObjectInfoEditView extends LinearLayout {
                 break;
             case R.id.purchase_time_layout:
                 String start = "";
-                if (TextUtils.isEmpty(bean.getCreated_at())) {
+                if (TextUtils.isEmpty(bean.getBuy_date())) {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
                     start = formatter.format(curDate);
                 } else {
-                    start = bean.getCreated_at();
+                    start = bean.getBuy_date();
                 }
                 DateBirthdayDialog dialog = new DateBirthdayDialog(getContext(), start) {
                     @Override
@@ -364,7 +364,7 @@ public class ObjectInfoEditView extends LinearLayout {
                         String bd = year + "-" + StringUtils.formatIntTime(month) + "-" +
                                 StringUtils.formatIntTime(day);
                         purchaseTimeTv.setText(bd);
-                        bean.setCreated_at(bd);
+                        bean.setBuy_date(bd);
                         if (changeListener != null) {
                             changeListener.change();
                         }
@@ -374,12 +374,12 @@ public class ObjectInfoEditView extends LinearLayout {
                 break;
             case R.id.expiry_time_layout:
                 String end = "";
-                if (TextUtils.isEmpty(bean.getDeleted_at())) {
+                if (TextUtils.isEmpty(bean.getExpire_date())) {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
                     end = formatter.format(curDate);
                 } else {
-                    end = bean.getDeleted_at();
+                    end = bean.getExpire_date();
                 }
                 DateBirthdayDialog expiryDialog = new DateBirthdayDialog(getContext(), end) {
                     @Override
@@ -387,7 +387,7 @@ public class ObjectInfoEditView extends LinearLayout {
                         String bd = year + "-" + StringUtils.formatIntTime(month) + "-" +
                                 StringUtils.formatIntTime(day);
                         expiryTimeTv.setText(bd);
-                        bean.setDeleted_at(bd);
+                        bean.setExpire_date(bd);
                         if (changeListener != null) {
                             changeListener.change();
                         }

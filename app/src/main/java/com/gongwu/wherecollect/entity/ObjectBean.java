@@ -87,6 +87,8 @@ public class ObjectBean implements Serializable {
     private boolean isLayer = false;//自己添加的参数，迁移隔层时用，别处没用
     private List<String> tags;
     private String price;
+    private String buy_date;
+    private String expire_date;
     /**
      * x : 0
      * y : 0
@@ -286,7 +288,8 @@ public class ObjectBean implements Serializable {
     }
 
     public String getPrice() {
-        return TextUtils.isEmpty(price) ? price_max + "" : price;
+        String str = TextUtils.isEmpty(price) ? price_max + "" : price;
+        return str.replaceAll("元", "").replaceAll("CNY ","");
     }
 
     public void setPrice(String price) {
@@ -301,8 +304,9 @@ public class ObjectBean implements Serializable {
             }
             sb.delete(sb.length() - 1, sb.length());
             return sb.toString();
+        }else{
+            return "";
         }
-        return channel;
     }
 
     public void setChannel(String channel) {
@@ -317,8 +321,9 @@ public class ObjectBean implements Serializable {
             }
             sb.delete(sb.length() - 1, sb.length());
             return sb.toString();
+        }else{
+            return "";
         }
-        return color;
     }
 
     public void setColor(String color) {
@@ -446,6 +451,23 @@ public class ObjectBean implements Serializable {
 
     public void setCategories(List<BaseBean> categories) {
         this.categories = categories;
+    }
+
+
+    public String getBuy_date() {
+        return buy_date;
+    }
+
+    public void setBuy_date(String buy_date) {
+        this.buy_date = buy_date;
+    }
+
+    public String getExpire_date() {
+        return expire_date;
+    }
+
+    public void setExpire_date(String expire_date) {
+        this.expire_date = expire_date;
     }
 
     /**

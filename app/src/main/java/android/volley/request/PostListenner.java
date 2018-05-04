@@ -1,4 +1,5 @@
 package android.volley.request;
+
 import android.content.Context;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import com.gongwu.wherecollect.util.LogUtil;
 import com.zhaojin.myviews.Loading;
 
 import org.json.JSONObject;
+
 /**
  * Created by zhaojin on 2016/7/22.
  */
@@ -25,7 +27,7 @@ public class PostListenner {
     }
 
     public PostListenner(final Context context, final Loading loading) {
-        this.context=context;
+        this.context = context;
         this.loading = loading;
         this.errorListener = new Response.ErrorListener() {
             @Override
@@ -52,7 +54,11 @@ public class PostListenner {
                     JSONObject object = null;
                     object = new JSONObject(response);
                     ResponseResult rr = JsonUtils.objectFromJson(response, ResponseResult.class);
-                    rr.setResult(object.getString("data"));
+                    try {
+                        rr.setResult(object.getString("data"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     LogUtil.i("i", rr.getResult());
                     dissLoading();
                     if (Integer.valueOf(rr.getCode()) == 200) {
@@ -70,6 +76,7 @@ public class PostListenner {
             }
         };
     }
+
     private void dissLoading() {
         if (loading != null) {
             try {
@@ -79,6 +86,7 @@ public class PostListenner {
             }
         }
     }
+
     protected void code2000(ResponseResult r) {
     }
 

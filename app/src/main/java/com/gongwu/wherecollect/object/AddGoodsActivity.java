@@ -257,7 +257,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                 //编辑物品
                 if (editGoodsType == 1) {
                     //判断图片是否更改，没更改的情况下 图片地址应该为网络路径
-                    if (!tempBean.getObject_url().contains("http")) {
+                    if (!tempBean.getObject_url().contains("http") && !tempBean.getObject_url().contains("#")) {
                         //图片有更改，先上传
                         upLoadImg(tempBean.getObjectFiles());
                     } else {
@@ -269,7 +269,10 @@ public class AddGoodsActivity extends BaseViewActivity {
                 //如果图片没有地址，则传一个颜色服务牌
                 if (TextUtils.isEmpty(tempBean.getObject_url())) {
                     //调用接口
-                    addObject();
+                    tempBean.setObject_url("#B5B5B5");
+                    addObjects();
+                } else if (tempBean.getObject_url().contains("http")) {
+                    addObjects();
                 } else {
                     //图片有地址 直接上传
                     upLoadImg(tempBean.getObjectFiles());
@@ -298,7 +301,8 @@ public class AddGoodsActivity extends BaseViewActivity {
                     tempBean.setObject_url(list.get(0));
                     addObject();
                 } else {
-                    addObjects(list);
+                    tempBean.setObject_url(list.get(0));
+                    addObjects();
                 }
             }
         };
@@ -308,17 +312,7 @@ public class AddGoodsActivity extends BaseViewActivity {
     /**
      * 添加物品
      */
-    private void addObjects(List<String> list) {
-        if (StringUtils.isEmpty(list)) {
-            return;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            sb.append(list.get(i));
-            if (i != list.size() - 1) {
-                sb.append(",");
-            }
-        }
+    private void addObjects() {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("ISBN", ISBN);
@@ -329,13 +323,19 @@ public class AddGoodsActivity extends BaseViewActivity {
         map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean
                 .getColor().split("、")));
         map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
-        map.put("name", goodsNameEv.getText().toString());
         map.put("price_max", tempBean.getPrice() + "");
         map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
         map.put("star", tempBean.getStar() + "");
-        map.put("image_urls", sb.toString());
+        List<String> names = new ArrayList<>();
+        names.add(goodsNameEv.getText().toString());
+        map.put("name", JsonUtils.jsonFromObject(names));
+        List<String> files = new ArrayList<>();
+        files.add(tempBean.getObject_url());
+        map.put("image_urls", JsonUtils.jsonFromObject(files));
         map.put("count", tempBean.getObject_count() + "");
+        map.put("buy_date", tempBean.getBuy_date());
+        map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -394,6 +394,8 @@ public class AddGoodsActivity extends BaseViewActivity {
         map.put("location_codes", lc.toString());
         map.put("channel", JsonUtils.jsonFromObject(tempBean.getChannel().split(">")));
         map.put("color", JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
+        map.put("buy_date", tempBean.getBuy_date());
+        map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this, Loading.show(null, this,
                 "正在加载")) {
             @Override
@@ -596,8 +598,8 @@ public class AddGoodsActivity extends BaseViewActivity {
         if (book.getImageFile() != null) {
             imgOldFile = book.getImageFile();
             setCameraIvParams(100);
-            cameraIv.setHead(IMG_COLOR_CODE, "", imgFile.getAbsolutePath());
-            tempBean.setObject_url(imgFile.getAbsolutePath());
+            cameraIv.setHead(IMG_COLOR_CODE, "", imgOldFile.getAbsolutePath());
+            tempBean.setObject_url(imgOldFile.getAbsolutePath());
             setCommitBtnEnable(true);
         }
         if (!TextUtils.isEmpty(book.getTitle())) {

@@ -110,13 +110,13 @@ public class ObjectInfoLookView extends LinearLayout {
         setQudao();//设置购货渠道
         setStar();//设置星级
         setQita();//其他
-        setjjiage();//其他
+        setjiage();//其他
     }
 
     private void setPurchaseTime() {
-        if (!TextUtils.isEmpty(bean.getCreated_at())) {
+        if (!TextUtils.isEmpty(bean.getBuy_date())) {
             purchaseTimeLayout.setVisibility(VISIBLE);
-            purchaseTimeTv.setText(bean.getCreated_at());
+            purchaseTimeTv.setText(bean.getBuy_date());
             showView();
         } else {
             purchaseTimeLayout.setVisibility(GONE);
@@ -124,9 +124,9 @@ public class ObjectInfoLookView extends LinearLayout {
     }
 
     private void setExpirytime() {
-        if (!TextUtils.isEmpty(bean.getDeleted_at())) {
+        if (!TextUtils.isEmpty(bean.getExpire_date())) {
             expiryTimeLayout.setVisibility(VISIBLE);
-            expiryTimeTv.setText(bean.getDeleted_at());
+            expiryTimeTv.setText(bean.getExpire_date());
             showView();
         } else {
             expiryTimeLayout.setVisibility(GONE);
@@ -149,7 +149,7 @@ public class ObjectInfoLookView extends LinearLayout {
     /**
      * 设置价格
      */
-    private void setjjiage() {
+    private void setjiage() {
         if (!TextUtils.isEmpty(bean.getPrice())) {
             jiageEdit.setText(bean.getPrice() + "元");
             jiageLayout.setVisibility(View.VISIBLE);
@@ -338,6 +338,7 @@ public class ObjectInfoLookView extends LinearLayout {
 
 
     private boolean locationIsShow = false;
+
     /**
      * 设置物品位置布局的显示或隐藏
      * true 隐藏  false显示

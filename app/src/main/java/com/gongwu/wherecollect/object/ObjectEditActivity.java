@@ -96,7 +96,7 @@ public class ObjectEditActivity extends BaseViewActivity {
             return;
         ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
         nameTv.setText(bean.getName());
-        timeTv.setText(String.format("创建于：%s", bean.getCreated_at()));
+        timeTv.setText(String.format("创建于：%s", bean.getBuy_date()));
         goodsInfoView.init(bean);
         nameTv.addTextChangedListener(new TextWatcher() {
             @Override

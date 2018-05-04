@@ -305,7 +305,7 @@ public class HttpClient {
      */
     public static void addObjects(Context context, Map<String, String> params, PostListenner
             listenner) {
-        CustomPostRequest request = new CustomPostRequest("api/app/v230/add-objects", params,
+        CustomPostRequest request = new CustomPostRequest("api/app/v320/add-objects", params,
                 listenner);
         Queue.getQueue(context).add(request);
     }
