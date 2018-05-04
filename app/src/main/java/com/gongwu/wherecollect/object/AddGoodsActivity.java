@@ -370,9 +370,10 @@ public class AddGoodsActivity extends BaseViewActivity {
         map.put("detail", tempBean.getDetail());
         map.put("image_url", TextUtils.isEmpty(tempBean.getObject_url()) ? "#B5B5B5" : tempBean.getObject_url());//B5B5B5
         map.put("object_count", tempBean.getObject_count() + "");
-        map.put("price_max", tempBean.getPrice_max() + "");
-        map.put("price_min", tempBean.getPrice_min() + "");
+        map.put("price_max", tempBean.getPrice() + "");
+        map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
+        map.put("code", tempBean.get_id());
         map.put("name", goodsNameEv.getText().toString().trim());
         map.put("star", tempBean.getStar() + "");
         map.put("coordinates", JsonUtils.jsonFromObject(tempBean.getCoordinates()));
@@ -402,7 +403,12 @@ public class AddGoodsActivity extends BaseViewActivity {
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 newBean = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
-                deleteObject();
+                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                Intent intent = new Intent();
+                intent.putExtra("bean", newBean);
+                setResult(100, intent);
+                finish();
+//                deleteObject();
             }
 
             @Override
