@@ -595,7 +595,7 @@ public class AddGoodsActivity extends BaseViewActivity {
      */
     String ISBN = "";
 
-    private void updateBeanWithBook(BookBean book) {
+    public void updateBeanWithBook(BookBean book) {
         if (book == null || book.getImageFile() == null) {
             return;
         }

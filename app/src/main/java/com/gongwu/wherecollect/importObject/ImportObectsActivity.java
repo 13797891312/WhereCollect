@@ -14,7 +14,6 @@ import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.object.AddGoodsActivity;
-import com.gongwu.wherecollect.object.ObjectsAddActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;

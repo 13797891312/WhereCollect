@@ -15,15 +15,11 @@ import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
 import com.gongwu.wherecollect.object.AddGoodsActivity;
-import com.gongwu.wherecollect.object.ObjectEditActivity;
-import com.gongwu.wherecollect.afragment.MainGoodsFragment;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
-import com.gongwu.wherecollect.object.ObjectsAddActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
-import com.gongwu.wherecollect.util.StringUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhaojin.myviews.Loading;
 

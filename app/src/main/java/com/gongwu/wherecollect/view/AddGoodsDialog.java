@@ -62,9 +62,13 @@ public class AddGoodsDialog extends Dialog {
             goodsNameEdit.setSelection(bean.getName().length());
         }
         if (!TextUtils.isEmpty(bean.getObject_url())) {
-            File file = new File(bean.getObject_url());
-            ImageLoader.loadFromFile(context, file, addGoodsIv);
-            imgOldFile = file;
+            if (bean.getObject_url().contains("http")) {
+                ImageLoader.load(context, addGoodsIv, bean.getObject_url());
+            } else {
+                File file = new File(bean.getObject_url());
+                ImageLoader.loadFromFile(context, file, addGoodsIv);
+                imgOldFile = file;
+            }
         } else {
             addGoodsIv.setImageDrawable(context.getResources().getDrawable(R.drawable.select_pic));
         }

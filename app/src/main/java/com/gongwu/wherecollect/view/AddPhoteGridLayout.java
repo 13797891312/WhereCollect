@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.entity.BookBean;
-import com.gongwu.wherecollect.object.ObjectsAddActivity;
+import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
@@ -75,8 +75,8 @@ public class AddPhoteGridLayout extends GridLayout {
                     protected void getBookResult(BookBean book) {
                         super.getBookResult(book);
                         selectImgDialog = null;
-                        if (context instanceof ObjectsAddActivity) {
-                            ((ObjectsAddActivity) context).updateBeanWithBook(book);
+                        if (context instanceof AddGoodsActivity) {
+                            ((AddGoodsActivity) context).updateBeanWithBook(book);
                         }
                     }
                 };

@@ -162,7 +162,8 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         map.put("season", tempBean.getSeason());
         map.put("star", tempBean.getStar() + "");
         map.put("count", tempBean.getObject_count() + "");
-        PostListenner listenner = new PostListenner(this) {
+        PostListenner listenner = new PostListenner(this, Loading.show(null, context,
+                "正在加载")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
@@ -190,7 +191,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             @Override
             public void result(ObjectBean bean) {
                 //上传
-                if (!TextUtils.isEmpty(bean.getObject_url())) {
+                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4")) {
                     upLoadImg(bean);
                     return;
                 }
