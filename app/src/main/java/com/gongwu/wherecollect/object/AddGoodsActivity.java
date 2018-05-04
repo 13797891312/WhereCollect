@@ -408,7 +408,6 @@ public class AddGoodsActivity extends BaseViewActivity {
                 intent.putExtra("bean", newBean);
                 setResult(100, intent);
                 finish();
-//                deleteObject();
             }
 
             @Override
@@ -421,31 +420,6 @@ public class AddGoodsActivity extends BaseViewActivity {
         };
         HttpClient.getAddObject(this, map, listenner);
     }
-
-    private void deleteObject() {
-        Map<String, String> map = new TreeMap<>();
-        map.put("uid", MyApplication.getUser(this).getId());
-        map.put("object_id", tempBean.get_id());
-        PostListenner listenner = new PostListenner(this, Loading.show(null, this,
-                "正在加载")) {
-            @Override
-            protected void code2000(final ResponseResult r) {
-                super.code2000(r);
-            }
-
-            @Override
-            protected void onFinish() {
-                super.onFinish();
-                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
-                Intent intent = new Intent();
-                intent.putExtra("bean", newBean);
-                setResult(100, intent);
-                finish();
-            }
-        };
-        HttpClient.deleteGoods(this, map, listenner);
-    }
-
 
     SelectImgDialog selectImgDialog;
 
@@ -600,7 +574,9 @@ public class AddGoodsActivity extends BaseViewActivity {
             return;
         }
         ISBN = book.getIsbnCode();
-        tempBean = new ObjectBean();
+        if (editGoodsType != 1) {
+            tempBean = new ObjectBean();
+        }
         if (book.getImageFile() != null) {
             imgOldFile = book.getImageFile();
             setCameraIvParams(100);

@@ -289,7 +289,7 @@ public class ObjectBean implements Serializable {
 
     public String getPrice() {
         String str = TextUtils.isEmpty(price) ? price_max + "" : price;
-        return str.replaceAll("元", "").replaceAll("CNY ","");
+        return str.replaceAll("元", "").replaceAll("CNY ", "");
     }
 
     public void setPrice(String price) {
@@ -304,8 +304,8 @@ public class ObjectBean implements Serializable {
             }
             sb.delete(sb.length() - 1, sb.length());
             return sb.toString();
-        }else{
-            return "";
+        } else {
+            return TextUtils.isEmpty(channel) ? "" : channel;
         }
     }
 
@@ -321,8 +321,8 @@ public class ObjectBean implements Serializable {
             }
             sb.delete(sb.length() - 1, sb.length());
             return sb.toString();
-        }else{
-            return "";
+        } else {
+            return TextUtils.isEmpty(color) ? "" : color;
         }
     }
 
