@@ -25,11 +25,13 @@ import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
+import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.AddGoodsDialog;
 import com.zhaojin.myviews.Loading;
 import com.zsitech.oncon.barcode.core.CaptureActivity;
@@ -292,7 +294,14 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             mDialog.onActivityResult(requestCode, resultCode, data);
         }
         if (requestCode == BOOK_CODE && resultCode == CaptureActivity.result) {//扫描的到结果
-            getBookInfo(data.getStringExtra("result"));
+            String result = data.getStringExtra("result");
+            if (result.contains("http")) {
+                //网络商城
+                importBuy(result);
+            } else {
+                //书本
+                getBookInfo(result);
+            }
         }
     }
 
@@ -340,6 +349,57 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             }
         };
         HttpClient.getBookInfo(context, map, listenner);
+    }
+
+    /**
+     * 导入网购商品
+     */
+    private void importBuy(String str) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("key", str);
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                final BookBean book = JsonUtils.objectFromJson(r.getResult(), BookBean.class);
+                if (book == null || TextUtils.isEmpty(book.getPic())) {
+                    ToastUtil.showTopToast(context, "获取商品信息失败");
+                    Intent intent = new Intent(context, ImportHelpActivity.class);
+                    context.startActivity(intent);
+                    return;
+                }
+                new Thread(new Runnable() {//下载图片
+                    @Override
+                    public void run() {
+                        try {
+                            File file = Glide.with(context).load(book.getPic()).downloadOnly(500, 500).get();
+                            String newPath = MyApplication.CACHEPATH + System.currentTimeMillis() + ".jpg";
+                            FileUtil.copyFile(file, newPath);
+                            file = new File(newPath);
+                            book.setImageFile(file);
+                            AddMoreGoodsActivity.this.runOnUiThread(new Runnable() {//回主线程
+                                @Override
+                                public void run() {
+                                    updateBeanWithBook(book);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+
+            @Override
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
+                ToastUtil.showTopToast(context, "获取商品信息失败");
+                Intent intent = new Intent(context, ImportHelpActivity.class);
+                context.startActivity(intent);
+            }
+        };
+        HttpClient.getTaobaoInfo(context, map, listenner);
     }
 
     /**
