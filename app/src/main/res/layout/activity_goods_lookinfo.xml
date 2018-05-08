@@ -1,199 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:scrollbars="none">
 
-    <ImageView
-        android:id="@+id/goods_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-100dp"
-        android:minHeight="400dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/test" />
 
-    <TextView
-        android:id="@+id/goods_image_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-100dp"
-        android:gravity="center"
-        android:minHeight="400dp"
-        android:textColor="@color/white"
-        android:textSize="40sp"
-        android:visibility="gone" />
+    <!--<com.handmark.pulltorefresh.library.PullToScrollView-->
+    <!--android:id="@+id/activity_goods_add"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:fillViewport="true"-->
+    <!--android:focusable="true"-->
+    <!--android:focusableInTouchMode="true"-->
+    <!--android:scrollbars="none">-->
+    <!--</com.handmark.pulltorefresh.library.PullToScrollView>-->
+    <!--<requestFocus />-->
 
-    <com.handmark.pulltorefresh.library.PullToScrollView
-        android:id="@+id/activity_goods_add"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:fillViewport="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:scrollbars="none">
+        android:orientation="vertical">
 
-        <requestFocus />
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"></View>-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
 
-            <View
+            <EditText
+                android:id="@+id/name_tv"
+                android:layout_width="@dimen/dip_210"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/dip_6"
+                android:layout_marginTop="@dimen/dip_6"
+                android:enabled="false"
+                android:gravity="center"
+                android:hint="物品名称"
+                android:imeOptions="actionDone"
+                android:lines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="@color/black_txt"
+                android:textColorHint="@color/divider"
+                android:textSize="@dimen/f_17"
+                android:theme="@style/MyEditText" />
+
+            <com.gongwu.wherecollect.view.GoodsImageView
+                android:id="@+id/goods_image_iv"
+                android:layout_width="@dimen/dip_100"
+                android:layout_height="@dimen/dip_100"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dip_4" />
+
+            <LinearLayout
+                android:id="@+id/objrct_position_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"></View>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dip_50"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dip_18"
+                    android:paddingRight="@dimen/dip_18"
+                    android:text="位置"
+                    android:textColor="@color/black_other"
+                    android:textSize="@dimen/f_13" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_marginRight="@dimen/dip_18"
+                    android:layout_weight="1"
+                    android:background="@color/black_26" />
+
+                <ImageView
+                    android:id="@+id/objrct_position_set_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dip_18"
+                    android:padding="@dimen/dip_8"
+                    android:src="@drawable/edit_icon" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-
-                android:orientation="vertical"
-                android:paddingBottom="24dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/time_tv"
+                    android:id="@+id/objrct_position_hint_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:text="创建于：2017/09/10 12：30"
-                    android:textColor="#999999"
-                    android:textSize="11sp" />
-
-                <EditText
-                    android:id="@+id/name_tv"
-                    android:layout_width="@dimen/dip_210"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/dip_6"
-                    android:layout_marginTop="@dimen/dip_6"
-                    android:enabled="false"
-                    android:gravity="center"
-                    android:hint="物品名称"
-                    android:imeOptions="actionDone"
-                    android:lines="1"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:singleLine="true"
-                    android:textColor="@color/black_txt"
-                    android:textColorHint="@color/divider"
-                    android:textSize="@dimen/f_17"
-                    android:theme="@style/MyEditText" />
+                    android:layout_marginLeft="@dimen/dip_18"
+                    android:background="@color/select_btn_press"
+                    android:padding="@dimen/dip_4"
+                    android:text="未归位" />
 
                 <LinearLayout
-                    android:id="@+id/objrct_position_layout"
+                    android:id="@+id/ac_location_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dip_50"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/dip_18"
-                        android:paddingRight="@dimen/dip_18"
-                        android:text="位置"
-                        android:textColor="@color/black_other"
-                        android:textSize="@dimen/f_13" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1px"
-                        android:layout_marginRight="@dimen/dip_18"
-                        android:layout_weight="1"
-                        android:background="@color/black_26" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/objrct_position_set_iv"
+                        android:id="@+id/ac_location_btn"
+                        android:layout_width="@dimen/dip_40"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="@dimen/dip_8"
+                        android:scaleType="center"
+                        android:src="@drawable/icon_location" />
+
+                    <com.gongwu.wherecollect.view.FlowViewGroup
+                        android:id="@+id/ac_location_flow"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/dip_18"
-                        android:padding="@dimen/dip_8"
-                        android:src="@drawable/edit_icon" />
+                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/objrct_position_hint_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dip_18"
-                        android:background="@color/select_btn_press"
-                        android:padding="@dimen/dip_4"
-                        android:text="未归位" />
-
-                    <LinearLayout
-                        android:id="@+id/ac_location_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:id="@+id/ac_location_btn"
-                            android:layout_width="@dimen/dip_40"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="@dimen/dip_8"
-                            android:scaleType="center"
-                            android:src="@drawable/icon_location" />
-
-                        <com.gongwu.wherecollect.view.FlowViewGroup
-                            android:id="@+id/ac_location_flow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/add_other_content_edit_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dip_50"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/dip_18"
-                        android:paddingRight="@dimen/dip_18"
-                        android:text="其他属性"
-                        android:textColor="@color/black_other"
-                        android:textSize="@dimen/f_13" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1px"
-                        android:layout_marginRight="@dimen/dip_18"
-                        android:layout_weight="1"
-                        android:background="@color/black_26" />
-
-                    <ImageView
-                        android:id="@+id/edit_goods_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/dip_18"
-                        android:padding="@dimen/dip_8"
-                        android:src="@drawable/edit_icon" />
-                </LinearLayout>
-
-                <com.gongwu.wherecollect.view.ObjectInfoLookView
-                    android:id="@+id/goodsInfo_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></com.gongwu.wherecollect.view.ObjectInfoLookView>
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_other_content_edit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dip_50"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dip_18"
+                    android:paddingRight="@dimen/dip_18"
+                    android:text="其他属性"
+                    android:textColor="@color/black_other"
+                    android:textSize="@dimen/f_13" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_marginRight="@dimen/dip_18"
+                    android:layout_weight="1"
+                    android:background="@color/black_26" />
+
+                <ImageView
+                    android:id="@+id/edit_goods_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dip_18"
+                    android:padding="@dimen/dip_8"
+                    android:src="@drawable/edit_icon" />
+            </LinearLayout>
+
+            <com.gongwu.wherecollect.view.ObjectInfoLookView
+                android:id="@+id/goodsInfo_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></com.gongwu.wherecollect.view.ObjectInfoLookView>
         </LinearLayout>
-    </com.handmark.pulltorefresh.library.PullToScrollView>
-</RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

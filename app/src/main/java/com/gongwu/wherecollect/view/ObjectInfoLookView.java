@@ -104,7 +104,6 @@ public class ObjectInfoLookView extends LinearLayout {
         setGoodsCount();//设置数量
         setPurchaseTime();//设置购买时间
         setExpirytime();//设置到期时间
-        setLocation();//设置位置
         setColors();//设置颜色
         setJijie();//设置季节
         setQudao();//设置购货渠道
@@ -118,7 +117,7 @@ public class ObjectInfoLookView extends LinearLayout {
             purchaseTimeLayout.setVisibility(VISIBLE);
             purchaseTimeTv.setText(bean.getBuy_date());
             showView();
-        } else {
+        }else{
             purchaseTimeLayout.setVisibility(GONE);
         }
     }
@@ -128,7 +127,7 @@ public class ObjectInfoLookView extends LinearLayout {
             expiryTimeLayout.setVisibility(VISIBLE);
             expiryTimeTv.setText(bean.getExpire_date());
             showView();
-        } else {
+        }else{
             expiryTimeLayout.setVisibility(GONE);
         }
     }
@@ -141,7 +140,7 @@ public class ObjectInfoLookView extends LinearLayout {
             goodsCountEdit.setText(bean.getObject_count() + "");
             addGoodsCountLaytou.setVisibility(View.VISIBLE);
             showView();
-        } else {
+        }else{
             addGoodsCountLaytou.setVisibility(View.GONE);
         }
     }
@@ -154,7 +153,7 @@ public class ObjectInfoLookView extends LinearLayout {
             jiageEdit.setText(bean.getPrice() + "元");
             jiageLayout.setVisibility(View.VISIBLE);
             showView();
-        } else {
+        }else{
             jiageLayout.setVisibility(View.GONE);
         }
     }
@@ -176,12 +175,12 @@ public class ObjectInfoLookView extends LinearLayout {
      * 设置星级
      */
     private void setStar() {
-        if (bean.getStar() == 0) {
-            starLayout.setVisibility(View.GONE);
-        } else {
+        if (bean.getStar() > 0) {
             starLayout.setVisibility(View.VISIBLE);
             ratingStar.setRating(bean.getStar());
             showView();
+        }else{
+            starLayout.setVisibility(View.GONE);
         }
     }
 
@@ -217,43 +216,6 @@ public class ObjectInfoLookView extends LinearLayout {
         showView();
     }
 
-    /**
-     * 设置位置
-     */
-    private void setLocation() {
-        if (locationIsShow) return;
-        if (bean.getLocations() == null || bean.getLocations().size() == 0) {
-            locationLayout.setVisibility(View.GONE);
-            return;
-        } else {
-            locationLayout.setVisibility(View.VISIBLE);
-        }
-        locationFlow.removeAllViews();
-        Collections.sort(bean.getLocations(), new Comparator<BaseBean>() {
-            @Override
-            public int compare(BaseBean lhs, BaseBean rhs) {
-                return lhs.getLevel() - rhs.getLevel();
-            }
-        });
-        for (int i = 0; i < StringUtils.getListSize(bean.getLocations()); i++) {
-            TextView text = (TextView) View.inflate(getContext(), R.layout.flow_textview, null);
-            locationFlow.addView(text);
-            MarginLayoutParams lp = (MarginLayoutParams) text.getLayoutParams();
-            lp.bottomMargin = 5;
-            lp.topMargin = 5;
-            lp.rightMargin = 10;
-            lp.leftMargin = 10;
-            text.setLayoutParams(lp);
-            text.setText(bean.getLocations().get(i).getName());
-            text.setBackgroundResource(R.drawable.shape_maingoods2_bg);
-        }
-        if (StringUtils.isEmpty(bean.getLocations())) {
-            locationBtn.setVisibility(GONE);
-        } else {
-            locationBtn.setVisibility(VISIBLE);
-        }
-        showView();
-    }
 
     /**
      * 设置颜色
@@ -310,7 +272,7 @@ public class ObjectInfoLookView extends LinearLayout {
     }
 
     /**
-     * 设置季节
+     * 设置购买渠道
      */
     private void setQudao() {
         qudaoFlow.removeAllViews();
@@ -360,5 +322,16 @@ public class ObjectInfoLookView extends LinearLayout {
         if (this.getVisibility() == View.GONE) {
             this.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void showGoodsLayout() {
+        fenleiLayout.setVisibility(View.VISIBLE);
+        addGoodsCountLaytou.setVisibility(View.VISIBLE);
+        purchaseTimeLayout.setVisibility(VISIBLE);
+        expiryTimeLayout.setVisibility(VISIBLE);
+        yanseLayout.setVisibility(View.VISIBLE);
+        jijieLayout.setVisibility(View.VISIBLE);
+        starLayout.setVisibility(View.VISIBLE);
+        jiageLayout.setVisibility(View.VISIBLE);
     }
 }

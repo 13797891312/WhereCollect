@@ -3,22 +3,12 @@ package com.gongwu.wherecollect.object;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
-import android.support.v4.content.CursorLoader;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -62,16 +52,17 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * 添加物品界面
@@ -95,6 +86,12 @@ public class AddGoodsActivity extends BaseViewActivity {
     ImageView head;
     @Bind(R.id.name)
     TextView name;
+    @Bind(R.id.goods_name_and_image_layout)
+    LinearLayout goods_name_and_image_layout;
+    @Bind(R.id.add_shopping_layout)
+    LinearLayout add_shopping_layout;
+    @Bind(R.id.add_code_layout)
+    LinearLayout add_code_layout;
 
     private ObjectBean tempBean = new ObjectBean();
     private File imgFile;
@@ -154,11 +151,12 @@ public class AddGoodsActivity extends BaseViewActivity {
                     cameraIv.name.setVisibility(View.VISIBLE);
                     cameraIv.name.setText(tempBean.getName());
                     cameraIv.head.setImageDrawable(null);
-                    cameraIv.head.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+                    cameraIv.head.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
                 }
             }
         } else {
             editGoodsType = 0;
+            showHelp();
         }
     }
 
@@ -227,15 +225,15 @@ public class AddGoodsActivity extends BaseViewActivity {
 
     }
 
-    @OnClick({R.id.add_shopping_layout, R.id.add_book_layout, R.id.camera_iv,
+    @OnClick({R.id.add_shopping_layout, R.id.add_code_layout, R.id.camera_iv,
             R.id.add_other_content_tv, R.id.commit_btn, R.id.add_other_content_edit_iv, R.id.textBtn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.add_shopping_layout:
                 //一键导入
-                importBuy();
+                initTBData();
                 break;
-            case R.id.add_book_layout:
+            case R.id.add_code_layout:
                 //图书扫码
                 qrBook();
                 break;
@@ -245,48 +243,79 @@ public class AddGoodsActivity extends BaseViewActivity {
                 break;
             case R.id.add_other_content_tv:
             case R.id.add_other_content_edit_iv:
-                //其他属性
-                Intent intent = new Intent(context, AddGoodsOtherContentActivity.class);
-                if (tempBean != null) {
-                    intent.putExtra("tempBean", tempBean);
-                }
-                startActivityForResult(intent, OTHER_CODE);
+                startAddGoodsOtherContentActivity();
                 break;
             case R.id.commit_btn:
-                //确定添加
-                loading = Loading.show(loading, this, "");
-                //编辑物品
-                if (editGoodsType == 1) {
-                    //判断图片是否更改，没更改的情况下 图片地址应该为网络路径
-                    if (!tempBean.getObject_url().contains("http") && !tempBean.getObject_url().contains("#")) {
-                        //图片有更改，先上传
-                        upLoadImg(tempBean.getObjectFiles());
-                    } else {
-                        //无修改图片时，直接调用修改其他属性的接口
-                        addObject();
-                    }
-                    return;
-                }
-                //如果图片没有地址，则传一个颜色服务牌
-                if (TextUtils.isEmpty(tempBean.getObject_url())) {
-                    //调用接口
-                    tempBean.setObject_url("#B5B5B5");
-                    addObjects();
-                } else if (tempBean.getObject_url().contains("http")) {
-                    addObjects();
-                } else {
-                    //图片有地址 直接上传
-                    upLoadImg(tempBean.getObjectFiles());
-                }
+                clickCommitBtn();
                 break;
             case R.id.textBtn:
-                Intent addMoreIntent = new Intent(context, AddGoodsOtherContentActivity.class);
-                if (tempBean != null) {
-                    addMoreIntent.putExtra("tempBean", tempBean);
-                    addMoreIntent.putExtra("type", MORE_TYPE);
-                }
-                startActivityForResult(addMoreIntent, MORE_CODE);
+                startAddMoreGoodsActivity();
                 break;
+        }
+    }
+
+    /**
+     * 导入网络商城数据
+     */
+    private void initTBData() {
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        ClipData cd2 = cm.getPrimaryClip();
+        String str = cd2.getItemAt(0).getText().toString();
+        importBuy(str);
+    }
+
+    /**
+     * 批量添加界面
+     */
+    private void startAddMoreGoodsActivity() {
+        Intent addMoreIntent = new Intent(context, AddGoodsOtherContentActivity.class);
+        if (tempBean != null) {
+            addMoreIntent.putExtra("tempBean", tempBean);
+            addMoreIntent.putExtra("type", MORE_TYPE);
+        }
+        startActivityForResult(addMoreIntent, MORE_CODE);
+    }
+
+    /**
+     * 跳转添加其他属性界面
+     */
+    private void startAddGoodsOtherContentActivity() {
+        //其他属性
+        Intent intent = new Intent(context, AddGoodsOtherContentActivity.class);
+        if (tempBean != null) {
+            intent.putExtra("tempBean", tempBean);
+        }
+        startActivityForResult(intent, OTHER_CODE);
+    }
+
+    /**
+     * 点击确认
+     */
+    private void clickCommitBtn() {
+        //确定添加
+        loading = Loading.show(loading, this, "");
+        //编辑物品
+        if (editGoodsType == 1) {
+            //判断图片是否更改，没更改的情况下 图片地址应该为网络路径
+            if (!tempBean.getObject_url().contains("http") && !tempBean.getObject_url().contains("#")) {
+                //图片有更改，先上传
+                upLoadImg(tempBean.getObjectFiles());
+            } else {
+                //无修改图片时，直接调用修改其他属性的接口
+                addObject();
+            }
+            return;
+        }
+        //如果图片没有地址，则传一个颜色服务牌
+        if (TextUtils.isEmpty(tempBean.getObject_url())) {
+            //调用接口
+            tempBean.setObject_url("#B5B5B5");
+            addObjects();
+        } else if (tempBean.getObject_url().contains("http")) {
+            addObjects();
+        } else {
+            //图片有地址 直接上传
+            upLoadImg(tempBean.getObjectFiles());
         }
     }
 
@@ -323,20 +352,20 @@ public class AddGoodsActivity extends BaseViewActivity {
                 .getChannel().split(">")));
         map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean
                 .getColor().split("、")));
-        map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
-        map.put("price_max", tempBean.getPrice() + "");
-        map.put("price_min", tempBean.getPrice() + "");
+//        map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
+//        map.put("price_max", tempBean.getPrice() + "");
+//        map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
-        map.put("star", tempBean.getStar() + "");
+//        map.put("star", tempBean.getStar() + "");
         List<String> names = new ArrayList<>();
         names.add(goodsNameEv.getText().toString());
         map.put("name", JsonUtils.jsonFromObject(names));
         List<String> files = new ArrayList<>();
         files.add(tempBean.getObject_url());
         map.put("image_urls", JsonUtils.jsonFromObject(files));
-        map.put("count", tempBean.getObject_count() + "");
+//        map.put("count", tempBean.getObject_count() + "");
         map.put("buy_date", tempBean.getBuy_date());
-        map.put("expire_date", tempBean.getExpire_date());
+//        map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -368,15 +397,15 @@ public class AddGoodsActivity extends BaseViewActivity {
     private void addObject() {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
-        map.put("detail", tempBean.getDetail());
+//        map.put("detail", tempBean.getDetail());
         map.put("image_url", TextUtils.isEmpty(tempBean.getObject_url()) ? "#B5B5B5" : tempBean.getObject_url());//B5B5B5
-        map.put("object_count", tempBean.getObject_count() + "");
-        map.put("price_max", tempBean.getPrice() + "");
-        map.put("price_min", tempBean.getPrice() + "");
+//        map.put("object_count", tempBean.getObject_count() + "");
+//        map.put("price_max", tempBean.getPrice() + "");
+//        map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
         map.put("code", tempBean.get_id());
         map.put("name", goodsNameEv.getText().toString().trim());
-        map.put("star", tempBean.getStar() + "");
+//        map.put("star", tempBean.getStar() + "");
         map.put("coordinates", JsonUtils.jsonFromObject(tempBean.getCoordinates()));
         StringBuilder ca = new StringBuilder();
         for (int i = 0; i < StringUtils.getListSize(tempBean.getCategories()); i++) {
@@ -404,7 +433,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 newBean = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
-                editCacheGoods(newBean,tempBean.get_id());
+                editCacheGoods(newBean, tempBean.get_id());
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                 Intent intent = new Intent();
                 intent.putExtra("bean", newBean);
@@ -423,7 +452,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         HttpClient.getAddObject(this, map, listenner);
     }
 
-    private void editCacheGoods(ObjectBean newBean,String code) {
+    private void editCacheGoods(ObjectBean newBean, String code) {
         for (List<ObjectBean> beanList : MainLocationFragment.objectMap.values()) {
             for (int i = 0; i < beanList.size(); i++) {
                 ObjectBean objectBean = beanList.get(i);
@@ -486,10 +515,8 @@ public class AddGoodsActivity extends BaseViewActivity {
     /**
      * 导入网购商品
      */
-    private void importBuy() {
-        ClipboardManager cm = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-        ClipData cd2 = cm.getPrimaryClip();
-        String str = cd2.getItemAt(0).getText().toString();
+    private void importBuy(String str) {
+
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(context).getId());
         map.put("key", str);
@@ -643,7 +670,14 @@ public class AddGoodsActivity extends BaseViewActivity {
             selectImgDialog.onActivityResult(requestCode, resultCode, data);
         }
         if (requestCode == BOOK_CODE && resultCode == CaptureActivity.result) {//扫描的到结果
-            getBookInfo(data.getStringExtra("result"));
+            String result = data.getStringExtra("result");
+            if (result.contains("http")) {
+                //网络商城
+                importBuy(result);
+            } else {
+                //书本
+                getBookInfo(result);
+            }
         }
         if (resultCode == 100) {
             tempBean = (ObjectBean) data.getSerializableExtra("bean");
@@ -715,5 +749,72 @@ public class AddGoodsActivity extends BaseViewActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 首次引导
+     */
+    private void showHelp() {
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setContentTextColor(getResources().getColor(R.color.white));
+        config.setMaskColor(getResources().getColor(R.color.black_87));
+        config.setDelay(200); // half second between each showcase view
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "addObject");
+        sequence.setConfig(config);
+        MaterialShowcaseView sequenceItem1 = (new MaterialShowcaseView.Builder(this)).setTarget(goods_name_and_image_layout)
+                .setContentText("名称和图片至少添加一项")
+                .setTargetTouchable(false)
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTargetTouch(true)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem1);
+        MaterialShowcaseView sequenceItem2 = (new MaterialShowcaseView.Builder(this))
+                .setTarget(otherLayout)
+                .setContentText("其他属性\n为方便筛选查找,还可添加数\n量、时间、分类、购获渠道\n等更多物品属性")
+                .setTargetTouchable(false)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTouch(true)
+                .setDelay(200)
+                .setShapePadding(0)
+                .setDismissOnTargetTouch(false)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem2);
+        MaterialShowcaseView sequenceItem3 = (new MaterialShowcaseView.Builder(this))
+                .setTarget(add_shopping_layout).
+                        setContentText("复制链接导入\n复制淘口令、天猫和京东链\n接,自动抓取物品数据")
+                .setTargetTouchable(false)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setDismissOnTargetTouch(false)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem3);
+        MaterialShowcaseView sequenceItem4 = (new MaterialShowcaseView.Builder(this))
+                .setTarget(add_code_layout).
+                        setContentText("扫条码导入\n支持图书扫码,及电脑端淘\n宝、天猫、京东网页商品\n二维码扫描")
+                .setTargetTouchable(false)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setDismissOnTargetTouch(false)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem4);
+        MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(this))
+                .setTarget(addMoreTv).
+                        setContentText("批量添加\n选择共同属性,批量添加多\n个物品")
+                .setTargetTouchable(false)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setDismissOnTargetTouch(false)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem5);
+        sequence.start();
     }
 }

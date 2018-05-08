@@ -207,6 +207,11 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             }
 
             @Override
+            public void results(List<ObjectBean> beans) {
+                upLoadImgs(beans);
+            }
+
+            @Override
             public void cancel() {
                 currentItem = -1;
             }
@@ -240,6 +245,34 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                     mDatas.add(objectBean);
                 }
                 mAdapter.notifyDataSetChanged();
+            }
+        };
+        uploadUtil.start();
+    }
+
+    /**
+     * 上传图片
+     */
+    private Loading loading;
+
+    private void upLoadImgs(final List<ObjectBean> objectBeans) {
+        List<File> list = new ArrayList<>();
+        for (ObjectBean bean : objectBeans) {
+            list.add(new File(bean.getObject_url()));
+        }
+        loading = Loading.show(loading, this, "上传中...");
+        QiNiuUploadUtil uploadUtil = new QiNiuUploadUtil(this, list, "object/image/") {
+            @Override
+            protected void finish(List<String> list) {
+                super.finish(list);
+                for (int i = 0; i < list.size(); i++) {
+                    objectBeans.get(i).setObject_url(list.get(i));
+                }
+                mDatas.addAll(objectBeans);
+                mAdapter.notifyDataSetChanged();
+                if (loading != null) {
+                    loading.dismiss();
+                }
             }
         };
         uploadUtil.start();

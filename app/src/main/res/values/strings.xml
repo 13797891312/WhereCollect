@@ -25,6 +25,7 @@
     <string name="add_more_text">批量添加</string>
     <string name="add_goods_text">添加物品</string>
     <string name="add_goods_other_content_text">添加属性</string>
+    <string name="add_goods_other_content_text_2">选择共同属性</string>
     <string name="add_more_goods_text">批量添加</string>
     <string name="add_goods_remind_text">添加提醒</string>
     <string name="goods_remind_details_text">提醒详情</string>

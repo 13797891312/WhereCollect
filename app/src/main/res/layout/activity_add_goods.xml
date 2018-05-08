@@ -30,7 +30,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/select_changheader_btn_other"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dip_18"
+                android:paddingTop="@dimen/dip_18">
 
                 <ImageView
                     android:layout_width="@dimen/dip_44"
@@ -40,19 +42,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dip_10"
-                    android:text="一键导入"
+                    android:layout_marginBottom="@dimen/dip_20"
+                    android:text="复制链接导入"
                     android:textColor="@color/black_other"
                     android:textSize="@dimen/f_15" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dip_20"
-                    android:gravity="center"
-                    android:text="网购类物品,根据提示可\n一键添加"
-                    android:textColor="@color/black_other_one"
-                    android:textSize="@dimen/f_12" />
 
 
             </LinearLayout>
@@ -63,13 +56,15 @@
                 android:background="@color/black_12" />
 
             <LinearLayout
-                android:id="@+id/add_book_layout"
+                android:id="@+id/add_code_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/select_changheader_btn_other"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dip_18"
+                android:paddingTop="@dimen/dip_18">
 
                 <ImageView
                     android:layout_width="@dimen/dip_44"
@@ -79,19 +74,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dip_10"
-                    android:text="图书扫码"
+                    android:layout_marginBottom="@dimen/dip_20"
+                    android:text="扫条码导入"
                     android:textColor="@color/black_other"
                     android:textSize="@dimen/f_15" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dip_20"
-                    android:gravity="center"
-                    android:text="图书类物品,直接扫描条\n形码添加"
-                    android:textColor="@color/black_other_one"
-                    android:textSize="@dimen/f_12" />
             </LinearLayout>
 
         </LinearLayout>
@@ -101,41 +88,40 @@
             android:layout_height="1px"
             android:background="@color/black_12" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/goods_name_and_image_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dip_18"
-            android:layout_marginTop="@dimen/dip_12"
-            android:gravity="center"
-            android:text="名称和图片至少添加一项"
-            android:textColor="@color/black_other_one"
-            android:textSize="@dimen/f_12" />
+            android:layout_marginTop="@dimen/dip_18"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/goods_name_et"
-            android:layout_width="@dimen/dip_210"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/dip_18"
-            android:gravity="center"
-            android:hint="物品名称"
-            android:imeOptions="actionDone"
-            android:lines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="@color/black_txt"
-            android:textColorHint="@color/divider"
-            android:textSize="@dimen/f_17"
-            android:theme="@style/MyEditText" />
+            <EditText
+                android:id="@+id/goods_name_et"
+                android:layout_width="@dimen/dip_210"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/dip_18"
 
-        <com.gongwu.wherecollect.view.GoodsImageView
-            android:id="@+id/camera_iv"
-            android:layout_width="@dimen/dip_30"
-            android:layout_height="@dimen/dip_30"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/dip_28"
-             />
+                android:gravity="center"
+                android:hint="物品名称"
+                android:imeOptions="actionDone"
+                android:lines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="@color/black_txt"
+                android:textColorHint="@color/divider"
+                android:textSize="@dimen/f_17"
+                android:theme="@style/MyEditText" />
+
+            <com.gongwu.wherecollect.view.GoodsImageView
+                android:id="@+id/camera_iv"
+                android:layout_width="@dimen/dip_30"
+                android:layout_height="@dimen/dip_30"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/dip_10" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/add_other_content_layout"

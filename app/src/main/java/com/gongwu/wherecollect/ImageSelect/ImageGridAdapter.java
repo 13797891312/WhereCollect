@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.ImageSelect;
+
 import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,16 +16,19 @@ import com.gongwu.wherecollect.util.ImageLoader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 public class ImageGridAdapter extends BaseAdapter {
     final String TAG = getClass().getSimpleName();
     public List<ImageData> chooseList = new ArrayList<ImageData>();
     public int selectTotal = 0;
     Activity act;
     List<ImageData> dataList;
+    private int max = 10;
 
-    public ImageGridAdapter(Activity act, List<ImageData> list) {
+    public ImageGridAdapter(Activity act, List<ImageData> list, int max) {
         this.act = act;
         dataList = list;
+        this.max = max;
     }
 
     @Override
@@ -90,7 +94,7 @@ public class ImageGridAdapter extends BaseAdapter {
                     if (chooseList.size() >= ImageGridActivity.max) {
                         //                        Toast.makeText(act, "最多还能选" + ImageGridActivity.max + "张图片", Toast
                         // .LENGTH_LONG).show();
-                        Toast.makeText(act, "最多只能选10张图片", Toast.LENGTH_LONG).show();
+                        Toast.makeText(act, "最多只能选" + max + "张图片", Toast.LENGTH_LONG).show();
                     } else {
                         holder.selected.setSelected(true);
                         holder.text.setBackgroundColor(v.getContext().getResources().getColor(R.color.black_54));

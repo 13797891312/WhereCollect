@@ -33,9 +33,9 @@
             hedgehog:starCount="5"
             hedgehog:starEmpty="@drawable/icon_start_nomal"
             hedgehog:starFill="@drawable/icon_star_seclect"
-            hedgehog:starImageHeight="30dp"
+            hedgehog:starImageHeight="24dp"
             hedgehog:starImagePadding="0dp"
-            hedgehog:starImageWidth="30dp" />
+            hedgehog:starImageWidth="24dp" />
     </LinearLayout>
 
     <LinearLayout

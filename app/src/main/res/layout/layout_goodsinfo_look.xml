@@ -155,7 +155,8 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        android:paddingTop="8dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

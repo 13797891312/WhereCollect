@@ -17,6 +17,7 @@ import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.ToastUtil;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -36,6 +37,9 @@ public class AddGoodsDialog extends Dialog {
 
     private Context context;
     private ObjectBean bean;
+    SelectImgDialog selectImgDialog;
+    private final int imgMax = 10;
+    private File imgOldFile;
 
     public AddGoodsDialog(Context context) {
         super(context);
@@ -110,10 +114,6 @@ public class AddGoodsDialog extends Dialog {
         }
     }
 
-    SelectImgDialog selectImgDialog;
-    private final int imgMax = 1;
-    private File imgOldFile;
-
     /**
      * 图片选择
      */
@@ -122,8 +122,12 @@ public class AddGoodsDialog extends Dialog {
             @Override
             public void getResult(List<File> list) {
                 super.getResult(list);
-                imgOldFile = list.get(0);
-                selectImgDialog.cropBitmap(imgOldFile);
+                if (list.size() == 1) {
+                    imgOldFile = list.get(0);
+                    selectImgDialog.cropBitmap(imgOldFile);
+                } else {
+                    setDataUrl(list);
+                }
             }
 
             @Override
@@ -135,6 +139,18 @@ public class AddGoodsDialog extends Dialog {
         };
         selectImgDialog.hintLayout();
         selectImgDialog.showEditIV(imgOldFile == null ? View.GONE : View.VISIBLE);
+    }
+
+
+    private void setDataUrl(List<File> fileList) {
+        List<ObjectBean> beans = new ArrayList<>();
+        for (File file : fileList) {
+            ObjectBean bean = new ObjectBean();
+            bean.setObject_url(file.getPath());
+            beans.add(bean);
+        }
+        results(beans);
+        dismiss();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -151,6 +167,10 @@ public class AddGoodsDialog extends Dialog {
 
     }
 
+    public void results(List<ObjectBean> beans) {
+
+    }
+
     public void cancel() {
 
     }
@@ -158,4 +178,5 @@ public class AddGoodsDialog extends Dialog {
     public void scanCode() {
 
     }
+
 }

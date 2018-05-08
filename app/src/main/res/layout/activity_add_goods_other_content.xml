@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/select_maincolor_bg"
         android:gravity="center"
-        android:text="跳过"
+        android:text="确定"
         android:textColor="@color/white"
         android:textSize="@dimen/f_15" />
 </LinearLayout>

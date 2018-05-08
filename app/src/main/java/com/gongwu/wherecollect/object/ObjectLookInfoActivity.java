@@ -22,6 +22,7 @@ import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
+import com.gongwu.wherecollect.entity.ImageData;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
@@ -30,16 +31,18 @@ import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.FlowViewGroup;
+import com.gongwu.wherecollect.view.GoodsImageView;
 import com.gongwu.wherecollect.view.ObjectInfoLookView;
 import com.gongwu.wherecollect.view.ObjectsLookMenuDialog;
+import com.gongwu.wherecollect.view.PhotosDialog;
 import com.handmark.pulltorefresh.library.PullToScrollView;
-import com.tencent.bugly.beta.download.BetaReceiver;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -52,16 +55,11 @@ import butterknife.OnClick;
 
 public class ObjectLookInfoActivity extends BaseViewActivity {
     ObjectBean bean;
-    @Bind(R.id.goods_image)
-    ImageView goodsImage;
-    @Bind(R.id.time_tv)
-    TextView timeTv;
+
     @Bind(R.id.name_tv)
     EditText nameTv;
     @Bind(R.id.goodsInfo_view)
     ObjectInfoLookView goodsInfoView;
-    @Bind(R.id.activity_goods_add)
-    PullToScrollView activityGoodsAdd;
     @Bind(R.id.ac_location_layout)
     LinearLayout locationLayout;
     @Bind(R.id.objrct_position_hint_tv)
@@ -72,8 +70,16 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
     ImageView locationBtn;
     @Bind(R.id.objrct_position_set_iv)
     ImageView objectPositionConfiIv;
-    @Bind(R.id.goods_image_tv)
-    TextView goodsImageTv;
+    @Bind(R.id.goods_image_iv)
+    GoodsImageView goodsImageIv;
+//    @Bind(R.id.goods_image_tv)
+//    TextView goodsImageTv;
+//    @Bind(R.id.goods_image)
+//    ImageView goodsImage;
+//    @Bind(R.id.activity_goods_add)
+//    PullToScrollView activityGoodsAdd;
+
+    private final String IMG_COLOR_CODE = 0 + "";//默认图片颜色的值
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +103,6 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
             }
         });
         initValues();
-        initScroll();
         EventBus.getDefault().register(this);
     }
 
@@ -144,42 +149,51 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
     }
 
     private void initScroll() {
-        final int maxMargin = (int) (100 * BaseViewActivity.getScreenScale(ObjectLookInfoActivity.this));
-        activityGoodsAdd.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver
-                .OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                if (activityGoodsAdd.getScrollY() / 2 < -maxMargin) {
-                    return;
-                }
-                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) goodsImage.getLayoutParams();
-                lp.topMargin = (-maxMargin - activityGoodsAdd.getScrollY() / 2);
-                goodsImage.setLayoutParams(lp);
-                activityGoodsAdd.getScrollY();
-            }
-        });
+//        final int maxMargin = (int) (100 * BaseViewActivity.getScreenScale(ObjectLookInfoActivity.this));
+//        activityGoodsAdd.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver
+//                .OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged() {
+//                if (activityGoodsAdd.getScrollY() / 2 < -maxMargin) {
+//                    return;
+//                }
+//                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) goodsImage.getLayoutParams();
+//                lp.topMargin = (-maxMargin - activityGoodsAdd.getScrollY() / 2);
+//                goodsImage.setLayoutParams(lp);
+//                activityGoodsAdd.getScrollY();
+//            }
+//        });
     }
 
     private void initValues() {
         if (bean == null)
             return;
-        if (bean.getObject_url().contains("#")) {
-            goodsImageTv.setVisibility(View.VISIBLE);
-            goodsImageTv.setText(bean.getName());
-            goodsImage.setImageDrawable(null);
-            goodsImage.setBackgroundColor(Color.parseColor(bean.getObject_url()));
-        } else {
-            goodsImageTv.setVisibility(View.GONE);
-            ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
+//        if (bean.getObject_url().contains("#")) {
+//            goodsImageTv.setVisibility(View.VISIBLE);
+//            goodsImageTv.setText(bean.getName());
+//            goodsImage.setImageDrawable(null);
+//            goodsImage.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+//        } else {
+//            goodsImageTv.setVisibility(View.GONE);
+//            ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
+//        }
+        if (bean.getObject_url().contains("http")) {
+            goodsImageIv.setHead(IMG_COLOR_CODE, "", bean.getObject_url());
+        } else if (bean.getObject_url().contains("#")) {
+            goodsImageIv.name.setVisibility(View.VISIBLE);
+            goodsImageIv.name.setText(bean.getName());
+            goodsImageIv.head.setImageDrawable(null);
+            goodsImageIv.head.setBackgroundColor(Color.parseColor(bean.getObject_url()));
         }
         nameTv.setText(bean.getName());
-        timeTv.setText(String.format("创建于：%s", bean.getBuy_date()));
         goodsInfoView.setLocationlayoutVisibility(true);
         goodsInfoView.init(bean);
+        goodsInfoView.showGoodsLayout();
         setLocation();
     }
 
-    @OnClick({R.id.edit_goods_iv, R.id.ac_location_btn, R.id.objrct_position_set_iv})
+    @OnClick({R.id.edit_goods_iv, R.id.ac_location_btn, R.id.objrct_position_set_iv
+            , R.id.goods_image_iv})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -196,6 +210,15 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
                 break;
             case R.id.objrct_position_set_iv:
                 editLocatio();
+                break;
+            case R.id.goods_image_iv:
+                if (bean.getObject_url().contains("#")) return;
+                List<ImageData> imageDatas = new ArrayList<>();
+                ImageData imageData = new ImageData();
+                imageData.setUrl(bean.getObject_url());
+                imageDatas.add(imageData);
+                PhotosDialog photosDialog = new PhotosDialog(this, false, false, imageDatas);
+                photosDialog.showPhotos(0);
                 break;
         }
     }

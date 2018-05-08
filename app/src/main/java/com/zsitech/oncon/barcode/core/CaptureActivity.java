@@ -342,14 +342,14 @@ public final class CaptureActivity extends BaseViewActivity implements
                     + resultHandler.getDisplayContents());
         } else {
             String string = resultHandler.getDisplayContents().toString();
-            if (string.startsWith("http")) {
-                WebActivity.start(this, "", string);
-            } else {
+//            if (string.startsWith("http")) {
+//                WebActivity.start(this, "", string);
+//            } else {
                 Intent intent = new Intent();
                 intent.putExtra("result", string);
                 setResult(result, intent);
                 finish();
-            }
+//            }
             restartPreviewAfterDelay(3000L);
         }
     }

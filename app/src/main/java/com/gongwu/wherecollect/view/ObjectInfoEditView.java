@@ -76,6 +76,8 @@ public class ObjectInfoEditView extends LinearLayout {
     TextView purchaseTimeTv;
     @Bind(R.id.expiry_time_tv)
     TextView expiryTimeTv;
+    @Bind(R.id.expiry_time_layout)
+    LinearLayout expiryTimeLayout;
 
     private ChangeListener changeListener;
 
@@ -400,5 +402,13 @@ public class ObjectInfoEditView extends LinearLayout {
 
     public static interface ChangeListener {
         public void change();
+    }
+
+    public void hintMoreGoodsLayout() {
+        starLayout.setVisibility(View.GONE);
+        expiryTimeLayout.setVisibility(View.GONE);
+        addGoodsCountLaytou.setVisibility(View.GONE);
+        qitaLayout.setVisibility(View.GONE);
+        jiageLayout.setVisibility(View.GONE);
     }
 }

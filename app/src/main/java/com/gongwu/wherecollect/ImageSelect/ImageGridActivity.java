@@ -73,7 +73,7 @@ public class ImageGridActivity extends BaseViewActivity implements PhotosDialog.
     private void initView() {
         gridView = (GridView) findViewById(R.id.gridview);
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        adapter = new ImageGridAdapter(ImageGridActivity.this, dataList) {
+        adapter = new ImageGridAdapter(ImageGridActivity.this, dataList,max) {
             @Override
             protected void change(List<ImageData> chooseList) {
                 super.change(chooseList);

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
  Copyright (C) 2008 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +14,19 @@
  limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <SurfaceView
         android:id="@+id/preview_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <com.zsitech.oncon.barcode.core.ViewfinderView
         android:id="@+id/viewfinder_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,26 +35,34 @@
         android:gravity="center_vertical"
         android:minHeight="@dimen/title_hight"
         android:orientation="horizontal">
-        <TextView android:id="@+id/title_ca"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:layout_centerInParent="true"
-                  android:gravity="center_vertical"
-                  android:text="扫描二维码"
-                  android:textColor="@color/black_txt"
-                  android:textSize="@dimen/f_17"/>
-        <ImageButton android:id="@+id/back_img"
-                     android:layout_width="@dimen/title_hight"
-                     android:layout_height="@dimen/title_hight"
-                     android:layout_alignParentLeft="true"
-                     android:layout_alignParentStart="true"
-                     android:layout_alignParentTop="true"
-                     android:background="@drawable/select_white_bg" android:paddingRight="@dimen/dip_4"
-                     android:src="@drawable/back_icon" android:visibility="visible"/>
-        <View android:id="@+id/line_view"
-              android:layout_width="1px"
-              android:layout_height="match_parent"
-              android:layout_toRightOf="@+id/back_btn"></View>
+
+        <TextView
+            android:id="@+id/title_ca"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:text="扫描二维码"
+            android:textColor="@color/black_txt"
+            android:textSize="@dimen/f_17" />
+
+        <ImageButton
+            android:id="@+id/back_img"
+            android:layout_width="@dimen/title_hight"
+            android:layout_height="@dimen/title_hight"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/select_white_bg"
+            android:paddingRight="@dimen/dip_4"
+            android:src="@drawable/back_icon"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/line_view"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/back_btn"></View>
     </RelativeLayout>
 
 
@@ -75,6 +82,25 @@
             android:background="@color/transparent"
             android:text="@string/msg_default_status"
             android:textColor="@color/white"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/dip_12"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:text="支持图书扫条码,\n及(天猫、淘宝、京东电脑网页)商品二\n维码扫码"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
     </LinearLayout>
 </FrameLayout>

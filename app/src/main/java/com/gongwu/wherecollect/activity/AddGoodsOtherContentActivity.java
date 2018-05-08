@@ -48,12 +48,11 @@ public class AddGoodsOtherContentActivity extends BaseViewActivity {
         startType = getIntent().getStringExtra("type");
         if (tempBean != null) {
             goodsInfoView.init(tempBean);
-            if (!tempBean.isEmpty()) {
-                commitBtn.setText("下一步");
-            }
         }
-        if (!AddGoodsActivity.MORE_TYPE.equals(startType)) {
-            commitBtn.setText("确定");
+        if (AddGoodsActivity.MORE_TYPE.equals(startType)) {
+            commitBtn.setText("跳过");
+            titleLayout.setTitle(getResources().getString(R.string.add_goods_other_content_text_2));
+            goodsInfoView.hintMoreGoodsLayout();
         }
     }
 
