@@ -100,6 +100,7 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
 
                     @Override
                     public void upSlide() {
+
                     }
 
                     @Override

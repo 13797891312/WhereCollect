@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.util.StringUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -86,11 +87,11 @@ public class GoodsImageView extends FrameLayout {
         nickName = TextUtils.isEmpty(nickName) ? userId : nickName;
         name.setText(getEndNick(nickName));
         name.setTag(userId);
-        head.setImageResource(getResId(userId));
+        head.setImageResource(StringUtils.getResId(Integer.parseInt(userId)));
         Glide.with(context)
                 .load(headUrl)
                 .asBitmap()
-                .placeholder(getResId(userId))
+                .placeholder(StringUtils.getResId(Integer.parseInt(userId)))
                 .dontAnimate()
                 .diskCacheStrategy
                         (DiskCacheStrategy.ALL)
@@ -110,7 +111,7 @@ public class GoodsImageView extends FrameLayout {
                         super.onLoadFailed(e, errorDrawable);
                         try {
                             if (name.getTag().toString().equals(userId)) {
-                                head.setImageResource(getResId(userId));
+                                head.setImageResource(StringUtils.getResId(Integer.parseInt(userId)));
                                 name.setVisibility(View.VISIBLE);
                             }
                         } catch (Exception e1) {
@@ -118,40 +119,6 @@ public class GoodsImageView extends FrameLayout {
                         }
                     }
                 });
-    }
-
-    private int getResId(String position) {
-        int j = Integer.parseInt(position);
-        int i;
-        if (j > 9) {
-            i = j % 10;
-        } else {
-            i = j;
-        }
-        switch (i) {
-            case 0:
-                return R.color.goods_color_0;
-            case 1:
-                return R.color.goods_color_1;
-            case 2:
-                return R.color.goods_color_2;
-            case 3:
-                return R.color.goods_color_3;
-            case 4:
-                return R.color.goods_color_4;
-            case 5:
-                return R.color.goods_color_5;
-            case 6:
-                return R.color.goods_color_6;
-            case 7:
-                return R.color.goods_color_7;
-            case 8:
-                return R.color.goods_color_8;
-            case 9:
-                return R.color.goods_color_9;
-            default:
-                return R.color.goods_color_0;
-        }
     }
 
     /**

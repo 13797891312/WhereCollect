@@ -137,7 +137,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         for (int i = 0; i < mDatas.size(); i++) {
             ObjectBean bean = mDatas.get(i);
             name.add(bean.getName());
-            files.add(TextUtils.isEmpty(bean.getObject_url()) ? getResId(i) + "" : bean.getObject_url());
+            files.add(TextUtils.isEmpty(bean.getObject_url()) ? StringUtils.getResCode(i) + "" : bean.getObject_url());
         }
         addObjects(name, files);
     }
@@ -443,39 +443,6 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             intent.putExtra("bean", objectBean);
         }
         context.startActivity(intent);
-    }
-
-    public String getResId(int position) {
-        int i;
-        if (position > 9) {
-            i = position % 10;
-        } else {
-            i = position;
-        }
-        switch (i) {
-            case 0:
-                return "#B5B5B5";
-            case 1:
-                return "#9076F2";
-            case 2:
-                return "#F19EC2";
-            case 3:
-                return "#13B5B1";
-            case 4:
-                return "#E66868";
-            case 5:
-                return "#F29B76";
-            case 6:
-                return "#AFC4D5";
-            case 7:
-                return "#32B16C";
-            case 8:
-                return "#13B5B1";
-            case 9:
-                return "#7ECEF4";
-            default:
-                return "#35BFBB";
-        }
     }
 
 }

@@ -352,20 +352,20 @@ public class AddGoodsActivity extends BaseViewActivity {
                 .getChannel().split(">")));
         map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean
                 .getColor().split("、")));
-//        map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
-//        map.put("price_max", tempBean.getPrice() + "");
-//        map.put("price_min", tempBean.getPrice() + "");
+        map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
+        map.put("price_max", tempBean.getPrice() + "");
+        map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
-//        map.put("star", tempBean.getStar() + "");
+        map.put("star", tempBean.getStar() + "");
         List<String> names = new ArrayList<>();
         names.add(goodsNameEv.getText().toString());
         map.put("name", JsonUtils.jsonFromObject(names));
         List<String> files = new ArrayList<>();
         files.add(tempBean.getObject_url());
         map.put("image_urls", JsonUtils.jsonFromObject(files));
-//        map.put("count", tempBean.getObject_count() + "");
+        map.put("count", tempBean.getObject_count() + "");
         map.put("buy_date", tempBean.getBuy_date());
-//        map.put("expire_date", tempBean.getExpire_date());
+        map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -397,15 +397,15 @@ public class AddGoodsActivity extends BaseViewActivity {
     private void addObject() {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
-//        map.put("detail", tempBean.getDetail());
+        map.put("detail", tempBean.getDetail());
         map.put("image_url", TextUtils.isEmpty(tempBean.getObject_url()) ? "#B5B5B5" : tempBean.getObject_url());//B5B5B5
-//        map.put("object_count", tempBean.getObject_count() + "");
-//        map.put("price_max", tempBean.getPrice() + "");
-//        map.put("price_min", tempBean.getPrice() + "");
+        map.put("object_count", tempBean.getObject_count() + "");
+        map.put("price_max", tempBean.getPrice() + "");
+        map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
         map.put("code", tempBean.get_id());
         map.put("name", goodsNameEv.getText().toString().trim());
-//        map.put("star", tempBean.getStar() + "");
+        map.put("star", tempBean.getStar() + "");
         map.put("coordinates", JsonUtils.jsonFromObject(tempBean.getCoordinates()));
         StringBuilder ca = new StringBuilder();
         for (int i = 0; i < StringUtils.getListSize(tempBean.getCategories()); i++) {

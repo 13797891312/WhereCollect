@@ -131,7 +131,17 @@ public class MainLocationFragment extends BaseFragment {
                 }
             }
         });
+        mHandler.postDelayed(r, 5000);
     }
+
+    Handler mHandler = new Handler();
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            objectListView.adapter.refreshData();
+            mHandler.postDelayed(this, 5000);
+        }
+    };
 
     @Override
     public void onDestroyView() {
@@ -168,7 +178,7 @@ public class MainLocationFragment extends BaseFragment {
                     protected void getNetDataListener(List<ObjectBean> list) {
                         super.getNetDataListener(list);
                         if (position == viewPager.getCurrentItem()) {
-                            objectListView.notifyData(list,indicatorView.getSelection());
+                            objectListView.notifyData(list, indicatorView.getSelection());
                             EventBus.getDefault().post(new EventBusMsg.getLocationObjectsMsg(position, list));
                         }
                     }

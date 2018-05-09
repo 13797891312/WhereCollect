@@ -53,6 +53,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 查看物品详情
+ */
 public class ObjectLookInfoActivity extends BaseViewActivity {
     ObjectBean bean;
 
@@ -72,6 +75,7 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
     ImageView objectPositionConfiIv;
     @Bind(R.id.goods_image_iv)
     GoodsImageView goodsImageIv;
+
 //    @Bind(R.id.goods_image_tv)
 //    TextView goodsImageTv;
 //    @Bind(R.id.goods_image)
@@ -88,9 +92,10 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         ButterKnife.bind(this);
         titleLayout.setTitle("查看物品");
         titleLayout.setBack(true, null);
-        titleLayout.imageBtn.setVisibility(View.VISIBLE);
         bean = (ObjectBean) getIntent().getSerializableExtra("bean");
-        titleLayout.imageBtn.setOnClickListener(new View.OnClickListener() {
+        titleLayout.textBtn.setVisibility(View.VISIBLE);
+        titleLayout.textBtn.setText("编辑");
+        titleLayout.textBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ObjectsLookMenuDialog dialog = new ObjectsLookMenuDialog(ObjectLookInfoActivity.this, bean) {
@@ -148,7 +153,7 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         }
     }
 
-    private void initScroll() {
+//    private void initScroll() {
 //        final int maxMargin = (int) (100 * BaseViewActivity.getScreenScale(ObjectLookInfoActivity.this));
 //        activityGoodsAdd.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver
 //                .OnScrollChangedListener() {
@@ -163,20 +168,11 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
 //                activityGoodsAdd.getScrollY();
 //            }
 //        });
-    }
+//    }
 
     private void initValues() {
         if (bean == null)
             return;
-//        if (bean.getObject_url().contains("#")) {
-//            goodsImageTv.setVisibility(View.VISIBLE);
-//            goodsImageTv.setText(bean.getName());
-//            goodsImage.setImageDrawable(null);
-//            goodsImage.setBackgroundColor(Color.parseColor(bean.getObject_url()));
-//        } else {
-//            goodsImageTv.setVisibility(View.GONE);
-//            ImageLoader.load(context, goodsImage, bean.getObject_url(), R.drawable.ic_img_error);
-//        }
         if (bean.getObject_url().contains("http")) {
             goodsImageIv.setHead(IMG_COLOR_CODE, "", bean.getObject_url());
         } else if (bean.getObject_url().contains("#")) {

@@ -19,6 +19,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.gongwu.wherecollect.R;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -515,5 +517,71 @@ public class StringUtils {
      */
     public static int pxConvertDp(int px, Context context) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, context.getResources().getDisplayMetrics());
+    }
+
+    public static int getResId(int position) {
+        int i;
+        if (position > 9) {
+            i = position % 10;
+        } else {
+            i = position;
+        }
+        switch (i) {
+            case 0:
+                return R.color.goods_color_0;
+            case 1:
+                return R.color.goods_color_1;
+            case 2:
+                return R.color.goods_color_2;
+            case 3:
+                return R.color.goods_color_3;
+            case 4:
+                return R.color.goods_color_4;
+            case 5:
+                return R.color.goods_color_5;
+            case 6:
+                return R.color.goods_color_6;
+            case 7:
+                return R.color.goods_color_7;
+            case 8:
+                return R.color.goods_color_8;
+            case 9:
+                return R.color.goods_color_9;
+            default:
+                return R.color.goods_color_0;
+        }
+    }
+
+    public static String getResCode(int position) {
+        int i;
+        if (position > 9) {
+            i = position % 10;
+        } else {
+            i = position;
+        }
+        switch (i) {
+            case 0:
+                return "#B5B5B5";
+            case 1:
+                return "#9076F2";
+            case 2:
+                return "#F19EC2";
+            case 3:
+                return "#13B5B1";
+            case 4:
+                return "#E66868";
+            case 5:
+                return "#F29B76";
+            case 6:
+                return "#AFC4D5";
+            case 7:
+                return "#32B16C";
+            case 8:
+                return "#13B5B1";
+            case 9:
+                return "#7ECEF4";
+            default:
+                return "#35BFBB";
+        }
     }
 }

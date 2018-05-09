@@ -54,14 +54,25 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.trans));
         }
         ObjectBean tempBean = mlist.get(position);
-        if (tempBean.getObject_url().contains("http")) {
-            ImageLoader.load(context, holder.image, tempBean.getObject_url(), R.drawable.ic_img_error);
-            holder.imageNameTv.setVisibility(View.GONE);
-        } else {
+        if (refresh) {
             holder.imageNameTv.setVisibility(View.VISIBLE);
             holder.imageNameTv.setText(tempBean.getName());
             holder.image.setImageDrawable(null);
-            holder.image.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
+            if (tempBean.getObject_url().contains("http")) {
+                holder.image.setBackgroundColor(context.getResources().getColor(StringUtils.getResId(position)));
+            } else {
+                holder.image.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
+            }
+        } else {
+            if (tempBean.getObject_url().contains("http")) {
+                ImageLoader.load(context, holder.image, tempBean.getObject_url(), R.drawable.ic_img_error);
+                holder.imageNameTv.setVisibility(View.GONE);
+            } else {
+                holder.imageNameTv.setVisibility(View.VISIBLE);
+                holder.imageNameTv.setText(tempBean.getName());
+                holder.image.setImageDrawable(null);
+                holder.image.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
+            }
         }
     }
 
@@ -92,6 +103,13 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
      */
     public void addBean(ObjectBean bean) {
         mlist.add(bean);
+        notifyDataSetChanged();
+    }
+
+    private boolean refresh = false;
+
+    public void refreshData() {
+        this.refresh = !this.refresh;
         notifyDataSetChanged();
     }
 
@@ -131,4 +149,5 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
             }
         }
     }
+
 }

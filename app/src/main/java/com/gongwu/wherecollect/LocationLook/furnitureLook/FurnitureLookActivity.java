@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook.furnitureLook;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 public class FurnitureLookActivity extends BaseViewActivity {
     public ObjectBean furnitureObject;
     public int spacePosition;//哪个空间桌布
@@ -55,7 +57,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
         titleLayout.setTitle(title);
         furnitureObject = (ObjectBean) getIntent().getSerializableExtra("furnitureObject");
         ObjectBean objectBean = (ObjectBean) getIntent().getSerializableExtra("object");
-        selectObject=objectBean;
+        selectObject = objectBean;
         //TODO 后台数据错误，把盒子也当隔层返回来了
         for (int i = StringUtils.getListSize(furnitureObject.getLayers()) - 1; i >= 0; i--) {
             if (furnitureObject.getLayers().get(i).getScale() == null) {
@@ -80,7 +82,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
                 drawerLayout.openDrawer(Gravity.RIGHT);
                 objectListView.show();
                 if (objectBean != null) {
-                   findObject(objectBean);
+                    findObject(objectBean);
                 }
             }
         }, 500);
@@ -110,7 +112,17 @@ public class FurnitureLookActivity extends BaseViewActivity {
             public void onDrawerStateChanged(@DrawerLayout.State int newState) {
             }
         });
+        mHandler.postDelayed(runnable, 5000);
     }
+
+    Handler mHandler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            objectListView.adapter.refreshData();
+            mHandler.postDelayed(this, 5000);
+        }
+    };
 
     /**
      * 刷新物品列表
@@ -167,9 +179,9 @@ public class FurnitureLookActivity extends BaseViewActivity {
             if (MaterialShowcaseView.showcaseView != null) {
                 try {
                     MaterialShowcaseView.showcaseView.hide();
-                }catch (Exception e){
+                } catch (Exception e) {
                 }
-                MaterialShowcaseView.showcaseView=null;
+                MaterialShowcaseView.showcaseView = null;
             } else if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                 drawerLayout.closeDrawer(Gravity.RIGHT);
                 objectListView.hide();
