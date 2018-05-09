@@ -4,9 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.volley.request.QiNiuUploadUtil;
@@ -17,8 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.gongwu.wherecollect.LocationEdit.SpaceEditActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.AddMoreGoodsListAdapter;
+import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.BookBean;
@@ -33,6 +40,12 @@ import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.AddGoodsDialog;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.zhaojin.myviews.Loading;
 import com.zsitech.oncon.barcode.core.CaptureActivity;
 
@@ -59,7 +72,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     @Bind(R.id.textBtn)
     TextView addGoodsTv;
     @Bind(R.id.more_goods_list_view)
-    ListView mListView;
+    SwipeMenuRecyclerView mListView;
     @Bind(R.id.more_commit_btn)
     Button commitBtn;
     private ObjectBean tempBean;
@@ -89,8 +102,6 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     private void initView() {
         addGoodsTv.setText("添加");
         addGoodsTv.setVisibility(View.VISIBLE);
-        mAdapter = new AddMoreGoodsListAdapter(context, mDatas);
-        mListView.setAdapter(mAdapter);
     }
 
     private void initData() {
@@ -98,21 +109,48 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     }
 
     private void initEvent() {
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mAdapter = new AddMoreGoodsListAdapter(context, mDatas);
+        mAdapter.setOnItemClickListener(new MyOnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentItem = position;
-                mDialog.setObjectBean(mDatas.get(position));
+            public void onItemClick(int positions, View view) {
+                currentItem = positions;
+                mDialog.setObjectBean(mDatas.get(positions));
                 mDialog.show();
             }
         });
-
-        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        // 创建菜单：
+        SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                return false;
+            public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
+                SwipeMenuItem deleteItem = new SwipeMenuItem(AddMoreGoodsActivity.this);
+                // 各种文字和图标属性设置。
+                deleteItem.setBackground(new ColorDrawable(Color.RED));
+                deleteItem.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
+                deleteItem.setWidth((int) (60 * BaseViewActivity.getScreenScale(AddMoreGoodsActivity.this)));
+                deleteItem.setText("删除");
+                deleteItem.setTextColor(Color.WHITE);
+                deleteItem.setTextSize(15);
+                rightMenu.addMenuItem(deleteItem); // 在Item左侧添加一个菜单。
             }
-        });
+        };
+        mListView.setSwipeMenuCreator(mSwipeMenuCreator);
+        // 菜单点击监听。
+        SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
+            @Override
+            public void onItemClick(SwipeMenuBridge menuBridge) {
+                // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+                menuBridge.closeMenu();
+                int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
+                mDatas.remove(adapterPosition);
+                mAdapter.notifyDataSetChanged();
+            }
+        };
+        mListView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+        mListView.setItemViewSwipeEnabled(false);// 开启滑动删除。
+        //设置默认的布局方式
+        mListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        //设置adapter
+        mListView.setAdapter(mAdapter);
     }
 
     @OnClick({R.id.textBtn, R.id.more_commit_btn})
@@ -164,6 +202,8 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         map.put("season", tempBean.getSeason());
         map.put("star", tempBean.getStar() + "");
         map.put("count", tempBean.getObject_count() + "");
+        map.put("buy_date", tempBean.getBuy_date());
+        map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this, Loading.show(null, context,
                 "正在加载")) {
             @Override

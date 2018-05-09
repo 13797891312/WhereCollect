@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/select_changheader_btn_other">
+    android:background="@drawable/select_changheader_btn_other"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,12 +11,31 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <com.gongwu.wherecollect.view.GoodsImageView
-            android:id="@+id/item_goods_iv"
+        <RelativeLayout
             android:layout_width="@dimen/dip_100"
             android:layout_height="@dimen/dip_100"
             android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginRight="@dimen/dip_15" />
+            android:layout_marginRight="@dimen/dip_15">
+
+            <ImageView
+                android:id="@+id/item_goods_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_img_error"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/item_goods_hint_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/dip_2"
+                android:layout_marginRight="@dimen/dip_2"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/f_17" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/item_goods_name_tv"
@@ -33,4 +53,11 @@
             android:layout_marginRight="@dimen/dip_16"
             android:src="@drawable/icon_next_black" />
     </LinearLayout>
-</FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_marginLeft="16dp"
+        android:background="@color/black_12"></View>
+</LinearLayout>

@@ -1,14 +1,19 @@
 package com.gongwu.wherecollect.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.GoodsImageView;
 
 import java.util.List;
@@ -20,7 +25,7 @@ import butterknife.ButterKnife;
  * Created by mucll on 2018/3/16.
  */
 
-public class AddMoreGoodsListAdapter extends BaseAdapter {
+public class AddMoreGoodsListAdapter extends RecyclerView.Adapter<AddMoreGoodsListAdapter.MyViewHolder> {
     private Context context;
     private List<ObjectBean> mDatas;
 
@@ -30,47 +35,66 @@ public class AddMoreGoodsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return mDatas == null ? 0 : mDatas.size();
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = View.inflate(context, R.layout.item_add_more_goods_list_layout, null);
+        return new MyViewHolder(view);
     }
 
     @Override
-    public ObjectBean getItem(int position) {
-        return mDatas.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_add_more_goods_list_layout, null);
-            holder = new ViewHolder(convertView);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        ObjectBean bean = getItem(position);
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        ObjectBean bean = mDatas.get(position);
         if (!TextUtils.isEmpty(bean.getName())) {
             holder.goodsNameTv.setText(bean.getName());
         }
-        holder.goodsIv.setHead(position + "", bean.getName(),
-                TextUtils.isEmpty(bean.getObject_url()) ? "" : bean.getObject_url());
-        return convertView;
+        if (TextUtils.isEmpty(bean.getObject_url())) {
+            bean.setObject_url(StringUtils.getResCode(position));
+            holder.goodsIv.setImageDrawable(null);
+            holder.goodsIv.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+            holder.goodsHintTv.setVisibility(View.VISIBLE);
+            holder.goodsHintTv.setText(bean.getName());
+        } else if (bean.getObject_url().contains("#")) {
+            holder.goodsIv.setImageDrawable(null);
+            holder.goodsIv.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+            holder.goodsHintTv.setVisibility(View.VISIBLE);
+            holder.goodsHintTv.setText(bean.getName());
+        } else{
+            ImageLoader.load(context, holder.goodsIv, bean.getObject_url(), R.drawable.ic_img_error);
+            holder.goodsHintTv.setVisibility(View.GONE);
+        }
     }
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return mDatas == null ? 0 : mDatas.size();
+    }
+
+
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.item_goods_iv)
-        GoodsImageView goodsIv;
+        ImageView goodsIv;
+        @Bind(R.id.item_goods_hint_tv)
+        TextView goodsHintTv;
         @Bind(R.id.item_goods_name_tv)
         TextView goodsNameTv;
 
-        public ViewHolder(View view) {
+        public MyViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
             view.setTag(this);
+            view.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(getLayoutPosition(), v);
+            }
+        }
+    }
+
+    public MyOnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(MyOnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 }
