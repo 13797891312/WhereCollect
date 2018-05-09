@@ -117,7 +117,7 @@ public class ObjectInfoLookView extends LinearLayout {
             purchaseTimeLayout.setVisibility(VISIBLE);
             purchaseTimeTv.setText(bean.getBuy_date());
             showView();
-        }else{
+        } else {
             purchaseTimeLayout.setVisibility(GONE);
         }
     }
@@ -127,7 +127,7 @@ public class ObjectInfoLookView extends LinearLayout {
             expiryTimeLayout.setVisibility(VISIBLE);
             expiryTimeTv.setText(bean.getExpire_date());
             showView();
-        }else{
+        } else {
             expiryTimeLayout.setVisibility(GONE);
         }
     }
@@ -140,7 +140,7 @@ public class ObjectInfoLookView extends LinearLayout {
             goodsCountEdit.setText(bean.getObject_count() + "");
             addGoodsCountLaytou.setVisibility(View.VISIBLE);
             showView();
-        }else{
+        } else {
             addGoodsCountLaytou.setVisibility(View.GONE);
         }
     }
@@ -149,11 +149,11 @@ public class ObjectInfoLookView extends LinearLayout {
      * 设置价格
      */
     private void setjiage() {
-        if (!TextUtils.isEmpty(bean.getPrice())) {
+        if (!TextUtils.isEmpty(bean.getPrice()) && !bean.getPrice().equals("0")) {
             jiageEdit.setText(bean.getPrice() + "元");
             jiageLayout.setVisibility(View.VISIBLE);
             showView();
-        }else{
+        } else {
             jiageLayout.setVisibility(View.GONE);
         }
     }
@@ -179,7 +179,7 @@ public class ObjectInfoLookView extends LinearLayout {
             starLayout.setVisibility(View.VISIBLE);
             ratingStar.setRating(bean.getStar());
             showView();
-        }else{
+        } else {
             starLayout.setVisibility(View.GONE);
         }
     }

@@ -82,7 +82,7 @@
             android:background="@color/transparent"
             android:text="@string/msg_default_status"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -101,6 +101,6 @@
             android:gravity="center"
             android:text="支持图书扫条码,\n及(天猫、淘宝、京东电脑网页)商品二\n维码扫码"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 </FrameLayout>

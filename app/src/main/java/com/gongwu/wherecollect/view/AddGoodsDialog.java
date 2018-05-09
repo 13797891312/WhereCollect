@@ -104,7 +104,7 @@ public class AddGoodsDialog extends Dialog {
                 if (!TextUtils.isEmpty(goodsNameEdit.getText().toString().trim())) {
                     bean.setName(goodsNameEdit.getText().toString().trim());
                 }
-                if (TextUtils.isEmpty(bean.getObject_url()) && TextUtils.isEmpty(bean.getName())) {
+                if (TextUtils.isEmpty(bean.getObject_url()) && TextUtils.isEmpty(goodsNameEdit.getText().toString().trim())) {
                     ToastUtil.show(context, "图片或名称至少选填一项", Toast.LENGTH_SHORT);
                     return;
                 }

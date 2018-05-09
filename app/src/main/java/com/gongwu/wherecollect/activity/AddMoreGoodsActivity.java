@@ -331,14 +331,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                             AddMoreGoodsActivity.this.runOnUiThread(new Runnable() {//回主线程
                                 @Override
                                 public void run() {
-                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", (Activity) context, new
-                                            DialogInterface.OnClickListener
-                                                    () {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    updateBeanWithBook(book);
-                                                }
-                                            }, null);
+                                    updateBeanWithBook(book);
                                 }
                             });
                         } catch (Exception e) {

@@ -455,6 +455,9 @@ public class ObjectBean implements Serializable {
 
 
     public String getBuy_date() {
+        if (!TextUtils.isEmpty(buy_date) && buy_date.contains("T")) {
+            return buy_date.split("T")[0];
+        }
         return buy_date;
     }
 
@@ -463,6 +466,9 @@ public class ObjectBean implements Serializable {
     }
 
     public String getExpire_date() {
+        if (!TextUtils.isEmpty(expire_date) && expire_date.contains("T")) {
+            return expire_date.split("T")[0];
+        }
         return expire_date;
     }
 

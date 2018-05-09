@@ -146,6 +146,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                 if (tempBean.getObject_url().contains("http")) {
                     setCameraIvParams(100);
                     cameraIv.setHead(IMG_COLOR_CODE, "", tempBean.getObject_url());
+                    downloadImage();
                 } else if (tempBean.getObject_url().contains("#")) {
                     setCameraIvParams(100);
                     cameraIv.name.setVisibility(View.VISIBLE);
@@ -158,6 +159,22 @@ public class AddGoodsActivity extends BaseViewActivity {
             editGoodsType = 0;
             showHelp();
         }
+    }
+
+    private void downloadImage() {
+        new Thread(new Runnable() {//下载图片
+            @Override
+            public void run() {
+                try {
+                    File file = Glide.with(context).load(tempBean.getObject_url()).downloadOnly(500, 500).get();
+                    String newPath = MyApplication.CACHEPATH + System.currentTimeMillis() + ".jpg";
+                    FileUtil.copyFile(file, newPath);
+                    imgOldFile = new File(newPath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     /**
@@ -293,7 +310,7 @@ public class AddGoodsActivity extends BaseViewActivity {
      */
     private void clickCommitBtn() {
         //确定添加
-        loading = Loading.show(loading, this, "");
+        loading = Loading.show(loading, this, "加载中...");
         //编辑物品
         if (editGoodsType == 1) {
             //判断图片是否更改，没更改的情况下 图片地址应该为网络路径
