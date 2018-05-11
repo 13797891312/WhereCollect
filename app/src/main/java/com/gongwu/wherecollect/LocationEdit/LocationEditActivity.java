@@ -47,6 +47,10 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 public class LocationEditActivity extends BaseViewActivity {
     public static LocationPage addPage;
     @Bind(R.id.tagViewPager)
@@ -182,6 +186,7 @@ public class LocationEditActivity extends BaseViewActivity {
             addFurniture.setVisibility(View.GONE);
             editLayout.setVisibility(View.VISIBLE);
             selectView = view;
+            showEditHelp();
         } else {
             addFurniture.setVisibility(View.VISIBLE);
             editLayout.setVisibility(View.GONE);
@@ -399,10 +404,77 @@ public class LocationEditActivity extends BaseViewActivity {
      * @param pageView
      */
     private void showHelp(LocationPage pageView) {
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setContentTextColor(getResources().getColor(R.color.white));
+        config.setMaskColor(getResources().getColor(R.color.black_87));
+        config.setDelay(200); // half second between each showcase view
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "editSpace");
+        sequence.setConfig(config);
+        MaterialShowcaseView sequenceItem1 = (new MaterialShowcaseView.Builder(this)).setTarget(editSpace)
+                .setContentText("空间编辑\n进入后，可对空间进行添加、\n删除、修改名称及排序")
+                .setTargetTouchable(false)
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTargetTouch(true)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem1);
         View targetView;
         if (pageView.getChildCount() >= 3) {
             targetView = pageView.getChildAt(1);
-            ShowCaseUtil.showHelp(this, targetView, null, null, "长按可移动位置\n点击可选中编辑", "editLocation");
+            MaterialShowcaseView sequenceItem2 = (new MaterialShowcaseView.Builder(this)).setTarget(targetView)
+                    .setContentText("长按可移动位置\n点击可选中编辑")
+                    .setTargetTouchable(false)
+                    .setDismissOnTouch(true)
+                    .setShapePadding(0)
+                    .setDelay(200)
+                    .setMaskColour(getResources().getColor(R.color.black_70))
+                    .setDismissOnTargetTouch(true)
+                    .withRectangleShape(false).build();
+            sequence.addSequenceItem(sequenceItem2);
         }
+        sequence.start();
+
+    }
+
+    private void showEditHelp() {
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setContentTextColor(getResources().getColor(R.color.white));
+        config.setMaskColor(getResources().getColor(R.color.black_87));
+        config.setDelay(200); // half second between each showcase view
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "selectView");
+        sequence.setConfig(config);
+        MaterialShowcaseView sequenceItem1 = (new MaterialShowcaseView.Builder(this)).setTarget(selectView)
+                .setContentText("家具调整\n点选家具图，长按拖动位置，托\n拽右下角调整图片大小")
+                .setTargetTouchable(false)
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTargetTouch(true)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem1);
+        MaterialShowcaseView sequenceItem2 = (new MaterialShowcaseView.Builder(this)).setTarget(moveBtn)
+                .setContentText("家具迁移\n家具及其内部已归入物品可整体\n跨空间迁移")
+                .setTargetTouchable(false)
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTargetTouch(true)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem2);
+        MaterialShowcaseView sequenceItem3 = (new MaterialShowcaseView.Builder(this)).setTarget(editBtn)
+                .setContentText("家具编辑页\n进入后，可编辑家具名称，家具\n展示图及图片截图区域，家具内\n部结构")
+                .setTargetTouchable(false)
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTargetTouch(true)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem3);
+        sequence.start();
     }
 }

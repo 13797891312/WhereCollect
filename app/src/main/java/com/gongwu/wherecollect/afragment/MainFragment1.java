@@ -32,7 +32,7 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
     public List<Fragment> fragments = new ArrayList();
     View view;
     @Bind(R.id.myFragmentLayout)
-    MyFragmentLayout_line myFragmentLayout;
+    public MyFragmentLayout_line myFragmentLayout;
     ImageButton serchBtn, filterBtn;
     RelativeLayout shijiBtn;
     View shijired;

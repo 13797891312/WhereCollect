@@ -120,10 +120,10 @@ public class FurnitureLookActivity extends BaseViewActivity {
         user = MyApplication.getUser(context);
         if (user == null) return;
         if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
-            mHandler.postDelayed(runnable, 5000);
+            mHandler.postDelayed(runnable, animTime);
         }
     }
-
+    private long animTime = 6000;
     Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -131,7 +131,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
             objectListView.adapter.refreshData();
             if (mHandler != null) {
                 if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
-                    mHandler.postDelayed(this, 5000);
+                    mHandler.postDelayed(this, animTime);
                 } else {
                     objectListView.adapter.defaultData();
                 }

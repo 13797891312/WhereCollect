@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
@@ -137,17 +138,17 @@ public class MainLocationFragment extends BaseFragment {
         user = MyApplication.getUser(getActivity());
         if (user == null) return;
         if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-            mHandler.postDelayed(r, 5000);
+            mHandler.postDelayed(r, animTime);
         }
     }
-
+    private long animTime = 6000;
     Handler mHandler = new Handler();
     Runnable r = new Runnable() {
         @Override
         public void run() {
             objectListView.adapter.refreshData();
             if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-                mHandler.postDelayed(this, 5000);
+                mHandler.postDelayed(this, animTime);
             }
         }
     };
@@ -509,7 +510,7 @@ public class MainLocationFragment extends BaseFragment {
             objectListViewPosition = 1;
         }
         MaterialShowcaseView sequenceItem3 = (new MaterialShowcaseView.Builder(getActivity()))
-                .setTarget(objectListView).setContentText("空间物品总览\n上滑展开查看，单次点击物品图可定位其所在位置")
+                .setTarget(objectListView).setContentText("空间物品总览\n上划展开查看，单次点击物品图可定位其所在位置")
                 .setTargetTouchable(false)
                 .setMaskColour(getResources().getColor(R.color.black_70))
                 .setDismissOnTouch(true)
@@ -519,7 +520,7 @@ public class MainLocationFragment extends BaseFragment {
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem3);
         MaterialShowcaseView sequenceItem4 = (new MaterialShowcaseView.Builder(getActivity()))
-                .setTarget(objectListView).setContentText("呼吸查看\n位置页物品图滚动展示图片和名称内容\n可在“我的”里面选择关闭")
+                .setTarget(objectListView).setContentText("呼吸查看\n位置页物品图滚动展示图片和名\n称内容。\n可在“我的”里选择关闭")
                 .setTargetTouchable(false)
                 .setMaskColour(getResources().getColor(R.color.black_70))
                 .setDismissOnTouch(true)
@@ -528,8 +529,10 @@ public class MainLocationFragment extends BaseFragment {
                 .setDismissOnTargetTouch(false)
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem4);
+        MainFragment1 fragment1 = (MainFragment1) ((MainActivity)getActivity()).fragments.get(0);
+        TextView  view = (TextView) fragment1.myFragmentLayout.findViewById(R.id.text_edit);
         MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(getActivity()))
-                .setTarget(((MainActivity)getActivity()).titleLayout.textBtn).setContentText("编辑\n进入后，可创建和排序空间，添加\n更多家具，调整家具图大小和位\n置，以及进行家具细节编辑")
+                .setTarget(view).setContentText("编辑\n进入后，可创建和排序空间，添\n加更多家具，调整家具图大小和\n位置，以及进行家具细节编辑")
                 .setTargetTouchable(false)
                 .setMaskColour(getResources().getColor(R.color.black_70))
                 .setDismissOnTouch(true)

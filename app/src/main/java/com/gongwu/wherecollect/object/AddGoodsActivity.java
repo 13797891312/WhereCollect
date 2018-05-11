@@ -802,19 +802,19 @@ public class AddGoodsActivity extends BaseViewActivity {
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem1);
         MaterialShowcaseView sequenceItem2 = (new MaterialShowcaseView.Builder(this))
-                .setTarget(otherLayout)
-                .setContentText("其他属性\n为方便筛选查找,还可添加数\n量、时间、分类、购获渠道\n等更多物品属性")
+                .setTarget(add_shopping_layout).
+                        setContentText("复制链接导入\n复制淘口令、天猫和京东链\n接，自动抓取物品数据")
                 .setTargetTouchable(false)
                 .setMaskColour(getResources().getColor(R.color.black_70))
                 .setDismissOnTouch(true)
-                .setDelay(200)
                 .setShapePadding(0)
+                .setDelay(200)
                 .setDismissOnTargetTouch(false)
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem2);
         MaterialShowcaseView sequenceItem3 = (new MaterialShowcaseView.Builder(this))
-                .setTarget(add_shopping_layout).
-                        setContentText("复制链接导入\n复制淘口令、天猫和京东链\n接,自动抓取物品数据")
+                .setTarget(add_code_layout).
+                        setContentText("扫条码导入\n支持图书扫码，及电脑端淘宝\n、天猫、京东网页商品二维\n码扫描")
                 .setTargetTouchable(false)
                 .setMaskColour(getResources().getColor(R.color.black_70))
                 .setDismissOnTouch(true)
@@ -824,19 +824,19 @@ public class AddGoodsActivity extends BaseViewActivity {
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem3);
         MaterialShowcaseView sequenceItem4 = (new MaterialShowcaseView.Builder(this))
-                .setTarget(add_code_layout).
-                        setContentText("扫条码导入\n支持图书扫码,及电脑端淘\n宝、天猫、京东网页商品\n二维码扫描")
+                .setTarget(otherLayout)
+                .setContentText("其他属性\n为方便筛选查找，还可添加数\n量、时间、分类、购获渠道等\n更多物品属性")
                 .setTargetTouchable(false)
                 .setMaskColour(getResources().getColor(R.color.black_70))
                 .setDismissOnTouch(true)
-                .setShapePadding(0)
                 .setDelay(200)
+                .setShapePadding(0)
                 .setDismissOnTargetTouch(false)
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem4);
         MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(this))
                 .setTarget(addMoreTv).
-                        setContentText("批量添加\n选择共同属性,批量添加多\n个物品")
+                        setContentText("批量添加\n选择共同属性，批量添加多\n个物品")
                 .setTargetTouchable(false)
                 .setMaskColour(getResources().getColor(R.color.black_70))
                 .setDismissOnTouch(true)
