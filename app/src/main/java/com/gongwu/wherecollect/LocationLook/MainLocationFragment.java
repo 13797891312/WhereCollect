@@ -22,6 +22,7 @@ import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.quickadd.QuickSpaceSelectListActivity;
 import com.gongwu.wherecollect.record.MakeRecordActivity;
 import com.gongwu.wherecollect.util.ACacheClient;
@@ -29,6 +30,7 @@ import com.gongwu.wherecollect.util.AnimationUtil;
 import com.gongwu.wherecollect.util.BitmapUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
@@ -76,6 +78,7 @@ public class MainLocationFragment extends BaseFragment {
     View quickLayout;
     @Bind(R.id.help_layout)
     View helpLayout;
+    private UserBean user;
 
     public MainLocationFragment() {
         // Required empty public constructor
@@ -131,7 +134,11 @@ public class MainLocationFragment extends BaseFragment {
                 }
             }
         });
-        mHandler.postDelayed(r, 5000);
+        user = MyApplication.getUser(getActivity());
+        if (user == null) return;
+        if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+            mHandler.postDelayed(r, 5000);
+        }
     }
 
     Handler mHandler = new Handler();
@@ -139,9 +146,22 @@ public class MainLocationFragment extends BaseFragment {
         @Override
         public void run() {
             objectListView.adapter.refreshData();
-            mHandler.postDelayed(this, 5000);
+            if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+                mHandler.postDelayed(this, 5000);
+            }
         }
     };
+
+    //呼吸查看
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.GoodsIsCloseBreathLook msg) {
+        if (!msg.isCloseBreathLook) {
+            mHandler.postDelayed(r, 5000);
+        } else {
+            mHandler.removeCallbacks(r);
+            objectListView.adapter.defaultData();
+        }
+    }
 
     @Override
     public void onDestroyView() {

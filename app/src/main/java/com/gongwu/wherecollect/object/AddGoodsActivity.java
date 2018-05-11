@@ -588,6 +588,14 @@ public class AddGoodsActivity extends BaseViewActivity {
                 Intent intent = new Intent(context, ImportHelpActivity.class);
                 context.startActivity(intent);
             }
+
+            @Override
+            protected void error() {
+                super.error();
+                ToastUtil.showTopToast(context, "获取商品信息失败");
+                Intent intent = new Intent(context, ImportHelpActivity.class);
+                context.startActivity(intent);
+            }
         };
         HttpClient.getTaobaoInfo(context, map, listenner);
     }

@@ -108,6 +108,12 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
         notifyDataSetChanged();
     }
 
+    public void defaultData() {
+        this.refresh = false;
+        this.statrAnim = false;
+        notifyDataSetChanged();
+    }
+
     /**
      * 删除一项
      *

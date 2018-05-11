@@ -1,9 +1,11 @@
 package com.gongwu.wherecollect.util;
+
 import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.UserBean;
 
 import java.util.List;
+
 /**
  * Function:
  * Date: 2017/12/15
@@ -17,29 +19,33 @@ public class EventBusMsg {
     public static String OBJECT_FITLER = "object_fitler";//筛选变动
     public static String ACTIVITY_FINISH = "activity_finish";
     public static String REFRESH_GOODS = "refresh_goods";
+
     /**
      * 更换账号
      */
     public static class ChangeUser {
         UserBean user;
     }
+
     /**
      * 账号资料改变更新UI
      */
     public static class ChangeUserInfo {
     }
+
     /**
      * 添加家具后的消息体
      */
     public static class AddFurnitureMsg {
         public ObjectBean objectBean;
     }
+
     /**
      * 位置变动，某一页位置需要重新获取网络数据刷新
      */
     public static class EditLocationMsg {
         public int position;
-        public boolean hasFurnitureChanged=true;//家具是否有变动要刷新
+        public boolean hasFurnitureChanged = true;//家具是否有变动要刷新
         public boolean hasObjectChanged = false;//物品总览是否有变动
         public boolean onlyNotifyUi = false;//是否只是刷新界面，不重新请求网络
         public ObjectBean changeBean;//可以为空，不为空代表改变的家具
@@ -48,6 +54,7 @@ public class EventBusMsg {
             this.position = position;
         }
     }
+
     /**
      * 编辑家具
      */
@@ -69,6 +76,7 @@ public class EventBusMsg {
             this.layers = layers;
         }
     }
+
     /**
      * 导入物品
      */
@@ -79,6 +87,7 @@ public class EventBusMsg {
             this.position = position;
         }
     }
+
     /**
      * 导入物品
      */
@@ -88,16 +97,19 @@ public class EventBusMsg {
         public RecordChange() {
         }
     }
+
     /**
      * 快速添加了空间和家具后需要网络刷新首页空间数据
      */
     public static class RequestSpace {
     }
+
     /**
      * 快速添加了空间和家具后位置查看页刷新后要通知编辑页刷新
      */
     public static class RequestSpaceEdit {
     }
+
     /**
      * 获取到物品总览后给详情页发消息
      */
@@ -110,6 +122,7 @@ public class EventBusMsg {
             this.objectList = objectList;
         }
     }
+
     /**
      * 编辑位置页面切换，位置通知位置查看页变动，
      */
@@ -120,6 +133,7 @@ public class EventBusMsg {
             this.position = position;
         }
     }
+
     /**
      * 导入购买商品成功
      */
@@ -128,6 +142,17 @@ public class EventBusMsg {
 
         public ImportFromBugSucces(BookBean bean) {
             this.bean = bean;
+        }
+    }
+
+    /**
+     * 是否呼吸查看
+     */
+    public static class GoodsIsCloseBreathLook {
+        public boolean isCloseBreathLook;
+
+        public GoodsIsCloseBreathLook(boolean isCloseBreathLook) {
+            this.isCloseBreathLook = isCloseBreathLook;
         }
     }
 }

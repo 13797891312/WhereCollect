@@ -13,10 +13,13 @@ import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
+import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.LogUtil;
+import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.drawerLayout.DrawerLayout;
 import com.umeng.analytics.MobclickAgent;
@@ -46,6 +49,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
     DrawerLayout drawerLayout;
     private String title;
     public ObjectBean selectObject;//选择的需要变高亮物品
+    private UserBean user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +117,11 @@ public class FurnitureLookActivity extends BaseViewActivity {
             public void onDrawerStateChanged(@DrawerLayout.State int newState) {
             }
         });
-        mHandler.postDelayed(runnable, 5000);
+        user = MyApplication.getUser(context);
+        if (user == null) return;
+        if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
+            mHandler.postDelayed(runnable, 5000);
+        }
     }
 
     Handler mHandler = new Handler();
@@ -122,7 +130,11 @@ public class FurnitureLookActivity extends BaseViewActivity {
         public void run() {
             objectListView.adapter.refreshData();
             if (mHandler != null) {
-                mHandler.postDelayed(this, 5000);
+                if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
+                    mHandler.postDelayed(this, 5000);
+                } else {
+                    objectListView.adapter.defaultData();
+                }
             }
         }
     };

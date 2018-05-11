@@ -1,8 +1,10 @@
 package com.gongwu.wherecollect.afragment;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -13,11 +15,13 @@ import android.view.WindowManager;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.volley.request.QiNiuUploadUtil;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AccountInfoActivity;
@@ -30,16 +34,20 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.record.RecordListActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ShareUtil;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.ChangeHeaderImgDialog;
 import com.gongwu.wherecollect.view.ChangeSexDialog;
 import com.gongwu.wherecollect.view.DateBirthdayDialog;
 import com.gongwu.wherecollect.view.EditTextDialog;
 import com.zhaojin.myviews.Loading;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -52,6 +60,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 public class MainFragment2 extends BaseFragment {
     View view;
     @Bind(R.id.person_iv)
@@ -81,7 +90,11 @@ public class MainFragment2 extends BaseFragment {
     View shareRed;
     @Bind(R.id.version_tv)
     TextView versionTv;
+    @Bind(R.id.switch_compat)
+    SwitchCompat switchCompat;
+
     private ChangeHeaderImgDialog changeHeaderdialog;
+    private UserBean user;
 
     public MainFragment2() {
         // Required empty public constructor
@@ -108,28 +121,41 @@ public class MainFragment2 extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_fragment2, container, false);
         ButterKnife.bind(this, view);
         refrashUi();
         setRedStatus();
+        initEvent();
         versionTv.setText(String.format("收哪儿v%s（%d）", StringUtils.getCurrentVersionName(getActivity()), StringUtils
                 .getCurrentVersion
                         (getActivity())));
         return view;
     }
 
+    private void initEvent() {
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SaveDate.getInstence(getContext()).setBreathLook(user.getId(), !isChecked);
+                EventBusMsg.GoodsIsCloseBreathLook msg = new EventBusMsg.GoodsIsCloseBreathLook(!isChecked);
+                EventBus.getDefault().post(msg);
+            }
+        });
+    }
+
     /**
      * 刷新UI
      */
     public void refrashUi() {
-        UserBean user = MyApplication.getUser(getActivity());
+        user = MyApplication.getUser(getActivity());
         if (user == null)
             return;
         ImageLoader.loadCircle(getActivity(), personIv, user.getAvatar(), R.mipmap.ic_launcher);
         tvNick.setText(user.getNickname());
         tvSex.setText(user.getGender());
         tvBirthday.setText(user.getBirthday());
+        boolean isBreathLook = SaveDate.getInstence(getContext()).getBreathLook(user.getId());
+        switchCompat.setChecked(!isBreathLook);
     }
 
     @Override
@@ -321,7 +347,7 @@ public class MainFragment2 extends BaseFragment {
      * 查询小红点的显示与否
      */
     public boolean setRedStatus() {
-        if(MyApplication.getUser(getActivity()).isTest()){
+        if (MyApplication.getUser(getActivity()).isTest()) {
             ((MainActivity) getActivity()).setRed(true);
             return true;
         }

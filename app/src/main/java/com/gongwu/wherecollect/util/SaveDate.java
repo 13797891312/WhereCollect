@@ -1,7 +1,9 @@
 package com.gongwu.wherecollect.util;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
 public class SaveDate {
     static SharedPreferences sharedPreferences;
     private static SaveDate SAVEDATE;
@@ -234,5 +236,20 @@ public class SaveDate {
 
     public boolean getQuickAdd(String uid) {
         return sharedPreferences.getBoolean(String.format("quickadd%s", uid), false);
+    }
+
+    /**
+     * 是否呼吸查看
+     *
+     * @param uid
+     */
+    public void setBreathLook(String uid, boolean isCloseBreathLook) {
+        Editor ed = sharedPreferences.edit();
+        ed.putBoolean(String.format("breathlook%s", uid), isCloseBreathLook);
+        ed.commit();
+    }
+
+    public boolean getBreathLook(String uid) {
+        return sharedPreferences.getBoolean(String.format("breathlook%s", uid), false);
     }
 }
