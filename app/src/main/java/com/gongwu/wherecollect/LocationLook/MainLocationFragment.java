@@ -518,6 +518,26 @@ public class MainLocationFragment extends BaseFragment {
                 .setDismissOnTargetTouch(false)
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem3);
+        MaterialShowcaseView sequenceItem4 = (new MaterialShowcaseView.Builder(getActivity()))
+                .setTarget(objectListView).setContentText("呼吸查看\n位置页物品图滚动展示图片和名称内容\n可在“我的”里面选择关闭")
+                .setTargetTouchable(false)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setDismissOnTargetTouch(false)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem4);
+        MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(getActivity()))
+                .setTarget(((MainActivity)getActivity()).titleLayout.textBtn).setContentText("编辑\n进入后，可创建和排序空间，添加\n更多家具，调整家具图大小和位\n置，以及进行家具细节编辑")
+                .setTargetTouchable(false)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setDismissOnTargetTouch(false)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem5);
         sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
             @Override
             public void onShow(MaterialShowcaseView itemView, int position) {

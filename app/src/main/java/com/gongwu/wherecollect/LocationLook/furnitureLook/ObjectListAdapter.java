@@ -85,10 +85,10 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
             }
         }
         if (statrAnim){
-            AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0.2f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
             holder.image.startAnimation(alphaAnimation);//开始动画
             alphaAnimation.setFillAfter(true);//动画结束后保持状态
-            alphaAnimation.setDuration(500);//动画持续时间，单位为毫秒
+            alphaAnimation.setDuration(800);//动画持续时间，单位为毫秒
         }
 //        holder.name.setText(mlist.get(position).getName());
         holder.itemView.setOnLongClickListener(new MyLongClickListener(holder.getLayoutPosition()));
