@@ -479,6 +479,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                     objectBean.setObject_url(newBean.getObject_url());
                     objectBean.setStar(newBean.getStar());
                     objectBean.setObject_count(newBean.getObject_count());
+                    objectBean.setName(newBean.getName());
                     objectBean.setCategories(newBean.getCategories());
                     objectBean.setPrice(newBean.getPrice());
                     objectBean.setColor(newBean.getColor());
