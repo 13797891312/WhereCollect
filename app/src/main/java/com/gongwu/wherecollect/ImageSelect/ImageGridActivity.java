@@ -1,9 +1,11 @@
 package com.gongwu.wherecollect.ImageSelect;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -21,10 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+
 public class ImageGridActivity extends BaseViewActivity implements PhotosDialog.OndismissListener {
     public static final String EXTRA_IMAGE_LIST = "imagelist";
     public static final int RESULT = 834;
-    public static int max=10;
+    public static int imgMax = 10;
     List<ImageData> dataList;
     GridView gridView;
     ImageGridAdapter adapter;// 列表适配器
@@ -52,7 +55,7 @@ public class ImageGridActivity extends BaseViewActivity implements PhotosDialog.
         titleLayout.setBack(true, null);
         titleLayout.textBtn.setText("确定");
         titleLayout.textBtn.setVisibility(View.VISIBLE);
-        max=getIntent().getIntExtra("max",10);
+        imgMax = getIntent().getIntExtra("max", 10);
         titleLayout.textBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +76,7 @@ public class ImageGridActivity extends BaseViewActivity implements PhotosDialog.
     private void initView() {
         gridView = (GridView) findViewById(R.id.gridview);
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        adapter = new ImageGridAdapter(ImageGridActivity.this, dataList,max) {
+        adapter = new ImageGridAdapter(ImageGridActivity.this, dataList, imgMax) {
             @Override
             protected void change(List<ImageData> chooseList) {
                 super.change(chooseList);
@@ -81,6 +84,18 @@ public class ImageGridActivity extends BaseViewActivity implements PhotosDialog.
                     titleLayout.setTitle("选择照片");
                 } else {
                     titleLayout.setTitle(String.format("已选择(%s)", chooseList.size()));
+                    //最大勾选图片数量为1的时候自动跳转到切割图片界面
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (imgMax == 1) {
+                                Intent intent = new Intent();
+                                intent.putExtra("list", (Serializable) adapter.chooseList);
+                                setResult(RESULT, intent);
+                                finish();
+                            }
+                        }
+                    }, 100);
                 }
             }
         };

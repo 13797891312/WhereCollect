@@ -58,7 +58,7 @@ public class AddMoreGoodsListAdapter extends RecyclerView.Adapter<AddMoreGoodsLi
             holder.goodsHintTv.setVisibility(View.VISIBLE);
             holder.goodsHintTv.setText(bean.getName());
         } else{
-            ImageLoader.load(context, holder.goodsIv, bean.getObject_url(), R.drawable.ic_img_error);
+            ImageLoader.placeholderLoad(context, holder.goodsIv, bean.getObject_url(), R.drawable.ic_img_error);
             holder.goodsHintTv.setVisibility(View.GONE);
         }
     }

@@ -91,7 +91,7 @@ public class ImageGridAdapter extends BaseAdapter {
             public void onClick(View v) {
                 item.setSelect(!item.isSelect());
                 if (item.isSelect()) {
-                    if (chooseList.size() >= ImageGridActivity.max) {
+                    if (chooseList.size() >= ImageGridActivity.imgMax) {
                         //                        Toast.makeText(act, "最多还能选" + ImageGridActivity.max + "张图片", Toast
                         // .LENGTH_LONG).show();
                         Toast.makeText(act, "最多只能选" + max + "张图片", Toast.LENGTH_LONG).show();

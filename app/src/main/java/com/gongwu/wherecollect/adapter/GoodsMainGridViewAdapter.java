@@ -70,10 +70,10 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
         } else {
-            holder.imgTv.setVisibility(View.VISIBLE);
-            holder.imgTv.setText(bean.getName());
             holder.image.setImageDrawable(null);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+            holder.imgTv.setVisibility(View.VISIBLE);
+            holder.imgTv.setText(bean.getName());
         }
         if (i == mlist.size() - 1) {
             holder.footer.setVisibility(View.VISIBLE);

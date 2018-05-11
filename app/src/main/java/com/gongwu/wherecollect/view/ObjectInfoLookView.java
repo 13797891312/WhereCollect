@@ -118,6 +118,7 @@ public class ObjectInfoLookView extends LinearLayout {
             purchaseTimeTv.setText(bean.getBuy_date());
             showView();
         } else {
+            purchaseTimeTv.setText("");
             purchaseTimeLayout.setVisibility(GONE);
         }
     }
@@ -128,6 +129,7 @@ public class ObjectInfoLookView extends LinearLayout {
             expiryTimeTv.setText(bean.getExpire_date());
             showView();
         } else {
+            expiryTimeTv.setText("");
             expiryTimeLayout.setVisibility(GONE);
         }
     }

@@ -88,10 +88,10 @@ public class SelectImgDialog {
 
     Dialog dialog;
     File imgFile;
-    int max;
+    int imgMax;
 
     public SelectImgDialog(final Activity context, ImageView headerIv, final int max) {
-        this.max = max;
+        this.imgMax = max;
         this.headerIv = headerIv;
         this.context = context;
         String sdPath = MyApplication.CACHEPATH;
@@ -116,8 +116,8 @@ public class SelectImgDialog {
         dialog.show();
     }
 
-    public SelectImgDialog(final Activity context, ImageView headerIv, final int max, File imgFile) {
-        this.max = max;
+    public SelectImgDialog(final Activity context, ImageView headerIv, final int imgMax, File imgFile) {
+        this.imgMax = imgMax;
         this.headerIv = headerIv;
         this.context = context;
         this.imgFile = imgFile;
@@ -315,7 +315,7 @@ public class SelectImgDialog {
     private void select() {
         // ######### 调到图片选择界面##########
         Intent i = new Intent(context, ImageGridActivity.class);
-        i.putExtra("max", max);
+        i.putExtra("max", imgMax);
         SelectImgDialog.this.context
                 .startActivityForResult(i, REQUST_PHOTOSELECT);
         // ###############################

@@ -38,7 +38,10 @@ public class AddGoodsDialog extends Dialog {
     private Context context;
     private ObjectBean bean;
     SelectImgDialog selectImgDialog;
-    private final int imgMax = 10;
+    private final int imgMax = 1;
+    /**
+     * 图片原文件 dialog dismiss的时候就会被初始化
+     */
     private File imgOldFile;
 
     public AddGoodsDialog(Context context) {
@@ -97,10 +100,14 @@ public class AddGoodsDialog extends Dialog {
                 scanCode();
                 break;
             case R.id.cancel_tv:
+                if (imgOldFile != null) {
+                    imgOldFile = null;
+                }
                 cancel();
                 dismiss();
                 break;
             case R.id.submit_tv:
+                //确定
                 if (!TextUtils.isEmpty(goodsNameEdit.getText().toString().trim())) {
                     bean.setName(goodsNameEdit.getText().toString().trim());
                 }
@@ -109,6 +116,8 @@ public class AddGoodsDialog extends Dialog {
                     return;
                 }
                 result(bean);
+                //初始化imgOldFile
+                imgOldFile = null;
                 dismiss();
                 break;
         }
@@ -118,6 +127,10 @@ public class AddGoodsDialog extends Dialog {
      * 图片选择
      */
     private void showSelectDialog() {
+        //bean url没数据的时候，编辑选择肯定是隐藏的
+        if (TextUtils.isEmpty(bean.getObject_url())) {
+            imgOldFile = null;
+        }
         selectImgDialog = new SelectImgDialog((Activity) context, null, imgMax, imgOldFile) {
             @Override
             public void getResult(List<File> list) {
@@ -138,6 +151,7 @@ public class AddGoodsDialog extends Dialog {
             }
         };
         selectImgDialog.hintLayout();
+        //编辑选择是否隐藏的 根据imgOldFile来判断
         selectImgDialog.showEditIV(imgOldFile == null ? View.GONE : View.VISIBLE);
     }
 

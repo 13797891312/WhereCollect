@@ -371,7 +371,17 @@ public class ObjectInfoEditView extends LinearLayout {
                             changeListener.change();
                         }
                     }
+
+                    @Override
+                    public void detele() {
+                        purchaseTimeTv.setText("");
+                        bean.setBuy_date("");
+                        if (changeListener != null) {
+                            changeListener.change();
+                        }
+                    }
                 };
+                dialog.setCancelBtnText(TextUtils.isEmpty(bean.getBuy_date()));
                 dialog.show();
                 break;
             case R.id.expiry_time_layout:
@@ -394,7 +404,17 @@ public class ObjectInfoEditView extends LinearLayout {
                             changeListener.change();
                         }
                     }
+
+                    @Override
+                    public void detele() {
+                        expiryTimeTv.setText("");
+                        bean.setExpire_date("");
+                        if (changeListener != null) {
+                            changeListener.change();
+                        }
+                    }
                 };
+                expiryDialog.setCancelBtnText(TextUtils.isEmpty(bean.getExpire_date()));
                 expiryDialog.show();
                 break;
         }

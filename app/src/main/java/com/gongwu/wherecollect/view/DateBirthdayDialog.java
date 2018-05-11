@@ -76,10 +76,26 @@ public abstract class DateBirthdayDialog {
                 result(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
             }
         });
+        builder.setNegativeButton(isCancelOrDetele ? R.string.cancel_text : R.string.delete_text, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                detele();
+            }
+        });
         builder.show();
     }
 
     public abstract void result(int year, int month, int day);
+
+    public void detele() {
+
+    }
+
+    private boolean isCancelOrDetele = false;
+
+    public void setCancelBtnText(boolean isCancelOrDetele) {
+        this.isCancelOrDetele = isCancelOrDetele;
+    }
 
     public void setDateMax() {
         if (Build.VERSION.SDK_INT >= 11) {

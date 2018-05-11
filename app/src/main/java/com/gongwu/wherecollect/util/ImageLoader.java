@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.util;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES10;
@@ -19,6 +20,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+
 /**
  * ClassName:ImageLoader
  * Function:图片加载工具类
@@ -43,6 +45,24 @@ public class ImageLoader {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(iv);
     }
+
+    /**
+     * 普通加载图片,设置错误图片
+     *
+     * @param context
+     * @param iv
+     * @param url
+     * @param errorRes 加载错误后的图片
+     */
+    public static void placeholderLoad(Context context, ImageView iv, String url, int errorRes) {
+        Glide.with(context)
+                .load(url)
+                .placeholder(errorRes)
+                .error(errorRes)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(iv);
+    }
+
     /**
      * 普通加载图片,不设置错误图片
      *
@@ -72,7 +92,7 @@ public class ImageLoader {
                 .dontAnimate()
                 .error(errorRes)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(new CenterCrop(context), new GlideRoundTransform(context,radio))
+                .transform(new CenterCrop(context), new GlideRoundTransform(context, radio))
                 .into(iv);
     }
 

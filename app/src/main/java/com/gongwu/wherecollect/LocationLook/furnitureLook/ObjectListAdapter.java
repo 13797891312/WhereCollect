@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -83,7 +84,13 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
                 holder.image.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
             }
         }
-        holder.name.setText(mlist.get(position).getName());
+        if (statrAnim){
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+            holder.image.startAnimation(alphaAnimation);//开始动画
+            alphaAnimation.setFillAfter(true);//动画结束后保持状态
+            alphaAnimation.setDuration(500);//动画持续时间，单位为毫秒
+        }
+//        holder.name.setText(mlist.get(position).getName());
         holder.itemView.setOnLongClickListener(new MyLongClickListener(holder.getLayoutPosition()));
     }
 
@@ -93,9 +100,11 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
     }
 
     private boolean refresh = false;
+    private boolean statrAnim = false;
 
     public void refreshData() {
         this.refresh = !this.refresh;
+        this.statrAnim = true;
         notifyDataSetChanged();
     }
 
@@ -141,8 +150,8 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
     public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.image)
         ImageView image;
-        @Bind(R.id.object_name_tv)
-        TextView name;
+//        @Bind(R.id.object_name_tv)
+//        TextView name;
         @Bind(R.id.linearLayout)
         RelativeLayout linearLayout;
         @Bind(R.id.image_hint_tv)

@@ -499,6 +499,9 @@ public class AddGoodsActivity extends BaseViewActivity {
      * 图片选择dialog
      */
     private void showSelectDialog() {
+        if (imgOldFile != null && TextUtils.isEmpty(tempBean.getObject_url())) {
+            imgOldFile = null;
+        }
         selectImgDialog = new SelectImgDialog(this, null, imgMax, imgOldFile) {
             @Override
             public void getResult(List<File> list) {
@@ -518,6 +521,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
         };
         selectImgDialog.hintLayout();
+        //编辑选择是否隐藏的 根据imgOldFile来判断
         selectImgDialog.showEditIV(imgOldFile == null ? View.GONE : View.VISIBLE);
     }
 
@@ -776,7 +780,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         config.setContentTextColor(getResources().getColor(R.color.white));
         config.setMaskColor(getResources().getColor(R.color.black_87));
         config.setDelay(200); // half second between each showcase view
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "addObject");
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "addGoods");
         sequence.setConfig(config);
         MaterialShowcaseView sequenceItem1 = (new MaterialShowcaseView.Builder(this)).setTarget(goods_name_and_image_layout)
                 .setContentText("名称和图片至少添加一项")

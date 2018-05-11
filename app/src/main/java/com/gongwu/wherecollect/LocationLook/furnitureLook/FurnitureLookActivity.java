@@ -16,6 +16,7 @@ import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout;
 import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.drawerLayout.DrawerLayout;
 import com.umeng.analytics.MobclickAgent;
@@ -120,7 +121,9 @@ public class FurnitureLookActivity extends BaseViewActivity {
         @Override
         public void run() {
             objectListView.adapter.refreshData();
-            mHandler.postDelayed(this, 5000);
+            if (mHandler != null) {
+                mHandler.postDelayed(this, 5000);
+            }
         }
     };
 
@@ -160,6 +163,8 @@ public class FurnitureLookActivity extends BaseViewActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mHandler = null;
+        runnable = null;
         EventBus.getDefault().unregister(objectListView);
     }
 
