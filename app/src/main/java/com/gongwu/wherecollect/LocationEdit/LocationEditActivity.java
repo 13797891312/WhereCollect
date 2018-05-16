@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationEdit;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,6 +108,9 @@ public class LocationEditActivity extends BaseViewActivity {
         });
     }
 
+
+    private boolean init = false;
+
     private void initPage() {
         viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 0,
                 0, 0, 0);
@@ -119,8 +123,10 @@ public class LocationEditActivity extends BaseViewActivity {
                     @Override
                     protected void getChildListener(int position) {
                         super.getChildListener(position);
-                        if (position == viewPager.getCurrentItem()) {
+                        if (position == viewPager.getCurrentItem() && init) {
                             showHelp(this);
+                        } else {
+                            init = true;
                         }
                     }
                 };
@@ -295,7 +301,7 @@ public class LocationEditActivity extends BaseViewActivity {
                 } else {
                     MainLocationFragment.locationMap.get(MainLocationFragment.mlist.get(selectPosition).getCode())
                             .remove
-                            (selectView.getObjectBean());//删除数据
+                                    (selectView.getObjectBean());//删除数据
                 }
                 /***********************/
                 MainLocationFragment.locationMap.get(MainLocationFragment.mlist.get(viewPager.getCurrentItem())
@@ -361,11 +367,10 @@ public class LocationEditActivity extends BaseViewActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.RequestSpaceEdit msg) {
-        if (empty.getVisibility() == View.VISIBLE) {
-            indicatorView.notifyView();
-            initPage();
-
-        }
+//        if (empty.getVisibility() == View.VISIBLE) {
+        indicatorView.notifyView();
+        initPage();
+//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -401,6 +406,7 @@ public class LocationEditActivity extends BaseViewActivity {
 
     /**
      * 首次引导
+     *
      * @param pageView
      */
     private void showHelp(LocationPage pageView) {

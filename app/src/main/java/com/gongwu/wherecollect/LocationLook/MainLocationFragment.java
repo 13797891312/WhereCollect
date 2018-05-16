@@ -212,6 +212,7 @@ public class MainLocationFragment extends BaseFragment {
                         super.getChildListener(position);
                         if (position == viewPager.getCurrentItem()) {
                             showHelp(this);
+
                         }
                     }
 

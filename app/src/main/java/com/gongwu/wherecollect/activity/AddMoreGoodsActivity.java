@@ -1,8 +1,6 @@
 package com.gongwu.wherecollect.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,19 +8,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.volley.request.QiNiuUploadUtil;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.gongwu.wherecollect.LocationEdit.SpaceEditActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.AddMoreGoodsListAdapter;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
@@ -32,8 +26,6 @@ import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
-import com.gongwu.wherecollect.object.AddGoodsActivity;
-import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
