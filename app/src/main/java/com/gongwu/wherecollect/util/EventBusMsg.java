@@ -155,4 +155,15 @@ public class EventBusMsg {
             this.isCloseBreathLook = isCloseBreathLook;
         }
     }
+
+    /**
+     * 删除物品
+     */
+    public static class DeleteGoodsMsg {
+        public String goodsId;
+
+        public DeleteGoodsMsg(String goodsId) {
+            this.goodsId = goodsId;
+        }
+    }
 }

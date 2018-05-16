@@ -128,4 +128,15 @@ public class LocationObectListView extends RecyclerView {
             adapter.notifyDataSetChanged();
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.DeleteGoodsMsg deleteGoodsMsg) {
+        for (int i = 0; i < list.size(); i++) {
+            ObjectBean bean = list.get(i);
+            if (bean.get_id().equals(deleteGoodsMsg.goodsId)) {
+                list.remove(i);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
 }

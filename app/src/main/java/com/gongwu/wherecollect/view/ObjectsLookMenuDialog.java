@@ -121,6 +121,7 @@ public class ObjectsLookMenuDialog {
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                ((Activity) context).finish();
             }
         };
         HttpClient.fengcun(context, map, listenner);
@@ -143,6 +144,8 @@ public class ObjectsLookMenuDialog {
                     protected void code2000(final ResponseResult r) {
                         super.code2000(r);
                         ((Activity) context).finish();
+                        EventBusMsg.DeleteGoodsMsg msg = new EventBusMsg.DeleteGoodsMsg(bean.get_id());
+                        EventBus.getDefault().post(msg);
                         EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                     }
                 };

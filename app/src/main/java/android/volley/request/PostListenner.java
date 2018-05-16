@@ -34,9 +34,9 @@ public class PostListenner {
             public void onErrorResponse(VolleyError error) {
                 try {
                     error();
-                    Toast.makeText(context, VolleyErrorHelper.getMessage(error, context),
-                            Toast
-                                    .LENGTH_SHORT).show();
+//                    Toast.makeText(context, VolleyErrorHelper.getMessage(error, context),
+//                            Toast
+//                                    .LENGTH_SHORT).show();
                     PostListenner.this.onFinish();
                     dissLoading();
                 } catch (Exception e) {
@@ -61,11 +61,15 @@ public class PostListenner {
                     }
                     LogUtil.i("i", rr.getResult());
                     dissLoading();
+                    if (rr.getCode().equals("ERROR")){
+                        codeOther(rr);
+                        return;
+                    }
                     if (Integer.valueOf(rr.getCode()) == 200) {
                         code2000(rr);
                     } else {
-                        ErrorCodeUtil.toastError(context, Integer.valueOf(rr.getCode()), rr
-                                .getMsg());
+//                        ErrorCodeUtil.toastError(context, Integer.valueOf(rr.getCode()), rr
+//                                .getMsg());
                         codeOther(rr);
                     }
                 } catch (Exception e) {

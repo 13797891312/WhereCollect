@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
@@ -32,6 +33,7 @@ import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 public class ImportHelpActivity extends BaseViewActivity {
     @Bind(R.id.imageview)
     ImageView imageview;
@@ -70,7 +72,13 @@ public class ImportHelpActivity extends BaseViewActivity {
     private void importBuy() {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
         ClipData cd2 = cm.getPrimaryClip();
-        String str = cd2.getItemAt(0).getText().toString();
+        String str;
+        if (cd2 == null) {
+            str = "";
+        } else {
+            str = cd2.getItemAt(0).getText().toString();
+
+        }
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(context).getId());
         map.put("key", str);

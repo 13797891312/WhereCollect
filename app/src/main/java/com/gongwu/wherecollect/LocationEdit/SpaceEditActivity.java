@@ -170,6 +170,7 @@ public class SpaceEditActivity extends BaseViewActivity {
                                         MainLocationFragment.mlist.remove(position);
                                         myAdapter.notifyItemRemoved(position);
                                         EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
+                                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                                     }
                                 };
                                 HttpClient.deleteLocation(SpaceEditActivity.this, map, listenner);

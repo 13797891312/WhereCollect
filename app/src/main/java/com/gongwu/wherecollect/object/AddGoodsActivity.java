@@ -643,6 +643,14 @@ public class AddGoodsActivity extends BaseViewActivity {
                     }
                 }).start();
             }
+
+            @Override
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
+                ToastUtil.showTopToast(context, "获取商品信息失败");
+                Intent intent = new Intent(context, ImportHelpActivity.class);
+                context.startActivity(intent);
+            }
         };
         HttpClient.getBookInfo(context, map, listenner);
     }

@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook.furnitureLook;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,6 +55,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function:
  * Date: 2017/11/14
@@ -526,6 +528,11 @@ public class FurnitureObectListView extends RelativeLayout {
                                     @Override
                                     protected void code2000(final ResponseResult r) {
                                         super.code2000(r);
+                                        //刷新物品界面 物品数据
+                                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                                        //删除位置界面 物品总览的缓存
+                                        EventBus.getDefault().post(new EventBusMsg.ImportObject(((FurnitureLookActivity) context)
+                                                .spacePosition));
                                     }
                                 };
                                 HttpClient.deleteLocation(context, map, listenner);
@@ -610,7 +617,8 @@ public class FurnitureObectListView extends RelativeLayout {
         map.put("user_id", MyApplication.getUser(context).getId());
         map.put("object_codes", sb.toString());
         map.put("code", code);
-        PostListenner listenner = new PostListenner(context) {
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context,
+                "正在加载")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);

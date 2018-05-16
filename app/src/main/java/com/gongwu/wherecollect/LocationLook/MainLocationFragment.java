@@ -141,6 +141,7 @@ public class MainLocationFragment extends BaseFragment {
             mHandler.postDelayed(r, animTime);
         }
     }
+
     private long animTime = 6000;
     Handler mHandler = new Handler();
     Runnable r = new Runnable() {
@@ -180,7 +181,9 @@ public class MainLocationFragment extends BaseFragment {
             List<ObjectBean> temp = JsonUtils.listFromJson(cache, ObjectBean.class);
             mlist.clear();
             mlist.addAll(temp);
-            indicatorView.init(mlist);
+            if (indicatorView != null) {
+                indicatorView.init(mlist);
+            }
             initPage();
         }
         getSpaceData(cache);
@@ -409,6 +412,18 @@ public class MainLocationFragment extends BaseFragment {
         pageMap.get(msg.position).getObjectList();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.DeleteGoodsMsg deleteGoodsMsg) {
+        for (List<ObjectBean> beanList : MainLocationFragment.objectMap.values()) {
+            for (int i = 0; i < beanList.size(); i++) {
+                ObjectBean objectBean = beanList.get(i);
+                if (objectBean.get_id().equals(deleteGoodsMsg.goodsId)) {
+                    beanList.remove(i);
+                }
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -529,8 +544,8 @@ public class MainLocationFragment extends BaseFragment {
                 .setDismissOnTargetTouch(false)
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem4);
-        MainFragment1 fragment1 = (MainFragment1) ((MainActivity)getActivity()).fragments.get(0);
-        TextView  view = (TextView) fragment1.myFragmentLayout.findViewById(R.id.text_edit);
+        MainFragment1 fragment1 = (MainFragment1) ((MainActivity) getActivity()).fragments.get(0);
+        TextView view = (TextView) fragment1.myFragmentLayout.findViewById(R.id.text_edit);
         MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(getActivity()))
                 .setTarget(view).setContentText("编辑\n进入后，可创建和排序空间，添\n加更多家具，调整家具图大小和\n位置，以及进行家具细节编辑")
                 .setTargetTouchable(false)

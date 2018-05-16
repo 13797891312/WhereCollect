@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.view;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -27,6 +28,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function:
  * Date: 2017/8/28
@@ -107,8 +109,8 @@ public class MainDrawerView extends LinearLayout {
                 List<Map<String, Object>> temp = new ArrayList<>();
                 for (int i = 0; i < filterList.size(); i++) {
                     for (int j = 0; j < filterList.get(i).getSelectSubs().size(); j++) {
-                        Map<String, Object> map = JsonUtils.mapFromJson(filterList.get(i).getSelectSubs().get(j)
-                                .getQuery());
+                        String query = filterList.get(i).getSelectSubs().get(j).getQuery();
+                        Map<String, Object> map = JsonUtils.mapFromJson(query);
                         temp.add(map);
                     }
                 }
