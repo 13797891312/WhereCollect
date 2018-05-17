@@ -274,6 +274,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     private void upLoadImg(final ObjectBean objectBean) {
         List<File> list = new ArrayList<>();
         list.add(new File(objectBean.getObject_url()));
+        loading = Loading.show(loading, this, "加载中...");
         QiNiuUploadUtil uploadUtil = new QiNiuUploadUtil(this, list, "object/image/") {
             @Override
             protected void finish(List<String> list) {
@@ -286,6 +287,9 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                 } else {
                     //为默认值，就是新添加的
                     mDatas.add(objectBean);
+                }
+                if (loading != null) {
+                    loading.dismiss();
                 }
                 mAdapter.notifyDataSetChanged();
             }
