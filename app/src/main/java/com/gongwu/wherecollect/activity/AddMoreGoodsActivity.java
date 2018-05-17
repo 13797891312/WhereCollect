@@ -43,6 +43,8 @@ import com.zsitech.oncon.barcode.core.CaptureActivity;
 
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,6 +62,11 @@ import butterknife.OnClick;
 public class AddMoreGoodsActivity extends BaseViewActivity {
 
     private final int BOOK_CODE = 0x132;
+    /**
+     *判断AddMoreGoodsActivity是否显示
+     * 显示的时候,AddGoodsActivity不接收eventBus发送的淘宝商品信息
+     */
+    public static boolean START_MORE_ACTIVITY = false;
 
     @Bind(R.id.textBtn)
     TextView addGoodsTv;
@@ -85,6 +92,8 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         titleLayout.setBack(true, null);
         titleLayout.setTitle(getResources().getString(R.string.add_more_goods_text));
         mDatas = new ArrayList<>();
+        EventBus.getDefault().register(this);
+        START_MORE_ACTIVITY = true;
         initView();
         initData();
         initEvent();
@@ -478,4 +487,15 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         context.startActivity(intent);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.ImportFromBugSucces msg) {
+        updateBeanWithBook(msg.bean);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        START_MORE_ACTIVITY = false;
+        EventBus.getDefault().unregister(this);
+    }
 }

@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.quickadd;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +32,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 public class QuickFurnitureSelectListActivity extends BaseViewActivity {
     @Bind(R.id.commit)
     public Button commit;
@@ -80,7 +82,7 @@ public class QuickFurnitureSelectListActivity extends BaseViewActivity {
             QuickAddRequest request = new QuickAddRequest(mList.get(i).getCode(), mList.get(i).getName());
             List<String> funitureCodes = new ArrayList<>();
             for (int j = 0; j < StringUtils.getListSize(mList.get(i).getLayers()); j++) {
-                if (mList.get(i).getLayers().get(j).getRecommend()>0) {
+                if (mList.get(i).getLayers().get(j).getRecommend() > 0) {
                     funitureCodes.add(mList.get(i).getLayers().get(j).getCode());
                 }
             }
@@ -95,6 +97,7 @@ public class QuickFurnitureSelectListActivity extends BaseViewActivity {
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 Intent intent = new Intent(context, LocationEditActivity.class);
+                intent.putExtra("type", 1);
                 startActivity(intent);
                 EventBus.getDefault().post(new EventBusMsg.RequestSpace());
                 finish();

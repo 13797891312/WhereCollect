@@ -94,6 +94,11 @@ public class LocationEditActivity extends BaseViewActivity {
         ButterKnife.bind(this);
         initView();
         indicatorView.init(MainLocationFragment.mlist);
+        //判断跳转是由快速构建点击进来还是其他的点击
+        int type = getIntent().getIntExtra("type", 0);
+        if (type == 1) {
+            init = false;
+        }
         EventBus.getDefault().register(this);
         initPage();
     }
@@ -108,8 +113,9 @@ public class LocationEditActivity extends BaseViewActivity {
         });
     }
 
-
-    private boolean init = false;
+    //初次跳转的时候,initPage会调用2次,为了防止引导界面2次调用,添加init进行限制
+    //初始化activity调用一次  接收eventbus调用一次
+    private boolean init = true;
 
     private void initPage() {
         viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 0,
@@ -367,10 +373,8 @@ public class LocationEditActivity extends BaseViewActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.RequestSpaceEdit msg) {
-//        if (empty.getVisibility() == View.VISIBLE) {
         indicatorView.notifyView();
         initPage();
-//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

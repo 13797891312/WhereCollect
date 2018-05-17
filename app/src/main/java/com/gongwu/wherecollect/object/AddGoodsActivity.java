@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AddGoodsOtherContentActivity;
+import com.gongwu.wherecollect.activity.AddMoreGoodsActivity;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.activity.ImportHelpActivity;
 import com.gongwu.wherecollect.application.MyApplication;
@@ -780,6 +781,13 @@ public class AddGoodsActivity extends BaseViewActivity {
     public void onMessageEvent(String str) {
         if (EventBusMsg.ACTIVITY_FINISH.contains(str)) {
             finish();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.ImportFromBugSucces msg) {
+        if (!AddMoreGoodsActivity.START_MORE_ACTIVITY) {
+            updateBeanWithBook(msg.bean);
         }
     }
 
