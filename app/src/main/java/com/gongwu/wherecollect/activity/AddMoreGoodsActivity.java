@@ -202,7 +202,6 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
         map.put("star", tempBean.getStar() + "");
-        map.put("count", tempBean.getObject_count() + "");
         map.put("buy_date", tempBean.getBuy_date());
         map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this, Loading.show(null, context,

@@ -56,6 +56,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import butterknife.Bind;
@@ -107,6 +108,7 @@ public class AddGoodsActivity extends BaseViewActivity {
     private int editGoodsType = 0;//0 为添加物品  1为编辑物品
     private ObjectBean newBean;
     private final String IMG_COLOR_CODE = 0 + "";//默认图片颜色的值
+    private final int COCLOR_COUNT = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,24 +223,30 @@ public class AddGoodsActivity extends BaseViewActivity {
      * @param isSet
      */
     private void setCameraIv(boolean isSet) {
-        if (isSet && TextUtils.isEmpty(tempBean.getObject_url())) {
+        if (isSet&& TextUtils.isEmpty(tempBean.getObject_url())) {
+            //没添加图片，文字变化 给一个随机颜色显示出来
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     setCameraIvParams(100);
-                    //未添加图片的时候，给个默认图片
-                    //IMG_COLOR_CODE默认图片颜色的值
-                    cameraIv.setHead(IMG_COLOR_CODE, goodsNameEv.getText().toString().trim(), "");
+                    // 随机颜色
+                    Random random = new Random();
+                    int randomcolor =random.nextInt(COCLOR_COUNT);
+                    cameraIv.setHead(randomcolor+"", goodsNameEv.getText().toString().trim(), "");
+                    tempBean.setObject_url(StringUtils.getResCode(randomcolor));
                 }
             }, 1000);
-        } else if (!isSet && TextUtils.isEmpty(tempBean.getObject_url())) {
-            setCameraIvParams(30);
-            head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
-            name.setText("");
-        } else if (isSet && !TextUtils.isEmpty(tempBean.getObject_url())) {
+        }else if (isSet && !TextUtils.isEmpty(tempBean.getObject_url())) {
+            //物品名字变化的时候 改变imageview的文字显示
             if (tempBean.getObject_url().contains("#")) {
                 cameraIv.name.setText(goodsNameEv.getText().toString().trim());
             }
+        }else if (!isSet) {
+            //没有文字的时候 设置默认图片 并初始化数据
+            setCameraIvParams(30);
+            head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
+            name.setText("");
+            tempBean.setObject_url("");
         }
 
     }
@@ -381,7 +389,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         List<String> files = new ArrayList<>();
         files.add(tempBean.getObject_url());
         map.put("image_urls", JsonUtils.jsonFromObject(files));
-        map.put("count", tempBean.getObject_count() + "");
+        map.put("object_count", tempBean.getObject_count() + "");
         map.put("buy_date", tempBean.getBuy_date());
         map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this) {

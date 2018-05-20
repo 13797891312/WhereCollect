@@ -328,7 +328,7 @@ public class ObjectInfoLookView extends LinearLayout {
 
     public void showGoodsLayout() {
         fenleiLayout.setVisibility(View.VISIBLE);
-        addGoodsCountLaytou.setVisibility(View.VISIBLE);
+//        addGoodsCountLaytou.setVisibility(View.VISIBLE);
         purchaseTimeLayout.setVisibility(VISIBLE);
         expiryTimeLayout.setVisibility(VISIBLE);
         yanseLayout.setVisibility(View.VISIBLE);
