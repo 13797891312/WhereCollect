@@ -55,7 +55,7 @@ public class ObjectBean implements Serializable {
     private String _id;
     private String id;
     private String search_tags;
-    private int object_count;
+    private int object_count;//3.2弃用
     private String object_url;
     private String image_url;
     private String background_url;
@@ -89,6 +89,7 @@ public class ObjectBean implements Serializable {
     private String price;
     private String buy_date;
     private String expire_date;
+    private int count;//物品数量
     /**
      * x : 0
      * y : 0
@@ -427,6 +428,14 @@ public class ObjectBean implements Serializable {
 
     public void setStar(int star) {
         this.star = star;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public List<CoordinatesBean> getCoordinates() {

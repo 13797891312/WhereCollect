@@ -138,8 +138,8 @@ public class ObjectInfoLookView extends LinearLayout {
      * 设置物品数量
      */
     private void setGoodsCount() {
-        if (bean.getObject_count() > 0) {
-            goodsCountEdit.setText(bean.getObject_count() + "");
+        if (bean.getCount() > 0) {
+            goodsCountEdit.setText(bean.getCount() + "");
             addGoodsCountLaytou.setVisibility(View.VISIBLE);
             showView();
         } else {

@@ -168,7 +168,7 @@ public class ObjectEditActivity extends BaseViewActivity {
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("detail", bean.getDetail());
         map.put("image_url", bean.getObject_url());
-        map.put("object_count", bean.getObject_count() + "");
+        map.put("count", bean.getCount() + "");
         map.put("price_max", bean.getPrice_max() + "");
         map.put("price_min", bean.getPrice_min() + "");
         map.put("season", bean.getSeason());

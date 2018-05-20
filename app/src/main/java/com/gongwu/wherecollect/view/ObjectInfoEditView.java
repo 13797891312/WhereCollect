@@ -161,7 +161,7 @@ public class ObjectInfoEditView extends LinearLayout {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(goodsCountEdit.getText().toString())) {
-                    bean.setObject_count(Integer.parseInt(goodsCountEdit.getText().toString()));
+                    bean.setCount(Integer.parseInt(goodsCountEdit.getText().toString()));
                 }
                 if (changeListener != null) {
                     changeListener.change();
@@ -208,8 +208,8 @@ public class ObjectInfoEditView extends LinearLayout {
      * 设置物品数量
      */
     private void setGoodsCount() {
-        if (bean.getObject_count() > 0) {
-            goodsCountEdit.setText(bean.getObject_count() + "");
+        if (bean.getCount() > 0) {
+            goodsCountEdit.setText(bean.getCount() + "");
             goodsCountEdit.setSelection(goodsCountEdit.getText().toString().length());
         }
     }

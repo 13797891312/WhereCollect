@@ -333,9 +333,8 @@ public class AddGoodsActivity extends BaseViewActivity {
             return;
         }
         //如果图片没有地址，则传一个颜色服务牌
-        if (TextUtils.isEmpty(tempBean.getObject_url())) {
+        if (!TextUtils.isEmpty(tempBean.getObject_url())&&tempBean.getObject_url().contains("#")) {
             //调用接口
-            tempBean.setObject_url("#B5B5B5");
             addObjects();
         } else if (tempBean.getObject_url().contains("http")) {
             addObjects();
@@ -389,7 +388,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         List<String> files = new ArrayList<>();
         files.add(tempBean.getObject_url());
         map.put("image_urls", JsonUtils.jsonFromObject(files));
-        map.put("object_count", tempBean.getObject_count() + "");
+        map.put("count", tempBean.getCount() + "");
         map.put("buy_date", tempBean.getBuy_date());
         map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this) {
@@ -425,7 +424,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("detail", tempBean.getDetail());
         map.put("image_url", TextUtils.isEmpty(tempBean.getObject_url()) ? "#B5B5B5" : tempBean.getObject_url());//B5B5B5
-        map.put("object_count", tempBean.getObject_count() + "");
+        map.put("count", tempBean.getCount() + "");
         map.put("price_max", tempBean.getPrice() + "");
         map.put("price_min", tempBean.getPrice() + "");
         map.put("season", tempBean.getSeason());
@@ -487,7 +486,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                     objectBean.setBuy_date(newBean.getBuy_date());
                     objectBean.setObject_url(newBean.getObject_url());
                     objectBean.setStar(newBean.getStar());
-                    objectBean.setObject_count(newBean.getObject_count());
+                    objectBean.setCount(newBean.getCount());
                     objectBean.setName(newBean.getName());
                     objectBean.setCategories(newBean.getCategories());
                     objectBean.setPrice(newBean.getPrice());
