@@ -109,10 +109,25 @@ public class MainLocationFragment extends BaseFragment {
     public void onShow() {
         super.onShow();
         if (!isLoaded) {
-            getLocationList();
+            initHandler.postDelayed(initRunnable, initTime);
             isLoaded = true;
         }
     }
+
+    private long initTime = 100;
+    Handler initHandler = new Handler();
+    Runnable initRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (viewPager == null) {
+                initHandler.postDelayed(this, initTime);
+            } else {
+                getLocationList();
+                initHandler.removeCallbacks(this);
+            }
+        }
+    };
+
 
     private void initView() {
         //桌布空间头点击事件
@@ -222,6 +237,7 @@ public class MainLocationFragment extends BaseFragment {
                         hd.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                if (objectListView.adapter == null) return;
                                 objectListView.adapter.selectPostion = -1;
                                 objectListView.adapter.notifyDataSetChanged();
                             }

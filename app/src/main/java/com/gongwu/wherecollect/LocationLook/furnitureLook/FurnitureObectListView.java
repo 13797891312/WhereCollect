@@ -167,6 +167,7 @@ public class FurnitureObectListView extends RelativeLayout {
                                         map.put("code", filterList.get(position).getId());
                                         map.put("uid", MyApplication.getUser(context).getId());
                                         mList.remove(filterList.remove(position));
+                                        adapter.notifyDataSetChanged();
                                         PostListenner listenner = new PostListenner(context) {
                                             @Override
                                             protected void code2000(final ResponseResult r) {

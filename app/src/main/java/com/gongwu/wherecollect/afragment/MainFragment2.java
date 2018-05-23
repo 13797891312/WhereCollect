@@ -347,7 +347,7 @@ public class MainFragment2 extends BaseFragment {
      * 查询小红点的显示与否
      */
     public boolean setRedStatus() {
-        if (MyApplication.getUser(getActivity()).isTest()) {
+        if (MyApplication.getUser(getActivity()) != null && MyApplication.getUser(getActivity()).isTest()) {
             ((MainActivity) getActivity()).setRed(true);
             return true;
         }

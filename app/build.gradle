@@ -55,6 +55,7 @@ android {
             signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         release_vivo {
             minifyEnabled true
             buildConfigField("boolean", "LOGSHOW", "false")
@@ -63,11 +64,84 @@ android {
             signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         release_oppo {
             minifyEnabled true
             buildConfigField("boolean", "LOGSHOW", "false")
             buildConfigField("String", "URL", "${API_HOST_RELEASE}")
             buildConfigField("String", "CHANNEL", "\"oppo\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_tencent {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"tencent\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_baidu {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"baidu\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_wandoujia {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"wandoujia\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_androidmarket {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"androidmarket\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_91 {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"91\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_pp {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"pp\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_360 {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"360\"")
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_headlines {
+            minifyEnabled true
+            buildConfigField("boolean", "LOGSHOW", "false")
+            buildConfigField("String", "URL", "${API_HOST_RELEASE}")
+            buildConfigField("String", "CHANNEL", "\"headlines\"")
             signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
