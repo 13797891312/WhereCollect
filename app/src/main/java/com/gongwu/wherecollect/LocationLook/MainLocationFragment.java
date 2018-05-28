@@ -310,6 +310,12 @@ public class MainLocationFragment extends BaseFragment {
                 pageMap.get(position).getObjectList();
                 checkedShijiCache(position);
                 indicatorView.scrollToPosition(position);
+                if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+                    //先取消 再开启
+                    mHandler.removeCallbacks(r);
+                    objectListView.adapter.defaultData();
+                    mHandler.postDelayed(r, animTime);
+                }
             }
         });
         viewPager.setCurrentItem(indicatorView.getSelection());
