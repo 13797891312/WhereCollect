@@ -75,48 +75,27 @@ public class MainFragment2 extends BaseFragment {
     TextView tvBirthday;
     @Bind(R.id.tv_detail)
     TextView tvDetail;
-    @Bind(R.id.tv_feedBack)
-    TextView tvFeedBack;
-    @Bind(R.id.tv_help)
-    TextView tvHelp;
     @Bind(R.id.tv_loginOut)
     TextView tvLoginOut;
     String token = "";
     @Bind(R.id.roomrecord_red)
     View roomrecordRed;
-    @Bind(R.id.tv_share)
-    TextView tvShare;
-    @Bind(R.id.share_red)
-    View shareRed;
     @Bind(R.id.version_tv)
     TextView versionTv;
-    @Bind(R.id.switch_compat)
-    SwitchCompat switchCompat;
 
     private ChangeHeaderImgDialog changeHeaderdialog;
     private UserBean user;
 
     public MainFragment2() {
-        // Required empty public constructor
     }
 
     public static MainFragment2 newInstance() {
         MainFragment2 fragment = new MainFragment2();
         Bundle args = new Bundle();
-        //        args.putString(ARG_PARAM1, param1);
-        //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //        if (getArguments() != null) {
-        //            mParam1 = getArguments().getString(ARG_PARAM1);
-        //            mParam2 = getArguments().getString(ARG_PARAM2);
-        //        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,23 +103,10 @@ public class MainFragment2 extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_main_fragment2, container, false);
         ButterKnife.bind(this, view);
         refrashUi();
-        setRedStatus();
-        initEvent();
         versionTv.setText(String.format("收哪儿v%s（%d）", StringUtils.getCurrentVersionName(getActivity()), StringUtils
                 .getCurrentVersion
                         (getActivity())));
         return view;
-    }
-
-    private void initEvent() {
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SaveDate.getInstence(getContext()).setBreathLook(user.getId(), !isChecked);
-                EventBusMsg.GoodsIsCloseBreathLook msg = new EventBusMsg.GoodsIsCloseBreathLook(!isChecked);
-                EventBus.getDefault().post(msg);
-            }
-        });
     }
 
     /**
@@ -154,8 +120,6 @@ public class MainFragment2 extends BaseFragment {
         tvNick.setText(user.getNickname());
         tvSex.setText(user.getGender());
         tvBirthday.setText(user.getBirthday());
-        boolean isBreathLook = SaveDate.getInstence(getContext()).getBreathLook(user.getId());
-        switchCompat.setChecked(!isBreathLook);
     }
 
     @Override
@@ -164,10 +128,8 @@ public class MainFragment2 extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick({R.id.head_layout, R.id.nick_layout, R.id.sex_layout, R.id.birth_layout, R.id.tv_detail, R.id
-            .tv_feedBack, R.id
-            .tv_help, R.id
-            .tv_loginOut, R.id.layout_share, R.id.layout_roomrecord})
+    @OnClick({R.id.head_layout, R.id.nick_layout, R.id.sex_layout, R.id.birth_layout, R.id.tv_detail,
+            R.id.tv_loginOut,  R.id.layout_roomrecord})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -207,13 +169,9 @@ public class MainFragment2 extends BaseFragment {
                 intent = new Intent(getActivity(), AccountInfoActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.tv_feedBack:
-                intent = new Intent(getActivity(), FeedBackActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.tv_help:
-                WebActivity.start(getActivity(), "帮助中心", "http://www.shouner.com/help");
-                break;
+//            case R.id.tv_help:
+//                WebActivity.start(getActivity(), "帮助中心", "http://www.shouner.com/help");
+//                break;
             case R.id.tv_loginOut:
                 DialogUtil.show("提示", "退出将会清空缓存数据,确定退出？", "确定", "取消", getActivity(), new DialogInterface.OnClickListener
                         () {
@@ -231,22 +189,9 @@ public class MainFragment2 extends BaseFragment {
                 if (roomrecordRed.getVisibility() == View.VISIBLE) {
                     SaveDate.getInstence(getActivity()).setRecordRed(MyApplication.getUser(getActivity()).getId(),
                             true);
-                    setRedStatus();
                 }
                 intent = new Intent(getActivity(), RecordListActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.layout_share:
-                if (shareRed.getVisibility() == View.VISIBLE) {
-                    showFirstShare();
-                } else {
-                    ShareUtil.openShareDialog(getActivity());
-                }
-                if (SaveDate.getInstence(getActivity()).getRecordSaved(MyApplication.getUser(getActivity()).getId())) {
-                    SaveDate.getInstence(getActivity()).setShareClicked(MyApplication.getUser(getActivity()).getId(),
-                            true);
-                    setRedStatus();
-                }
                 break;
         }
     }
@@ -343,66 +288,4 @@ public class MainFragment2 extends BaseFragment {
         uploadUtil.start();
     }
 
-    /**
-     * 查询小红点的显示与否
-     */
-    public boolean setRedStatus() {
-        if (MyApplication.getUser(getActivity()) != null && MyApplication.getUser(getActivity()).isTest()) {
-            ((MainActivity) getActivity()).setRed(true);
-            return true;
-        }
-        boolean isHasRed = false;
-        UserBean userBean = MyApplication.getUser(getActivity());
-        if (SaveDate.getInstence(getActivity()).getRecordSaved(userBean.getId())//保存过室迹
-                && !SaveDate.getInstence(getActivity()).getRecordRed(userBean.getId())) {//没消除过红点
-            roomrecordRed.setVisibility(View.VISIBLE);
-            isHasRed = true;
-        } else {
-            roomrecordRed.setVisibility(View.GONE);
-        }
-        if (SaveDate.getInstence(getActivity()).getRecordSaved(userBean.getId())
-                && !SaveDate.getInstence(getActivity()).getShareClicked(userBean.getId())) {//如果点击过分享
-            shareRed.setVisibility(View.VISIBLE);
-            isHasRed = true;
-        } else {
-            shareRed.setVisibility(View.GONE);
-        }
-        ((MainActivity) getActivity()).setRed(isHasRed);
-        return isHasRed;
-    }
-
-    /**
-     * 设置添加屏幕的背景透明度
-     *
-     * @param bgAlpha 屏幕透明度0.0-1.0 1表示完全不透明
-     */
-    public void setBackgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = getActivity().getWindow()
-                .getAttributes();
-        lp.alpha = bgAlpha;
-        getActivity().getWindow().setAttributes(lp);
-    }
-
-    /**
-     * 第一次用本功能的提示
-     */
-    private void showFirstShare() {
-        View view = View.inflate(getActivity(), R.layout.layout_popwindow_share_help, null);
-        ((TextView) view.findViewById(R.id.textview)).setText(Html.fromHtml("所以如果喜欢，<font " +
-                "color='#25B65A'>也请将我们推荐给你身边的好友</font>，一起见证我们的成长。"));
-        PopupWindow popupWindow = new PopupWindow(view, FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams
-                .WRAP_CONTENT);
-        popupWindow.setAnimationStyle(R.style.pop_bottomin_bottomout);
-        popupWindow.setBackgroundDrawable(new ColorDrawable());
-        popupWindow.setFocusable(true);
-        popupWindow.showAtLocation(getActivity().findViewById(R.id.base_layout), Gravity.BOTTOM, 0, 0);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                setBackgroundAlpha(1.0f);
-                ShareUtil.openShareDialog(getActivity());
-            }
-        });
-        setBackgroundAlpha(0.5f);
-    }
 }

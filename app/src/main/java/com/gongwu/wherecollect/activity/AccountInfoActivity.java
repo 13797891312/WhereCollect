@@ -36,6 +36,10 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+/**
+ * 账号信息  该界面3.3作废
+ */
 public class AccountInfoActivity extends BaseViewActivity {
     UmAuthListener listener = new UmAuthListener(this);
     @Bind(R.id.tv_wx)
