@@ -8,9 +8,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +34,6 @@ import com.gongwu.wherecollect.util.AnimationUtil;
 import com.gongwu.wherecollect.util.BitmapUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
-import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
@@ -79,6 +81,9 @@ public class MainLocationFragment extends BaseFragment {
     View quickLayout;
     @Bind(R.id.help_layout)
     View helpLayout;
+    @Bind(R.id.objectListView_layout)
+    FrameLayout listviewLayout;
+
     private UserBean user;
 
     public MainLocationFragment() {
@@ -162,10 +167,29 @@ public class MainLocationFragment extends BaseFragment {
     Runnable r = new Runnable() {
         @Override
         public void run() {
-            objectListView.adapter.refreshData();
-            if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-                mHandler.postDelayed(this, animTime);
-            }
+            AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0.2f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+            alphaAnimation.setFillAfter(false);//动画结束后保持状态
+            alphaAnimation.setDuration(1500);//动画持续时间，单位为毫秒
+            objectListView.startAnimation(alphaAnimation);//开始动画
+            alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    objectListView.adapter.refreshData();
+                    if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+                        mHandler.postDelayed(r, animTime);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
         }
     };
 
@@ -269,13 +293,16 @@ public class MainLocationFragment extends BaseFragment {
 
                     @Override
                     public void upSlide() {
-                        objectListView.setVisibility(View.VISIBLE);
-                        AnimationUtil.upSlide(objectListView, 150);
+//                        objectListView.setVisibility(View.VISIBLE);
+//                        AnimationUtil.upSlide(objectListView, 150);
+                        listviewLayout.setVisibility(View.VISIBLE);
+                        AnimationUtil.upSlide(listviewLayout, 150);
                     }
 
                     @Override
                     public void downSlide() {
-                        AnimationUtil.downSlide(objectListView, 150);
+//                        AnimationUtil.downSlide(objectListView, 150);
+                        AnimationUtil.downSlide(listviewLayout, 150);
                     }
                 });
                 v.getLocationChild(position);
@@ -497,8 +524,9 @@ public class MainLocationFragment extends BaseFragment {
      * 隐藏物品总览
      */
     public void hideObjectList() {
-        if (objectListView != null) {
-            AnimationUtil.downSlide(objectListView, 150);
+        if (listviewLayout != null) {
+            AnimationUtil.downSlide(listviewLayout, 150);
+//            AnimationUtil.downSlide(objectListView, 150);
         }
     }
 
@@ -583,8 +611,10 @@ public class MainLocationFragment extends BaseFragment {
             @Override
             public void onShow(MaterialShowcaseView itemView, int position) {
                 if (position == objectListViewPosition) {
-                    objectListView.setVisibility(View.VISIBLE);
-                    AnimationUtil.upSlide(objectListView, 150);
+//                    objectListView.setVisibility(View.VISIBLE);
+//                    AnimationUtil.upSlide(objectListView, 150);
+                    listviewLayout.setVisibility(View.VISIBLE);
+                    AnimationUtil.upSlide(listviewLayout, 150);
                 }
             }
         });
