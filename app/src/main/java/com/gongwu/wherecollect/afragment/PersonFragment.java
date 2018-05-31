@@ -21,6 +21,8 @@ import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.SaveDate;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,7 +47,8 @@ public class PersonFragment extends BaseFragment {
             view = inflater.inflate(R.layout.fragment_person, container, false);
         }
         ButterKnife.bind(this, view);
-        refrashUi();
+        EventBus.getDefault().register(this);
+        refreshUi();
         initEvent();
         return view;
     }
@@ -86,7 +89,7 @@ public class PersonFragment extends BaseFragment {
     /**
      * 刷新UI
      */
-    public void refrashUi() {
+    public void refreshUi() {
         user = MyApplication.getUser(getActivity());
         if (user == null)
             return;
@@ -96,9 +99,26 @@ public class PersonFragment extends BaseFragment {
         switchCompat.setChecked(!isBreathLook);
     }
 
+    /**
+     * 用户登录会收到消息
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.ChangeUser msg) {
+        refreshUi();
+    }
+
+    /**
+     * 用户资料改变
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.ChangeUserInfo msg) {
+        refreshUi();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 }

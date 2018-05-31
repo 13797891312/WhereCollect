@@ -277,6 +277,7 @@ public class PersonActivity extends BaseViewActivity {
                 }
                 String stringUser = JsonUtils.jsonFromObject(user);
                 SaveDate.getInstence(context).setUser(stringUser);
+                EventBus.getDefault().post(new EventBusMsg.ChangeUserInfo());
             }
         };
         HttpClient.editInfo(context, map, listenner);

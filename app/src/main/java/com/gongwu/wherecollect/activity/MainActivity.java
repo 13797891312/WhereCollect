@@ -158,7 +158,7 @@ public class MainActivity extends BaseViewActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.ChangeUser msg) {
-        ((PersonFragment) fragments.get(1)).refrashUi();
+        ((PersonFragment) fragments.get(1)).refreshUi();
         myFragmentLayout.setCurrenItem(0);
         filterView.getFilterList();
         MainLocationFragment.locationMap.clear();
