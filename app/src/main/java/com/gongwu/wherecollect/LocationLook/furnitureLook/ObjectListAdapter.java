@@ -85,12 +85,11 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
             }
         }
         if (statrAnim){
-            AlphaAnimation alphaAnimation = new AlphaAnimation(0.2f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
             holder.image.startAnimation(alphaAnimation);//开始动画
             alphaAnimation.setFillAfter(true);//动画结束后保持状态
             alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
         }
-//        holder.name.setText(mlist.get(position).getName());
         holder.itemView.setOnLongClickListener(new MyLongClickListener(holder.getLayoutPosition()));
     }
 
@@ -112,6 +111,10 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
         this.refresh = false;
         this.statrAnim = false;
         notifyDataSetChanged();
+    }
+
+    public void stopAnim() {
+        this.statrAnim = false;
     }
 
     /**
@@ -156,7 +159,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
     public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.image)
         ImageView image;
-//        @Bind(R.id.object_name_tv)
+        //        @Bind(R.id.object_name_tv)
 //        TextView name;
         @Bind(R.id.linearLayout)
         RelativeLayout linearLayout;

@@ -2,35 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgcolor2"
+    android:background="@color/colorf9"
     tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_hight"
-        android:background="@color/colorPrimary"
-        android:divider="@drawable/shape_divider_line"
-        android:dividerPadding="1px"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:showDividers="end">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="我的"
-            android:textColor="@color/black_txt"
-            android:textSize="@dimen/f_17" />
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/title_hight"
         android:fillViewport="true"
         android:scrollbars="none">
-
+        <!--android:layout_marginTop="@dimen/title_hight"-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -257,118 +237,6 @@
                 android:text="账号信息"
                 android:textColor="@color/black_54"
                 android:textSize="@dimen/f_16" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dip_12"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_feedBack"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dip_45"
-                    android:background="@drawable/select_white_bg"
-                    android:drawableRight="@drawable/icon_next_black"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dip_16"
-                    android:paddingRight="@dimen/dip_16"
-                    android:text="意见反馈"
-                    android:textColor="@color/black_54"
-                    android:textSize="@dimen/f_16" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2px"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/black_12"
-                    android:visibility="gone"></View>
-
-                <TextView
-                    android:id="@+id/tv_help"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dip_45"
-                    android:background="@drawable/select_white_bg"
-                    android:drawableRight="@drawable/icon_next_black"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dip_16"
-                    android:paddingRight="@dimen/dip_16"
-                    android:text="帮助与关注"
-                    android:textColor="@color/black_54"
-                    android:textSize="@dimen/f_15"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dip_12"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dip_45"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/dip_16"
-                        android:paddingRight="@dimen/dip_16"
-                        android:text="呼吸查看"
-                        android:textColor="@color/black_54"
-                        android:textSize="@dimen/f_16" />
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_compat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/dip_16"
-                        android:layout_centerVertical="true" />
-
-                </RelativeLayout>
-
-                <TextView
-                    android:textSize="@dimen/f_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dip_4"
-                    android:paddingLeft="@dimen/dip_16"
-                    android:text="位置页物品图滚动展示图片和名称内容" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_share"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dip_45"
-                android:layout_marginTop="@dimen/dip_12"
-                android:background="@drawable/select_white_bg"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/dip_16"
-                android:paddingRight="@dimen/dip_16">
-
-                <TextView
-                    android:id="@+id/tv_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="2px"
-                    android:gravity="center_vertical"
-                    android:text="推荐给好友"
-                    android:textColor="@color/black_54"
-                    android:textSize="@dimen/f_16" />
-
-                <View
-                    android:id="@+id/share_red"
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/shape_circle_msg_count_red"></View>
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_loginOut"

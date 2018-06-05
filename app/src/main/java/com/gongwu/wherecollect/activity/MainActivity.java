@@ -16,6 +16,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.afragment.MainFragment2;
+import com.gongwu.wherecollect.afragment.PersonFragment;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.object.AddGoodsActivity;
@@ -112,7 +113,7 @@ public class MainActivity extends BaseViewActivity {
             }
         });
         fragments.add(MainFragment1.newInstance());
-        fragments.add(MainFragment2.newInstance());
+        fragments.add(PersonFragment.newInstance());
         myFragmentLayout = (MyFragmentLayout1) this.findViewById(R.id.myFragmentLayout);
         myFragmentLayout.setScorllToNext(false);
         myFragmentLayout.setScorll(true);
@@ -157,13 +158,13 @@ public class MainActivity extends BaseViewActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.ChangeUser msg) {
-        ((MainFragment2) fragments.get(1)).refrashUi();
+        ((PersonFragment) fragments.get(1)).refreshUi();
         myFragmentLayout.setCurrenItem(0);
         filterView.getFilterList();
         MainLocationFragment.locationMap.clear();
         MainLocationFragment.pageMap.clear();
         MainLocationFragment.mlist.clear();
-        ((MainFragment2) fragments.get(1)).setRedStatus();
+//        ((MainFragment2) fragments.get(1)).setRedStatus();
     }
 
     /**
@@ -173,7 +174,7 @@ public class MainActivity extends BaseViewActivity {
     public void onMessageEvent(EventBusMsg.RecordChange msg) {
         switch (msg.isSave) {
             case 0:
-                ((MainFragment2) fragments.get(1)).setRedStatus();
+//                ((MainFragment2) fragments.get(1)).setRedStatus();
                 break;
             case 1:
                 ((MainFragment1) fragments.get(0)).setRedStatus(true);//暂存，显示红点

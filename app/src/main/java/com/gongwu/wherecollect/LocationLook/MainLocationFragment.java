@@ -8,9 +8,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +83,9 @@ public class MainLocationFragment extends BaseFragment {
     View quickLayout;
     @Bind(R.id.help_layout)
     View helpLayout;
+    @Bind(R.id.objectListView_layout)
+    FrameLayout listviewLayout;
+
     private UserBean user;
 
     public MainLocationFragment() {
@@ -88,8 +95,6 @@ public class MainLocationFragment extends BaseFragment {
     public static MainLocationFragment newInstance() {
         MainLocationFragment fragment = new MainLocationFragment();
         Bundle args = new Bundle();
-        //        args.putString(ARG_PARAM1, param1);
-        //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,7 +102,6 @@ public class MainLocationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_location_look, container, false);
         ButterKnife.bind(this, view);
         initView();
@@ -142,10 +146,9 @@ public class MainLocationFragment extends BaseFragment {
         objectListView.setOnItemClickListener(new LocationObectListView.OnitemClickLisener() {
             @Override
             public void itemClick(int position, ObjectBean bean, View view) {
-                //                ShowCaseUtil.showCaseForObject(getActivity(), locationPage, locationPage
-                // .findViewByObject(bean));
                 if (pageMap.get(indicatorView.getSelection()) != null) {
                     pageMap.get(indicatorView.getSelection()).findView(bean);
+                    objectListView.adapter.stopAnim();
                     MobclickAgent.onEvent(getActivity(), "030301");
                 }
             }
@@ -162,10 +165,33 @@ public class MainLocationFragment extends BaseFragment {
     Runnable r = new Runnable() {
         @Override
         public void run() {
-            objectListView.adapter.refreshData();
-            if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-                mHandler.postDelayed(this, animTime);
+            AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+            alphaAnimation.setFillAfter(false);//动画结束后保持状态
+            alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
+            if (objectListView != null) {
+                objectListView.startAnimation(alphaAnimation);//开始动画
             }
+            alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if (objectListView != null && objectListView.adapter != null) {
+                        objectListView.adapter.refreshData();
+                    }
+                    if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+                        mHandler.postDelayed(r, animTime);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
         }
     };
 
@@ -237,7 +263,9 @@ public class MainLocationFragment extends BaseFragment {
                         hd.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (objectListView.adapter == null) return;
+                                if (objectListView == null || objectListView.adapter == null) {
+                                    return;
+                                }
                                 objectListView.adapter.selectPostion = -1;
                                 objectListView.adapter.notifyDataSetChanged();
                             }
@@ -269,13 +297,13 @@ public class MainLocationFragment extends BaseFragment {
 
                     @Override
                     public void upSlide() {
-                        objectListView.setVisibility(View.VISIBLE);
-                        AnimationUtil.upSlide(objectListView, 150);
+                        listviewLayout.setVisibility(View.VISIBLE);
+                        AnimationUtil.upSlide(listviewLayout, 150);
                     }
 
                     @Override
                     public void downSlide() {
-                        AnimationUtil.downSlide(objectListView, 150);
+                        AnimationUtil.downSlide(listviewLayout, 150);
                     }
                 });
                 v.getLocationChild(position);
@@ -497,8 +525,8 @@ public class MainLocationFragment extends BaseFragment {
      * 隐藏物品总览
      */
     public void hideObjectList() {
-        if (objectListView != null) {
-            AnimationUtil.downSlide(objectListView, 150);
+        if (listviewLayout != null) {
+            AnimationUtil.downSlide(listviewLayout, 150);
         }
     }
 
@@ -583,8 +611,8 @@ public class MainLocationFragment extends BaseFragment {
             @Override
             public void onShow(MaterialShowcaseView itemView, int position) {
                 if (position == objectListViewPosition) {
-                    objectListView.setVisibility(View.VISIBLE);
-                    AnimationUtil.upSlide(objectListView, 150);
+                    listviewLayout.setVisibility(View.VISIBLE);
+                    AnimationUtil.upSlide(listviewLayout, 150);
                 }
             }
         });

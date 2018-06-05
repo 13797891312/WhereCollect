@@ -8,6 +8,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -123,19 +125,39 @@ public class FurnitureLookActivity extends BaseViewActivity {
             mHandler.postDelayed(runnable, animTime);
         }
     }
+
     private long animTime = 6000;
     Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            objectListView.adapter.refreshData();
-            if (mHandler != null) {
-                if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
-                    mHandler.postDelayed(this, animTime);
-                } else {
-                    objectListView.adapter.defaultData();
+            AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+            alphaAnimation.setFillAfter(false);//动画结束后保持状态
+            alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
+            objectListView.recyclerView.startAnimation(alphaAnimation);//开始动画
+            alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
                 }
-            }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    objectListView.adapter.refreshData();
+                    if (mHandler != null) {
+                        if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
+                            mHandler.postDelayed(runnable, animTime);
+                        } else {
+                            objectListView.adapter.defaultData();
+                        }
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
         }
     };
 
@@ -175,8 +197,11 @@ public class FurnitureLookActivity extends BaseViewActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHandler = null;
-        runnable = null;
+        if (mHandler != null && runnable != null) {
+            mHandler.removeCallbacks(runnable);
+            mHandler = null;
+            runnable = null;
+        }
         EventBus.getDefault().unregister(objectListView);
     }
 

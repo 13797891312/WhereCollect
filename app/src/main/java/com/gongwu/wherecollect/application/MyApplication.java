@@ -73,8 +73,6 @@ public class MyApplication extends Application {
     }
 
     private void initUM() {
-        MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this, "5a2de126f43e484ca70000ef",
-                BuildConfig.CHANNEL));
         Config.DEBUG = BuildConfig.LOGSHOW;
         PlatformConfig.setWeixin("wx9b2c37b4717d4c13", "e1777498993b4eecbc20e9ef8c520c5d");
         PlatformConfig.setQQZone("1105780975", "YtsbvRT5V9PUaG8X");
