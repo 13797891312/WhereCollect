@@ -71,7 +71,7 @@ public class FurnitureObectListView extends RelativeLayout {
     List<ObjectBean> mFilterBoxList = new ArrayList<>();//盒子筛选后列表
     Context context;
     @Bind(R.id.recyclerView)
-    RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     @Bind(R.id.title)
     TextView title;
     @Bind(R.id.indicatorListView)

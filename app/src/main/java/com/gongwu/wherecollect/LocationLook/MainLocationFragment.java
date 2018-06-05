@@ -14,7 +14,6 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +34,6 @@ import com.gongwu.wherecollect.util.AnimationUtil;
 import com.gongwu.wherecollect.util.BitmapUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
-import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
@@ -63,7 +61,7 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 public class MainLocationFragment extends BaseFragment {
     public static List<ObjectBean> mlist = new ArrayList<>();//静态空间数据
     public static Map<String, List<ObjectBean>> objectMap = new HashMap<>();
-    ;//物品总览
+    //物品总览
     public static Map<String, List<ObjectBean>> locationMap = new HashMap<>();//家具
     public static Map<Integer, LocationPage> pageMap = new HashMap<>();
     public static Bitmap bitmap;
@@ -87,10 +85,6 @@ public class MainLocationFragment extends BaseFragment {
     FrameLayout listviewLayout;
 
     private UserBean user;
-
-    public MainLocationFragment() {
-        // Required empty public constructor
-    }
 
     public static MainLocationFragment newInstance() {
         MainLocationFragment fragment = new MainLocationFragment();

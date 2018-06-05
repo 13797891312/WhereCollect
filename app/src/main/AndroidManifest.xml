@@ -161,7 +161,8 @@
         <activity android:name=".activity.AddGoodsOtherContentActivity" />
         <activity android:name=".activity.AddMoreGoodsActivity" />
         <activity android:name=".activity.AddGoodsRemindActivity" />
-        <activity android:name=".activity.RemindGoodsDetailsActivity"></activity>
+        <activity android:name=".activity.RemindGoodsDetailsActivity" />
+        <activity android:name=".activity.PersonActivity"></activity>
     </application>
 
 </manifest>
