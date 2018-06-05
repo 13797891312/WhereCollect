@@ -61,7 +61,7 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 public class MainLocationFragment extends BaseFragment {
     public static List<ObjectBean> mlist = new ArrayList<>();//静态空间数据
     public static Map<String, List<ObjectBean>> objectMap = new HashMap<>();
-    ;//物品总览
+    //物品总览
     public static Map<String, List<ObjectBean>> locationMap = new HashMap<>();//家具
     public static Map<Integer, LocationPage> pageMap = new HashMap<>();
     public static Bitmap bitmap;
@@ -86,15 +86,9 @@ public class MainLocationFragment extends BaseFragment {
 
     private UserBean user;
 
-    public MainLocationFragment() {
-        // Required empty public constructor
-    }
-
     public static MainLocationFragment newInstance() {
         MainLocationFragment fragment = new MainLocationFragment();
         Bundle args = new Bundle();
-        //        args.putString(ARG_PARAM1, param1);
-        //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -102,7 +96,6 @@ public class MainLocationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_location_look, container, false);
         ButterKnife.bind(this, view);
         initView();
@@ -261,7 +254,8 @@ public class MainLocationFragment extends BaseFragment {
                         hd.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (objectListView.adapter == null) return;
+                                if (objectListView == null || objectListView.adapter == null)
+                                    return;
                                 objectListView.adapter.selectPostion = -1;
                                 objectListView.adapter.notifyDataSetChanged();
                             }
