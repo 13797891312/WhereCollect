@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.afragment;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 public class MainFragment1 extends BaseFragment implements View.OnClickListener {
     public List<Fragment> fragments = new ArrayList();
     View view;
@@ -100,7 +102,7 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
         myFragmentLayout.setWhereTab(1);
         myFragmentLayout.setTabHeight((int) (3 * BaseViewActivity.getScreenScale(getActivity())), getResources()
                 .getColor(R.color
-                .maincolor), true, 0);
+                        .maincolor), true, 0);
         myFragmentLayout.setOnChangeFragmentListener(new MyFragmentLayout_line.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int positon,
@@ -191,6 +193,8 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
      * 设置左上角室迹按钮的红点展示与隐藏
      */
     public void setRedStatus(boolean isHasRed) {
-        shijired.setVisibility(isHasRed ? View.VISIBLE : View.GONE);
+        if (shijired != null) {
+            shijired.setVisibility(isHasRed ? View.VISIBLE : View.GONE);
+        }
     }
 }

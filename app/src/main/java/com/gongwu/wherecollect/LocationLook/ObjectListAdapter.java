@@ -76,16 +76,6 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
                 holder.image.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
             }
         }
-        if (statrAnim) {
-            AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
-            alphaAnimation.setFillAfter(true);//动画结束后保持状态
-<<<<<<< HEAD
-            alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
-=======
-            alphaAnimation.setDuration(1500);//动画持续时间，单位为毫秒
->>>>>>> origin/master
-            holder.image.startAnimation(alphaAnimation);//开始动画
-        }
     }
 
     @Override
@@ -119,23 +109,17 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
     }
 
     private boolean refresh = false;
-    private boolean statrAnim = false;
 
     public void refreshData() {
         this.refresh = !this.refresh;
-        this.statrAnim = true;
         notifyDataSetChanged();
     }
 
     public void defaultData() {
         this.refresh = false;
-        this.statrAnim = false;
         notifyDataSetChanged();
     }
 
-    public void stopAnim() {
-        this.statrAnim = false;
-    }
 
     /**
      * @param position

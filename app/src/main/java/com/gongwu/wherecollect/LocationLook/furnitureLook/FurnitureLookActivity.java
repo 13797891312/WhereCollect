@@ -126,40 +126,56 @@ public class FurnitureLookActivity extends BaseViewActivity {
         }
     }
 
-    private long animTime = 6000;
+    private long animTime = 5000;
     Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
-            alphaAnimation.setFillAfter(false);//动画结束后保持状态
-            alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
-            objectListView.recyclerView.startAnimation(alphaAnimation);//开始动画
-            alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    objectListView.adapter.refreshData();
-                    if (mHandler != null) {
-                        if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
-                            mHandler.postDelayed(runnable, animTime);
-                        } else {
-                            objectListView.adapter.defaultData();
-                        }
-                    }
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
+            startViewAlphaAnim();
         }
     };
+
+    private void startViewAlphaAnim() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+        alphaAnimation.setFillAfter(false);//动画结束后保持状态
+        alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
+        objectListView.recyclerView.startAnimation(alphaAnimation);//开始动画
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                //动画结束，刷新数据并开启动画显示出来
+                if (objectListView != null && objectListView.adapter != null) {
+                    objectListView.adapter.refreshData();
+                    setViewAnim(objectListView.recyclerView);
+                }
+                if (mHandler != null) {
+                    if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
+                        mHandler.postDelayed(runnable, animTime);
+                    } else {
+                        objectListView.adapter.defaultData();
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    //View 显示动画
+    private void setViewAnim(View view) {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
+        alphaAnimation.setFillAfter(false);//动画结束后保持状态
+        alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
+        view.startAnimation(alphaAnimation);//开始动画
+    }
 
     /**
      * 刷新物品列表

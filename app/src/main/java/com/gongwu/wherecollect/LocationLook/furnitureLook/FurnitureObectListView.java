@@ -141,7 +141,6 @@ public class FurnitureObectListView extends RelativeLayout {
         adapter.setOnItemClickListener(new MyOnItemClickListener() {
             @Override
             public void onItemClick(int positions, View view) {
-                adapter.stopAnim();
                 if (getSelectObjectId().equals(filterList.get(positions).get_id())) {
                     Intent intent = new Intent(context, ObjectLookInfoActivity.class);
                     intent.putExtra("bean", filterList.get(positions));
