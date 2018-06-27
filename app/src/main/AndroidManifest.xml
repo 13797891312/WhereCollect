@@ -26,6 +26,7 @@
         android:theme="@style/AppTheme">
 
         <!-- 设置最大屏幕比例，适配全面屏 -->
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1"/>
