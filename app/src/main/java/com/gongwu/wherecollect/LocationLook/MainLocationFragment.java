@@ -524,6 +524,8 @@ public class MainLocationFragment extends BaseFragment {
                 if (locations.get(j).getCode().equals(mlist.get(i).getCode())) {
                     viewPager.setCurrentItem(i);
                     objectListView.findObject(objectBean);
+
+                    return;
                 }
             }
         }
