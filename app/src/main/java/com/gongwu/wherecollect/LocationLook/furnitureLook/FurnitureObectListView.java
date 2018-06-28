@@ -37,6 +37,7 @@ import com.gongwu.wherecollect.util.AnimationUtil;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ShowCaseUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.BoxEditDialog;
@@ -279,14 +280,28 @@ public class FurnitureObectListView extends RelativeLayout {
             title.setBackgroundResource(R.drawable.icon_text_select);
         }
         filterObjects(boxBean == null ? bean : boxBean);
-        adapter.notifyDataSetChanged();
         if (StringUtils.isEmpty(filterList)) {
             recyclerView.setVisibility(GONE);
             emtpyView.setVisibility(VISIBLE);
         } else {
             recyclerView.setVisibility(VISIBLE);
             emtpyView.setVisibility(GONE);
+            //切换隔层 先判断userid
+            if (!TextUtils.isEmpty(userId)) {
+                //再判断呼吸查看 开关是否开启
+                if (!SaveDate.getInstence(context).getBreathLook(userId)) {
+                    //重新开启呼吸动画
+                    ((FurnitureLookActivity) context).reStartViewAlphaAnim();
+                }
+            }
         }
+        adapter.notifyDataSetChanged();
+    }
+
+    private String userId;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**

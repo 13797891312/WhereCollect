@@ -123,6 +123,8 @@ public class FurnitureLookActivity extends BaseViewActivity {
         if (user == null) return;
         if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {
             mHandler.postDelayed(runnable, animTime);
+            //传入id，当用户切换隔层的时候 好判断是否开启呼吸查看
+            objectListView.setUserId(user.getId());
         }
     }
 
@@ -135,11 +137,27 @@ public class FurnitureLookActivity extends BaseViewActivity {
         }
     };
 
-    private void startViewAlphaAnim() {
+    /**
+     * 用户切换隔层的时候 当该隔层有数据的时候，重新开启呼吸查看
+     */
+    public void reStartViewAlphaAnim() {
+        if (mHandler != null && runnable != null) {
+            mHandler.removeCallbacks(runnable);
+            mHandler.postDelayed(runnable, animTime);
+        }
+    }
+
+    /**
+     * 显示呼吸查看动画
+     */
+    public void startViewAlphaAnim() {
         AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
         alphaAnimation.setFillAfter(false);//动画结束后保持状态
         alphaAnimation.setDuration(1000);//动画持续时间，单位为毫秒
-        objectListView.recyclerView.startAnimation(alphaAnimation);//开始动画
+        //view显示的时候才 开启动画
+        if (objectListView.recyclerView.getVisibility() == View.VISIBLE) {
+            objectListView.recyclerView.startAnimation(alphaAnimation);//开始动画
+        }
         alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -151,7 +169,10 @@ public class FurnitureLookActivity extends BaseViewActivity {
                 //动画结束，刷新数据并开启动画显示出来
                 if (objectListView != null && objectListView.adapter != null) {
                     objectListView.adapter.refreshData();
-                    setViewAnim(objectListView.recyclerView);
+                    //view显示的时候才 开启动画
+                    if (objectListView.recyclerView.getVisibility() == View.VISIBLE) {
+                        setViewAnim(objectListView.recyclerView);
+                    }
                 }
                 if (mHandler != null) {
                     if (!SaveDate.getInstence(context).getBreathLook(user.getId())) {

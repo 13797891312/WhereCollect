@@ -5,9 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,7 +15,6 @@ import com.gongwu.wherecollect.entity.GoodsBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.StringUtils;
-import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.util.List;
 
