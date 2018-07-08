@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook;
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.volley.request.HttpClient;
@@ -10,9 +11,11 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 /**
  * Function:
  * Date: 2018/1/17
@@ -46,6 +49,9 @@ public class GetObjectListUtil {
         }
     }
 
+    private int page = 1;
+    private List<ObjectBean> datas = new ArrayList<>();
+
     /**
      * 网络获取物品总览
      *
@@ -57,7 +63,7 @@ public class GetObjectListUtil {
         map.put("uid", MyApplication.getUser(context).getId());
         map.put("user_id", MyApplication.getUser(context).getId());
         map.put("code", code);
-        map.put("page", "1");
+        map.put("page", page + "");
         PostListenner listenner = new PostListenner(context) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -67,9 +73,29 @@ public class GetObjectListUtil {
                 }
                 List<ObjectBean> list = JsonUtils.listFromJsonWithSubKey(r.getResult().replaceAll("\"channel\"",
                         "\"channels\"").replaceAll("\"color\"", "\"colors\""), ObjectBean.class, "items");
-                SaveDate.getInstence(context).setObjectWithCode(code, r.getResult());
-                MainLocationFragment.objectMap.put(code, list);
-                getObjectListDataListener(list);
+                if (page == 1) {
+                    datas.clear();
+                    datas.addAll(list);
+                    if (list.size() == 50) {
+                        page = page + 1;
+                        getNetObjectData(cache, code);
+                    } else {
+                        SaveDate.getInstence(context).setObjectWithCode(code, JsonUtils.jsonFromObject(datas));
+                        MainLocationFragment.objectMap.put(code, datas);
+                        getObjectListDataListener(datas);
+                    }
+                } else {
+                    datas.addAll(list);
+                    if (list.size() == 50) {
+                        page = page + 1;
+                        getNetObjectData(cache, code);
+                    } else {
+                        SaveDate.getInstence(context).setObjectWithCode(code, JsonUtils.jsonFromObject(datas));
+                        MainLocationFragment.objectMap.put(code, datas);
+                        getObjectListDataListener(datas);
+                    }
+                }
+
             }
         };
         HttpClient.getObjectListWithSpaceCode(context, map, listenner);

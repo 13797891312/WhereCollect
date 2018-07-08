@@ -12,7 +12,7 @@ android {
         config {
             keyAlias 'shounaer'
             keyPassword '123456'
-            storeFile file('C:/Users/zhaojin/Documents/shounaer/key.jks')
+            storeFile file('D:/key.jks')
             storePassword '123456'
         }
     }
@@ -21,8 +21,8 @@ android {
         applicationId "com.gongwu.wherecollect"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 5
-        versionName "3.2.5"
+        versionCode 6
+        versionName "3.2.6"
         buildConfigField("String", "URL", "${API_HOST_RELEASE}")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

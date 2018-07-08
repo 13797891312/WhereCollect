@@ -113,7 +113,8 @@ public class MainActivity extends BaseViewActivity {
             }
         });
         fragments.add(MainFragment1.newInstance());
-        fragments.add(PersonFragment.newInstance());
+        fragments.add(MainFragment2.newInstance());
+//        fragments.add(PersonFragment.newInstance());
         myFragmentLayout = (MyFragmentLayout1) this.findViewById(R.id.myFragmentLayout);
         myFragmentLayout.setScorllToNext(false);
         myFragmentLayout.setScorll(true);
