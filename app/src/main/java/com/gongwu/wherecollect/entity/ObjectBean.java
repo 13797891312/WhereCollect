@@ -276,6 +276,10 @@ public class ObjectBean implements Serializable {
         return TextUtils.isEmpty(object_url) ? "#9076F2" : object_url;
     }
 
+    public String getGood_url() {
+        return object_url;
+    }
+
     public void setObject_url(String object_url) {
         this.object_url = object_url;
     }
