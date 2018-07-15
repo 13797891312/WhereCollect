@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,6 +10,7 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
@@ -29,6 +31,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 public class LoginEmailActivity extends BaseViewActivity implements TextWatcher {
     @Bind(R.id.email_edit)
     EditText emailEdit;
@@ -70,6 +73,12 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
                 Intent intent = new Intent(LoginEmailActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+            }
+
+            @Override
+            protected void otherCode() {
+                super.otherCode();
+                Toast.makeText(context, "账号密码错误", Toast.LENGTH_SHORT).show();
             }
         };
         HttpClient.login(this, map, listenner);

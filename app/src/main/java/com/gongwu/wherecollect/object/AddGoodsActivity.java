@@ -286,7 +286,12 @@ public class AddGoodsActivity extends BaseViewActivity {
     private void initTBData() {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
         ClipData cd2 = cm.getPrimaryClip();
-        if (cd2 == null) return;
+        if (cd2 == null) {
+            ToastUtil.showTopToast(context, "获取商品信息失败");
+            Intent intent = new Intent(context, ImportHelpActivity.class);
+            context.startActivity(intent);
+            return;
+        }
         String str = cd2.getItemAt(0).getText().toString();
         importBuy(str);
     }
