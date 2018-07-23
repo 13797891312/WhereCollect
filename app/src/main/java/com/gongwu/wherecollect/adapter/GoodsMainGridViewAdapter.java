@@ -70,7 +70,6 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         holder.locationTv.setText(getLoction(bean));
         holder.image.refreshDrawableState();
         if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
-            LogUtil.e("dinglai:" + bean.getObject_url());
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
         } else if (!TextUtils.isEmpty(bean.getObject_url())) {

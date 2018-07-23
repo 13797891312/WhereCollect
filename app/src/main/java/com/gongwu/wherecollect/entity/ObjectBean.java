@@ -276,8 +276,14 @@ public class ObjectBean implements Serializable {
         if (TextUtils.isEmpty(object_url)) {
             return null;
         }
-        String colorbase = "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$";
-        return object_url.matches(colorbase) ? object_url : "#E66868";
+        if (object_url.contains("http")) {
+            return object_url;
+        }
+        if (object_url.contains("#")) {
+            String colorbase = "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$";
+            return object_url.matches(colorbase) ? object_url : "#E66868";
+        }
+        return object_url;
     }
 
     public String getObjectUrl() {
