@@ -243,11 +243,13 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
         } else if (!isSet) {
             //没有文字的时候 设置默认图片 并初始化数据
-            setCameraIvParams(30);
-            head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
-            head.setBackground(null);
-            name.setText("");
-            tempBean.setObject_url(null);
+            if (!TextUtils.isEmpty(tempBean.getObject_url()) && tempBean.getObject_url().contains("#")) {
+                setCameraIvParams(30);
+                head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
+                head.setBackground(null);
+                name.setText("");
+                tempBean.setObject_url(null);
+            }
         }
 
     }
