@@ -2,6 +2,8 @@ package com.gongwu.wherecollect.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,6 +14,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 
 import java.util.Collections;
@@ -66,12 +69,27 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         holder.nameTv.setText(bean.getName());
         holder.locationTv.setText(getLoction(bean));
         holder.image.refreshDrawableState();
-        if (bean.getObject_url().contains("http")) {
+        String colorbase = "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$";
+        if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
+            LogUtil.e("dinglai:" + bean.getObject_url());
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
-        } else {
+        } else if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().matches(colorbase)) {
+            //判断颜色格式是不是对的
+            //颜色格式正确
             holder.image.setImageDrawable(null);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+            holder.imgTv.setVisibility(View.VISIBLE);
+            holder.imgTv.setText(bean.getName());
+        } else if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().matches(colorbase)) {
+            //颜色格式错误
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_3));
+            holder.imgTv.setVisibility(View.VISIBLE);
+            holder.imgTv.setText(bean.getName());
+        } else {
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_1));
             holder.imgTv.setVisibility(View.VISIBLE);
             holder.imgTv.setText(bean.getName());
         }

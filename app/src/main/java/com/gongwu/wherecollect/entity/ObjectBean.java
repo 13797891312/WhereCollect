@@ -273,7 +273,7 @@ public class ObjectBean implements Serializable {
     }
 
     public String getObject_url() {
-        return TextUtils.isEmpty(object_url) ? "#9076F2" : object_url;
+        return object_url;
     }
 
     public String getObjectUrl() {
