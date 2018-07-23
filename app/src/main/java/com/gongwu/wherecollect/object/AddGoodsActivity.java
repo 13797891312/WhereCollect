@@ -235,7 +235,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                     cameraIv.setHead(randomcolor + "", goodsNameEv.getText().toString().trim(), "");
                     tempBean.setObject_url(StringUtils.getResCode(randomcolor));
                 }
-            }, 1000);
+            }, 200);
         } else if (isSet && !TextUtils.isEmpty(tempBean.getObject_url())) {
             //物品名字变化的时候 改变imageview的文字显示
             if (tempBean.getObject_url().contains("#")) {
@@ -245,8 +245,9 @@ public class AddGoodsActivity extends BaseViewActivity {
             //没有文字的时候 设置默认图片 并初始化数据
             setCameraIvParams(30);
             head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
+            head.setBackground(null);
             name.setText("");
-            tempBean.setObject_url("");
+            tempBean.setObject_url(null);
         }
 
     }

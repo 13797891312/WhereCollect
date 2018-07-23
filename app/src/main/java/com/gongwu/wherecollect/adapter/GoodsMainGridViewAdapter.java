@@ -69,22 +69,13 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         holder.nameTv.setText(bean.getName());
         holder.locationTv.setText(getLoction(bean));
         holder.image.refreshDrawableState();
-        String colorbase = "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$";
         if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
             LogUtil.e("dinglai:" + bean.getObject_url());
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
-        } else if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().matches(colorbase)) {
-            //判断颜色格式是不是对的
-            //颜色格式正确
+        } else if (!TextUtils.isEmpty(bean.getObject_url())) {
             holder.image.setImageDrawable(null);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
-            holder.imgTv.setVisibility(View.VISIBLE);
-            holder.imgTv.setText(bean.getName());
-        } else if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().matches(colorbase)) {
-            //颜色格式错误
-            holder.image.setImageDrawable(null);
-            holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_3));
             holder.imgTv.setVisibility(View.VISIBLE);
             holder.imgTv.setText(bean.getName());
         } else {
