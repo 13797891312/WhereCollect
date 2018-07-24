@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 //def API_HOST_RELEASE = "\"http://123.57.52.110:9201/\""
-//def API_HOST_RELEASE = "\"http://www.shouner.com:9202/\""
-def API_HOST_RELEASE = "\"https://www.shouner.com/\""
+def API_HOST_RELEASE = "\"http://www.shouner.com:9202/\""
+//def API_HOST_RELEASE = "\"https://www.shouner.com/\""
 
 android {
     compileSdkVersion 25

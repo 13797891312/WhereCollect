@@ -48,6 +48,8 @@ import com.gongwu.wherecollect.view.EditTextDialog;
 import com.zhaojin.myviews.Loading;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -123,7 +125,8 @@ public class MainFragment2 extends BaseFragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_fragment2, container, false);
         ButterKnife.bind(this, view);
-        refrashUi();
+        EventBus.getDefault().register(this);
+        refreshUi();
         setRedStatus();
         initEvent();
         versionTv.setText(String.format("收哪儿v%s（%d）", StringUtils.getCurrentVersionName(getActivity()), StringUtils
@@ -146,7 +149,7 @@ public class MainFragment2 extends BaseFragment {
     /**
      * 刷新UI
      */
-    public void refrashUi() {
+    public void refreshUi() {
         user = MyApplication.getUser(getActivity());
         if (user == null)
             return;
@@ -162,6 +165,7 @@ public class MainFragment2 extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick({R.id.head_layout, R.id.nick_layout, R.id.sex_layout, R.id.birth_layout, R.id.tv_detail, R.id
@@ -381,6 +385,14 @@ public class MainFragment2 extends BaseFragment {
                 .getAttributes();
         lp.alpha = bgAlpha;
         getActivity().getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 用户资料改变
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.ChangeUser msg) {
+        refreshUi();
     }
 
     /**
