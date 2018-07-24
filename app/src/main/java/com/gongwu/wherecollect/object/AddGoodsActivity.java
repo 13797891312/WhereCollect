@@ -235,7 +235,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                     cameraIv.setHead(randomcolor + "", goodsNameEv.getText().toString().trim(), "");
                     tempBean.setObject_url(StringUtils.getResCode(randomcolor));
                 }
-            }, 1000);
+            }, 200);
         } else if (isSet && !TextUtils.isEmpty(tempBean.getObject_url())) {
             //物品名字变化的时候 改变imageview的文字显示
             if (tempBean.getObject_url().contains("#")) {
@@ -243,10 +243,13 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
         } else if (!isSet) {
             //没有文字的时候 设置默认图片 并初始化数据
-            setCameraIvParams(30);
-            head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
-            name.setText("");
-            tempBean.setObject_url("");
+            if (!TextUtils.isEmpty(tempBean.getObject_url()) && tempBean.getObject_url().contains("#")) {
+                setCameraIvParams(30);
+                head.setImageDrawable(getResources().getDrawable(R.drawable.camera));
+                head.setBackground(null);
+                name.setText("");
+                tempBean.setObject_url(null);
+            }
         }
 
     }
@@ -286,7 +289,12 @@ public class AddGoodsActivity extends BaseViewActivity {
     private void initTBData() {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
         ClipData cd2 = cm.getPrimaryClip();
-        if (cd2 == null) return;
+        if (cd2 == null) {
+            ToastUtil.showTopToast(context, "获取商品信息失败");
+            Intent intent = new Intent(context, ImportHelpActivity.class);
+            context.startActivity(intent);
+            return;
+        }
         String str = cd2.getItemAt(0).getText().toString();
         importBuy(str);
     }

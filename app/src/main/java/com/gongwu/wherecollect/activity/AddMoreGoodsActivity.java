@@ -176,7 +176,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         for (int i = 0; i < mDatas.size(); i++) {
             ObjectBean bean = mDatas.get(i);
             name.add(bean.getName());
-            files.add(TextUtils.isEmpty(bean.getObject_url()) ? StringUtils.getResCode(i) + "" : bean.getObject_url());
+            files.add(bean.getObject_url());
         }
         addObjects(name, files);
     }
@@ -229,11 +229,12 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
      */
     private void startDialog() {
         //添加
-        mDialog = new AddGoodsDialog(context) {
+        mDialog = new AddGoodsDialog(context,mDatas.size()) {
             @Override
             public void result(ObjectBean bean) {
                 //上传
-                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4")) {
+                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4")
+                        && !bean.getObject_url().contains("#")) {
                     upLoadImg(bean);
                     return;
                 }
