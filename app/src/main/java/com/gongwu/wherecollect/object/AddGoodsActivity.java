@@ -145,17 +145,17 @@ public class AddGoodsActivity extends BaseViewActivity {
                 goodsNameEv.setText(tempBean.getName());
             }
             //设置图片
-            if (!TextUtils.isEmpty(tempBean.getGood_url())) {
-                if (tempBean.getGood_url().contains("http")) {
+            if (!TextUtils.isEmpty(tempBean.getObject_url())) {
+                if (tempBean.getObject_url().contains("http")) {
                     setCameraIvParams(100);
-                    cameraIv.setHead(IMG_COLOR_CODE, "", tempBean.getGood_url());
+                    cameraIv.setHead(IMG_COLOR_CODE, "", tempBean.getObject_url());
                     downloadImage();
-                } else if (tempBean.getGood_url().contains("#")) {
+                } else if (tempBean.getObject_url().contains("#")) {
                     setCameraIvParams(100);
                     cameraIv.name.setVisibility(View.VISIBLE);
                     cameraIv.name.setText(tempBean.getName());
                     cameraIv.head.setImageDrawable(null);
-                    cameraIv.head.setBackgroundColor(Color.parseColor(tempBean.getGood_url()));
+                    cameraIv.head.setBackgroundColor(Color.parseColor(tempBean.getObject_url()));
                 }
             }
         } else {
@@ -169,7 +169,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             @Override
             public void run() {
                 try {
-                    File file = Glide.with(context).load(tempBean.getGood_url()).downloadOnly(500, 500).get();
+                    File file = Glide.with(context).load(tempBean.getObject_url()).downloadOnly(500, 500).get();
                     String newPath = MyApplication.CACHEPATH + System.currentTimeMillis() + ".jpg";
                     FileUtil.copyFile(file, newPath);
                     imgOldFile = new File(newPath);
@@ -223,7 +223,7 @@ public class AddGoodsActivity extends BaseViewActivity {
      * @param isSet
      */
     private void setCameraIv(boolean isSet) {
-        if (isSet && TextUtils.isEmpty(tempBean.getGood_url())) {
+        if (isSet && TextUtils.isEmpty(tempBean.getObject_url())) {
             //没添加图片，文字变化 给一个随机颜色显示出来
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -236,9 +236,9 @@ public class AddGoodsActivity extends BaseViewActivity {
                     tempBean.setObject_url(StringUtils.getResCode(randomcolor));
                 }
             }, 1000);
-        } else if (isSet && !TextUtils.isEmpty(tempBean.getGood_url())) {
+        } else if (isSet && !TextUtils.isEmpty(tempBean.getObject_url())) {
             //物品名字变化的时候 改变imageview的文字显示
-            if (tempBean.getGood_url().contains("#")) {
+            if (tempBean.getObject_url().contains("#")) {
                 cameraIv.name.setText(goodsNameEv.getText().toString().trim());
             }
         } else if (!isSet) {
@@ -324,7 +324,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         //编辑物品
         if (editGoodsType == 1) {
             //判断图片是否更改，没更改的情况下 图片地址应该为网络路径
-            if (!tempBean.getGood_url().contains("http") && !tempBean.getGood_url().contains("#")) {
+            if (!tempBean.getObject_url().contains("http") && !tempBean.getObject_url().contains("#")) {
                 //图片有更改，先上传
                 upLoadImg(tempBean.getObjectFiles());
             } else {
@@ -334,10 +334,10 @@ public class AddGoodsActivity extends BaseViewActivity {
             return;
         }
         //如果图片没有地址，则传一个颜色服务牌
-        if (!TextUtils.isEmpty(tempBean.getGood_url()) && tempBean.getGood_url().contains("#")) {
+        if (!TextUtils.isEmpty(tempBean.getObject_url()) && tempBean.getObject_url().contains("#")) {
             //调用接口
             addObjects();
-        } else if (tempBean.getGood_url().contains("http")) {
+        } else if (tempBean.getObject_url().contains("http")) {
             addObjects();
         } else {
             //图片有地址 直接上传
@@ -387,7 +387,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         names.add(goodsNameEv.getText().toString());
         map.put("name", JsonUtils.jsonFromObject(names));
         List<String> files = new ArrayList<>();
-        files.add(tempBean.getGood_url());
+        files.add(tempBean.getObject_url());
         map.put("image_urls", JsonUtils.jsonFromObject(files));
         map.put("count", tempBean.getCount() + "");
         map.put("buy_date", tempBean.getBuy_date());
@@ -424,7 +424,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("detail", tempBean.getDetail());
-        map.put("image_url", TextUtils.isEmpty(tempBean.getGood_url()) ? "#B5B5B5" : tempBean.getGood_url());//B5B5B5
+        map.put("image_url", TextUtils.isEmpty(tempBean.getObject_url()) ? "#B5B5B5" : tempBean.getObject_url());//B5B5B5
         map.put("count", tempBean.getCount() + "");
         map.put("price_max", tempBean.getPrice() + "");
         map.put("price_min", tempBean.getPrice() + "");
@@ -485,7 +485,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                 if (objectBean.get_id().equals(code)) {
                     objectBean.setExpire_date(newBean.getExpire_date());
                     objectBean.setBuy_date(newBean.getBuy_date());
-                    objectBean.setObject_url(newBean.getGood_url());
+                    objectBean.setObject_url(newBean.getObject_url());
                     objectBean.setStar(newBean.getStar());
                     objectBean.setCount(newBean.getCount());
                     objectBean.setName(newBean.getName());
@@ -509,7 +509,7 @@ public class AddGoodsActivity extends BaseViewActivity {
      * 图片选择dialog
      */
     private void showSelectDialog() {
-        if (imgOldFile != null && TextUtils.isEmpty(tempBean.getGood_url())) {
+        if (imgOldFile != null && TextUtils.isEmpty(tempBean.getObject_url())) {
             imgOldFile = null;
         }
         selectImgDialog = new SelectImgDialog(this, null, imgMax, imgOldFile) {

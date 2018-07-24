@@ -103,6 +103,10 @@ public class SelectFenleiActivity extends BaseViewActivity implements TextWatche
      */
     private void commit() {
         if (TextUtils.isEmpty(seachEdit.getText())) {//如果是空的直接结束
+            bean.setCategories(null);
+            Intent intent = new Intent();
+            intent.putExtra("bean", bean);
+            setResult(100, intent);
             finish();
             return;
         }

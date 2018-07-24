@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.furnitureEdit;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -41,6 +42,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function: 物品编辑
  * Date: 2018-01-07
@@ -378,8 +380,8 @@ public class EditTemplateActivity extends BaseViewActivity implements View.OnCli
                 ObjectBean temp = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
                 final EventBusMsg.EditLocationMsg msg = new EventBusMsg.EditLocationMsg(spacePosition);
                 msg.hasObjectChanged = true;//TODO后台处理可能会超过10秒，怎么处理数据刷新？
-                msg.hasFurnitureChanged=false;
-                msg.changeBean=temp;
+                msg.hasFurnitureChanged = false;
+                msg.changeBean = temp;
                 EventBus.getDefault().post(msg);
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                 Intent intent = new Intent();

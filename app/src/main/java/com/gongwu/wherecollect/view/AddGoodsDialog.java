@@ -9,16 +9,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,19 +37,25 @@ public class AddGoodsDialog extends Dialog {
     ImageView addGoodsIv;
     @Bind(R.id.goods_name_et)
     EditText goodsNameEdit;
+    @Bind(R.id.submit_tv)
+    TextView submit_tv;
 
     private Context context;
     private ObjectBean bean;
     SelectImgDialog selectImgDialog;
     private final int imgMax = 1;
+    private final int COCLOR_COUNT = 10;
+    private int goodsCount;
+    private int goodsMaxCount = 10;
     /**
      * 图片原文件 dialog dismiss的时候就会被初始化
      */
     private File imgOldFile;
 
-    public AddGoodsDialog(Context context) {
+    public AddGoodsDialog(Context context, int goodsCount) {
         super(context);
         this.context = context;
+        this.goodsCount = goodsCount;
     }
 
     /**
@@ -71,13 +80,16 @@ public class AddGoodsDialog extends Dialog {
         if (!TextUtils.isEmpty(bean.getObject_url())) {
             if (bean.getObject_url().contains("http")) {
                 ImageLoader.load(context, addGoodsIv, bean.getObject_url());
+            } else if (bean.getObject_url().contains("#")) {
+                //给了默认色
+                addGoodsIv.setImageDrawable(context.getResources().getDrawable(R.drawable.select_pic));
             } else {
                 File file = new File(bean.getObject_url());
                 ImageLoader.loadFromFile(context, file, addGoodsIv);
                 imgOldFile = file;
             }
         } else {
-            addGoodsIv.setImageDrawable(context.getResources().getDrawable(R.drawable.select_pic));
+
         }
     }
 
@@ -88,6 +100,11 @@ public class AddGoodsDialog extends Dialog {
         this.setCancelable(false);
         this.setCanceledOnTouchOutside(false);
         ButterKnife.bind(this);
+        if (goodsCount >= goodsMaxCount) {
+            submit_tv.setTextColor(context.getResources().getColor(R.color.black_other_one));
+        } else {
+            submit_tv.setTextColor(context.getResources().getColor(R.color.maincolor));
+        }
     }
 
     @OnClick({R.id.add_goods_iv, R.id.code_layout, R.id.cancel_tv, R.id.submit_tv})
@@ -107,13 +124,23 @@ public class AddGoodsDialog extends Dialog {
                 dismiss();
                 break;
             case R.id.submit_tv:
+                if (goodsCount >= goodsMaxCount) {
+                    ToastUtil.show(context, "一次最多添加10个物品", Toast.LENGTH_SHORT);
+                    return;
+                }
                 //确定
                 if (!TextUtils.isEmpty(goodsNameEdit.getText().toString().trim())) {
                     bean.setName(goodsNameEdit.getText().toString().trim());
                 }
-                if (TextUtils.isEmpty(bean.getObject_url()) && TextUtils.isEmpty(goodsNameEdit.getText().toString().trim())) {
+                if (TextUtils.isEmpty(bean.getObjectUrl()) && TextUtils.isEmpty(goodsNameEdit.getText().toString().trim())) {
                     ToastUtil.show(context, "图片或名称至少选填一项", Toast.LENGTH_SHORT);
                     return;
+                }
+                if (TextUtils.isEmpty(bean.getObjectUrl())) {
+                    // 随机颜色
+                    Random random = new Random();
+                    int randomcolor = random.nextInt(COCLOR_COUNT);
+                    bean.setObject_url(StringUtils.getResCode(randomcolor));
                 }
                 result(bean);
                 //初始化imgOldFile

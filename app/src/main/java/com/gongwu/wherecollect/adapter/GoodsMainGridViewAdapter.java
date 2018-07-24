@@ -2,6 +2,8 @@ package com.gongwu.wherecollect.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,6 +14,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 
 import java.util.Collections;
@@ -66,12 +69,17 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         holder.nameTv.setText(bean.getName());
         holder.locationTv.setText(getLoction(bean));
         holder.image.refreshDrawableState();
-        if (bean.getObject_url().contains("http")) {
+        if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
-        } else {
+        } else if (!TextUtils.isEmpty(bean.getObject_url())) {
             holder.image.setImageDrawable(null);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+            holder.imgTv.setVisibility(View.VISIBLE);
+            holder.imgTv.setText(bean.getName());
+        } else {
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_1));
             holder.imgTv.setVisibility(View.VISIBLE);
             holder.imgTv.setText(bean.getName());
         }

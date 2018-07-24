@@ -71,6 +71,7 @@ public class PostListenner {
 //                        ErrorCodeUtil.toastError(context, Integer.valueOf(rr.getCode()), rr
 //                                .getMsg());
                         codeOther(rr);
+                        otherCode();
                     }
                 } catch (Exception e) {
                     codeOther(null);
@@ -98,6 +99,14 @@ public class PostListenner {
     }
 
     protected void codeOther(ResponseResult r) {
+        try {
+            onFinish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void otherCode() {
         try {
             onFinish();
         } catch (Exception e) {

@@ -63,7 +63,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
 
     private final int BOOK_CODE = 0x132;
     /**
-     * 判断AddMoreGoodsActivity是否显示
+     *判断AddMoreGoodsActivity是否显示
      * 显示的时候,AddGoodsActivity不接收eventBus发送的淘宝商品信息
      */
     public static boolean START_MORE_ACTIVITY = false;
@@ -233,7 +233,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             @Override
             public void result(ObjectBean bean) {
                 //上传
-                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4") && !bean.getObject_url().contains("#")) {
+                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4")) {
                     upLoadImg(bean);
                     return;
                 }

@@ -95,6 +95,12 @@ public class RegisteActivity extends BaseViewActivity implements TextWatcher {
                 startActivity(intent);
                 finish();
             }
+
+            @Override
+            protected void otherCode() {
+                super.otherCode();
+                Toast.makeText(context, "账号已注册", Toast.LENGTH_SHORT).show();
+            }
         };
         HttpClient.register(this, map, listenner);
     }

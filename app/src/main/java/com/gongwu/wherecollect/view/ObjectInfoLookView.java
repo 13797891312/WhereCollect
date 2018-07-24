@@ -156,6 +156,7 @@ public class ObjectInfoLookView extends LinearLayout {
             jiageLayout.setVisibility(View.VISIBLE);
             showView();
         } else {
+            jiageEdit.setText("");
             jiageLayout.setVisibility(View.GONE);
         }
     }
@@ -190,13 +191,13 @@ public class ObjectInfoLookView extends LinearLayout {
      * 设置分类
      */
     private void setFenlei() {
+        fenleiFlow.removeAllViews();
         if (bean.getCategories() != null && bean.getCategories().size() > 0) {
             fenleiLayout.setVisibility(View.VISIBLE);
         } else {
             fenleiLayout.setVisibility(View.GONE);
             return;
         }
-        fenleiFlow.removeAllViews();
         Collections.sort(bean.getCategories(), new Comparator<BaseBean>() {
             @Override
             public int compare(BaseBean lhs, BaseBean rhs) {

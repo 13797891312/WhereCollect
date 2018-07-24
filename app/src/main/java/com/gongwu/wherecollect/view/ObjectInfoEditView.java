@@ -129,6 +129,13 @@ public class ObjectInfoEditView extends LinearLayout {
                     if (changeListener != null) {
                         changeListener.change();
                     }
+                } else {
+                    bean.setPrice_max(0);
+                    bean.setPrice_min(0);
+                    bean.setPrice(0 + "");
+                    if (changeListener != null) {
+                        changeListener.change();
+                    }
                 }
             }
         });
@@ -162,6 +169,8 @@ public class ObjectInfoEditView extends LinearLayout {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(goodsCountEdit.getText().toString())) {
                     bean.setCount(Integer.parseInt(goodsCountEdit.getText().toString()));
+                } else {
+                    bean.setCount(0);
                 }
                 if (changeListener != null) {
                     changeListener.change();
@@ -234,10 +243,10 @@ public class ObjectInfoEditView extends LinearLayout {
      * 设置分类
      */
     private void setFenlei() {
+        fenleiFlow.removeAllViews();
         if (bean.getCategories() == null) {
             return;
         }
-        fenleiFlow.removeAllViews();
         Collections.sort(bean.getCategories(), new Comparator<BaseBean>() {
             @Override
             public int compare(BaseBean lhs, BaseBean rhs) {
