@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.zhaojin.myviews.Loading;
@@ -24,6 +26,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function: 忘记密码
  * Date: 2016-08-20
@@ -97,6 +100,7 @@ public class ForgetPWDActivity extends BaseViewActivity implements TextWatcher {
      */
     private void getCode() {
         Map<String, String> map = new HashMap<>();
+        map.put("uid", MyApplication.getUser(this).getId());
         PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在发送")) {
             @Override
             protected void code2000(final ResponseResult r) {

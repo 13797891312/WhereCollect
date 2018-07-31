@@ -118,7 +118,9 @@ public class FurnitureObectListView extends RelativeLayout {
 
     public void init(ObjectBean furnitureBean, List<ObjectBean> list) {
         mList.clear();
-        mList.addAll(list);
+        if (list != null && list.size() > 0) {
+            mList.addAll(list);
+        }
         this.furnitureBean = furnitureBean;
         initInduction();
         recyclerView.setHasFixedSize(true);
