@@ -1,8 +1,10 @@
 package com.gongwu.wherecollect.LocationEdit;
+
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -38,6 +40,7 @@ import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Function: 空间编辑列表
  * Date: 2016-08-20
@@ -169,8 +172,14 @@ public class SpaceEditActivity extends BaseViewActivity {
                                         super.code2000(r);
                                         MainLocationFragment.mlist.remove(position);
                                         myAdapter.notifyItemRemoved(position);
-                                        EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
-                                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                                        //后台数据可能没改过来，需要缓一下 物品位置才清空
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
+                                                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                                            }
+                                        }, 1500);
                                     }
                                 };
                                 HttpClient.deleteLocation(SpaceEditActivity.this, map, listenner);
@@ -215,8 +224,8 @@ public class SpaceEditActivity extends BaseViewActivity {
             sb.append(MainLocationFragment.mlist.get(i).getCode());
             sb.append(",");
         }
-        if(sb.length()!=0){
-            sb.delete(sb.length()-1,sb.length());
+        if (sb.length() != 0) {
+            sb.delete(sb.length() - 1, sb.length());
         }
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
