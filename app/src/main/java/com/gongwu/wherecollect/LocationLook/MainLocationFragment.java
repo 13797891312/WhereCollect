@@ -606,17 +606,19 @@ public class MainLocationFragment extends BaseFragment {
                 .withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem4);
         MainFragment1 fragment1 = (MainFragment1) ((MainActivity) getActivity()).fragments.get(0);
-        TextView view = (TextView) fragment1.myFragmentLayout.findViewById(R.id.text_edit);
-        MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(getActivity()))
-                .setTarget(view).setContentText("编辑\n进入后，可创建和排序空间，添\n加更多家具，调整家具图大小和\n位置，以及进行家具细节编辑")
-                .setTargetTouchable(false)
-                .setMaskColour(getResources().getColor(R.color.black_70))
-                .setDismissOnTouch(true)
-                .setShapePadding(0)
-                .setDelay(200)
-                .setDismissOnTargetTouch(false)
-                .withRectangleShape(false).build();
-        sequence.addSequenceItem(sequenceItem5);
+        if (fragment1.myFragmentLayout != null) {
+            TextView view = (TextView) fragment1.myFragmentLayout.findViewById(R.id.text_edit);
+            MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(getActivity()))
+                    .setTarget(view).setContentText("编辑\n进入后，可创建和排序空间，添\n加更多家具，调整家具图大小和\n位置，以及进行家具细节编辑")
+                    .setTargetTouchable(false)
+                    .setMaskColour(getResources().getColor(R.color.black_70))
+                    .setDismissOnTouch(true)
+                    .setShapePadding(0)
+                    .setDelay(200)
+                    .setDismissOnTargetTouch(false)
+                    .withRectangleShape(false).build();
+            sequence.addSequenceItem(sequenceItem5);
+        }
         sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
             @Override
             public void onShow(MaterialShowcaseView itemView, int position) {

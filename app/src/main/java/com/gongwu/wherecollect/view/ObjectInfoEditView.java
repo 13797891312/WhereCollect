@@ -123,15 +123,15 @@ public class ObjectInfoEditView extends LinearLayout {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(jiageEdit.getText())) {
-                    bean.setPrice_max(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
-                    bean.setPrice_min(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
+//                    bean.setPrice_max(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
+//                    bean.setPrice_min(Integer.parseInt(jiageEdit.getText().toString().replaceAll("元", "")));
                     bean.setPrice(jiageEdit.getText().toString());
                     if (changeListener != null) {
                         changeListener.change();
                     }
                 } else {
-                    bean.setPrice_max(0);
-                    bean.setPrice_min(0);
+//                    bean.setPrice_max(0);
+//                    bean.setPrice_min(0);
                     bean.setPrice(0 + "");
                     if (changeListener != null) {
                         changeListener.change();
@@ -197,10 +197,10 @@ public class ObjectInfoEditView extends LinearLayout {
 
     private void setjjiage() {
         //后台赋值是乱的 列表跟 家具里面的物品 价格参数不一样
-        if (bean.getPrice_max() != 0) {
-            jiageEdit.setText(bean.getPrice_max() + "");
-        } else if (bean.getPrice().equals("0")) {
+        if (!bean.getPrice().equals("0")) {
             jiageEdit.setText(bean.getPrice());
+        } else {
+            jiageEdit.setText("");
         }
     }
 
