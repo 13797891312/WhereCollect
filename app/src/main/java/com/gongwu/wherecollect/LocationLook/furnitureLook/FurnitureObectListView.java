@@ -547,11 +547,18 @@ public class FurnitureObectListView extends RelativeLayout {
                                     @Override
                                     protected void code2000(final ResponseResult r) {
                                         super.code2000(r);
-                                        //刷新物品界面 物品数据
-                                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
-                                        //删除位置界面 物品总览的缓存
-                                        EventBus.getDefault().post(new EventBusMsg.ImportObject(((FurnitureLookActivity) context)
-                                                .spacePosition));
+                                        //后台数据可能没改过来，需要缓一下 物品位置才清空
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //刷新物品界面 物品数据
+                                                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                                                //删除位置界面 物品总览的缓存
+                                                EventBus.getDefault().post(new EventBusMsg.ImportObject(((FurnitureLookActivity) context)
+                                                        .spacePosition));
+                                            }
+                                        }, 1500);
+
                                     }
                                 };
                                 HttpClient.deleteLocation(context, map, listenner);

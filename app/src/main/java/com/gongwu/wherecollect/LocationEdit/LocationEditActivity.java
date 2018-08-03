@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.volley.request.HttpClient;
@@ -351,8 +352,15 @@ public class LocationEditActivity extends BaseViewActivity {
                                                 .getCurrentItem());
                                         msg.hasObjectChanged = true;
                                         EventBus.getDefault().post(msg);
-                                        //刷新物品界面 物品数据
-                                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                                        //后台数据可能没改过来，需要缓一下 物品位置才清空
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //刷新物品界面 物品数据
+                                                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                                            }
+                                        }, 1500);
+
                                     }
                                 };
                                 HttpClient.deleteLocation(context, map, listenner);
