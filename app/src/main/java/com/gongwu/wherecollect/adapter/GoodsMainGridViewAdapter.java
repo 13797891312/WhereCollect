@@ -7,6 +7,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.gongwu.wherecollect.util.StringUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -66,19 +68,21 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
             holder = (CustomViewHolder) view.getTag();
         }
         ObjectBean bean = mlist.get(i);
-        holder.nameTv.setText(bean.getName());
-        holder.locationTv.setText(getLoction(bean));
         holder.image.refreshDrawableState();
         if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundResource(0);
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
         } else if (!TextUtils.isEmpty(bean.getObject_url())) {
             holder.image.setImageDrawable(null);
+            holder.image.setBackgroundResource(0);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
             holder.imgTv.setVisibility(View.VISIBLE);
             holder.imgTv.setText(bean.getName());
         } else {
             holder.image.setImageDrawable(null);
+            holder.image.setBackgroundResource(0);
             holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_1));
             holder.imgTv.setVisibility(View.VISIBLE);
             holder.imgTv.setText(bean.getName());
@@ -88,6 +92,8 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         } else {
             holder.footer.setVisibility(View.GONE);
         }
+        holder.nameTv.setText(bean.getName());
+        holder.locationTv.setText(getLoction(bean));
         return view;
     }
 

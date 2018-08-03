@@ -220,6 +220,8 @@ public class FurnitureLookActivity extends BaseViewActivity {
             structView.notifyData(furnitureObject.getLayers(), furnitureObject.getRatio());
             refrushListView(null);
             objectListView.getNetDate("");
+        } else if (requestCode == FurnitureObectListView.REFRESH_CODE && resultCode == RESULT_OK) {
+            objectListView.getNetDate("" + FurnitureObectListView.REFRESH_CODE);
         }
     }
 

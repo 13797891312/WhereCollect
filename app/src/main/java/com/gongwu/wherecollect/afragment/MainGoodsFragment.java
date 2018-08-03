@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.afragment;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,6 +39,7 @@ import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 public class MainGoodsFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     View view;
     @Bind(R.id.swipe_target)
@@ -149,6 +151,8 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                     }
                 }
                 mList.addAll(temp);
+                goodsGridView.setAdapter(null);
+                goodsGridView.setAdapter(gridViewAdapter);
                 gridViewAdapter.notifyDataSetChanged();
                 goodsGridView.setEmptyView(empty);
             }

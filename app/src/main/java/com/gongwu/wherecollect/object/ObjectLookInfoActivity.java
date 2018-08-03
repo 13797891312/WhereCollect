@@ -84,6 +84,7 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
 //    PullToScrollView activityGoodsAdd;
 
     private final String IMG_COLOR_CODE = 0 + "";//默认图片颜色的值
+    private boolean isSetResult = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,15 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         setContentView(R.layout.activity_goods_lookinfo);
         ButterKnife.bind(this);
         titleLayout.setTitle("查看物品");
-        titleLayout.setBack(true, null);
+        titleLayout.setBack(true, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isSetResult) {
+                    setResult(RESULT_OK);
+                }
+                finish();
+            }
+        });
         bean = (ObjectBean) getIntent().getSerializableExtra("bean");
         titleLayout.textBtn.setVisibility(View.VISIBLE);
         titleLayout.textBtn.setText("编辑");
@@ -262,8 +271,17 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
             bean = (ObjectBean) data.getSerializableExtra("bean");
+            isSetResult = true;
             initValues();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isSetResult) {
+            setResult(RESULT_OK);
+        }
+        super.onBackPressed();
     }
 
     @Override

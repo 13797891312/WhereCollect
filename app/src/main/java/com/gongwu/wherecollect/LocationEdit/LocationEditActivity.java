@@ -351,6 +351,8 @@ public class LocationEditActivity extends BaseViewActivity {
                                                 .getCurrentItem());
                                         msg.hasObjectChanged = true;
                                         EventBus.getDefault().post(msg);
+                                        //刷新物品界面 物品数据
+                                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                                     }
                                 };
                                 HttpClient.deleteLocation(context, map, listenner);

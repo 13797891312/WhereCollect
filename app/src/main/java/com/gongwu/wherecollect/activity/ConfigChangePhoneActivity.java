@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function: 更换手机号界面
  * Date: 2016-08-20
@@ -94,6 +96,7 @@ public class ConfigChangePhoneActivity extends BaseViewActivity {
      */
     private void getCode() {
         Map<String, String> map = new HashMap<>();
+        map.put("uid", MyApplication.getUser(this).getId());
         PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在发送")) {
             @Override
             protected void code2000(final ResponseResult r) {
