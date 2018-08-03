@@ -37,9 +37,10 @@ public class GetObjectListUtil {
         List<ObjectBean> list = MainLocationFragment.objectMap.get(code);
         if (list == null) {
             final String cache = SaveDate.getInstence(context).getObjectWithCode(code);
-            if (!TextUtils.isEmpty(cache)) {
-                list = JsonUtils.listFromJsonWithSubKey(cache.replaceAll("\"channel\"",
-                        "\"channels\"").replaceAll("\"color\"", "\"colors\""), ObjectBean.class, "items");
+            if (!TextUtils.isEmpty(cache)&&!cache.equals("[]")&&cache.contains("items")) {
+                String json = cache.replaceAll("\"channel\"",
+                        "\"channels\"").replaceAll("\"color\"", "\"colors\"");
+                list = JsonUtils.listFromJsonWithSubKey(json, ObjectBean.class, "items");
                 MainLocationFragment.objectMap.put(code, list);
                 getObjectListDataListener(list);
             }
