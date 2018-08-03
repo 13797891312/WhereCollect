@@ -65,7 +65,6 @@ import butterknife.OnClick;
  * @since JDK 1.7
  */
 public class FurnitureObectListView extends RelativeLayout {
-    public static final int REFRESH_CODE = 0x879;
 
     public ObjectListAdapter adapter;
     List<ObjectBean> mList = new ArrayList<>();//物品
@@ -149,7 +148,7 @@ public class FurnitureObectListView extends RelativeLayout {
                 if (getSelectObjectId().equals(filterList.get(positions).get_id())) {
                     Intent intent = new Intent(context, ObjectLookInfoActivity.class);
                     intent.putExtra("bean", filterList.get(positions));
-                    ((Activity) context).startActivityForResult(intent, REFRESH_CODE);
+                    context.startActivity(intent);
                     return;
                 }
                 ((FurnitureLookActivity) context).selectObject = filterList.get(positions);
@@ -729,13 +728,8 @@ public class FurnitureObectListView extends RelativeLayout {
                 mFilterBoxList.clear();
                 List<ObjectBean> tempBoxObjects = JsonUtils.listFromJsonWithSubKey(r.getResult(), ObjectBean.class,
                         "locations");
-                List<ObjectBean> objects = JsonUtils.listFromJsonWithSubKey(r.getResult(), ObjectBean.class,
-                        "objects");
                 mBoxList.addAll(tempBoxObjects);
                 notifyInducation(objectBean);
-                if (cache.equals(FurnitureObectListView.REFRESH_CODE + "")) {
-
-                }
             }
         };
         HttpClient.getFurnitureDetail(context, map, listenner);

@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.application.MyApplication;
@@ -82,7 +83,9 @@ public class FurnitureLookActivity extends BaseViewActivity {
         }
         structView.init(drawerLayout, furnitureObject.getLayers(), furnitureObject.getRatio());
         structView.setBean(furnitureObject);
-        objectListView.init(furnitureObject, (List<ObjectBean>) getIntent().getSerializableExtra("list"));
+//        objectListView.init(furnitureObject, (List<ObjectBean>) getIntent().getSerializableExtra("list"));
+        objectListView.init(furnitureObject, MainLocationFragment.objectMap.get(MainLocationFragment.mlist.get((
+                (FurnitureLookActivity) context).spacePosition).getCode()));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -220,8 +223,6 @@ public class FurnitureLookActivity extends BaseViewActivity {
             structView.notifyData(furnitureObject.getLayers(), furnitureObject.getRatio());
             refrushListView(null);
             objectListView.getNetDate("");
-        } else if (requestCode == FurnitureObectListView.REFRESH_CODE && resultCode == RESULT_OK) {
-            objectListView.getNetDate("" + FurnitureObectListView.REFRESH_CODE);
         }
     }
 

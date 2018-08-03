@@ -92,15 +92,7 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         setContentView(R.layout.activity_goods_lookinfo);
         ButterKnife.bind(this);
         titleLayout.setTitle("查看物品");
-        titleLayout.setBack(true, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isSetResult) {
-                    setResult(RESULT_OK);
-                }
-                finish();
-            }
-        });
+        titleLayout.setBack(true, null);
         bean = (ObjectBean) getIntent().getSerializableExtra("bean");
         titleLayout.textBtn.setVisibility(View.VISIBLE);
         titleLayout.textBtn.setText("编辑");
@@ -274,14 +266,6 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
             isSetResult = true;
             initValues();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isSetResult) {
-            setResult(RESULT_OK);
-        }
-        super.onBackPressed();
     }
 
     @Override
