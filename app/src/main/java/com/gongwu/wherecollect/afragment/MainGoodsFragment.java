@@ -150,11 +150,15 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                                 .show();
                     }
                 }
+                int index = mList.size();
                 mList.addAll(temp);
                 goodsGridView.setAdapter(null);
                 goodsGridView.setAdapter(gridViewAdapter);
                 gridViewAdapter.notifyDataSetChanged();
                 goodsGridView.setEmptyView(empty);
+                if (page != 1 && goodsGridView.mRefreshableView != null) {
+                    goodsGridView.mRefreshableView.smoothScrollToPosition(index);
+                }
             }
 
             @Override

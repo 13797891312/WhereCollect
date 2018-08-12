@@ -183,6 +183,7 @@ public class ObjectInfoLookView extends LinearLayout {
             ratingStar.setRating(bean.getStar());
             showView();
         } else {
+            ratingStar.setRating(0);
             starLayout.setVisibility(View.GONE);
         }
     }
