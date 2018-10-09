@@ -66,6 +66,7 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
                 super.code2000(r);
                 logoutTest(MyApplication.getUser(context));
                 UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                user.setOpenid(pwdEdit.getText().toString());
                 user.setPassLogin(true);
                 SaveDate.getInstence(LoginEmailActivity.this).setUser(JsonUtils.jsonFromObject(user));
                 MyApplication.setUser(user);

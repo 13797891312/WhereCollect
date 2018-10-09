@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 public class LoginActivity extends BaseViewActivity {
     UmAuthListener listener = new UmAuthListener(this);
     @Bind(R.id.wx_layout)
@@ -119,7 +121,7 @@ public class LoginActivity extends BaseViewActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void login(String type, Map<String, String> infoMap) {
+    public void login(String type, final Map<String, String> infoMap) {
         Map<String, String> map = new TreeMap<>();
         map.put("avatar", infoMap.get("iconurl"));
         map.put("gender", infoMap.get("gender"));
@@ -134,8 +136,9 @@ public class LoginActivity extends BaseViewActivity {
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 logoutTest(MyApplication.getUser(context));
-                SaveDate.getInstence(LoginActivity.this).setUser(r.getResult());
                 UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                user.setOpenid(infoMap.get("uid"));
+                SaveDate.getInstence(LoginActivity.this).setUser(JsonUtils.jsonFromObject(user));
                 MyApplication.setUser(user);
                 EventBus.getDefault().post(user);
                 EventBus.getDefault().post(new EventBusMsg.ChangeUser());

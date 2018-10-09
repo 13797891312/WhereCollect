@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 //def API_HOST_RELEASE = "\"http://123.57.52.110:9201/\""
-def API_HOST_RELEASE = "\"http://www.shouner.com:9202/\""
-//def API_HOST_RELEASE = "\"https://www.shouner.com/\""
+//def API_HOST_RELEASE = "\"http://www.shouner.com:9202/\""
+def API_HOST_RELEASE = "\"https://www.shouner.com/\""
 
 android {
     compileSdkVersion 25
@@ -21,8 +21,8 @@ android {
         applicationId "com.gongwu.wherecollect"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 6
-        versionName "3.2.6"
+        versionCode 7
+        versionName "3.2.7"
         buildConfigField("String", "URL", "${API_HOST_RELEASE}")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

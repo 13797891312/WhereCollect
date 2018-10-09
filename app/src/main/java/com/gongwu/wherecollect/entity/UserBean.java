@@ -1,5 +1,7 @@
 package com.gongwu.wherecollect.entity;
+
 import android.text.TextUtils;
+
 /**
  * Function:
  * Date: 2017/9/6
@@ -56,7 +58,17 @@ public class UserBean {
     private String mail = "";
     private String birthday = "";
     private String mobile = "";
+    private String openid;
+
     private boolean isPassLogin;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public boolean isPassLogin() {
         return isPassLogin;
@@ -253,6 +265,7 @@ public class UserBean {
             this.current = current;
         }
     }
+
     public static class WeixinBean {
         /**
          * nickname : 呜呜呜呜
@@ -287,6 +300,7 @@ public class UserBean {
             this.openid = openid;
         }
     }
+
     public static class QqBean {
         /**
          * nickname : 赵进
@@ -311,6 +325,7 @@ public class UserBean {
             this.openid = openid;
         }
     }
+
     public static class SinaBean {
         private String nickname;
         private String openid;

@@ -673,4 +673,15 @@ public class HttpClient {
                 listenner);
         Queue.getQueue(context).add(request);
     }
+
+    /**
+     * 用户详情
+     */
+    public static void getUserInfo(Context context, String uid, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("users/user-info/" + uid,
+                params,
+                listenner);
+        Queue.getQueue(context).add(request);
+    }
 }

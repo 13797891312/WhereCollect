@@ -4,9 +4,12 @@ package com.gongwu.wherecollect.afragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.volley.request.HttpClient;
+import android.volley.request.PostListenner;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,19 +18,27 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.FeedBackActivity;
 import com.gongwu.wherecollect.activity.PersonActivity;
 import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 新用户界面
+ */
 public class PersonFragment extends BaseFragment {
 
     @Bind(R.id.person_iv)
@@ -97,6 +108,23 @@ public class PersonFragment extends BaseFragment {
         userName.setText(user.getNickname());
         boolean isBreathLook = SaveDate.getInstence(getContext()).getBreathLook(user.getId());
         switchCompat.setChecked(!isBreathLook);
+        if (!TextUtils.isEmpty(user.getOpenid())) {
+            getUserInfoData();
+        }
+    }
+
+    private void getUserInfoData() {
+        Map<String, String> map = new HashMap<>();
+        map.put("uid", user.getId());
+        map.put("password", user.getOpenid());
+        PostListenner listenner = new PostListenner(getContext(), null) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                LogUtil.e("123");
+            }
+        };
+        HttpClient.getUserInfo(getContext(), user.getId(), map, listenner);
     }
 
     /**
@@ -120,5 +148,12 @@ public class PersonFragment extends BaseFragment {
         super.onDestroy();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onShow() {
+        if (user != null && !TextUtils.isEmpty(user.getOpenid())) {
+            getUserInfoData();
+        }
     }
 }
