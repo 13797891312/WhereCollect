@@ -16,14 +16,16 @@ import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.FeedBackActivity;
+import com.gongwu.wherecollect.activity.MessageListActivity;
 import com.gongwu.wherecollect.activity.PersonActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
-import com.gongwu.wherecollect.util.LogUtil;
+import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.view.UserCodeDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,6 +49,8 @@ public class PersonFragment extends BaseFragment {
     SwitchCompat switchCompat;
     @Bind(R.id.user_name)
     TextView userName;
+    @Bind(R.id.user_id_tv)
+    TextView userId;
 
     private UserBean user;
     private View view;
@@ -82,7 +86,7 @@ public class PersonFragment extends BaseFragment {
         });
     }
 
-    @OnClick({R.id.person_layout, R.id.feedback_layout})
+    @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout, R.id.user_code_layout})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -93,6 +97,13 @@ public class PersonFragment extends BaseFragment {
             case R.id.feedback_layout:
                 intent = new Intent(getActivity(), FeedBackActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.message_list_layout:
+                MessageListActivity.start(getContext());
+                break;
+            case R.id.user_code_layout:
+                UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
+                userCodeDialog.showDialog(R.layout.dialog_user_code);
                 break;
         }
     }
@@ -121,7 +132,10 @@ public class PersonFragment extends BaseFragment {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
-                LogUtil.e("123");
+                UserBean userBean = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                if (userBean != null) {
+                    userId.setText("ID: " + userBean.getUsid());
+                }
             }
         };
         HttpClient.getUserInfo(getContext(), user.getId(), map, listenner);

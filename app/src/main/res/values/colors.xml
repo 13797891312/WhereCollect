@@ -93,4 +93,6 @@
     <color name="color666">#666666</color>
     <color name="color333">#333333</color>
     <color name="colorf9">#f9f9f9</color>
+
+    <color name="vifrification">#60ffffff</color>   <!-- 透明 -->
 </resources>

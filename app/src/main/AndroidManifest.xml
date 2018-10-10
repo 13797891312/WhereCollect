@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gongwu.wherecollect">
+          package="com.gongwu.wherecollect">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
 
     <application
         android:name=".application.MyApplication"
@@ -33,15 +33,14 @@
         <!-- ###########友盟 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5a2de126f43e484ca70000ef" />
-
+            android:value="5a2de126f43e484ca70000ef"/>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${CHANNEL_VALUE}" /> <!--渠道号，多渠道这里使用了占位符$-->
+            android:value="${CHANNEL_VALUE}"/> <!-- 渠道号，多渠道这里使用了占位符$ -->
 
         <meta-data
             android:name="com.gongwu.wherecollect.util.SimpleGlideModule"
-            android:value="GlideModule" />
+            android:value="GlideModule"/>
 
         <!-- <provider -->
         <!-- android:name="android.support.v4.content.FileProvider" -->
@@ -56,21 +55,21 @@
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent"/>
         <activity
             android:name="com.umeng.socialize.media.WBShareCallBackActivity"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name="com.sina.weibo.sdk.share.WbShareTransActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
             <intent-filter>
-                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
@@ -78,96 +77,97 @@
             android:launchMode="singleTask"
             android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="tencent100424468" />
+                <data android:scheme="tencent100424468"/>
             </intent-filter>
         </activity>
         <activity
             android:name="com.umeng.qq.tencent.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <!-- ###########友盟 -->
 
         <activity
             android:name=".activity.StartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activity.FeedBackActivity" />
-        <activity android:name=".activity.LoginActivity" />
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FeedBackActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.TestActivity" />
-        <activity android:name=".activity.ConfigChangePWDActivity" />
-        <activity android:name=".activity.AccountInfoActivity" />
-        <activity android:name=".activity.ConfigChangePhoneActivity" />
-        <activity android:name=".activity.RegisteActivity" />
-        <activity android:name=".activity.LoginEmailActivity" />
-        <activity android:name=".activity.ForgetPWDActivity" />
-        <activity android:name=".activity.BindEmailActivity" />
-        <activity android:name=".activity.WebActivity" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".activity.TestActivity"/>
+        <activity android:name=".activity.ConfigChangePWDActivity"/>
+        <activity android:name=".activity.AccountInfoActivity"/>
+        <activity android:name=".activity.ConfigChangePhoneActivity"/>
+        <activity android:name=".activity.RegisteActivity"/>
+        <activity android:name=".activity.LoginEmailActivity"/>
+        <activity android:name=".activity.ForgetPWDActivity"/>
+        <activity android:name=".activity.BindEmailActivity"/>
+        <activity android:name=".activity.WebActivity"/>
         <activity
             android:name=".activity.SearchActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity android:name=".object.ObjectsAddActivity" />
-        <activity android:name=".object.ObjectLookInfoActivity" />
-        <activity android:name=".object.ObjectEditActivity" />
-        <activity android:name=".object.SelectColorActivity" />
-        <activity android:name=".object.SelectJijieActivity" />
-        <activity android:name=".object.SelectChannelActivity" />
-        <activity android:name=".object.SelectFenleiActivity" />
-        <activity android:name=".ImageSelect.ImageGridActivity" />
-        <activity android:name="com.zsitech.oncon.barcode.core.CaptureActivity" />
-        <activity android:name=".LocationLook.furnitureLook.FurnitureLookActivity" />
-        <activity android:name=".LocationEdit.SpaceEditActivity" />
-        <activity android:name=".furnitureEdit.FurnitureSysListActivity" />
-        <activity android:name=".furnitureEdit.CreateFurenitureActivity" />
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+        <activity android:name=".object.ObjectsAddActivity"/>
+        <activity android:name=".object.ObjectLookInfoActivity"/>
+        <activity android:name=".object.ObjectEditActivity"/>
+        <activity android:name=".object.SelectColorActivity"/>
+        <activity android:name=".object.SelectJijieActivity"/>
+        <activity android:name=".object.SelectChannelActivity"/>
+        <activity android:name=".object.SelectFenleiActivity"/>
+        <activity android:name=".ImageSelect.ImageGridActivity"/>
+        <activity android:name="com.zsitech.oncon.barcode.core.CaptureActivity"/>
+        <activity android:name=".LocationLook.furnitureLook.FurnitureLookActivity"/>
+        <activity android:name=".LocationEdit.SpaceEditActivity"/>
+        <activity android:name=".furnitureEdit.FurnitureSysListActivity"/>
+        <activity android:name=".furnitureEdit.CreateFurenitureActivity"/>
         <activity
             android:name=".LocationEdit.LocationEditActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".furnitureEdit.FurenitureAddActivity" />
-        <activity android:name=".importObject.ImportObectsActivity" />
-        <activity android:name=".importObject.ImportSelectFurnitureActivity" />
-        <activity android:name=".record.MakeRecordActivity" />
-        <activity android:name=".record.RecordShareActivity" />
-        <activity android:name=".furnitureEdit.CreateTemplateActivity" />
-        <activity android:name=".furnitureEdit.TemplateGridActivity" />
-        <activity android:name=".furnitureEdit.EditFurenitureActivity" />
-        <activity android:name=".furnitureEdit.EditTemplateActivity" />
+            android:launchMode="singleTask"/>
+        <activity android:name=".furnitureEdit.FurenitureAddActivity"/>
+        <activity android:name=".importObject.ImportObectsActivity"/>
+        <activity android:name=".importObject.ImportSelectFurnitureActivity"/>
+        <activity android:name=".record.MakeRecordActivity"/>
+        <activity android:name=".record.RecordShareActivity"/>
+        <activity android:name=".furnitureEdit.CreateTemplateActivity"/>
+        <activity android:name=".furnitureEdit.TemplateGridActivity"/>
+        <activity android:name=".furnitureEdit.EditFurenitureActivity"/>
+        <activity android:name=".furnitureEdit.EditTemplateActivity"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".record.RecordListActivity" />
-        <activity android:name=".activity.ImportHelpActivity" />
-        <activity android:name=".activity.UpdataInfoActivity" />
-        <activity android:name=".quickadd.QuickSpaceSelectListActivity" />
-        <activity android:name=".quickadd.QuickFurnitureSelectListActivity" />
-        <activity android:name=".record.RecordLookActivity" />
-        <activity android:name=".object.AddGoodsActivity" />
-        <activity android:name=".activity.AddGoodsOtherContentActivity" />
-        <activity android:name=".activity.AddMoreGoodsActivity" />
-        <activity android:name=".activity.AddGoodsRemindActivity" />
-        <activity android:name=".activity.RemindGoodsDetailsActivity" />
-        <activity android:name=".activity.PersonActivity"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".record.RecordListActivity"/>
+        <activity android:name=".activity.ImportHelpActivity"/>
+        <activity android:name=".activity.UpdataInfoActivity"/>
+        <activity android:name=".quickadd.QuickSpaceSelectListActivity"/>
+        <activity android:name=".quickadd.QuickFurnitureSelectListActivity"/>
+        <activity android:name=".record.RecordLookActivity"/>
+        <activity android:name=".object.AddGoodsActivity"/>
+        <activity android:name=".activity.AddGoodsOtherContentActivity"/>
+        <activity android:name=".activity.AddMoreGoodsActivity"/>
+        <activity android:name=".activity.AddGoodsRemindActivity"/>
+        <activity android:name=".activity.RemindGoodsDetailsActivity"/>
+        <activity android:name=".activity.PersonActivity"/>
+        <activity android:name=".activity.MessageListActivity"/>
     </application>
 
 </manifest>

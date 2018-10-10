@@ -59,8 +59,17 @@ public class UserBean {
     private String birthday = "";
     private String mobile = "";
     private String openid;
+    private String usid;
 
     private boolean isPassLogin;
+
+    public String getUsid() {
+        return usid;
+    }
+
+    public void setUsid(String usid) {
+        this.usid = usid;
+    }
 
     public String getOpenid() {
         return openid;

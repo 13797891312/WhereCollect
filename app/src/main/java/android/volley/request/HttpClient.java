@@ -673,6 +673,7 @@ public class HttpClient {
                 listenner);
         Queue.getQueue(context).add(request);
     }
+    //############################################3.3接口##################################################
 
     /**
      * 用户详情
@@ -680,6 +681,17 @@ public class HttpClient {
     public static void getUserInfo(Context context, String uid, Map<String, String> params, PostListenner
             listenner) {
         CustomPostRequest request = new CustomPostRequest("users/user-info/" + uid,
+                params,
+                listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 消息中心列表
+     */
+    public static void getMessageList(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/messages",
                 params,
                 listenner);
         Queue.getQueue(context).add(request);
