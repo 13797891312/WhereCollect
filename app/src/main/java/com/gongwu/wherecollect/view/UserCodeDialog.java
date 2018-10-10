@@ -2,9 +2,7 @@ package com.gongwu.wherecollect.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.view.Window;
-import android.view.WindowManager;
 
 import com.gongwu.wherecollect.R;
 
@@ -16,7 +14,7 @@ public class UserCodeDialog extends Dialog {
     private Window window = null;
 
     public UserCodeDialog(Context context) {
-        super(context);
+        super(context,R.style.Transparent2);
     }
 
     public void showDialog(int layoutResID) {
