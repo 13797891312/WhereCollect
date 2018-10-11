@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/title_hight"
+              android:gravity="center"
+              android:minHeight="@dimen/title_hight"
+              android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxHeight="@dimen/dip_22"
+        android:paddingLeft="@dimen/dip_12"
+        android:paddingRight="@dimen/dip_12"
+        android:paddingTop="@dimen/dip_10"
+        android:text="客厅"
+        android:textColor="@drawable/select_text_green"
+        android:textSize="@dimen/f_16"
+        />
+
+    <View
+        android:id="@+id/select_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_2"
+        android:layout_marginLeft="@dimen/dip_2"
+        android:layout_marginRight="@dimen/dip_2"
+        android:layout_marginTop="@dimen/dip_6"
+        android:background="@color/green_text_color"
+        android:visibility="invisible"
+        />
+</LinearLayout>

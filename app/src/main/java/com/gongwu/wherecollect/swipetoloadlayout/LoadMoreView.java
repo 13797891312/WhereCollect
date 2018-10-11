@@ -1,4 +1,4 @@
-package com.gongwu.wherecollect.view;
+package com.gongwu.wherecollect.swipetoloadlayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -14,10 +14,8 @@ import swipetoloadlayout.SwipeTrigger;
  * Created by mucll on 2017/9/7.
  */
 public class LoadMoreView extends RelativeLayout implements SwipeLoadMoreTrigger, SwipeTrigger {
-    //    private ImageView shangla;
     private TextView textView;
     private ProgressBar progressBar;
-    //    private ObjectAnimator anim;
     private boolean isRelease;
     private Context context;
     private View view;
@@ -38,34 +36,14 @@ public class LoadMoreView extends RelativeLayout implements SwipeLoadMoreTrigger
 
     private void initview() {
         view = View.inflate(context, R.layout.item_foot, null);
-        //        shangla = (ImageView) view.findViewById(R.id.foot_iv);
         textView = (TextView) view.findViewById(R.id.foot_tv);
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        //        shangla = new ImageView(getContext());
-        //        textView = new TextView(getContext());
-        //        //添加线性的父布局
-        //        LinearLayout ll = new LinearLayout(getContext());
-        //        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams
-        // .WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //        llParams.addRule(CENTER_IN_PARENT);
-        //        ll.setLayoutParams(llParams);
-        //        ll.setPadding(10, 10, 10, 10);
-        //        shangla.setImageResource(R.drawable.icon);
-        //        ll.addView(shangla);
-        //        ll.addView(textView);
         addView(view);
     }
 
     @Override
     public void onLoadMore() {
         //上啦到一定位置之后调用此方法
-        //        shangla.setImageResource(R.drawable.icon);
-        //        anim = ObjectAnimator.ofFloat(shangla, "rotation", shangla.getRotation(), shangla.getRotation() +
-        // 360f)
-        //                .setDuration(500);
-        //        anim.setRepeatCount(ValueAnimator.INFINITE);
-        //        anim.setRepeatMode(ValueAnimator.RESTART);
-        //        anim.start();
         textView.setText("正在加载");
     }
 

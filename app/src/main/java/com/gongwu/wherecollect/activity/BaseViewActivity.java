@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -22,6 +23,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
+
 /**
  * acticity的父类
  */
@@ -80,7 +82,7 @@ public class BaseViewActivity extends FragmentActivity {
         if (vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
             MIUISetStatusBarLightMode(this.getWindow(), true);
         } else if (vendor.toLowerCase(Locale.ENGLISH).contains("meizu")) {
-            FlymeSetStatusBarLightMode(this.getWindow(),true);
+            FlymeSetStatusBarLightMode(this.getWindow(), true);
         }
         FlymeSetStatusBarLightMode(this.getWindow(), true);
         contentView = (LinearLayout) View.inflate(this, R.layout.activity_base_layout, null);
@@ -165,6 +167,7 @@ public class BaseViewActivity extends FragmentActivity {
 
     /**
      * 小米手机状态栏字体黑色
+     *
      * @param window
      * @param dark
      * @return
@@ -193,6 +196,7 @@ public class BaseViewActivity extends FragmentActivity {
 
     /**
      * 魅族手机状态栏字体黑色
+     *
      * @param window
      * @param dark
      * @return

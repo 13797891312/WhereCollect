@@ -2,7 +2,11 @@ package com.gongwu.wherecollect.afragment;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ import android.widget.TextView;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.FeedBackActivity;
 import com.gongwu.wherecollect.activity.MessageListActivity;
+import com.gongwu.wherecollect.activity.MyShareActivity;
 import com.gongwu.wherecollect.activity.PersonActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
@@ -31,6 +36,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +64,7 @@ public class PersonFragment extends BaseFragment {
 
     private UserBean user;
     private View view;
+    private Bitmap bitmap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,26 +97,74 @@ public class PersonFragment extends BaseFragment {
         });
     }
 
-    @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout, R.id.user_code_layout})
+    @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout, R.id.user_code_layout, R.id.my_share_layout})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
-            case R.id.person_layout:
+            case R.id.person_layout://个人信息
                 intent = new Intent(getActivity(), PersonActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.feedback_layout:
+            case R.id.feedback_layout://意见反馈
                 intent = new Intent(getActivity(), FeedBackActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.message_list_layout:
+            case R.id.message_list_layout://消息中心
                 MessageListActivity.start(getContext());
                 break;
-            case R.id.user_code_layout:
-                UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
-                userCodeDialog.showDialog(R.layout.dialog_user_code);
+            case R.id.user_code_layout://二维码
+                if (bitmap != null) {
+                    UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
+                    userCodeDialog.showDialog(user.getUsid(), bitmap);
+                } else {
+                    returnBitMap(user.getAvatar());
+                }
+                break;
+            case R.id.my_share_layout://消息中心
+                MyShareActivity.start(getContext());
                 break;
         }
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            bitmap = (Bitmap) msg.obj;
+            if (bitmap != null) {
+                UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
+                userCodeDialog.showDialog(user.getUsid(), bitmap);
+            }
+        }
+    };
+
+    public void returnBitMap(final String url) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                URL imageurl = null;
+
+                try {
+                    imageurl = new URL(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    HttpURLConnection conn = (HttpURLConnection) imageurl.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+                    InputStream is = conn.getInputStream();
+                    Message message = handler.obtainMessage();
+                    Bitmap bitmap = BitmapFactory.decodeStream(is);
+                    message.obj = bitmap;
+                    handler.sendMessage(message);
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     /**

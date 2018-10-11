@@ -1,4 +1,5 @@
 package com.zsitech.oncon.barcode.core;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -49,6 +50,7 @@ import com.zsitech.oncon.barcode.executor.ResultHandler;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
+
 public final class CaptureActivity extends BaseViewActivity implements
         SurfaceHolder.Callback {
     public static final int result = 869;
@@ -342,14 +344,14 @@ public final class CaptureActivity extends BaseViewActivity implements
                     + resultHandler.getDisplayContents());
         } else {
             String string = resultHandler.getDisplayContents().toString();
-//            if (string.startsWith("http")) {
-//                WebActivity.start(this, "", string);
-//            } else {
-                Intent intent = new Intent();
-                intent.putExtra("result", string);
-                setResult(result, intent);
-                finish();
-//            }
+            //如果是扫描用户二维码
+            if (string.contains("shouner.com/user/profile")) {
+                string = string.split("id=")[1];
+            }
+            Intent intent = new Intent();
+            intent.putExtra("result", string);
+            setResult(result, intent);
+            finish();
             restartPreviewAfterDelay(3000L);
         }
     }

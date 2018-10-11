@@ -2,9 +2,19 @@ package com.gongwu.wherecollect.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Window;
+import android.widget.ImageView;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.util.QRCode;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Administrator on 2018/10/10.
@@ -12,13 +22,21 @@ import com.gongwu.wherecollect.R;
 
 public class UserCodeDialog extends Dialog {
     private Window window = null;
+    private Context context;
 
     public UserCodeDialog(Context context) {
-        super(context,R.style.Transparent2);
+        super(context, R.style.userCodeDialogStyle);
+        this.context = context;
     }
 
-    public void showDialog(int layoutResID) {
-        setContentView(layoutResID);
+    public void showDialog(String id, Bitmap usericon) {
+        setContentView(R.layout.dialog_user_code);
+        ImageView image_code = (ImageView) findViewById(R.id.image_code);
+        String contnet = "https://www.shouner.com/user/profile?id=" + id;
+        Bitmap bitmap = QRCode.createQRCodeWithLogo(contnet, 500,usericon
+                );
+//        BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)
+        image_code.setImageBitmap(bitmap);
         //设置触摸对话框意外的地方取消对话框
         setCanceledOnTouchOutside(true);
         show();
@@ -29,6 +47,5 @@ public class UserCodeDialog extends Dialog {
         super.show();
         window = getWindow(); //得到对话框
         window.setWindowAnimations(R.style.dialogWindowAnim); //设置窗口弹出动画
-        window.setBackgroundDrawableResource(R.color.vifrification); //设置对话框背景为透明
     }
 }

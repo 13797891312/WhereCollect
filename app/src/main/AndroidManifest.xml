@@ -168,6 +168,10 @@
         <activity android:name=".activity.RemindGoodsDetailsActivity"/>
         <activity android:name=".activity.PersonActivity"/>
         <activity android:name=".activity.MessageListActivity"/>
+        <activity android:name=".activity.MyShareActivity">
+        </activity>
+        <activity android:name=".activity.AddSharePersonActivity">
+        </activity>
     </application>
 
 </manifest>

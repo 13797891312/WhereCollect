@@ -7,6 +7,7 @@
     <color name="maincolor_press">#069E3D</color>
     <color name="btn_enable">#DDDDDD</color>
     <color name="windowsbg">#faf5f0</color>
+    <color name="windowsbg2">#F0F0F0</color>
     <color name="black_txt">#343939</color>
     <color name="divider">#d2d2d2</color>
     <color name="bgcolor2">#faf5f0</color>
@@ -95,4 +96,5 @@
     <color name="colorf9">#f9f9f9</color>
 
     <color name="vifrification">#60ffffff</color>   <!-- 透明 -->
+    <color name="green_text_color">#209b40</color>
 </resources>

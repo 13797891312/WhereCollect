@@ -95,6 +95,15 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="userCodeDialogStyle">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
     <style name="dialogWindowAnim" mce_bogus="1" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_enter_anim</item>
         <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
