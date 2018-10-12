@@ -1,8 +1,10 @@
 package com.gongwu.wherecollect.util;
+
 import android.animation.Keyframe;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.view.View;
+
 /**
  * Function:
  * Date: 2017/11/16
@@ -92,5 +94,38 @@ public class AnimationUtil {
         ObjectAnimator.ofFloat(view, "translationY", 0, view.getHeight())
                 .setDuration(time).start();
         view.setTag(false);
+    }
+
+
+    /**
+     * 向右滑动
+     *
+     * @param view
+     * @param time 动画持续时间
+     */
+    public static void upRight(View view, int time) {
+        if (view.getTag()!=null && (!(Boolean) view.getTag())){
+            return;
+        }
+
+        ObjectAnimator.ofFloat(view, "translationX", 0, view.getWidth() * 2)
+                .setDuration(time).start();
+        view.setTag(false);
+    }
+
+
+    /**
+     * 向左滑动
+     *
+     * @param view
+     * @param time 动画持续时间
+     */
+    public static void upLeft(View view, int time) {
+        if (view.getTag() != null && ((Boolean) view.getTag())) {
+            return;
+        }
+        ObjectAnimator.ofFloat(view, "translationX", view.getWidth() * 2, 0)
+                .setDuration(time).start();
+        view.setTag(true);
     }
 }

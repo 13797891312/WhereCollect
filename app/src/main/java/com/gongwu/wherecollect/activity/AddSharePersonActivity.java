@@ -3,12 +3,24 @@ package com.gongwu.wherecollect.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.volley.request.HttpClient;
+import android.volley.request.PostListenner;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.entity.SharePersonBean;
+import com.gongwu.wherecollect.util.JsonUtils;
 import com.zsitech.oncon.barcode.core.CaptureActivity;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,6 +37,8 @@ public class AddSharePersonActivity extends BaseViewActivity {
     TextView titleView;
     @Bind(R.id.add_share_edit)
     EditText addShareEditView;
+    @Bind(R.id.add_share_recycler_view)
+    RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +48,30 @@ public class AddSharePersonActivity extends BaseViewActivity {
         ButterKnife.bind(this);
         initView();
         initEvent();
+        initData();
     }
 
     private void initView() {
         titleView.setText("添加共享人");
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
     private void initEvent() {
+    }
 
+    private void initData() {
+        Map<String, String> params = new HashMap<>();
+        PostListenner listener = new PostListenner(this) {
+            @Override
+            protected void code2000(ResponseResult r) {
+                super.code2000(r);
+                List<SharePersonBean> beans = JsonUtils.listFromJson(r.getResult(), SharePersonBean.class);
+                if (beans != null && beans.size() > 0) {
+
+                }
+            }
+        };
+        HttpClient.getAddSharePersonOldList(this, params, listener);
     }
 
     @OnClick({R.id.add_share_scan_tv, R.id.add_share_back_btn})

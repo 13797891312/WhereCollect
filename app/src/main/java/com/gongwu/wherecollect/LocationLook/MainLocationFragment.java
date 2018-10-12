@@ -14,11 +14,13 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.activity.AddSharePersonActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
@@ -54,6 +56,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -83,6 +86,8 @@ public class MainLocationFragment extends BaseFragment {
     View helpLayout;
     @Bind(R.id.objectListView_layout)
     FrameLayout listviewLayout;
+    @Bind(R.id.share_iv)
+    ImageView shareIv;
 
     private UserBean user;
 
@@ -214,6 +219,18 @@ public class MainLocationFragment extends BaseFragment {
         }
     }
 
+    @OnClick({R.id.share_iv})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.share_iv:
+                AddSharePersonActivity.start(getContext());
+                break;
+            default:
+                break;
+        }
+    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -307,11 +324,14 @@ public class MainLocationFragment extends BaseFragment {
                     public void upSlide() {
                         listviewLayout.setVisibility(View.VISIBLE);
                         AnimationUtil.upSlide(listviewLayout, 150);
+                        shareIv.setVisibility(View.VISIBLE);
+                        AnimationUtil.upLeft(shareIv, 150);
                     }
 
                     @Override
                     public void downSlide() {
                         AnimationUtil.downSlide(listviewLayout, 150);
+                        AnimationUtil.upRight(shareIv, 150);
                     }
                 });
                 v.getLocationChild(position);
@@ -537,6 +557,9 @@ public class MainLocationFragment extends BaseFragment {
     public void hideObjectList() {
         if (listviewLayout != null) {
             AnimationUtil.downSlide(listviewLayout, 150);
+        }
+        if (shareIv != null) {
+            AnimationUtil.upRight(shareIv, 150);
         }
     }
 

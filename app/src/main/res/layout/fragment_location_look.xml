@@ -1,15 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:paddingBottom="54dp">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingBottom="54dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
+        tools:context="com.gongwu.wherecollect.afragment.MainFragment1"
+        >
         <!--<com.gongwu.wherecollect.view.EditLocationView-->
         <!--android:id="@+id/editLocationView"-->
         <!--android:layout_width="match_parent"-->
@@ -19,19 +21,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <com.gongwu.wherecollect.LocationLook.LocationIndicatorView
                 android:id="@+id/indicatorView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="@dimen/dip_12"></com.gongwu.wherecollect.LocationLook.LocationIndicatorView>
+                android:padding="@dimen/dip_12"
+                ></com.gongwu.wherecollect.LocationLook.LocationIndicatorView>
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <com.zhaojin.myviews.TagViewPager
                 android:id="@+id/tagViewPager"
@@ -39,7 +44,8 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:clipToPadding="true"
-                android:fitsSystemWindows="true"></com.zhaojin.myviews.TagViewPager>
+                android:fitsSystemWindows="true"
+                ></com.zhaojin.myviews.TagViewPager>
             <!--下面这个布局只是为了首次引导用的，别无用处-->
             <View
                 android:id="@+id/help_layout"
@@ -47,13 +53,15 @@
                 android:layout_height="match_parent"
                 android:layout_above="@+id/objectListView"
                 android:clipToPadding="true"
-                android:fitsSystemWindows="true"></View>
+                android:fitsSystemWindows="true"
+                ></View>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:background="@color/white">
+                android:background="@color/white"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -65,7 +73,8 @@
                     android:gravity="center"
                     android:text="上滑查看物品总览"
                     android:textColor="@color/black_26"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    />
             </RelativeLayout>
 
             <FrameLayout
@@ -74,15 +83,29 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:background="#faf5f0"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                >
 
                 <com.gongwu.wherecollect.LocationLook.LocationObectListView
                     android:id="@+id/objectListView"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:minHeight="60dp"
-                    android:padding="2dp"></com.gongwu.wherecollect.LocationLook.LocationObectListView>
+                    android:padding="2dp"
+                    />
             </FrameLayout>
+
+            <ImageView
+                android:id="@+id/share_iv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dip_80"
+                android:layout_marginRight="@dimen/dip_20"
+                android:src="@drawable/icon_app"
+                android:visibility="invisible"
+                />
         </RelativeLayout>
     </LinearLayout>
 
@@ -91,5 +114,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:visibility="gone"></com.gongwu.wherecollect.view.ErrorView>
+        android:visibility="gone"
+        ></com.gongwu.wherecollect.view.ErrorView>
 </RelativeLayout>

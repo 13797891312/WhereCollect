@@ -687,6 +687,17 @@ public class HttpClient {
     }
 
     /**
+     * 获取历史共享人列表
+     */
+    public static void getAddSharePersonOldList(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/search-user-history",
+                params,
+                listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
      * 消息中心列表
      */
     public static void getMessageList(Context context, Map<String, String> params, PostListenner
