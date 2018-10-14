@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.view;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,6 +12,7 @@ import com.gongwu.wherecollect.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Function:
  * Date: 2017/8/25
@@ -32,6 +34,8 @@ public class TitleLayout extends LinearLayout {
     public TextView titleTv;
     @Bind(R.id.back_text)
     public TextView backText;
+    @Bind(R.id.select_space_ib)
+    public ImageButton selectSpaceView;
 
     public TitleLayout(Context context) {
         this(context, null);

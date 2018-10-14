@@ -90,6 +90,7 @@ public class ObjectBean implements Serializable {
     private String buy_date;
     private String expire_date;
     private int count;//物品数量
+    private boolean isSelectSpace;
     /**
      * x : 0
      * y : 0
@@ -480,6 +481,13 @@ public class ObjectBean implements Serializable {
         this.categories = categories;
     }
 
+    public boolean isSelectSpace() {
+        return isSelectSpace;
+    }
+
+    public void setSelectSpace(boolean selectSpace) {
+        isSelectSpace = selectSpace;
+    }
 
     public String getBuy_date() {
         if (!TextUtils.isEmpty(buy_date) && buy_date.contains("T")) {

@@ -121,6 +121,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
     public void onItemClick(int positions, View view) {
         if (datas != null && datas.size() >= positions) {
             SharePersonBean bean = datas.get(positions);
+            SelectShareSpaceActivity.start(context, bean);
         }
     }
 }
