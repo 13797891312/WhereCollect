@@ -1,21 +1,17 @@
 package com.gongwu.wherecollect.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.SelectShareSpaceAdapter;
 import com.gongwu.wherecollect.entity.ObjectBean;
-import com.gongwu.wherecollect.entity.SharePersonBean;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
-import com.gongwu.wherecollect.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;

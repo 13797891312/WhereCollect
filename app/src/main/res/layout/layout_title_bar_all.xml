@@ -87,6 +87,15 @@
         android:visibility="gone" />
 
     <ImageButton
+        android:id="@+id/cutlink_ib"
+        android:layout_width="@dimen/title_hight"
+        android:layout_height="@dimen/title_hight"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/select_white_bg"
+        android:src="@drawable/icon_cutlink"
+        android:visibility="gone" />
+
+    <ImageButton
         android:id="@+id/image_btn"
         android:layout_width="@dimen/title_hight"
         android:layout_height="@dimen/title_hight"

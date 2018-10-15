@@ -172,7 +172,8 @@
         <activity
             android:name=".activity.AddSharePersonActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity android:name=".activity.SelectShareSpaceActivity"></activity>
+        <activity android:name=".activity.SelectShareSpaceActivity" />
+        <activity android:name=".activity.SharePersonDetailsActivity"></activity>
     </application>
 
 </manifest>

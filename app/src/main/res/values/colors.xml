@@ -90,10 +90,12 @@
     <color name="goods_color_8">#13B5B1</color>
     <color name="goods_color_9">#7ECEF4</color>
     <color name="goods_color_0">#B5B5B5</color>
+    <color name="colorddd">#ddd</color>
     <color name="color999">#999999</color>
     <color name="color666">#666666</color>
     <color name="color333">#333333</color>
     <color name="colorf9">#f9f9f9</color>
+    <color name="colorf7">#f7f7f7</color>
 
     <color name="vifrification">#60ffffff</color>   <!-- 透明 -->
     <color name="green_text_color">#209b40</color>

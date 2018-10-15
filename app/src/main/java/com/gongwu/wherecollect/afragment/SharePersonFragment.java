@@ -11,6 +11,8 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.activity.SharePersonDetailsActivity;
+import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.adapter.SharePersonListAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
@@ -31,7 +33,7 @@ import butterknife.ButterKnife;
 /**
  * 共享人
  */
-public class SharePersonFragment extends BaseFragment implements OnRefreshListener {
+public class SharePersonFragment extends BaseFragment implements OnRefreshListener, MyOnItemClickListener {
 
     @Bind(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
@@ -63,6 +65,7 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
 
     private void initEvent() {
         mSwipeToLoadLayout.setOnRefreshListener(this);
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -94,6 +97,11 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
         HttpClient.getAllSharedUsers(getContext(), params, listener);
     }
 
+    @Override
+    public void onItemClick(int positions, View view) {
+        SharePersonDetailsActivity.start(getContext(), datas.get(positions));
+    }
+
 
     @Override
     public void onShow() {
@@ -109,4 +117,5 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
     public void refreshFragment() {
         mSwipeToLoadLayout.setRefreshing(true);
     }
+
 }

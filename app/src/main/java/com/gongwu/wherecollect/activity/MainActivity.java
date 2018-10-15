@@ -40,6 +40,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+
 public class MainActivity extends BaseViewActivity {
     public List<Fragment> fragments = new ArrayList();
     @Bind(R.id.id_drawerlayout)

@@ -1,12 +1,13 @@
 package com.gongwu.wherecollect.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2018/10/15.
  */
 
-public class SharedLocationBean {
+public class SharedLocationBean implements Serializable {
     private String id;
     private String code;
     private String user_id;

@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout;
 import com.gongwu.wherecollect.view.TitleLayout;
 import com.umeng.analytics.MobclickAgent;
 import com.zhaojin.myviews.HackyViewPager;
@@ -162,6 +163,13 @@ public class BaseViewActivity extends FragmentActivity {
             return super.isDestroyed();
         } else {
             return mIsDestoryed;// 在onDestroy中设置true
+        }
+    }
+
+    public void closeLoading(SwipeToLoadLayout mSwipeToLoadLayout) {
+        if (mSwipeToLoadLayout != null) {
+            mSwipeToLoadLayout.setRefreshing(false);
+            mSwipeToLoadLayout.setLoadingMore(false);
         }
     }
 
