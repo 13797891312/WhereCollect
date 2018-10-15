@@ -28,14 +28,14 @@
             android:layout_height="match_parent"
             />
 
-        <com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView
-            android:id="@id/swipe_load_more_footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dip_10"
-            android:layout_marginTop="@dimen/dip_10"
-            android:gravity="center"
-            />
+        <!--<com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView-->
+            <!--android:id="@id/swipe_load_more_footer"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="@dimen/dip_10"-->
+            <!--android:layout_marginTop="@dimen/dip_10"-->
+            <!--android:gravity="center"-->
+            <!--/>-->
 
     </com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout>
 </FrameLayout>

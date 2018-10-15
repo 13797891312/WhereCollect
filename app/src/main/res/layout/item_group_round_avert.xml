@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.hdodenhof.circleimageview.CircleImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/circle_iamge"
+    android:layout_width="@dimen/dip_24"
+    android:layout_height="@dimen/dip_24"
+    android:orientation="vertical"
+    />

@@ -691,9 +691,7 @@ public class HttpClient {
      */
     public static void getAddSharePersonOldList(Context context, Map<String, String> params, PostListenner
             listenner) {
-        CustomPostRequest request = new CustomPostRequest("api/app/v330/search-user-history",
-                params,
-                listenner);
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/search-user-history", params, listenner);
         Queue.getQueue(context).add(request);
     }
 
@@ -702,9 +700,43 @@ public class HttpClient {
      */
     public static void getMessageList(Context context, Map<String, String> params, PostListenner
             listenner) {
-        CustomPostRequest request = new CustomPostRequest("api/app/v330/messages",
-                params,
-                listenner);
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/messages", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 获取共享人列表
+     */
+    public static void getAllSharedUsers(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/a/get-all-shared-users", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 获取共享空间列表
+     */
+    public static void getAllSharedLocations(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/a/get-all-shared-locations", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 扫描用户二维码获取信息
+     */
+    public static void getUserCodeInfo(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/user-info-by-id", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 与已建立连接的用户直接共享空间
+     */
+    public static void shareOldUserLocation(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/a/share-location-2-user", params, listenner);
         Queue.getQueue(context).add(request);
     }
 }

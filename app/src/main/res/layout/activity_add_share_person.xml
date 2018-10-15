@@ -29,6 +29,7 @@
             android:src="@drawable/back_icon"
             />
 
+
         <TextView
             android:id="@+id/add_share_title_tv"
             android:layout_width="wrap_content"
@@ -39,16 +40,14 @@
             android:textSize="@dimen/f_17"
             />
 
-        <TextView
-            android:id="@+id/add_share_scan_tv"
-            android:layout_width="@dimen/dip_48"
-            android:layout_height="@dimen/dip_48"
+        <ImageButton
+            android:id="@+id/add_share_scan_ib"
+            android:layout_width="@dimen/title_hight"
+            android:layout_height="@dimen/title_hight"
             android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:background="@drawable/select_white_bg"
-            android:gravity="center"
-            android:text="+"
-            android:textColor="@color/color666"
-            android:textSize="@dimen/f_18"
+            android:src="@drawable/icon_scanf"
             />
 
         <View

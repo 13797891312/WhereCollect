@@ -43,4 +43,8 @@
         <attr name="clickable" format="boolean"/>
         <attr name="halfstart" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="PileLayout">
+        <attr name="PileLayout_vertivalSpace" format="dimension"/>
+        <attr name="PileLayout_pileWidth" format="dimension"/>
+    </declare-styleable>
 </resources>

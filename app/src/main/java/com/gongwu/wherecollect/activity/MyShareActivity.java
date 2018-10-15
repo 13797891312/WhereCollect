@@ -32,6 +32,8 @@ import butterknife.OnClick;
  */
 public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPageChangeListener {
 
+    private final int START_CODE = 0x189;
+
     @Bind(R.id.my_share_title_view)
     TabLocationView mTabView;
     @Bind(R.id.my_share_view_page)
@@ -94,11 +96,20 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
                 finish();
                 break;
             case R.id.add_share_tv:
-                AddSharePersonActivity.start(this);
+                Intent intent = new Intent(this, AddSharePersonActivity.class);
+                startActivityForResult(intent, START_CODE);
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == START_CODE && resultCode == RESULT_OK) {
+            fragments.get(0).refreshFragment();
+            fragments.get(1).refreshFragment();
+        }
+    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

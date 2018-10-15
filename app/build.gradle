@@ -136,4 +136,5 @@ dependencies {
     compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
     compile 'com.github.yalantis:ucrop:2.2.1'
     compile files('libs/SocialSDK_Sina_Simplify.jar')
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }

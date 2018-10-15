@@ -1,17 +1,24 @@
 package com.gongwu.wherecollect.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.UserManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.AddSharePersonOldListAdapter;
@@ -19,7 +26,10 @@ import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.SharePersonBean;
+import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.util.ToastUtil;
 import com.zsitech.oncon.barcode.core.CaptureActivity;
 
 import java.util.ArrayList;
@@ -34,7 +44,7 @@ import butterknife.OnClick;
 /**
  * 添加共享人
  */
-public class AddSharePersonActivity extends BaseViewActivity implements MyOnItemClickListener {
+public class AddSharePersonActivity extends BaseViewActivity implements MyOnItemClickListener, TextWatcher {
 
     private final int START_CODE = 101;
 
@@ -44,9 +54,15 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
     EditText addShareEditView;
     @Bind(R.id.add_share_recycler_view)
     RecyclerView mRecyclerView;
+    @Bind(R.id.delete_btn)
+    ImageButton deleteBtn;
 
     private List<SharePersonBean> datas = new ArrayList<>();
     private AddSharePersonOldListAdapter mAdapter;
+    private boolean init;
+    private boolean initList;
+    private SharePersonBean selectBean;
+    private String location_codes, content_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +86,103 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
         if (mAdapter != null) {
             mAdapter.setOnItemClickListener(this);
         }
+        addShareEditView.addTextChangedListener(this);
+        addShareEditView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    if (TextUtils.isEmpty(addShareEditView.getText().toString().trim())) {
+                        ToastUtil.show(context, "输入共享人ID", Toast.LENGTH_SHORT);
+                    } else {
+                        //会被调用2次
+                        if (!init) {
+                            init = true;
+                            getUserCodeData(addShareEditView.getText().toString().trim());
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @OnClick({R.id.add_share_scan_ib, R.id.add_share_back_btn, R.id.delete_btn})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.add_share_back_btn:
+                onBackPressed();
+                break;
+            case R.id.add_share_scan_ib:
+                startActivityForResult(new Intent(context, CaptureActivity.class), START_CODE);
+                break;
+            case R.id.delete_btn:
+                deleteBtn.setVisibility(View.GONE);
+                addShareEditView.setText("");
+                if (initList) {
+                    initData();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == START_CODE && resultCode == CaptureActivity.result) {//扫描的到结果
+            String result = data.getStringExtra("result");
+            addShareEditView.setText(result);
+            addShareEditView.setSelection(result.length());
+            getUserCodeData(result);
+        }
+        if (requestCode == START_CODE && resultCode == Activity.RESULT_OK) {//选择共享空间的结果
+            location_codes = data.getStringExtra("location_codes");
+            content_text = data.getStringExtra("content_text");
+            if (!TextUtils.isEmpty(location_codes) && selectBean != null) {
+                startDialog();
+            }
+        }
+    }
+
+    private void startDialog() {
+        String content = "";
+        if (selectBean.isValid()) {
+            content = "已与" + selectBean.getNickname() + "建立连接,直接共享" + content_text + "?";
+        }
+        DialogUtil.show("", content, "确定", "取消", (Activity) context, new DialogInterface.OnClickListener
+                () {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                shareOldUserLocation();
+            }
+        }, null);
+    }
+
+    @Override
+    public void onItemClick(int positions, View view) {
+        if (datas != null && datas.size() >= positions) {
+            selectBean = datas.get(positions);
+            Intent intent = new Intent(AddSharePersonActivity.this, SelectShareSpaceActivity.class);
+            startActivityForResult(intent, START_CODE);
+        }
+    }
+
+    private void shareOldUserLocation() {
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", MyApplication.getUser(this).getId());
+        params.put("be_shared_user_id", selectBean.getId());
+        params.put("location_codes", location_codes);
+        PostListenner listener = new PostListenner(this) {
+            @Override
+            protected void code2000(ResponseResult r) {
+                super.code2000(r);
+                setResult(RESULT_OK);
+                finish();
+            }
+        };
+        HttpClient.shareOldUserLocation(this, params, listener);
     }
 
     private void initData() {
@@ -85,43 +198,69 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
                     datas.addAll(beans);
                 }
                 mAdapter.notifyDataSetChanged();
+                initList = false;
             }
         };
         HttpClient.getAddSharePersonOldList(this, params, listener);
     }
 
-    @OnClick({R.id.add_share_scan_tv, R.id.add_share_back_btn})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.add_share_back_btn:
-                onBackPressed();
-                break;
-            case R.id.add_share_scan_tv:
-                startActivityForResult(new Intent(context, CaptureActivity.class), START_CODE);
-                break;
+    private void getUserCodeData(String usid) {
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", MyApplication.getUser(this).getId());
+        params.put("usid", usid);
+        PostListenner listener = new PostListenner(this) {
+            @Override
+            protected void code2000(ResponseResult r) {
+                super.code2000(r);
+                datas.clear();
+                SharePersonBean beans = JsonUtils.objectFromJson(r.getResult(), SharePersonBean.class);
+                if (beans != null) {
+                    datas.add(beans);
+                }
+                mAdapter.notifyDataSetChanged();
+                initList = true;
+                Intent intent = new Intent(AddSharePersonActivity.this, SelectShareSpaceActivity.class);
+                startActivityForResult(intent, START_CODE);
+            }
+
+            @Override
+            protected void error() {
+                ToastUtil.show(context, "该用户不存在", Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+                init = false;
+            }
+        };
+        HttpClient.getUserCodeInfo(this, params, listener);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (count > 0) {
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.GONE);
+            if (initList) {
+                initData();
+            }
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == START_CODE && resultCode == CaptureActivity.result) {//扫描的到结果
-            String result = data.getStringExtra("result");
-            addShareEditView.setText(result);
-            addShareEditView.setSelection(result.length());
-        }
+    public void afterTextChanged(Editable editable) {
+
     }
 
     public static void start(Context context) {
         Intent intent = new Intent(context, AddSharePersonActivity.class);
         context.startActivity(intent);
-    }
-
-    @Override
-    public void onItemClick(int positions, View view) {
-        if (datas != null && datas.size() >= positions) {
-            SharePersonBean bean = datas.get(positions);
-            SelectShareSpaceActivity.start(context, bean);
-        }
     }
 }

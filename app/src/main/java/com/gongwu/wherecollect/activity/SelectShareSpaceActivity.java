@@ -34,7 +34,6 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
     private SelectShareSpaceAdapter mAdapter;
 
     private List<ObjectBean> datas = new ArrayList<>();
-    private SharePersonBean sharePersonBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,6 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
     }
 
     private void initView() {
-        sharePersonBean = (SharePersonBean) getIntent().getSerializableExtra("sharePersonBean");
         titleLayout.setTitle("选择共享空间");
         titleLayout.setBack(true, null);
         titleLayout.selectSpaceView.setVisibility(View.VISIBLE);
@@ -82,22 +80,19 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
     }
 
     private void selectSpaceDataToPost() {
-        int count = 0;
+        String location_codes = "";
+        String content_text = "";
         for (int i = 0; i < datas.size(); i++) {
             if (datas.get(i).isSelectSpace()) {
-                count++;
+                location_codes += datas.get(i).getCode() + "%";
+                content_text += "【" + datas.get(i).getName() + "】,";
             }
         }
-        ToastUtil.show(context, count + "", Toast.LENGTH_SHORT);
-
+        Intent intent = new Intent();
+        intent.putExtra("location_codes", location_codes.substring(0, location_codes.length() - 1));
+        intent.putExtra("content_text", content_text.substring(0, content_text.length() - 1));
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
-    public static void start(Context context, SharePersonBean bean) {
-        Intent intent = new Intent(context, SelectShareSpaceActivity.class);
-        if (bean != null) {
-            intent.putExtra("sharePersonBean", bean);
-        }
-        context.startActivity(intent);
-
-    }
 }

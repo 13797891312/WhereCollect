@@ -120,7 +120,7 @@ public class PersonFragment extends BaseFragment {
                     returnBitMap(user.getAvatar());
                 }
                 break;
-            case R.id.my_share_layout://消息中心
+            case R.id.my_share_layout://共享空间
                 MyShareActivity.start(getContext());
                 break;
         }

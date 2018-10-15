@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Administrator on 2018/10/12.
@@ -14,6 +15,7 @@ public class SharePersonBean implements Serializable {
     private String search_user_id;
     private boolean valid;
     private String nickname;
+    private List<SharedLocationBean> shared_locations;
 
     public String getAvatar() {
         return avatar;
@@ -69,5 +71,13 @@ public class SharePersonBean implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public List<SharedLocationBean> getShared_locations() {
+        return shared_locations;
+    }
+
+    public void setShared_locations(List<SharedLocationBean> shared_locations) {
+        this.shared_locations = shared_locations;
     }
 }
