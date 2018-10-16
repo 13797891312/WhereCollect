@@ -27,10 +27,15 @@ public class ShareSpaceListAdapter extends RecyclerView.Adapter<ShareSpaceListAd
 
     private Context mContext;
     private List<SharedLocationBean> datas;
+    private MyOnItemClickListener onItemClickListener;
 
     public ShareSpaceListAdapter(Context mContext, List<SharedLocationBean> datas) {
         this.mContext = mContext;
         this.datas = datas;
+    }
+
+    public void setOnItemClickListener(MyOnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -51,7 +56,7 @@ public class ShareSpaceListAdapter extends RecyclerView.Adapter<ShareSpaceListAd
         return datas == null ? 0 : datas.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.share_space_list_name_tv)
         TextView spaceNameTv;
         @Bind(R.id.pile_avert_view)
@@ -60,6 +65,14 @@ public class ShareSpaceListAdapter extends RecyclerView.Adapter<ShareSpaceListAd
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(getLayoutPosition(), view);
+            }
         }
     }
 }

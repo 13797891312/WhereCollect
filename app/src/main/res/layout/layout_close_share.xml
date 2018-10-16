@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/camare"
+            android:id="@+id/close_save_data_tv"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dip_40"
             android:layout_marginLeft="8dp"
@@ -24,7 +24,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/select_changheader_top_btn_bg"
             android:gravity="center"
-            android:text="拍 照"
+            android:text="断开并保留双方数据"
             android:textColor="@color/black_87"
             android:textScaleX="1.05"
             android:textSize="@dimen/f_15"/>
@@ -37,26 +37,7 @@
             android:background="@color/white_54"/>
 
         <TextView
-            android:id="@+id/camare_video"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dip_40"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/select_changheader_btn"
-            android:gravity="center"
-            android:text="录 像"
-            android:textColor="@color/black_87"
-            android:textScaleX="1.05"
-            android:textSize="@dimen/f_15"
-            android:visibility="gone"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@color/white_54"/>
-        <TextView
-            android:id="@+id/select"
+            android:id="@+id/close_delete_data_tv"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dip_40"
             android:layout_marginBottom="8dp"
@@ -64,7 +45,7 @@
             android:layout_marginRight="8dp"
             android:background="@drawable/select_changheader_bottom_btn_bg"
             android:gravity="center"
-            android:text="从相册选择"
+            android:text="断开并删除对方数据"
             android:textColor="@color/black_87"
             android:textScaleX="1.05"
             android:textSize="@dimen/f_15"/>

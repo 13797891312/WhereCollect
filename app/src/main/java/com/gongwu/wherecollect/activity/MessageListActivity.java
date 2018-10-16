@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
@@ -74,31 +75,46 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
     public void onItemClick(int positions, View view) {
         final MessageBean messageBean = datas.get(positions);
         String okStr = "";
-        String cancal = "";
+        String okUrl = "";
+        String cancelStr = "";
+        String cancelUrl = "";
         if (messageBean.getButtons().size() == 1) {
-            cancal = messageBean.getButtons().get(0).getText();
+            cancelStr = messageBean.getButtons().get(0).getText();
         }
         if (messageBean.getButtons().size() > 1) {
             for (int i = 0; i < messageBean.getButtons().size(); i++) {
                 if (messageBean.getButtons().get(i).getColor().equals("SUCCESS")) {
                     okStr = messageBean.getButtons().get(i).getText();
+                    okUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
+                            messageBean.getButtons().get(i).getApi_url();
                 }
                 if (messageBean.getButtons().get(i).getColor().equals("DANGER")) {
-                    cancal = messageBean.getButtons().get(i).getText();
+                    cancelStr = messageBean.getButtons().get(i).getText();
+                    cancelUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
+                            messageBean.getButtons().get(i).getApi_url();
                 }
             }
         }
-        DialogUtil.show("", messageBean.getContent(), okStr, cancal, this, new DialogInterface.OnClickListener() {
+        final String finalOkUrl = okUrl;
+        final String finalCancelUrl = cancelUrl;
+        DialogUtil.show("", messageBean.getContent(), okStr, cancelStr, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (!messageBean.isIs_read()) {
-                    postShareHttp();
+                if (!messageBean.isIs_read() && !TextUtils.isEmpty(finalOkUrl)) {
+                    postShareHttp(finalOkUrl);
                 }
             }
-        }, null);
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (!messageBean.isIs_read() && !TextUtils.isEmpty(finalCancelUrl)) {
+                    postShareHttp(finalCancelUrl);
+                }
+            }
+        });
     }
 
-    private void postShareHttp() {
+    private void postShareHttp(String url) {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
         PostListenner listenner = new PostListenner(this) {
@@ -112,7 +128,7 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
                 super.onFinish();
             }
         };
-        HttpClient.dealWithShareRequest(context, map, listenner);
+        HttpClient.dealWithShareRequest(context, url, map, listenner);
     }
 
     /**

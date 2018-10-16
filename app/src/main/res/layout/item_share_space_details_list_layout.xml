@@ -13,11 +13,24 @@
         android:padding="@dimen/dip_8"
         >
 
-        <ImageView
-            android:id="@+id/share_person_list_user_icon_iv"
-            android:layout_width="@dimen/dip_48"
-            android:layout_height="@dimen/dip_48"
-            />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/share_person_details_user_icon_iv"
+                android:layout_width="@dimen/dip_48"
+                android:layout_height="@dimen/dip_48"
+                />
+
+            <ImageView
+                android:id="@+id/space_details_lock_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_lock"
+                />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -34,41 +47,17 @@
                 >
 
                 <TextView
-                    android:id="@+id/share_person_list_user_name_tv"
+                    android:id="@+id/share_person_details_user_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_70"
                     android:textSize="@dimen/f_14"
                     />
 
-                <LinearLayout
-                    android:id="@+id/share_person_valid_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dip_4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_vcr"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="等待对方确认...."
-                        android:textColor="@color/green_text_color"
-                        android:textSize="@dimen/f_10"
-                        />
-                </LinearLayout>
             </LinearLayout>
 
             <TextView
-                android:id="@+id/share_person_list_user_space_tv"
+                android:id="@+id/share_person_details_user_space_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dip_8"
@@ -80,7 +69,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/close_share_person_iv"
+            android:id="@+id/close_share_space_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

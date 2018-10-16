@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.SharePersonBean;
+import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.util.ImageLoader;
 
 import java.util.List;
@@ -18,18 +20,24 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * 共享人列表 adapter
+ * 共享控件详情列表 adapter
  */
-
-public class SharePersonListAdapter extends RecyclerView.Adapter<SharePersonListAdapter.ViewHolder> {
+public class ShareSpaceDetailsListAdapter extends RecyclerView.Adapter<ShareSpaceDetailsListAdapter.ViewHolder> {
 
     private Context mContext;
     private List<SharePersonBean> datas;
     private MyOnItemClickListener onItemClickListener;
+    private String content;
+    private UserBean manager;
 
-    public SharePersonListAdapter(Context mContext, List<SharePersonBean> datas) {
+    public ShareSpaceDetailsListAdapter(Context mContext, List<SharePersonBean> datas, UserBean manager) {
         this.mContext = mContext;
         this.datas = datas;
+        this.manager = manager;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public void setOnItemClickListener(MyOnItemClickListener onItemClickListener) {
@@ -38,7 +46,7 @@ public class SharePersonListAdapter extends RecyclerView.Adapter<SharePersonList
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_share_person_list_layout, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_share_space_details_list_layout, parent, false);
         return new ViewHolder(view);
     }
 
@@ -47,22 +55,18 @@ public class SharePersonListAdapter extends RecyclerView.Adapter<SharePersonList
         SharePersonBean bean = datas.get(position);
         ImageLoader.loadCircle(mContext, holder.userIconIv, bean.getAvatar(), R.mipmap.ic_launcher);
         holder.userNameTv.setText(bean.getNickname());
-        String s = "";
-        for (int i = 0; i < bean.getShared_locations().size(); i++) {
-            s += bean.getShared_locations().get(i).getName() + " ";
-        }
-        holder.userSpaceTv.setText(s);
-        if (!bean.isValid()) {
-            holder.isValidView.setVisibility(View.VISIBLE);
-        } else {
-            holder.isValidView.setVisibility(View.GONE);
-        }
+        holder.userSpaceTv.setText(content);
         holder.closeIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 closeClick(position);
             }
         });
+        if (manager.getId().equals(MyApplication.getUser(mContext).getId())) {
+            holder.lockIv.setVisibility(View.VISIBLE);
+        } else {
+            holder.lockIv.setVisibility(View.GONE);
+        }
     }
 
     public void closeClick(int position) {
@@ -75,16 +79,16 @@ public class SharePersonListAdapter extends RecyclerView.Adapter<SharePersonList
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @Bind(R.id.share_person_list_user_icon_iv)
+        @Bind(R.id.share_person_details_user_icon_iv)
         ImageView userIconIv;
-        @Bind(R.id.share_person_list_user_name_tv)
+        @Bind(R.id.share_person_details_user_name_tv)
         TextView userNameTv;
-        @Bind(R.id.share_person_list_user_space_tv)
+        @Bind(R.id.share_person_details_user_space_tv)
         TextView userSpaceTv;
-        @Bind(R.id.close_share_person_iv)
+        @Bind(R.id.close_share_space_iv)
         ImageView closeIv;
-        @Bind(R.id.share_person_valid_layout)
-        View isValidView;
+        @Bind(R.id.space_details_lock_iv)
+        ImageView lockIv;
 
         public ViewHolder(View itemView) {
             super(itemView);

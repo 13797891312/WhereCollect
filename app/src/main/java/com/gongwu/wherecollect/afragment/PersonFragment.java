@@ -18,6 +18,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.FeedBackActivity;
 import com.gongwu.wherecollect.activity.MessageListActivity;
@@ -76,6 +79,7 @@ public class PersonFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         refreshUi();
         initEvent();
+        loadImageSimpleTarget(user.getAvatar());
         return view;
     }
 
@@ -117,7 +121,7 @@ public class PersonFragment extends BaseFragment {
                     UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
                     userCodeDialog.showDialog(user.getUsid(), bitmap);
                 } else {
-                    returnBitMap(user.getAvatar());
+                    loadImageSimpleTarget(user.getAvatar());
                 }
                 break;
             case R.id.my_share_layout://共享空间
@@ -126,45 +130,19 @@ public class PersonFragment extends BaseFragment {
         }
     }
 
-    private Handler handler = new Handler() {
+    private SimpleTarget target = new SimpleTarget<Bitmap>() {
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            bitmap = (Bitmap) msg.obj;
-            if (bitmap != null) {
-                UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
-                userCodeDialog.showDialog(user.getUsid(), bitmap);
-            }
+        public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+            //这里我们拿到回掉回来的bitmap，可以加载到我们想使用到的地方
+            PersonFragment.this.bitmap = bitmap;
         }
     };
 
-    public void returnBitMap(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                URL imageurl = null;
-
-                try {
-                    imageurl = new URL(url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    HttpURLConnection conn = (HttpURLConnection) imageurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.connect();
-                    InputStream is = conn.getInputStream();
-                    Message message = handler.obtainMessage();
-                    Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    message.obj = bitmap;
-                    handler.sendMessage(message);
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    private void loadImageSimpleTarget(String url) {
+        Glide.with(getContext()) // could be an issue!
+                .load(url)
+                .asBitmap()   //强制转换Bitmap
+                .into(target);
     }
 
     /**

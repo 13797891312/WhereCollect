@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.LocationLook.TabLocationView;
@@ -107,6 +105,12 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == START_CODE && resultCode == RESULT_OK) {
             fragments.get(0).refreshFragment();
+            fragments.get(1).refreshFragment();
+        }
+        if (requestCode == 102 && resultCode == RESULT_OK) {
+            fragments.get(0).refreshFragment();
+        }
+        if (requestCode == 104 && resultCode == RESULT_OK) {
             fragments.get(1).refreshFragment();
         }
     }

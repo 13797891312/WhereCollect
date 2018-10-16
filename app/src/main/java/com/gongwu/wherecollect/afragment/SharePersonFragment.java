@@ -1,7 +1,8 @@
 package com.gongwu.wherecollect.afragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,10 +18,10 @@ import com.gongwu.wherecollect.adapter.SharePersonListAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.SharePersonBean;
-import com.gongwu.wherecollect.swipetoloadlayout.OnLoadMoreListener;
 import com.gongwu.wherecollect.swipetoloadlayout.OnRefreshListener;
 import com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.view.CloseShareDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,8 @@ import butterknife.ButterKnife;
  */
 public class SharePersonFragment extends BaseFragment implements OnRefreshListener, MyOnItemClickListener {
 
+    private final int START_CODE = 102;
+
     @Bind(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     @Bind(R.id.swipe_target)
@@ -44,6 +47,7 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
     private boolean init;
     private List<SharePersonBean> datas = new ArrayList<>();
     private SharePersonListAdapter mAdapter;
+    private CloseShareDialog closeShareDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,8 +63,50 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
 
     private void initView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mAdapter = new SharePersonListAdapter(getContext(), datas);
+        mAdapter = new SharePersonListAdapter(getContext(), datas) {
+            @Override
+            public void closeClick(int position) {
+                startDialog(position);
+            }
+        };
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void startDialog(final int position) {
+
+        closeShareDialog = new CloseShareDialog(getActivity()) {
+            @Override
+            public void saveData() {
+                closeShareUser(datas.get(position).getId(), "1");
+            }
+
+            @Override
+            public void deleteData() {
+                closeShareUser(datas.get(position).getId(), "0");
+            }
+        };
+    }
+
+    private void closeShareUser(String shareUserId, String type) {
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", MyApplication.getUser(getContext()).getId());
+        params.put("be_shared_user_id", shareUserId);
+        params.put("type", type);
+        PostListenner listener = new PostListenner(getContext()) {
+            @Override
+            protected void code2000(ResponseResult r) {
+                super.code2000(r);
+                if (mSwipeToLoadLayout != null) {
+                    mSwipeToLoadLayout.setRefreshing(true);
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.closeShareUser(getContext(), params, listener);
     }
 
     private void initEvent() {
@@ -99,9 +145,10 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
 
     @Override
     public void onItemClick(int positions, View view) {
-        SharePersonDetailsActivity.start(getContext(), datas.get(positions));
+        Intent intent = new Intent(getContext(), SharePersonDetailsActivity.class);
+        intent.putExtra("sharePersonBean", datas.get(positions));
+        getActivity().startActivityForResult(intent, 102);
     }
-
 
     @Override
     public void onShow() {

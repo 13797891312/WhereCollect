@@ -1,5 +1,6 @@
 package com.gongwu.wherecollect.afragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.activity.ShareSpaceDetailsActivity;
+import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.adapter.ShareSpaceListAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
@@ -31,7 +34,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ShareSpaceFragment extends BaseFragment implements OnRefreshListener {
+public class ShareSpaceFragment extends BaseFragment implements OnRefreshListener, MyOnItemClickListener {
 
     @Bind(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
@@ -63,6 +66,7 @@ public class ShareSpaceFragment extends BaseFragment implements OnRefreshListene
 
     private void initEvent() {
         mSwipeToLoadLayout.setOnRefreshListener(this);
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -107,5 +111,13 @@ public class ShareSpaceFragment extends BaseFragment implements OnRefreshListene
     @Override
     public void refreshFragment() {
         mSwipeToLoadLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void onItemClick(int positions, View view) {
+        SharedLocationBean locationBean = datas.get(positions);
+        Intent intent = new Intent(getContext(), ShareSpaceDetailsActivity.class);
+        intent.putExtra("locationBean", locationBean);
+        startActivityForResult(intent, 104);
     }
 }

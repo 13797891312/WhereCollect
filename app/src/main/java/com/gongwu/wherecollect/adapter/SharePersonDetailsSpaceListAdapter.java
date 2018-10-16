@@ -20,10 +20,12 @@ public class SharePersonDetailsSpaceListAdapter extends RecyclerView.Adapter<Sha
 
     private Context mContext;
     private List<SharedLocationBean> datas;
+    private String userId;
 
-    public SharePersonDetailsSpaceListAdapter(Context mContext, List<SharedLocationBean> datas) {
+    public SharePersonDetailsSpaceListAdapter(Context mContext, List<SharedLocationBean> datas, String userId) {
         this.mContext = mContext;
         this.datas = datas;
+        this.userId = userId;
     }
 
     @Override
@@ -33,9 +35,24 @@ public class SharePersonDetailsSpaceListAdapter extends RecyclerView.Adapter<Sha
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         SharedLocationBean bean = datas.get(position);
         holder.space_name_tv.setText(bean.getName());
+        if (userId.equals(bean.getUser_id())) {
+            holder.space_lock_iv.setVisibility(View.VISIBLE);
+        } else {
+            holder.space_lock_iv.setVisibility(View.GONE);
+        }
+        holder.close_space_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeSpace(position);
+            }
+        });
+    }
+
+    public void closeSpace(int position) {
+
     }
 
     @Override
@@ -48,6 +65,8 @@ public class SharePersonDetailsSpaceListAdapter extends RecyclerView.Adapter<Sha
         TextView space_name_tv;
         @Bind(R.id.close_share_user_details_space_iv)
         ImageView close_space_iv;
+        @Bind(R.id.space_lock_iv)
+        ImageView space_lock_iv;
 
         public ViewHolder(View itemView) {
             super(itemView);

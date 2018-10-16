@@ -9,10 +9,14 @@ import android.view.View;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.SelectShareSpaceAdapter;
+import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.SharedLocationBean;
+import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,25 +31,49 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
 
     @Bind(R.id.select_share_space_recycler_view)
     RecyclerView mRecyclerView;
+
     private SelectShareSpaceAdapter mAdapter;
 
     private List<ObjectBean> datas = new ArrayList<>();
+    private boolean addMore = false;
+    private UserBean user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_share_space);
         ButterKnife.bind(this);
+        user = MyApplication.getUser(this);
         initView();
-        initEvent();
         initData();
     }
 
     private void initData() {
         datas.clear();
         final String cache = SaveDate.getInstence(this).getSpace();
+        List<SharedLocationBean> shareSpaceBeans = (List<SharedLocationBean>) getIntent().getSerializableExtra("shareSpaceBeans");
         if (!TextUtils.isEmpty(cache)) {
             List<ObjectBean> temp = JsonUtils.listFromJson(cache, ObjectBean.class);
+            for (int i = 0; i < temp.size(); i++) {
+                ObjectBean objectBean = temp.get(i);
+                if (!objectBean.getUser_id().equals(user.getId())) {
+                    temp.remove(i);
+                    i--;
+                }
+            }
+            if (shareSpaceBeans != null && shareSpaceBeans.size() > 0) {
+                titleLayout.setTitle("批量添加共享空间");
+                addMore = true;
+                for (int i = 0; i < temp.size(); i++) {
+                    ObjectBean objectBean = temp.get(i);
+                    for (int j = 0; j < shareSpaceBeans.size(); j++) {
+                        if (objectBean.getName().equals(shareSpaceBeans.get(j).getName())) {
+                            temp.remove(i);
+                            i--;
+                        }
+                    }
+                }
+            }
             datas.addAll(temp);
         }
         mAdapter.notifyDataSetChanged();
@@ -58,10 +86,6 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdapter = new SelectShareSpaceAdapter(context, datas);
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void initEvent() {
-
     }
 
     @OnClick({R.id.select_space_ib})
@@ -78,15 +102,27 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
     private void selectSpaceDataToPost() {
         String location_codes = "";
         String content_text = "";
+        List<SharedLocationBean> beans = new ArrayList<>();
         for (int i = 0; i < datas.size(); i++) {
             if (datas.get(i).isSelectSpace()) {
                 location_codes += datas.get(i).getCode() + "%";
                 content_text += "【" + datas.get(i).getName() + "】,";
+                if (addMore) {
+                    SharedLocationBean bean = new SharedLocationBean();
+                    bean.setCode(datas.get(i).getCode());
+                    bean.setName(datas.get(i).getName());
+                    bean.setId(datas.get(i).getId());
+                    bean.setUser_id(datas.get(i).getUser_id());
+                    beans.add(bean);
+                }
             }
         }
         Intent intent = new Intent();
         intent.putExtra("location_codes", location_codes.substring(0, location_codes.length() - 1));
         intent.putExtra("content_text", content_text.substring(0, content_text.length() - 1));
+        if (addMore) {
+            intent.putExtra("result_bean", (Serializable) beans);
+        }
         setResult(RESULT_OK, intent);
         finish();
     }
