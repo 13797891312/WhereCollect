@@ -739,4 +739,13 @@ public class HttpClient {
         CustomPostRequest request = new CustomPostRequest("api/app/v330/a/share-location-2-user", params, listenner);
         Queue.getQueue(context).add(request);
     }
+
+    /**
+     * 邀请用户共享空间
+     */
+    public static void dealWithShareRequest(Context context, Map<String, String> params, PostListenner
+            listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v330/deal-with-share-request", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
 }

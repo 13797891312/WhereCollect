@@ -94,7 +94,7 @@ public class MessageBean {
         this.buttons = buttons;
     }
 
-    static class MessageChildBean {
+    public static class MessageChildBean {
         private String _id;
         private String api_url;
         private String color;

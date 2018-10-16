@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,8 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
@@ -17,16 +16,13 @@ import com.gongwu.wherecollect.adapter.MessageListAdapter;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.MessageBean;
-import com.gongwu.wherecollect.entity.MessageGroupBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.swipetoloadlayout.OnLoadMoreListener;
 import com.gongwu.wherecollect.swipetoloadlayout.OnRefreshListener;
 import com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout;
+import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.zhaojin.myviews.Loading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +72,47 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
 
     @Override
     public void onItemClick(int positions, View view) {
+        final MessageBean messageBean = datas.get(positions);
+        String okStr = "";
+        String cancal = "";
+        if (messageBean.getButtons().size() == 1) {
+            cancal = messageBean.getButtons().get(0).getText();
+        }
+        if (messageBean.getButtons().size() > 1) {
+            for (int i = 0; i < messageBean.getButtons().size(); i++) {
+                if (messageBean.getButtons().get(i).getColor().equals("SUCCESS")) {
+                    okStr = messageBean.getButtons().get(i).getText();
+                }
+                if (messageBean.getButtons().get(i).getColor().equals("DANGER")) {
+                    cancal = messageBean.getButtons().get(i).getText();
+                }
+            }
+        }
+        DialogUtil.show("", messageBean.getContent(), okStr, cancal, this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (!messageBean.isIs_read()) {
+                    postShareHttp();
+                }
+            }
+        }, null);
+    }
 
+    private void postShareHttp() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(this).getId());
+        PostListenner listenner = new PostListenner(this) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+//        HttpClient.dealWithShareRequest(context, map, listenner);
     }
 
     /**
