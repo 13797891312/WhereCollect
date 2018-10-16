@@ -150,6 +150,8 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
         String content = "";
         if (selectBean.isValid()) {
             content = "已与" + selectBean.getNickname() + "建立连接,直接共享" + content_text + "?";
+        } else {
+            content = "是否邀请@" + selectBean.getNickname() + ",并共享" + content_text + "?" + "\n（共享后，双方可同时查看和编辑该空间及空间内物品）";
         }
         DialogUtil.show("", content, "确定", "取消", (Activity) context, new DialogInterface.OnClickListener
                 () {
@@ -158,6 +160,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
                 shareOldUserLocation();
             }
         }, null);
+
     }
 
     @Override
@@ -167,6 +170,10 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
             Intent intent = new Intent(AddSharePersonActivity.this, SelectShareSpaceActivity.class);
             startActivityForResult(intent, START_CODE);
         }
+    }
+
+    private void shareUserLocation() {
+
     }
 
     private void shareOldUserLocation() {

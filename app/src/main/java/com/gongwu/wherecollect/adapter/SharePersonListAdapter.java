@@ -52,6 +52,9 @@ public class SharePersonListAdapter extends RecyclerView.Adapter<SharePersonList
             s += bean.getShared_locations().get(i).getName() + " ";
         }
         holder.userSpaceTv.setText(s);
+        if (!bean.isValid()) {
+            holder.isValidView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -68,6 +71,8 @@ public class SharePersonListAdapter extends RecyclerView.Adapter<SharePersonList
         TextView userSpaceTv;
         @Bind(R.id.close_share_person_iv)
         ImageView closeIv;
+        @Bind(R.id.share_person_valid_layout)
+        View isValidView;
 
         public ViewHolder(View itemView) {
             super(itemView);

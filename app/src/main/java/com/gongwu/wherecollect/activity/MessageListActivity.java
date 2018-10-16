@@ -112,7 +112,7 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
                 super.onFinish();
             }
         };
-//        HttpClient.dealWithShareRequest(context, map, listenner);
+        HttpClient.dealWithShareRequest(context, map, listenner);
     }
 
     /**
