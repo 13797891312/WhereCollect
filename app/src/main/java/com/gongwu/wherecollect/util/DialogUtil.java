@@ -61,6 +61,37 @@ public class DialogUtil {
         dialog.getWindow().setAttributes(params);
         return dialog;
     }
+
+    /**
+     * @param title     标题
+     * @param msg       消息
+     * @param okStr     确认按钮文字
+     * @param cancalStr 取消按钮文字
+     * @param context
+     * @param listener1 确认监听
+     * @param listener2 取消监听
+     * @return
+     */
+    public static AlertDialog showMsg(String title, String msg, String okStr, String cancalStr,
+                                   Activity context, DialogInterface.OnClickListener listener1,
+                                   DialogInterface.OnClickListener listener2) {
+        AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(context)
+                .setTitle(title)
+                .setPositiveButton(okStr, listener1)
+                .setNegativeButton(cancalStr, listener2)
+                .setMessage(msg)
+                .create();
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.setCancelable(false);
+        dialog.show();
+        WindowManager.LayoutParams params =
+                dialog.getWindow().getAttributes();
+        if (BaseViewActivity.getScreenWidth(context) < BaseViewActivity.getScreenHeigth(context)) {
+            params.width = (int) (BaseViewActivity.getScreenWidth(context) * 6.0f / 7.0f);
+        }
+        dialog.getWindow().setAttributes(params);
+        return dialog;
+    }
 }
 
 

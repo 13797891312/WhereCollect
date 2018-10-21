@@ -4,6 +4,7 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 
@@ -25,7 +26,7 @@ public class GetSpaceDateUtil {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
-                List<ObjectBean> temp = JsonUtils.listFromJson(r.getResult(), ObjectBean.class);
+                List<LocationBean> temp = JsonUtils.listFromJson(r.getResult(), LocationBean.class);
                 SaveDate.getInstence(activity).setSpace(r.getResult());
                 MainLocationFragment.mlist.clear();
                 MainLocationFragment.mlist.addAll(temp);
@@ -46,7 +47,7 @@ public class GetSpaceDateUtil {
      *
      * @param temp
      */
-    protected void getResult(List<ObjectBean> temp) {
+    protected void getResult(List<LocationBean> temp) {
     }
 
     /**

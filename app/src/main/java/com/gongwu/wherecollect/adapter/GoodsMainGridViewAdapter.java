@@ -92,6 +92,11 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         } else {
             holder.footer.setVisibility(View.GONE);
         }
+        if (bean.getIs_share()==1){
+            holder.isShare.setVisibility(View.VISIBLE);
+        }else{
+            holder.isShare.setVisibility(View.GONE);
+        }
         holder.nameTv.setText(bean.getName());
         holder.locationTv.setText(getLoction(bean));
         return view;
@@ -133,6 +138,8 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         TextView locationTv;
         @Bind(R.id.no_url_img_tv)
         TextView imgTv;
+        @Bind(R.id.goods_is_share_layout)
+        View isShare;
 
         public CustomViewHolder(View view) {
             ButterKnife.bind(this, view);

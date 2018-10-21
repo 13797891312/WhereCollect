@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ScrollSpeedLinearLayoutManger;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * @since JDK 1.7
  */
 public class LocationIndicatorView extends RecyclerView {
-    List<ObjectBean> mlist=new ArrayList<>();
+    List<LocationBean> mlist=new ArrayList<>();
     Context context;
     public LocationIndicatorAdapter adapter;
     private ScrollSpeedLinearLayoutManger mLayoutManager;
@@ -55,7 +56,7 @@ public class LocationIndicatorView extends RecyclerView {
         }
     }
 
-    public void init(List<ObjectBean> list) {
+    public void init(List<LocationBean> list) {
         mlist = list;
         setHasFixedSize(true);
         adapter = new LocationIndicatorAdapter(context, mlist);
@@ -79,7 +80,7 @@ public class LocationIndicatorView extends RecyclerView {
      *
      * @return
      */
-    public ObjectBean getCurrentLocation() {
+    public LocationBean getCurrentLocation() {
         return mlist.get(adapter.getSelectPostion()==-1?null:adapter.getSelectPostion());
     }
 

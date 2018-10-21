@@ -103,4 +103,16 @@
         android:background="@drawable/select_white_bg"
         android:src="@drawable/icon_menu"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/add_share_tv"
+        android:layout_width="@dimen/dip_48"
+        android:layout_height="@dimen/dip_48"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/select_white_bg"
+        android:gravity="center"
+        android:text="+"
+        android:textColor="@color/color666"
+        android:textSize="@dimen/f_23"
+        android:visibility="gone" />
 </RelativeLayout>

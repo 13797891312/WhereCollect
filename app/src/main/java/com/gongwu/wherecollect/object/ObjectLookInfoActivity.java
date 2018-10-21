@@ -20,16 +20,19 @@ import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
+import com.gongwu.wherecollect.adapter.ObjectShowShareUsersAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ImageData;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.entity.ShareUserBean;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.view.EbagGridView;
 import com.gongwu.wherecollect.view.FlowViewGroup;
 import com.gongwu.wherecollect.view.GoodsImageView;
 import com.gongwu.wherecollect.view.ObjectInfoLookView;
@@ -75,6 +78,10 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
     ImageView objectPositionConfiIv;
     @Bind(R.id.goods_image_iv)
     GoodsImageView goodsImageIv;
+    @Bind(R.id.objrct_share_user_grid_view)
+    EbagGridView mEbagGridView;
+    @Bind(R.id.objrct_share_user_layout)
+    LinearLayout shareUserLayout;
 
 //    @Bind(R.id.goods_image_tv)
 //    TextView goodsImageTv;
@@ -85,6 +92,7 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
 
     private final String IMG_COLOR_CODE = 0 + "";//默认图片颜色的值
     private boolean isSetResult = false;
+    private List<ShareUserBean> shareUserBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +102,13 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         titleLayout.setTitle("查看物品");
         titleLayout.setBack(true, null);
         bean = (ObjectBean) getIntent().getSerializableExtra("bean");
+        shareUserBeans = (List<ShareUserBean>) getIntent().getSerializableExtra("shareUsers");
+        if (shareUserBeans != null && shareUserBeans.size() > 0) {
+            initImgData();
+            shareUserLayout.setVisibility(View.VISIBLE);
+        } else {
+            shareUserLayout.setVisibility(View.GONE);
+        }
         titleLayout.textBtn.setVisibility(View.VISIBLE);
         titleLayout.textBtn.setText("编辑");
         titleLayout.textBtn.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +125,11 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         });
         initValues();
         EventBus.getDefault().register(this);
+    }
+
+    private void initImgData() {
+        ObjectShowShareUsersAdapter mAdapter = new ObjectShowShareUsersAdapter(this, shareUserBeans, MyApplication.getUser(this).getId());
+        mEbagGridView.setAdapter(mAdapter);
     }
 
     /**

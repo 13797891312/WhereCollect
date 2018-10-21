@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/dip_8"
-        >
+        android:padding="@dimen/dip_8">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/share_person_details_user_icon_iv"
                 android:layout_width="@dimen/dip_48"
                 android:layout_height="@dimen/dip_48"
-                />
+                android:scaleType="fitXY" />
 
             <ImageView
                 android:id="@+id/space_details_lock_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_lock"
-                />
+                android:src="@drawable/icon_lock" />
         </RelativeLayout>
 
         <LinearLayout
@@ -37,22 +33,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="@dimen/dip_8"
-            >
+            android:padding="@dimen/dip_8">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/share_person_details_user_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_70"
-                    android:textSize="@dimen/f_14"
-                    />
+                    android:textSize="@dimen/f_14" />
 
             </LinearLayout>
 
@@ -64,8 +57,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/black_40"
-                android:textSize="@dimen/f_12"
-                />
+                android:textSize="@dimen/f_12" />
         </LinearLayout>
 
         <ImageView
@@ -75,14 +67,12 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:padding="@dimen/dip_8"
-            android:src="@drawable/icon_cutlink"
-            />
+            android:src="@drawable/icon_cutlink" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="@dimen/dip_16"
-        android:background="@color/black_12"
-        />
+        android:background="@color/black_12" />
 </LinearLayout>

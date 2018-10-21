@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.EventBusMsg;
@@ -30,10 +31,10 @@ import butterknife.ButterKnife;
  * Created by mChenys on 2017/2/15.
  */
 public class SpaceEditListAdapter extends RecyclerView.Adapter<SpaceEditListAdapter.MyViewHolder> {
-    List<ObjectBean> mData;
+    List<LocationBean> mData;
     Context context;
 
-    public SpaceEditListAdapter(Context context, List<ObjectBean> mData) {
+    public SpaceEditListAdapter(Context context, List<LocationBean> mData) {
         this.mData = mData;
         this.context = context;
     }

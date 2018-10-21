@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ScrollSpeedLinearLayoutManger;
 import com.gongwu.wherecollect.util.StringUtils;
@@ -25,10 +26,10 @@ import butterknife.ButterKnife;
 public class LocationIndicatorAdapter extends RecyclerView.Adapter<LocationIndicatorAdapter.CustomViewHolder> {
     MyOnItemClickListener onItemClickListener;
     Context context;
-    List<ObjectBean> mlist;
+    List<LocationBean> mlist;
     private ScrollSpeedLinearLayoutManger mLayoutManager;
 
-    public LocationIndicatorAdapter(Context context, List<ObjectBean> list) {
+    public LocationIndicatorAdapter(Context context, List<LocationBean> list) {
         this.context = context;
         this.mlist = list;
         getSelectPostion();

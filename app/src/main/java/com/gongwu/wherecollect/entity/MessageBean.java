@@ -1,8 +1,9 @@
 package com.gongwu.wherecollect.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class MessageBean {
+public class MessageBean implements Serializable{
     private String created_at;
     private String updated_at;
     private String type;
@@ -94,7 +95,7 @@ public class MessageBean {
         this.buttons = buttons;
     }
 
-    public static class MessageChildBean {
+    public static class MessageChildBean implements Serializable {
         private String _id;
         private String api_url;
         private String color;

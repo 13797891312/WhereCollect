@@ -56,6 +56,7 @@
                     android:id="@+id/person_iv"
                     android:layout_width="70dip"
                     android:layout_height="70dip"
+                    android:scaleType="fitXY"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dip_24"
                     android:src="@mipmap/ic_launcher"

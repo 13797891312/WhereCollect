@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.util;
 
 import com.gongwu.wherecollect.entity.BookBean;
+import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.UserBean;
 
@@ -19,6 +20,7 @@ public class EventBusMsg {
     public static String OBJECT_FITLER = "object_fitler";//筛选变动
     public static String ACTIVITY_FINISH = "activity_finish";
     public static String REFRESH_GOODS = "refresh_goods";
+    public static String MESSAGE_LIST = "message_list";
 
     /**
      * 更换账号
@@ -165,5 +167,19 @@ public class EventBusMsg {
         public DeleteGoodsMsg(String goodsId) {
             this.goodsId = goodsId;
         }
+    }
+
+    /**
+     * 获取msglist
+     */
+    public static class GetMessageList {
+        public MessageBean messageBean;
+
+        public GetMessageList(MessageBean messageBean) {
+            this.messageBean = messageBean;
+        }
+    }
+
+    public static class REFRESHBYMESSAGE {
     }
 }

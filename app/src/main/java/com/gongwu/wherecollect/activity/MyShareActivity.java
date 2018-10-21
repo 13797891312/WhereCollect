@@ -17,6 +17,7 @@ import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.SharePersonFragment;
 import com.gongwu.wherecollect.afragment.ShareSpaceFragment;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
     TabLocationView mTabView;
     @Bind(R.id.my_share_view_page)
     ViewPager mViewPager;
-    @Bind(R.id.add_share_tv)
+    @Bind(R.id.add_my_share_tv)
     TextView addShareBtn;
 
     private List<BaseFragment> fragments = null;
@@ -58,7 +59,6 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mViewPager.setCurrentItem(mTabView.getSelection());
-                isShowAddShareBtn(mTabView.getSelection());
             }
         });
     }
@@ -87,13 +87,13 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
 
     }
 
-    @OnClick({R.id.share_back_btn, R.id.add_share_tv})
+    @OnClick({R.id.share_back_btn, R.id.add_my_share_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.share_back_btn:
                 finish();
                 break;
-            case R.id.add_share_tv:
+            case R.id.add_my_share_tv:
                 Intent intent = new Intent(this, AddSharePersonActivity.class);
                 startActivityForResult(intent, START_CODE);
                 break;
@@ -134,6 +134,7 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
     }
 
     private void isShowAddShareBtn(int position) {
+        LogUtil.e("position:"+position);
         switch (position) {
             case 0:
                 addShareBtn.setVisibility(View.VISIBLE);

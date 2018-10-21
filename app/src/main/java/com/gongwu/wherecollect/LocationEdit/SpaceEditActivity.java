@@ -16,6 +16,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.adapter.SpaceEditListAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.DialogUtil;
@@ -203,7 +204,7 @@ public class SpaceEditActivity extends BaseViewActivity {
                     @Override
                     protected void code2000(final ResponseResult r) {
                         super.code2000(r);
-                        ObjectBean bean = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
+                        LocationBean bean = JsonUtils.objectFromJson(r.getResult(), LocationBean.class);
                         MainLocationFragment.mlist.add(bean);
                         myAdapter.notifyDataSetChanged();
                         EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);

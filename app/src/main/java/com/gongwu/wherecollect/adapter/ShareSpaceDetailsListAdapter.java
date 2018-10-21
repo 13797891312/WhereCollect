@@ -28,9 +28,9 @@ public class ShareSpaceDetailsListAdapter extends RecyclerView.Adapter<ShareSpac
     private List<SharePersonBean> datas;
     private MyOnItemClickListener onItemClickListener;
     private String content;
-    private UserBean manager;
+    private SharePersonBean manager;
 
-    public ShareSpaceDetailsListAdapter(Context mContext, List<SharePersonBean> datas, UserBean manager) {
+    public ShareSpaceDetailsListAdapter(Context mContext, List<SharePersonBean> datas, SharePersonBean manager) {
         this.mContext = mContext;
         this.datas = datas;
         this.manager = manager;
@@ -62,7 +62,12 @@ public class ShareSpaceDetailsListAdapter extends RecyclerView.Adapter<ShareSpac
                 closeClick(position);
             }
         });
-        if (manager.getId().equals(MyApplication.getUser(mContext).getId())) {
+        if (bean.isValid()) {
+            holder.closeIv.setVisibility(View.VISIBLE);
+        } else {
+            holder.closeIv.setVisibility(View.GONE);
+        }
+        if (manager.getId().equals(bean.getId())) {
             holder.lockIv.setVisibility(View.VISIBLE);
         } else {
             holder.lockIv.setVisibility(View.GONE);

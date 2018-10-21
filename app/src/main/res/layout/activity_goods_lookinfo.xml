@@ -138,6 +138,39 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/objrct_share_user_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dip_50"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dip_18"
+                    android:paddingRight="@dimen/dip_18"
+                    android:text="共享"
+                    android:textColor="@color/black_other"
+                    android:textSize="@dimen/f_13" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_marginRight="@dimen/dip_18"
+                    android:layout_weight="1"
+                    android:background="@color/black_26" />
+            </LinearLayout>
+
+            <com.gongwu.wherecollect.view.EbagGridView
+                android:id="@+id/objrct_share_user_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="5"
+                android:paddingLeft="@dimen/dip_18"
+                android:paddingRight="@dimen/dip_18" />
+
+            <LinearLayout
                 android:id="@+id/add_other_content_edit_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

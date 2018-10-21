@@ -26,6 +26,7 @@ import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
@@ -62,7 +63,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class MainLocationFragment extends BaseFragment {
-    public static List<ObjectBean> mlist = new ArrayList<>();//静态空间数据
+    public static List<LocationBean> mlist = new ArrayList<>();//静态空间数据
     public static Map<String, List<ObjectBean>> objectMap = new HashMap<>();
     //物品总览
     public static Map<String, List<ObjectBean>> locationMap = new HashMap<>();//家具
@@ -244,7 +245,7 @@ public class MainLocationFragment extends BaseFragment {
     private void getLocationList() {
         final String cache = SaveDate.getInstence(getActivity()).getSpace();
         if (!TextUtils.isEmpty(cache)) {
-            List<ObjectBean> temp = JsonUtils.listFromJson(cache, ObjectBean.class);
+            List<LocationBean> temp = JsonUtils.listFromJson(cache, LocationBean.class);
             mlist.clear();
             mlist.addAll(temp);
             if (indicatorView != null) {
@@ -398,7 +399,7 @@ public class MainLocationFragment extends BaseFragment {
                 if (r.getResult().equals(cache)) {//如果缓存和网络获取的一样则不做处理
                     return;
                 }
-                List<ObjectBean> temp = JsonUtils.listFromJson(r.getResult(), ObjectBean.class);
+                List<LocationBean> temp = JsonUtils.listFromJson(r.getResult(), LocationBean.class);
                 SaveDate.getInstence(getActivity()).setSpace(r.getResult());
                 mlist.clear();
                 mlist.addAll(temp);

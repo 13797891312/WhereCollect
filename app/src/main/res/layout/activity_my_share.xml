@@ -48,7 +48,7 @@
 
 
         <TextView
-            android:id="@+id/add_share_tv"
+            android:id="@+id/add_my_share_tv"
             android:layout_width="@dimen/dip_48"
             android:layout_height="@dimen/dip_48"
             android:layout_alignParentRight="true"

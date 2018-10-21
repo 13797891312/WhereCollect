@@ -19,7 +19,7 @@ import java.util.List;
  * @author zhaojin
  * @since JDK 1.7
  */
-public class ObjectBean implements Serializable {
+public class LocationBean implements Serializable {
     /**
      * _id : 59e7fb1d31391929e7ed83e7
      * search_tags :
@@ -80,7 +80,7 @@ public class ObjectBean implements Serializable {
     private Point scale;
     private Point position;
     private String code;
-    private ArrayList<ObjectBean> layers;
+    private ArrayList<LocationBean> layers;
     private float ratio;
     private int recommend;//快速添加几个
     private boolean isOpen = true;//自己添加的参数，快速添加时用的，别处没用
@@ -91,8 +91,7 @@ public class ObjectBean implements Serializable {
     private String expire_date;
     private int count;//物品数量
     private boolean isSelectSpace;
-    private int is_share;
-    private List<String> share_users;
+    private boolean is_share;
     /**
      * x : 0
      * y : 0
@@ -131,20 +130,12 @@ public class ObjectBean implements Serializable {
         return BaseViewActivity.getScreenWidth(((Activity) context)) / 4;
     }
 
-    public int getIs_share() {
+    public boolean isIs_share() {
         return is_share;
     }
 
-    public void setIs_share(int is_share) {
+    public void setIs_share(boolean is_share) {
         this.is_share = is_share;
-    }
-
-    public List<String> getShare_users() {
-        return share_users;
-    }
-
-    public void setShare_users(List<String> share_users) {
-        this.share_users = share_users;
     }
 
     public List<String> getTags() {
@@ -203,12 +194,12 @@ public class ObjectBean implements Serializable {
         this.ratio = ratio;
     }
 
-    public List<ObjectBean> getLayers() {
+    public List<LocationBean> getLayers() {
         return layers;
     }
 
-    public void setLayers(List<ObjectBean> layers) {
-        this.layers = (ArrayList<ObjectBean>) layers;
+    public void setLayers(List<LocationBean> layers) {
+        this.layers = (ArrayList<LocationBean>) layers;
     }
 
     public boolean isSelect() {

@@ -1,9 +1,11 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,8 +20,10 @@ import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.afragment.MainFragment2;
 import com.gongwu.wherecollect.afragment.PersonFragment;
 import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.object.AddGoodsActivity;
+import com.gongwu.wherecollect.service.TimerService;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.PermissionUtil;
@@ -72,6 +76,8 @@ public class MainActivity extends BaseViewActivity {
         initBugly();
         checkSDcard();
         initView();
+        //启动Android定时器，并且启动服务
+        TimerService.getConnet(this);
         //        test();
     }
 
@@ -156,6 +162,57 @@ public class MainActivity extends BaseViewActivity {
         idDrawerlayout.openDrawer(Gravity.RIGHT);
     }
 
+    private boolean isMessage = false;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.GetMessageList msg) {
+        if (isMessage) {
+            return;
+        }
+        final MessageBean messageBean = msg.messageBean;
+        String okStr = "";
+        String okUrl = "";
+        String cancelStr = "";
+        String cancelUrl = "";
+        if (messageBean.getButtons().size() == 1) {
+            cancelStr = messageBean.getButtons().get(0).getText();
+        }
+        if (messageBean.getButtons().size() > 1) {
+            for (int i = 0; i < messageBean.getButtons().size(); i++) {
+                if (messageBean.getButtons().get(i).getColor().equals("SUCCESS")) {
+                    okStr = messageBean.getButtons().get(i).getText();
+                    okUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
+                            messageBean.getButtons().get(i).getApi_url();
+                }
+                if (messageBean.getButtons().get(i).getColor().equals("DANGER")) {
+                    cancelStr = messageBean.getButtons().get(i).getText();
+                    cancelUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
+                            messageBean.getButtons().get(i).getApi_url();
+                }
+            }
+        }
+        final String finalOkUrl = okUrl;
+        final String finalCancelUrl = cancelUrl;
+        isMessage = true;
+        DialogUtil.showMsg("", messageBean.getContent(), okStr, cancelStr, this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                isMessage = false;
+                if (!messageBean.isIs_read() && !TextUtils.isEmpty(finalOkUrl)) {
+//                    postShareHttp(finalOkUrl);
+                }
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                isMessage = false;
+                if (!messageBean.isIs_read() && !TextUtils.isEmpty(finalCancelUrl)) {
+//                    postShareHttp(finalCancelUrl);
+                }
+            }
+        });
+    }
+
     /**
      * 用户登录会收到消息
      */
@@ -208,9 +265,15 @@ public class MainActivity extends BaseViewActivity {
 
     @Override
     protected void onDestroy() {
+        //停止由AlarmManager启动的循环
+        TimerService.stop(this);
+        //停止由服务启动的循环
+        Intent intent = new Intent(this, TimerService.class);
+        stopService(intent);
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         myFragmentLayout = null;
+
     }
 
     @OnClick(R.id.add_btn)
@@ -250,5 +313,17 @@ public class MainActivity extends BaseViewActivity {
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isMessage = true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        isMessage = false;
     }
 }

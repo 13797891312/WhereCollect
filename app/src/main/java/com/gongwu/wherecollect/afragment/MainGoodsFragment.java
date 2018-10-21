@@ -2,6 +2,7 @@ package com.gongwu.wherecollect.afragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.gongwu.wherecollect.adapter.GoodsMainGridViewAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.entity.ShareUserBean;
 import com.gongwu.wherecollect.object.ObjectLookInfoActivity;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
@@ -32,6 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +52,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     int page = 1;
     private GoodsMainGridViewAdapter gridViewAdapter;
     private List<ObjectBean> mList = new ArrayList<>();
+    private List<ShareUserBean> shareUserBeans = new ArrayList<>();
 
     public MainGoodsFragment() {
         // Required empty public constructor
@@ -120,8 +124,23 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        ObjectBean objectBean = mList.get(i);
         Intent intent = new Intent(getActivity(), ObjectLookInfoActivity.class);
-        intent.putExtra("bean", mList.get(i));
+        intent.putExtra("bean", objectBean);
+        if (objectBean.getIs_share() == 1 && objectBean.getShare_users() != null && objectBean.getShare_users().size() > 0) {
+            List<String> share_users = objectBean.getShare_users();
+            List<ShareUserBean> shareUserData = new ArrayList<>();
+            for (int a = 0; a < share_users.size(); a++) {
+                String shareUserId = share_users.get(a);
+                for (int b = 0; b < shareUserBeans.size(); b++) {
+                    ShareUserBean bean = shareUserBeans.get(b);
+                    if (bean.get_id().equals(shareUserId)) {
+                        shareUserData.add(bean);
+                    }
+                }
+            }
+            intent.putExtra("shareUsers", (Serializable) shareUserData);
+        }
         startActivity(intent);
     }
 
@@ -141,6 +160,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 List temp = JsonUtils.listFromJsonWithSubKey(r.getResult(), ObjectBean.class, "items");
+                List shareUserdata = JsonUtils.listFromJsonWithSubKey(r.getResult(), ShareUserBean.class, "users");
                 if (page == 1) {//如果是第一页就缓存下
                     SaveDate.getInstence(getActivity()).setObjectList(JsonUtils.jsonFromObject(temp));
                     mList.clear();
@@ -152,6 +172,8 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                 }
                 int index = mList.size();
                 mList.addAll(temp);
+                shareUserBeans.clear();
+                shareUserBeans.addAll(shareUserdata);
                 goodsGridView.setAdapter(null);
                 goodsGridView.setAdapter(gridViewAdapter);
                 gridViewAdapter.notifyDataSetChanged();

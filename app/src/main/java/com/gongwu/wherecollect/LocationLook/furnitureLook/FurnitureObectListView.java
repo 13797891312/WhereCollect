@@ -617,11 +617,18 @@ public class FurnitureObectListView extends RelativeLayout {
             sb.delete(sb.length() - 1, sb.length());
         }
         String code;
+        String location_code="";
         List<BaseBean> locations;
         if (boxAdapter.selectPostion == -1) {
             code = objectBean.getCode();
+            if (objectBean.getParents().size() > 0) {
+                location_code = objectBean.getParents().get(0).getCode();
+            }
             locations = getLocations(objectBean, null);
         } else {
+            if (boxAdapter.getSelectObject().getParents().size() > 0) {
+                location_code = boxAdapter.getSelectObject().getParents().get(0).getCode();
+            }
             code = boxAdapter.getSelectObject().getCode();
             locations = getLocations(objectBean, boxAdapter.getSelectObject());
         }
@@ -643,6 +650,7 @@ public class FurnitureObectListView extends RelativeLayout {
         map.put("user_id", MyApplication.getUser(context).getId());
         map.put("object_codes", sb.toString());
         map.put("code", code);
+        map.put("location_code", location_code);
         PostListenner listenner = new PostListenner(context, Loading.show(null, context,
                 "正在加载")) {
             @Override

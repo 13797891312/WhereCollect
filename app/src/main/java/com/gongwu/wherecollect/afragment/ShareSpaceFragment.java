@@ -118,6 +118,6 @@ public class ShareSpaceFragment extends BaseFragment implements OnRefreshListene
         SharedLocationBean locationBean = datas.get(positions);
         Intent intent = new Intent(getContext(), ShareSpaceDetailsActivity.class);
         intent.putExtra("locationBean", locationBean);
-        startActivityForResult(intent, 104);
+        getActivity().startActivityForResult(intent, 104);
     }
 }
