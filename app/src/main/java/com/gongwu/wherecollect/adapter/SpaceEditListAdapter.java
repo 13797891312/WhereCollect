@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.adapter;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Created by mChenys on 2017/2/15.
  */
@@ -61,6 +63,11 @@ public class SpaceEditListAdapter extends RecyclerView.Adapter<SpaceEditListAdap
                 openRight(holder.getLayoutPosition());
             }
         });
+        if (mData.get(position).isIs_share()) {
+            holder.delete_img.setVisibility(View.INVISIBLE);
+        }else{
+            holder.delete_img.setVisibility(View.VISIBLE);
+        }
     }
 
     /**

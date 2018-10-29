@@ -18,11 +18,21 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.activity.LoginActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
+import com.gongwu.wherecollect.activity.ShareSpaceDetailsActivity;
 import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.SharePersonBean;
+import com.gongwu.wherecollect.entity.SharedLocationBean;
 import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
+import com.gongwu.wherecollect.view.PileAvertView;
 import com.umeng.analytics.MobclickAgent;
 import com.zhaojin.myviews.MyFragmentLayout_line;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +47,10 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
     public MyFragmentLayout_line myFragmentLayout;
     ImageButton serchBtn, filterBtn;
     RelativeLayout shijiBtn;
-    View shijired;
+    //    View shijired;
+    PileAvertView share_user_list_tv;
     TextView editBtn;
+    private LocationBean selectBean;
 
     public MainFragment1() {
         // Required empty public constructor
@@ -68,11 +80,13 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_fragment1, container, false);
         ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         initFragment();
         serchBtn = (ImageButton) view.findViewById(R.id.serch_btn);
         filterBtn = (ImageButton) view.findViewById(R.id.fiter_btn);
         shijiBtn = (RelativeLayout) view.findViewById(R.id.shiji_layout);
-        shijired = view.findViewById(R.id.shiji_red_circle);
+        share_user_list_tv = (PileAvertView) view.findViewById(R.id.share_user_list_view);
+//        shijired = view.findViewById(R.id.shiji_red_circle);
         editBtn = (TextView) view.findViewById(R.id.text_edit);
         editBtn.setOnClickListener(this);
         filterBtn.setOnClickListener(this);
@@ -91,6 +105,7 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
     private void initFragment() {
@@ -140,7 +155,8 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
                     }, null);
                     return;
                 }
-                ((MainLocationFragment) fragments.get(1)).shijiClick();
+//                ((MainLocationFragment) fragments.get(1)).shijiClick();
+                startLocationAct();
                 break;
             case R.id.serch_btn:
                 ((MainActivity) getActivity()).searchClick();
@@ -174,6 +190,16 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
         }
     }
 
+    private void startLocationAct() {
+        SharedLocationBean locationBean = new SharedLocationBean();
+        locationBean.setName(selectBean.getName());
+        locationBean.setCode(selectBean.getCode());
+        locationBean.setShared_users(selectBean.getSharedUsers());
+        Intent intent = new Intent(getContext(), ShareSpaceDetailsActivity.class);
+        intent.putExtra("locationBean", locationBean);
+        startActivity(intent);
+    }
+
     /**
      * 定位到某个物品
      *
@@ -193,8 +219,20 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
      * 设置左上角室迹按钮的红点展示与隐藏
      */
     public void setRedStatus(boolean isHasRed) {
-        if (shijired != null) {
-            shijired.setVisibility(isHasRed ? View.VISIBLE : View.GONE);
+//        if (shijired != null) {
+//            shijired.setVisibility(isHasRed ? View.VISIBLE : View.GONE);
+//        }
+    }
+
+    //呼吸查看
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.showShareImgList msg) {
+        if (msg.shareUser != null && msg.shareUser.getSharedUsers() != null && msg.shareUser.getSharedUsers().size() > 0) {
+            selectBean = msg.shareUser;
+            share_user_list_tv.setUserImages(msg.shareUser.getSharedUsers());
+            shijiBtn.setVisibility(View.VISIBLE);
+        } else {
+            shijiBtn.setVisibility(View.GONE);
         }
     }
 }

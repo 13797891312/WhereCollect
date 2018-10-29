@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -27,6 +30,12 @@ public class UserCodeDialog extends Dialog {
     public UserCodeDialog(Context context) {
         super(context, R.style.userCodeDialogStyle);
         this.context = context;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
     public void showDialog(String id, Bitmap usericon) {

@@ -23,7 +23,12 @@ import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.swipetoloadlayout.OnRefreshListener;
 import com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout;
 import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +66,7 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_space_details);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         user = MyApplication.getUser(this);
         initView();
         initEvent();
@@ -68,16 +74,10 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
 
     private void initView() {
         locationBean = (SharedLocationBean) getIntent().getSerializableExtra("locationBean");
-        if (locationBean != null && locationBean.getUser() != null) {
-            managerUser = locationBean.getUser();
-            if (user.getId().equals(managerUser.getId())) {
-                addShareTv.setVisibility(View.VISIBLE);
-            }
-        }
         titleLayout.setTitle(locationBean.getName() + ">共享详情");
         titleLayout.setBack(true, null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mAdapter = new ShareSpaceDetailsListAdapter(this, datas, managerUser) {
+        mAdapter = new ShareSpaceDetailsListAdapter(this, datas, user.getId()) {
             @Override
             public void closeClick(final int position) {
                 DialogUtil.show("", "确定断开【" + locationBean.getName() + "】的共享?\n(断开后属于共享空间的非本人添加的物品也将被清空)", "确定", "取消", ShareSpaceDetailsActivity.this, new DialogInterface.OnClickListener() {
@@ -118,6 +118,13 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
                         content += beans.get(i).getName() + " ";
                         if (beans.get(i).getCode().equals(locationBean.getCode())) {
                             datas.addAll(beans.get(i).getShared_users());
+                            managerUser = beans.get(i).getUser();
+                            if (user.getId().equals(managerUser.getId())) {
+                                addShareTv.setVisibility(View.VISIBLE);
+                            }
+                            if (mAdapter != null) {
+                                mAdapter.setManager(managerUser);
+                            }
                         }
                     }
                 }
@@ -154,6 +161,7 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
             @Override
             protected void code2000(ResponseResult r) {
                 super.code2000(r);
+                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
                 if (personBean.getUid().equals(user.getId())) {
                     setResult(RESULT_OK);
                     finish();
@@ -208,5 +216,17 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
         if (requestCode == 106 && resultCode == RESULT_OK) {
             mSwipeToLoadLayout.setRefreshing(true);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.updateShareMsg msg) {
+        mSwipeToLoadLayout.setRefreshing(true);
     }
 }

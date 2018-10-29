@@ -26,7 +26,7 @@ public class PileAvertView extends LinearLayout {
     PileView pileView;
 
     private Context context = null;
-    public static final int VISIBLE_COUNT = 3;//默认显示个数
+    public static final int VISIBLE_COUNT = 2;//默认显示个数
 
     public PileAvertView(Context context) {
         this(context, null);
@@ -57,6 +57,15 @@ public class PileAvertView extends LinearLayout {
         pileView.removeAllViews();
         for (int i = 0; i < imageList.size(); i++) {
             CircleImageView image = (CircleImageView) LayoutInflater.from(context).inflate(R.layout.item_group_round_avert, pileView, false);
+            ImageLoader.load(context, image, imageList.get(i).getAvatar());
+            pileView.addView(image);
+        }
+    }
+
+    public void setUserImages(List<SharePersonBean> imageList) {
+        pileView.removeAllViews();
+        for (int i = 0; i < imageList.size(); i++) {
+            CircleImageView image = (CircleImageView) LayoutInflater.from(context).inflate(R.layout.item_group_round_share_user, pileView, false);
             ImageLoader.load(context, image, imageList.get(i).getAvatar());
             pileView.addView(image);
         }

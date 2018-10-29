@@ -45,10 +45,20 @@ public class ShareSpaceListAdapter extends RecyclerView.Adapter<ShareSpaceListAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         SharedLocationBean bean = datas.get(position);
         holder.spaceNameTv.setText(bean.getName());
         holder.mPileAvertView.setAvertImages(bean.getShared_users());
+        holder.clseIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeClick(position);
+            }
+        });
+    }
+
+    public void closeClick(int position) {
+
     }
 
     @Override
@@ -61,6 +71,8 @@ public class ShareSpaceListAdapter extends RecyclerView.Adapter<ShareSpaceListAd
         TextView spaceNameTv;
         @Bind(R.id.pile_avert_view)
         PileAvertView mPileAvertView;
+        @Bind(R.id.close_share_space_view)
+        ImageView clseIV;
 
         public ViewHolder(View itemView) {
             super(itemView);

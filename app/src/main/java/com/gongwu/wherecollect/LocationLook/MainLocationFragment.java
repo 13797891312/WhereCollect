@@ -32,7 +32,6 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.quickadd.QuickSpaceSelectListActivity;
 import com.gongwu.wherecollect.record.MakeRecordActivity;
-import com.gongwu.wherecollect.util.ACacheClient;
 import com.gongwu.wherecollect.util.AnimationUtil;
 import com.gongwu.wherecollect.util.BitmapUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
@@ -76,9 +75,6 @@ public class MainLocationFragment extends BaseFragment {
     LocationObectListView objectListView;
     @Bind(R.id.tagViewPager)
     TagViewPager viewPager;
-    boolean isLoaded = false;
-    Loading loading;
-    Handler hd = new Handler();
     @Bind(R.id.empty)
     ErrorView empty;
     @Bind(R.id.quick_layout)
@@ -91,6 +87,9 @@ public class MainLocationFragment extends BaseFragment {
     ImageView shareIv;
 
     private UserBean user;
+    boolean isLoaded = false;
+    Loading loading;
+    Handler hd = new Handler();
 
     public static MainLocationFragment newInstance() {
         MainLocationFragment fragment = new MainLocationFragment();
@@ -252,6 +251,7 @@ public class MainLocationFragment extends BaseFragment {
                 indicatorView.init(mlist);
             }
             initPage();
+            EventBus.getDefault().post(new EventBusMsg.showShareImgList(mlist.get(0)));
         }
         getSpaceData(cache);
     }
@@ -367,6 +367,7 @@ public class MainLocationFragment extends BaseFragment {
                 pageMap.get(position).getObjectList();
                 checkedShijiCache(position);
                 indicatorView.scrollToPosition(position);
+                EventBus.getDefault().post(new EventBusMsg.showShareImgList(mlist.get(position)));
                 if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
                     //先取消 再开启
                     mHandler.removeCallbacks(r);
@@ -383,9 +384,9 @@ public class MainLocationFragment extends BaseFragment {
      * 检测室迹暂存
      */
     private void checkedShijiCache(int position) {
-        String cache = ACacheClient.getRecord(getActivity(), mlist.get(position).getCode());
-        ((MainFragment1) ((MainActivity) getActivity()).fragments.get(0)).setRedStatus(!TextUtils.isEmpty
-                (cache));
+//        String cache = ACacheClient.getRecord(getActivity(), mlist.get(position).getCode());
+//        ((MainFragment1) ((MainActivity) getActivity()).fragments.get(0)).setRedStatus(!TextUtils.isEmpty
+//                (cache));
     }
 
     private void getSpaceData(final String cache) {
@@ -411,6 +412,7 @@ public class MainLocationFragment extends BaseFragment {
                 indicatorView.init(mlist);
                 initPage();
                 EventBus.getDefault().post(new EventBusMsg.RequestSpaceEdit());
+                EventBus.getDefault().post(new EventBusMsg.showShareImgList(mlist.get(0)));
             }
         };
         HttpClient.getLocationList(getActivity(), map, listenner);
@@ -487,6 +489,11 @@ public class MainLocationFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.updateShareMsg msg) {
+        getLocationList();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.ImportObject msg) {
         MainLocationFragment.objectMap.remove(mlist.get(msg.position).getCode());
         pageMap.get(msg.position).getObjectList();
@@ -534,6 +541,7 @@ public class MainLocationFragment extends BaseFragment {
         intent.putExtra("code", indicatorView.getCurrentLocation().getCode());
         getActivity().startActivity(intent);
     }
+
 
     /**
      * 定位物品

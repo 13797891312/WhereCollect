@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.volley.request.HttpClient;
+import android.volley.request.PostListenner;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,10 +25,12 @@ import com.gongwu.wherecollect.afragment.PersonFragment;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.service.TimerService;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.PermissionUtil;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.MainDrawerView;
@@ -40,6 +45,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,6 +70,7 @@ public class MainActivity extends BaseViewActivity {
             {R.drawable.icon_tab1_active, R.drawable.icon_tab1_normal},
             {R.drawable.icon_tab2_active, R.drawable.icon_tab2_normal}};
     private String title[] = {"查看", "我的"};
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,32 +182,33 @@ public class MainActivity extends BaseViewActivity {
         String okUrl = "";
         String cancelStr = "";
         String cancelUrl = "";
-        if (messageBean.getButtons().size() == 1) {
-            cancelStr = messageBean.getButtons().get(0).getText();
-        }
-        if (messageBean.getButtons().size() > 1) {
+        if (messageBean.getButtons().size() > 0) {
             for (int i = 0; i < messageBean.getButtons().size(); i++) {
                 if (messageBean.getButtons().get(i).getColor().equals("SUCCESS")) {
                     okStr = messageBean.getButtons().get(i).getText();
                     okUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
                             messageBean.getButtons().get(i).getApi_url();
                 }
-                if (messageBean.getButtons().get(i).getColor().equals("DANGER")) {
+                if (messageBean.getButtons().get(i).getColor().equals("DANGER")
+                        || messageBean.getButtons().get(i).getColor().equals("DEFAULT")) {
                     cancelStr = messageBean.getButtons().get(i).getText();
                     cancelUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
                             messageBean.getButtons().get(i).getApi_url();
                 }
             }
+        } else {
+            LogUtil.e("消息没有buttons");
+            return;
         }
         final String finalOkUrl = okUrl;
         final String finalCancelUrl = cancelUrl;
         isMessage = true;
-        DialogUtil.showMsg("", messageBean.getContent(), okStr, cancelStr, this, new DialogInterface.OnClickListener() {
+        dialog = DialogUtil.showMsg("", messageBean.getContent(), okStr, cancelStr, this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 isMessage = false;
                 if (!messageBean.isIs_read() && !TextUtils.isEmpty(finalOkUrl)) {
-//                    postShareHttp(finalOkUrl);
+                    postShareHttp(finalOkUrl);
                 }
             }
         }, new DialogInterface.OnClickListener() {
@@ -207,10 +216,28 @@ public class MainActivity extends BaseViewActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 isMessage = false;
                 if (!messageBean.isIs_read() && !TextUtils.isEmpty(finalCancelUrl)) {
-//                    postShareHttp(finalCancelUrl);
+                    postShareHttp(finalCancelUrl);
                 }
             }
         });
+    }
+
+    private void postShareHttp(String url) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(this).getId());
+        PostListenner listenner = new PostListenner(this) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.dealWithShareRequest(context, url, map, listenner);
     }
 
     /**
@@ -237,10 +264,10 @@ public class MainActivity extends BaseViewActivity {
 //                ((MainFragment2) fragments.get(1)).setRedStatus();
                 break;
             case 1:
-                ((MainFragment1) fragments.get(0)).setRedStatus(true);//暂存，显示红点
+//                ((MainFragment1) fragments.get(0)).setRedStatus(true);//暂存，显示红点
                 break;
             case 2:
-                ((MainFragment1) fragments.get(0)).setRedStatus(false);//取消暂存，隐藏红点
+//                ((MainFragment1) fragments.get(0)).setRedStatus(false);//取消暂存，隐藏红点
                 break;
         }
     }
@@ -318,7 +345,10 @@ public class MainActivity extends BaseViewActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        isMessage = true;
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+            isMessage = true;
+        }
     }
 
     @Override

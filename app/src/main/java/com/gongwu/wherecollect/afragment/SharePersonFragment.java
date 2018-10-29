@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.afragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,8 +21,15 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.SharePersonBean;
 import com.gongwu.wherecollect.swipetoloadlayout.OnRefreshListener;
 import com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout;
+import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.view.CloseShareDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +64,7 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
             view = inflater.inflate(R.layout.fragment_share_person, container, false);
         }
         ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         initView();
         initEvent();
         return view;
@@ -77,12 +86,22 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
         closeShareDialog = new CloseShareDialog(getActivity()) {
             @Override
             public void saveData() {
-                closeShareUser(datas.get(position).getId(), "1");
+                DialogUtil.show("", "确定与@" + datas.get(position).getNickname() + "断开全部共享?\n(待对方同意后会保留双方已添加的数据)", "确定", "取消", getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        closeShareUser(datas.get(position).getId(), "1");
+                    }
+                }, null);
             }
 
             @Override
             public void deleteData() {
-                closeShareUser(datas.get(position).getId(), "0");
+                DialogUtil.show("", "确定断开与@" + datas.get(position).getNickname() + "的全部共享?\n(断开后属于共享空间的非本人添加的物品也将被清空)", "确定", "取消", getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        closeShareUser(datas.get(position).getId(), "0");
+                    }
+                }, null);
             }
         };
     }
@@ -96,9 +115,7 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
             @Override
             protected void code2000(ResponseResult r) {
                 super.code2000(r);
-                if (mSwipeToLoadLayout != null) {
-                    mSwipeToLoadLayout.setRefreshing(true);
-                }
+                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
             }
 
             @Override
@@ -165,4 +182,15 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
         mSwipeToLoadLayout.setRefreshing(true);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.updateShareMsg msg) {
+        mSwipeToLoadLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
+    }
 }

@@ -29,11 +29,17 @@ public class ShareSpaceDetailsListAdapter extends RecyclerView.Adapter<ShareSpac
     private MyOnItemClickListener onItemClickListener;
     private String content;
     private SharePersonBean manager;
+    private String loginUserId;
 
-    public ShareSpaceDetailsListAdapter(Context mContext, List<SharePersonBean> datas, SharePersonBean manager) {
+    public ShareSpaceDetailsListAdapter(Context mContext, List<SharePersonBean> datas, String loginUserId) {
         this.mContext = mContext;
         this.datas = datas;
+        this.loginUserId = loginUserId;
+    }
+
+    public void setManager(SharePersonBean manager) {
         this.manager = manager;
+        notifyDataSetChanged();
     }
 
     public void setContent(String content) {
@@ -67,8 +73,11 @@ public class ShareSpaceDetailsListAdapter extends RecyclerView.Adapter<ShareSpac
         } else {
             holder.closeIv.setVisibility(View.GONE);
         }
-        if (manager.getId().equals(bean.getId())) {
+        if (manager != null && manager.getId().equals(bean.getId())) {
             holder.lockIv.setVisibility(View.VISIBLE);
+            if (!bean.getId().equals(loginUserId)) {
+                holder.closeIv.setVisibility(View.GONE);
+            }
         } else {
             holder.lockIv.setVisibility(View.GONE);
         }

@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 
 import java.util.List;
@@ -23,9 +24,9 @@ import butterknife.ButterKnife;
 
 public class SelectShareSpaceAdapter extends RecyclerView.Adapter<SelectShareSpaceAdapter.ViewHolder> {
     private Context mContext;
-    private List<ObjectBean> datas;
+    private List<LocationBean> datas;
 
-    public SelectShareSpaceAdapter(Context context, List<ObjectBean> datas) {
+    public SelectShareSpaceAdapter(Context context, List<LocationBean> datas) {
         this.mContext = context;
         this.datas = datas;
     }
@@ -38,7 +39,7 @@ public class SelectShareSpaceAdapter extends RecyclerView.Adapter<SelectShareSpa
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        ObjectBean objectBean = datas.get(position);
+        LocationBean objectBean = datas.get(position);
         holder.spaceName.setText(objectBean.getName());
         holder.selectSpaceView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

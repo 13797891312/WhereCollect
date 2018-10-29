@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.util;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+
 /**
  * Function:
  * Date: 2017/12/19
@@ -90,9 +92,9 @@ public class ShareUtil {
     public static void openShareDialog(Activity context) {
         UMImage thumb = new UMImage(context, R.drawable.icon_lun);
         UMWeb web = new UMWeb("http://www.shouner.com/");
-        web.setTitle("收哪儿");//标题
+        web.setTitle("收哪儿-你的物品收纳记录管家");//标题
         web.setThumb(thumb);  //缩略图
-        web.setDescription("您的收纳整理管家");//描述
+        web.setDescription("找东西,不操心");//描述
         new ShareAction(context)
                 .withMedia(web)
                 .setDisplayList(SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.SINA, SHARE_MEDIA.QQ,

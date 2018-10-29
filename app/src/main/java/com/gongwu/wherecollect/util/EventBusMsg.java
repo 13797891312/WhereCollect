@@ -1,8 +1,11 @@
 package com.gongwu.wherecollect.util;
 
 import com.gongwu.wherecollect.entity.BookBean;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.SharePersonBean;
+import com.gongwu.wherecollect.entity.ShareUserBean;
 import com.gongwu.wherecollect.entity.UserBean;
 
 import java.util.List;
@@ -180,6 +183,14 @@ public class EventBusMsg {
         }
     }
 
-    public static class REFRESHBYMESSAGE {
+    public static class showShareImgList {
+        public LocationBean shareUser;
+
+        public showShareImgList(LocationBean shareUser) {
+            this.shareUser = shareUser;
+        }
+    }
+
+    public static class updateShareMsg {
     }
 }

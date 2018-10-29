@@ -4,6 +4,7 @@ package com.gongwu.wherecollect.afragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,11 +13,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -33,6 +37,8 @@ import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.util.ShareUtil;
+import com.gongwu.wherecollect.view.HighOpinionDialog;
 import com.gongwu.wherecollect.view.UserCodeDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,6 +56,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.deanwild.materialshowcaseview.PrefsManager;
 
 /**
  * 新用户界面
@@ -64,6 +71,8 @@ public class PersonFragment extends BaseFragment {
     TextView userName;
     @Bind(R.id.user_id_tv)
     TextView userId;
+    @Bind(R.id.refresh_help_iv)
+    ImageView refreshHelpIv;
 
     private UserBean user;
     private View view;
@@ -101,7 +110,9 @@ public class PersonFragment extends BaseFragment {
         });
     }
 
-    @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout, R.id.user_code_layout, R.id.my_share_layout})
+    @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout,
+            R.id.user_code_layout, R.id.my_share_layout, R.id.refresh_help_iv
+            , R.id.person_high_opinion_layout,R.id.user_share_app})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -127,7 +138,80 @@ public class PersonFragment extends BaseFragment {
             case R.id.my_share_layout://共享空间
                 MyShareActivity.start(getContext());
                 break;
+            case R.id.refresh_help_iv:
+                Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_rotate);
+                refreshHelpIv.startAnimation(anim);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        PrefsManager.resetAll(getContext());
+                        refreshHelpIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.refresh_help_gray));
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                break;
+            case R.id.person_high_opinion_layout:
+                HighOpinionDialog dialog = new HighOpinionDialog(getActivity()) {
+                    @Override
+                    public void startApp() {
+                        openApplicationMarket("com.gongwu.wherecollect");
+                    }
+
+                    @Override
+                    public void startAct() {
+                        Intent intent = new Intent(getActivity(), FeedBackActivity.class);
+                        startActivity(intent);
+                    }
+                };
+                dialog.showDialog();
+                break;
+            case R.id.user_share_app:
+                ShareUtil.openShareDialog(getActivity());
+                break;
+            default:
+                break;
         }
+    }
+
+    /**
+     * 通过包名 在应用商店打开应用
+     *
+     * @param packageName 包名
+     */
+    private void openApplicationMarket(String packageName) {
+        try {
+            String str = "market://details?id=" + packageName;
+            Intent localIntent = new Intent(Intent.ACTION_VIEW);
+            localIntent.setData(Uri.parse(str));
+            startActivity(localIntent);
+        } catch (Exception e) {
+            // 打开应用商店失败 可能是没有手机没有安装应用市场
+            e.printStackTrace();
+            Toast.makeText(getContext(), "打开应用商店失败", Toast.LENGTH_SHORT).show();
+            // 调用系统浏览器进入商城
+            String url = "http://app.mi.com/detail/163525?ref=search";
+            openLinkBySystem(url);
+        }
+    }
+
+    /**
+     * 调用系统浏览器打开网页
+     *
+     * @param url 地址
+     */
+    private void openLinkBySystem(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     private SimpleTarget target = new SimpleTarget<Bitmap>() {

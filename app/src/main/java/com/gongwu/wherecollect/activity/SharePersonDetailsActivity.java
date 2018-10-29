@@ -22,8 +22,12 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.SharePersonBean;
 import com.gongwu.wherecollect.entity.SharedLocationBean;
 import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.view.CloseShareDialog;
+
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -86,7 +90,7 @@ public class SharePersonDetailsActivity extends BaseViewActivity {
             datas.addAll(sharePersonBean.getShared_locations());
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mAdapter = new SharePersonDetailsSpaceListAdapter(this, datas,MyApplication.getUser(context).getId()) {
+        mAdapter = new SharePersonDetailsSpaceListAdapter(this, datas, MyApplication.getUser(context).getId()) {
             @Override
             public void closeSpace(int position) {
                 closeSpaceDialog(position);
@@ -182,6 +186,7 @@ public class SharePersonDetailsActivity extends BaseViewActivity {
             @Override
             protected void code2000(ResponseResult r) {
                 super.code2000(r);
+                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
                 if (!TextUtils.isEmpty(location_id)) {
                     datas.remove(deleteSpacePosition);
                     mAdapter.notifyDataSetChanged();
@@ -248,5 +253,11 @@ public class SharePersonDetailsActivity extends BaseViewActivity {
     public void onBackPressed() {
         setResult(RESULT_OK);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 }

@@ -7,6 +7,7 @@ public class ShareUserBean implements Serializable {
     private String avatar;
     private String nickname;
     private String usid;
+    private boolean valid;
 
     public String get_id() {
         return _id;
@@ -38,5 +39,13 @@ public class ShareUserBean implements Serializable {
 
     public void setUsid(String usid) {
         this.usid = usid;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

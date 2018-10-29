@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
+import android.widget.Toast;
 
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
@@ -23,6 +24,7 @@ import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.SpaceEditDialog;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
@@ -144,7 +146,7 @@ public class SpaceEditActivity extends BaseViewActivity {
         spaceRecyclerView.setOnItemStateChangedListener(mOnItemStateChangedListener);
         spaceRecyclerView.setOnItemMoveListener(mItemMoveListener);
         spaceRecyclerView.setLongPressDragEnabled(true);// 开启长按拖拽
-        spaceRecyclerView.setItemViewSwipeEnabled(false);// 开启滑动删除。
+        spaceRecyclerView.setItemViewSwipeEnabled(false);
         //设置默认的布局方式
         spaceRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         //设置adapter
@@ -155,6 +157,10 @@ public class SpaceEditActivity extends BaseViewActivity {
      * 删除空间
      */
     private void deleteData(final int position) {
+        if (MainLocationFragment.mlist.get(position).isIs_share()) {
+            ToastUtil.show(context, "分享的空间无法删除", Toast.LENGTH_SHORT);
+            return;
+        }
         DialogUtil.show("提示", String.format("是否删除 %s ？删除后该空间内所有内容的位置将会归为未定义", MainLocationFragment.mlist.get(position)
                         .getName()), "确定",
                 "取消", this, new

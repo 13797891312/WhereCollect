@@ -22,8 +22,12 @@ import com.gongwu.wherecollect.swipetoloadlayout.OnLoadMoreListener;
 import com.gongwu.wherecollect.swipetoloadlayout.OnRefreshListener;
 import com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout;
 import com.gongwu.wherecollect.util.DialogUtil;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,22 +82,23 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
         String okUrl = "";
         String cancelStr = "";
         String cancelUrl = "";
-        if (messageBean.getButtons().size() == 1) {
-            cancelStr = messageBean.getButtons().get(0).getText();
-        }
-        if (messageBean.getButtons().size() > 1) {
+        if (messageBean.getButtons().size() > 0) {
             for (int i = 0; i < messageBean.getButtons().size(); i++) {
                 if (messageBean.getButtons().get(i).getColor().equals("SUCCESS")) {
                     okStr = messageBean.getButtons().get(i).getText();
                     okUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
                             messageBean.getButtons().get(i).getApi_url();
                 }
-                if (messageBean.getButtons().get(i).getColor().equals("DANGER")) {
+                if (messageBean.getButtons().get(i).getColor().equals("DANGER")
+                        || messageBean.getButtons().get(i).getColor().equals("DEFAULT")) {
                     cancelStr = messageBean.getButtons().get(i).getText();
                     cancelUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
                             messageBean.getButtons().get(i).getApi_url();
                 }
             }
+        } else {
+            LogUtil.e("消息没有buttons");
+            return;
         }
         final String finalOkUrl = okUrl;
         final String finalCancelUrl = cancelUrl;
@@ -121,6 +126,7 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
+                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
             }
 
             @Override

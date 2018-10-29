@@ -120,6 +120,16 @@ public class LocationBean implements Serializable {
      */
     private List<BaseBean> categories;
 
+    private List<SharePersonBean> shared_users;
+
+    public List<SharePersonBean> getSharedUsers() {
+        return shared_users;
+    }
+
+    public void setSharedUsers(List<SharePersonBean> shared_users) {
+        this.shared_users = shared_users;
+    }
+
     /**
      * 获取初始尺寸
      *

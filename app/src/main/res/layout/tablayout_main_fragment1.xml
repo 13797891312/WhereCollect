@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" android:background="@color/colorPrimary">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
+
     <FrameLayout
         android:id="@+id/root"
         android:layout_width="120dp"
@@ -34,7 +35,7 @@
                     android:gravity="center_vertical"
                     android:text="物品"
                     android:textColor="@color/black_txt"
-                    android:textSize="@dimen/f_17"/>
+                    android:textSize="@dimen/f_17" />
             </LinearLayout>
 
             <LinearLayout
@@ -53,11 +54,12 @@
                     android:gravity="center_vertical"
                     android:text="位置"
                     android:textColor="@color/black_txt"
-                    android:textSize="@dimen/f_17"/>
+                    android:textSize="@dimen/f_17" />
             </LinearLayout>
         </LinearLayout>
 
     </FrameLayout>
+
     <ImageButton
         android:id="@+id/fiter_btn"
         android:layout_width="@dimen/title_hight"
@@ -65,7 +67,8 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/select_white_bg"
         android:paddingTop="4dp"
-        android:src="@drawable/icon_fitler"/>
+        android:src="@drawable/icon_fitler" />
+
     <ImageButton
         android:id="@+id/serch_btn"
         android:layout_width="@dimen/title_hight"
@@ -74,45 +77,71 @@
         android:layout_marginRight="@dimen/dip_2"
         android:background="@drawable/select_white_bg"
         android:paddingTop="4dp"
-        android:src="@drawable/icon_search"/>
+        android:src="@drawable/icon_search" />
+
     <RelativeLayout
         android:id="@+id/shiji_layout"
         android:layout_width="@dimen/title_hight"
         android:layout_height="@dimen/title_hight"
-        android:background="@drawable/select_white_bg">
-        <ImageView
-            android:id="@+id/shiji_iv"
+        android:layout_marginLeft="@dimen/dip_16"
+        android:background="@color/white">
+        <!--<ImageView-->
+        <!--android:id="@+id/shiji_iv"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:paddingTop="4dp"-->
+        <!--android:src="@drawable/icon_shiji"-->
+        <!--android:visibility="visible"/>-->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:paddingTop="4dp"
-            android:src="@drawable/icon_shiji"
-            android:visibility="visible"/>
-        <View android:id="@+id/shiji_red_circle"
-              android:layout_width="6dp"
-              android:layout_height="6dp"
-              android:layout_alignParentRight="true"
-              android:layout_alignTop="@+id/shiji_iv"
-              android:layout_marginRight="10dp"
-              android:layout_marginTop="4.5dp"
-              android:background="@drawable/shape_circle_msg_count_red"
-              android:visibility="gone"/>
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.gongwu.wherecollect.view.PileAvertView
+                android:id="@+id/share_user_list_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dip_2"
+                android:text="共享中..."
+                android:textColor="@color/green_text_color"
+                android:textSize="@dimen/f_8" />
+        </LinearLayout>
+        <!--<View-->
+        <!--android:id="@+id/shiji_red_circle"-->
+        <!--android:layout_width="6dp"-->
+        <!--android:layout_height="6dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignTop="@+id/shiji_iv"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_marginTop="4.5dp"-->
+        <!--android:background="@drawable/shape_circle_msg_count_red"-->
+        <!--android:visibility="gone" />-->
     </RelativeLayout>
-    <TextView android:id="@+id/text_edit"
-              android:layout_width="wrap_content"
-              android:layout_height="@dimen/title_hight"
-              android:layout_alignParentRight="true"
-              android:background="@drawable/select_white_bg"
-              android:gravity="center"
-              android:paddingLeft="12dp"
-              android:paddingRight="12dp"
-              android:text="编辑"
-              android:textColor="@color/black_txt"
-              android:textSize="@dimen/f_17"
-              android:visibility="gone"/>
-    <View android:layout_width="match_parent"
-          android:layout_height="1px"
-          android:layout_alignBottom="@id/serch_btn"
-          android:background="@drawable/shape_divider_line"
-    ></View>
+
+    <TextView
+        android:id="@+id/text_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/title_hight"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/select_white_bg"
+        android:gravity="center"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:text="编辑"
+        android:textColor="@color/black_txt"
+        android:textSize="@dimen/f_17"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignBottom="@id/serch_btn"
+        android:background="@drawable/shape_divider_line"></View>
 </RelativeLayout>

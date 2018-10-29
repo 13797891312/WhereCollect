@@ -213,4 +213,10 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
         goodsGridView.setRefreshing(true);
         ((MainActivity) getActivity()).filterView.getFilterList();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.updateShareMsg msg) {
+        page = 0;
+        goodsGridView.setRefreshing(true);
+    }
 }

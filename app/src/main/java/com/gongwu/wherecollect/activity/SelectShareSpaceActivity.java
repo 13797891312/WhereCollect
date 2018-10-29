@@ -6,15 +6,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.SelectShareSpaceAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.SharedLocationBean;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.util.ToastUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
 
     private SelectShareSpaceAdapter mAdapter;
 
-    private List<ObjectBean> datas = new ArrayList<>();
+    private List<LocationBean> datas = new ArrayList<>();
     private boolean addMore = false;
     private UserBean user;
 
@@ -53,9 +56,9 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
         final String cache = SaveDate.getInstence(this).getSpace();
         List<SharedLocationBean> shareSpaceBeans = (List<SharedLocationBean>) getIntent().getSerializableExtra("shareSpaceBeans");
         if (!TextUtils.isEmpty(cache)) {
-            List<ObjectBean> temp = JsonUtils.listFromJson(cache, ObjectBean.class);
+            List<LocationBean> temp = JsonUtils.listFromJson(cache, LocationBean.class);
             for (int i = 0; i < temp.size(); i++) {
-                ObjectBean objectBean = temp.get(i);
+                LocationBean objectBean = temp.get(i);
                 if (!objectBean.getUser_id().equals(user.getId())) {
                     temp.remove(i);
                     i--;
@@ -65,7 +68,7 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
                 titleLayout.setTitle("批量添加共享空间");
                 addMore = true;
                 for (int i = 0; i < temp.size(); i++) {
-                    ObjectBean objectBean = temp.get(i);
+                    LocationBean objectBean = temp.get(i);
                     for (int j = 0; j < shareSpaceBeans.size(); j++) {
                         if (objectBean.getName().equals(shareSpaceBeans.get(j).getName())) {
                             temp.remove(i);
@@ -116,6 +119,10 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
                     beans.add(bean);
                 }
             }
+        }
+        if (beans.size() == 0) {
+            ToastUtil.show(this,"请选择共享的空间", Toast.LENGTH_SHORT);
+            return;
         }
         Intent intent = new Intent();
         intent.putExtra("location_codes", location_codes.substring(0, location_codes.length() - 1));

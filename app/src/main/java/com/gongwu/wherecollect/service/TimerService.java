@@ -77,6 +77,7 @@ public class TimerService extends Service {
     private void getHttp() {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
+        map.put("type", "0");
         PostListenner listenner = new PostListenner(this) {
             @Override
             protected void code2000(final ResponseResult r) {

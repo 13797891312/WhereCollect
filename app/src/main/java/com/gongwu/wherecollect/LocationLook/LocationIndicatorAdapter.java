@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook;
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,6 +10,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.ScrollSpeedLinearLayoutManger;
 import com.gongwu.wherecollect.util.StringUtils;
 
@@ -16,6 +18,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 /**
  * Function:
  * Date: 2017/8/30
