@@ -3,11 +3,8 @@ package com.gongwu.wherecollect.afragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -38,6 +35,7 @@ import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ShareUtil;
+import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.HighOpinionDialog;
 import com.gongwu.wherecollect.view.UserCodeDialog;
 
@@ -45,11 +43,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,7 +69,6 @@ public class PersonFragment extends BaseFragment {
 
     private UserBean user;
     private View view;
-    private Bitmap bitmap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +80,6 @@ public class PersonFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         refreshUi();
         initEvent();
-        loadImageSimpleTarget(user.getAvatar());
         return view;
     }
 
@@ -112,7 +103,7 @@ public class PersonFragment extends BaseFragment {
 
     @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout,
             R.id.user_code_layout, R.id.my_share_layout, R.id.refresh_help_iv
-            , R.id.person_high_opinion_layout,R.id.user_share_app})
+            , R.id.person_high_opinion_layout, R.id.user_share_app})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -128,12 +119,13 @@ public class PersonFragment extends BaseFragment {
                 MessageListActivity.start(getContext());
                 break;
             case R.id.user_code_layout://二维码
-                if (bitmap != null) {
-                    UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
-                    userCodeDialog.showDialog(user.getUsid(), bitmap);
-                } else {
-                    loadImageSimpleTarget(user.getAvatar());
-                }
+                Glide.with(getContext()).load(user.getAvatar()).asBitmap().into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());
+                        userCodeDialog.showDialog(user.getUsid(), resource);
+                    }
+                }); //方法中设置asBitmap可以设置回调类型
                 break;
             case R.id.my_share_layout://共享空间
                 MyShareActivity.start(getContext());
@@ -149,6 +141,7 @@ public class PersonFragment extends BaseFragment {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
+                        ToastUtil.show(getContext(), "操作成功", Toast.LENGTH_SHORT);
                         PrefsManager.resetAll(getContext());
                         refreshHelpIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.refresh_help_gray));
                     }
@@ -212,21 +205,6 @@ public class PersonFragment extends BaseFragment {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
-    }
-
-    private SimpleTarget target = new SimpleTarget<Bitmap>() {
-        @Override
-        public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-            //这里我们拿到回掉回来的bitmap，可以加载到我们想使用到的地方
-            PersonFragment.this.bitmap = bitmap;
-        }
-    };
-
-    private void loadImageSimpleTarget(String url) {
-        Glide.with(getContext()) // could be an issue!
-                .load(url)
-                .asBitmap()   //强制转换Bitmap
-                .into(target);
     }
 
     /**

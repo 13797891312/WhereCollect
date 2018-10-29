@@ -111,6 +111,12 @@ public class MainLocationFragment extends BaseFragment {
     @Override
     public void onShow() {
         super.onShow();
+        if (isLoaded) {
+            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), "mainlocation");
+            if (!sequence.hasFired()) {
+                initPage();
+            }
+        }
         if (!isLoaded) {
             initHandler.postDelayed(initRunnable, initTime);
             isLoaded = true;
@@ -374,6 +380,7 @@ public class MainLocationFragment extends BaseFragment {
                     objectListView.adapter.defaultData();
                     mHandler.postDelayed(r, animTime);
                 }
+                hideObjectList();
             }
         });
         viewPager.setCurrentItem(indicatorView.getSelection());
@@ -651,12 +658,24 @@ public class MainLocationFragment extends BaseFragment {
                     .withRectangleShape(false).build();
             sequence.addSequenceItem(sequenceItem5);
         }
+        MaterialShowcaseView sequenceItem6 = (new MaterialShowcaseView.Builder(getActivity()))
+                .setTarget(shareIv).setContentText("共享\n创建共享后，可共同查看和\n编辑该空间和空间内所有物\n品")
+                .setTargetTouchable(false)
+                .setMaskColour(getResources().getColor(R.color.black_70))
+                .setDismissOnTouch(true)
+                .setShapePadding(0)
+                .setDelay(200)
+                .setDismissOnTargetTouch(false)
+                .withRectangleShape(false).build();
+        sequence.addSequenceItem(sequenceItem6);
         sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
             @Override
             public void onShow(MaterialShowcaseView itemView, int position) {
                 if (position == objectListViewPosition) {
                     listviewLayout.setVisibility(View.VISIBLE);
                     AnimationUtil.upSlide(listviewLayout, 150);
+                    shareIv.setVisibility(View.VISIBLE);
+                    AnimationUtil.upLeft(shareIv, 150);
                 }
             }
         });

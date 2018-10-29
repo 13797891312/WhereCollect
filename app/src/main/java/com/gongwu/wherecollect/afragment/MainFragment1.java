@@ -22,7 +22,6 @@ import com.gongwu.wherecollect.activity.ShareSpaceDetailsActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.LocationBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
-import com.gongwu.wherecollect.entity.SharePersonBean;
 import com.gongwu.wherecollect.entity.SharedLocationBean;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
@@ -233,6 +232,13 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
             shijiBtn.setVisibility(View.VISIBLE);
         } else {
             shijiBtn.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onShow() {
+        if (myFragmentLayout.getCurrentPosition() == 1) {
+            ((BaseFragment) fragments.get(1)).onShow();
         }
     }
 }

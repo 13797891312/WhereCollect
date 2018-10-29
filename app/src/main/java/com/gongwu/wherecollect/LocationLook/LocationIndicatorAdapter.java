@@ -70,11 +70,23 @@ public class LocationIndicatorAdapter extends RecyclerView.Adapter<LocationIndic
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         holder.text.setText(mlist.get(position).getName());
+
         if (mlist.get(position).isSelect()) {
             holder.text.setSelected(true);
         } else {
             holder.text.setSelected(false);
         }
+        if (mlist.get(position).isIs_share()) {
+            holder.text.setTextColor(context.getResources().getColor(R.color.green_text_color));
+        } else {
+            holder.text.setTextColor(context.getResources().getColor(R.color.color666));
+        }
+        if (mlist.get(position).isSelect()) {
+            holder.text.setTextColor(context.getResources().getColor(R.color.white));
+        }
+//        if (mlist.get(position).isIs_share()) {
+//            holder.text.setTextColor(context.getResources().getColor(R.color.green_text_color));
+//        }
     }
 
     @Override

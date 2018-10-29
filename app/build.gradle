@@ -21,8 +21,8 @@ android {
         applicationId "com.gongwu.wherecollect"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 7
-        versionName "3.2.7"
+        versionCode 8
+        versionName "3.2.8"
         buildConfigField("String", "URL", "${API_HOST_RELEASE}")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
