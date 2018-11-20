@@ -1,17 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.gongwu.wherecollect.afragment.SharePersonFragment"
-    >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gongwu.wherecollect.afragment.SharePersonFragment">
 
     <com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout
         android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.gongwu.wherecollect.swipetoloadlayout.RefreshHeadView
             android:id="@id/swipe_refresh_header"
@@ -19,23 +17,44 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="@dimen/dip_10"
-            android:paddingTop="@dimen/dip_10"
-            />
+            android:paddingTop="@dimen/dip_10" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@id/swipe_target"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
         <!--<com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView-->
-            <!--android:id="@id/swipe_load_more_footer"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="@dimen/dip_10"-->
-            <!--android:layout_marginTop="@dimen/dip_10"-->
-            <!--android:gravity="center"-->
-            <!--/>-->
+        <!--android:id="@id/swipe_load_more_footer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="@dimen/dip_10"-->
+        <!--android:layout_marginTop="@dimen/dip_10"-->
+        <!--android:gravity="center"-->
+        <!--/>-->
 
     </com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout>
-</FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/share_space_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/icon_placeholder_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_empty"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dip_12"
+            android:text="暂无共享空间~"
+            android:textColor="@color/color999"
+            android:textSize="@dimen/f_14" />
+    </RelativeLayout>
+</RelativeLayout>

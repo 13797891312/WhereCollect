@@ -52,6 +52,8 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
     RecyclerView mRecyclerView;
     @Bind(R.id.add_share_tv)
     TextView addShareTv;
+    @Bind(R.id.share_space_details_empty_view)
+    View emptyView;
 
     private List<SharePersonBean> datas = new ArrayList<>();
     private List<SharedLocationBean> locationBeans = new ArrayList<>();
@@ -131,8 +133,10 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
                 if (datas.size() > 0) {
                     locationBeans.addAll(beans);
                     mAdapter.setContent(content);
+                    emptyView.setVisibility(View.GONE);
                     mAdapter.notifyDataSetChanged();
                 } else {
+                    emptyView.setVisibility(View.VISIBLE);
                     setResult(RESULT_OK);
                     finish();
                 }
@@ -214,6 +218,9 @@ public class ShareSpaceDetailsActivity extends BaseViewActivity implements OnRef
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 106 && resultCode == RESULT_OK) {
+            mSwipeToLoadLayout.setRefreshing(true);
+        }
+        if (requestCode == START_CODE && resultCode == RESULT_OK) {
             mSwipeToLoadLayout.setRefreshing(true);
         }
     }

@@ -108,7 +108,7 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
         List<SharedLocationBean> beans = new ArrayList<>();
         for (int i = 0; i < datas.size(); i++) {
             if (datas.get(i).isSelectSpace()) {
-                location_codes += datas.get(i).getCode() + "%";
+                location_codes += datas.get(i).getCode() + ",";
                 content_text += "【" + datas.get(i).getName() + "】,";
                 if (addMore) {
                     SharedLocationBean bean = new SharedLocationBean();
@@ -120,8 +120,8 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
                 }
             }
         }
-        if (beans.size() == 0) {
-            ToastUtil.show(this,"请选择共享的空间", Toast.LENGTH_SHORT);
+        if (addMore && beans.size() == 0) {
+            ToastUtil.show(this, "请选择共享的空间", Toast.LENGTH_SHORT);
             return;
         }
         Intent intent = new Intent();

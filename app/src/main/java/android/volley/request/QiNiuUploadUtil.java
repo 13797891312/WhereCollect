@@ -77,8 +77,10 @@ public class QiNiuUploadUtil {
                         if (info.isOK()) {
                             //                                {"hash":"FlY2_jV4gKjYHz6fkDQ9qLSr67rb",
                             // "key":"urser-15100554679801510055460290.jpg"}
+                            //http://7xroa4.com1.z0.glb.clouddn.com/
+                            //http://cdn.shouner.com/
                             try {
-                                String url = "http://7xroa4.com1.z0.glb.clouddn.com/" + res.getString("key");
+                                String url = "http://cdn.shouner.com/" + res.getString("key");
                                 urls.add(url);
                                 if (urls.size() == mlist.size()) {
                                     ((Activity) context).runOnUiThread(new Runnable() {

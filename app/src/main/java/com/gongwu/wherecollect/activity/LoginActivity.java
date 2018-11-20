@@ -3,6 +3,7 @@ package com.gongwu.wherecollect.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
@@ -142,6 +143,14 @@ public class LoginActivity extends BaseViewActivity {
                 MyApplication.setUser(user);
                 EventBus.getDefault().post(user);
                 EventBus.getDefault().post(new EventBusMsg.ChangeUser());
+                //先停止在开始
+                EventBus.getDefault().post(new EventBusMsg.stopService());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        EventBus.getDefault().post(new EventBusMsg.startService());
+                    }
+                }, 1000);
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 public class SearchActivity extends BaseViewActivity implements AdapterView.OnItemClickListener {
     @Bind(R.id.back)
     ImageButton back;
@@ -196,6 +198,7 @@ public class SearchActivity extends BaseViewActivity implements AdapterView.OnIt
                 mlist.get(i).save();
                 break;
             case R.id.searchListView:
+                if (searchDatas.get(i).getLocations() == null || searchDatas.get(i).getLocations().size() < 1)return;
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("object", searchDatas.get(i));
                 startActivity(intent);

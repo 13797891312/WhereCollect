@@ -41,7 +41,7 @@ public class TimerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("TimerService", "onStartCommand");
+        LogUtil.d("TimerService", "onStartCommand");
         if (intent.getStringExtra("flags").equals("3")) {
             //判断当系统版本大于20，即超过Android5.0时，我们采用线程循环的方式请求。
             //当小于5.0时的系统则采用定时唤醒服务的方式执行循环
@@ -75,6 +75,7 @@ public class TimerService extends Service {
 
     //请求网络获取数据
     private void getHttp() {
+        if (MyApplication.getUser(this) == null) return;
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("type", "0");

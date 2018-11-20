@@ -91,7 +91,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/dip_16"
-                        android:text="赵进"
                         android:textColor="@color/black_87"
                         android:textSize="@dimen/f_15" />
 
@@ -135,7 +134,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/dip_16"
-                        android:text="男"
                         android:textColor="@color/black_87"
                         android:textSize="@dimen/f_15" />
 
@@ -179,7 +177,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/dip_16"
-                        android:text="1987-12-18"
                         android:textColor="@color/black_87"
                         android:textSize="@dimen/f_15" />
                 </RelativeLayout>

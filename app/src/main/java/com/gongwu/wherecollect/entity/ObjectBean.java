@@ -65,8 +65,8 @@ public class ObjectBean implements Serializable {
     private String color;
     private List<String> colors;
     private String season;
-    private int price_min;
-    private int price_max;
+    private double price_min;
+    private double price_max;
     private String name;
     private int __v;
     private String deleted_at;
@@ -376,19 +376,19 @@ public class ObjectBean implements Serializable {
         this.season = season;
     }
 
-    public int getPrice_min() {
+    public double getPrice_min() {
         return price_min;
     }
 
-    public void setPrice_min(int price_min) {
+    public void setPrice_min(double price_min) {
         this.price_min = price_min;
     }
 
-    public int getPrice_max() {
+    public double getPrice_max() {
         return price_max;
     }
 
-    public void setPrice_max(int price_max) {
+    public void setPrice_max(double price_max) {
         this.price_max = price_max;
     }
 

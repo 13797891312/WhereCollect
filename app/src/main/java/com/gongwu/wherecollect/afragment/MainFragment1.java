@@ -130,8 +130,10 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
                 } else {
                     serchBtn.setVisibility(View.INVISIBLE);
                     filterBtn.setVisibility(View.INVISIBLE);
-                    shijiBtn.setVisibility(View.VISIBLE);
                     editBtn.setVisibility(View.VISIBLE);
+                    if (selectBean != null) {
+                        shijiBtn.setVisibility(View.VISIBLE);
+                    }
                 }
                 ((BaseFragment) fragments.get(positon)).onShow();
             }
@@ -190,6 +192,7 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
     }
 
     private void startLocationAct() {
+        if (selectBean == null) return;
         SharedLocationBean locationBean = new SharedLocationBean();
         locationBean.setName(selectBean.getName());
         locationBean.setCode(selectBean.getCode());
@@ -223,21 +226,25 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
 //        }
     }
 
-    //呼吸查看
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.showShareImgList msg) {
         if (msg.shareUser != null && msg.shareUser.getSharedUsers() != null && msg.shareUser.getSharedUsers().size() > 0) {
             selectBean = msg.shareUser;
             share_user_list_tv.setUserImages(msg.shareUser.getSharedUsers());
-            shijiBtn.setVisibility(View.VISIBLE);
+            //判断当前fragment为位置界面
+            if (myFragmentLayout.getCurrentPosition() == 1) {
+                shijiBtn.setVisibility(View.VISIBLE);
+            }
         } else {
+            selectBean = null;
+            share_user_list_tv.setUserImages(null);
             shijiBtn.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onShow() {
-        if (myFragmentLayout.getCurrentPosition() == 1) {
+        if (myFragmentLayout != null && myFragmentLayout.getCurrentPosition() == 1) {
             ((BaseFragment) fragments.get(1)).onShow();
         }
     }

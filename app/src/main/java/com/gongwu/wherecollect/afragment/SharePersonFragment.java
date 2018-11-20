@@ -50,6 +50,8 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
     SwipeToLoadLayout mSwipeToLoadLayout;
     @Bind(R.id.swipe_target)
     RecyclerView mRecyclerView;
+    @Bind(R.id.share_person_empty_view)
+    View emptyView;
 
     private View view;
     private boolean init;
@@ -147,6 +149,9 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
                 List<SharePersonBean> beans = JsonUtils.listFromJson(r.getResult(), SharePersonBean.class);
                 if (beans != null && beans.size() > 0) {
                     datas.addAll(beans);
+                    emptyView.setVisibility(View.GONE);
+                } else {
+                    emptyView.setVisibility(View.VISIBLE);
                 }
                 mAdapter.notifyDataSetChanged();
             }

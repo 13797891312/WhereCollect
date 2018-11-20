@@ -255,6 +255,27 @@ public class MainActivity extends BaseViewActivity {
     }
 
     /**
+     * 停止服务
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.stopService msg) {
+        //停止由AlarmManager启动的循环
+        TimerService.stop(this);
+        //停止由服务启动的循环
+        Intent intent = new Intent(this, TimerService.class);
+        stopService(intent);
+    }
+
+    /**
+     * 启动服务
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.startService msg) {
+        //启动Android定时器，并且启动服务
+        TimerService.getConnet(this);
+    }
+
+    /**
      * 室迹暂存或者保存过要显示小红点
      */
     @Subscribe(threadMode = ThreadMode.MAIN)

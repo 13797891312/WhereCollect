@@ -179,14 +179,8 @@ public class SpaceEditActivity extends BaseViewActivity {
                                         super.code2000(r);
                                         MainLocationFragment.mlist.remove(position);
                                         myAdapter.notifyItemRemoved(position);
-                                        //后台数据可能没改过来，需要缓一下 物品位置才清空
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
-                                                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
-                                            }
-                                        }, 1500);
+                                        EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
+                                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                                     }
                                 };
                                 HttpClient.deleteLocation(SpaceEditActivity.this, map, listenner);

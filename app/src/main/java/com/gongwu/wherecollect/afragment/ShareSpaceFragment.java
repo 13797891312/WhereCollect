@@ -47,6 +47,8 @@ public class ShareSpaceFragment extends BaseFragment implements OnRefreshListene
     SwipeToLoadLayout mSwipeToLoadLayout;
     @Bind(R.id.swipe_target)
     RecyclerView mRecyclerView;
+    @Bind(R.id.share_space_empty_view)
+    View emptyView;
 
     private View view;
     private ShareSpaceListAdapter mAdapter;
@@ -104,6 +106,9 @@ public class ShareSpaceFragment extends BaseFragment implements OnRefreshListene
                 List<SharedLocationBean> beans = JsonUtils.listFromJson(r.getResult(), SharedLocationBean.class);
                 if (beans != null && beans.size() > 0) {
                     datas.addAll(beans);
+                    emptyView.setVisibility(View.GONE);
+                } else {
+                    emptyView.setVisibility(View.VISIBLE);
                 }
                 mAdapter.notifyDataSetChanged();
             }

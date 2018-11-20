@@ -193,4 +193,10 @@ public class EventBusMsg {
 
     public static class updateShareMsg {
     }
+
+    public static class startService {
+    }
+    
+    public static class stopService {
+    }
 }

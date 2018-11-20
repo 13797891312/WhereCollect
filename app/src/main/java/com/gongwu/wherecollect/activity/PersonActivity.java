@@ -210,6 +210,7 @@ public class PersonActivity extends BaseViewActivity {
                         Intent intent;
                         MyApplication.setUser(null);
                         SaveDate.getInstence(context).setUser("");
+                        EventBus.getDefault().post(new EventBusMsg.stopService());
                         intent = new Intent(context, LoginActivity.class);
                         startActivity(intent);
                     }

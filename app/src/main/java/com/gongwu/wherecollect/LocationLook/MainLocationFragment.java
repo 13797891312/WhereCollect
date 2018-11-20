@@ -257,7 +257,9 @@ public class MainLocationFragment extends BaseFragment {
                 indicatorView.init(mlist);
             }
             initPage();
-            EventBus.getDefault().post(new EventBusMsg.showShareImgList(mlist.get(0)));
+            if (mlist.size() > 0) {
+                EventBus.getDefault().post(new EventBusMsg.showShareImgList(mlist.get(0)));
+            }
         }
         getSpaceData(cache);
     }

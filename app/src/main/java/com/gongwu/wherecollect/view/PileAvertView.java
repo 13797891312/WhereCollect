@@ -64,6 +64,7 @@ public class PileAvertView extends LinearLayout {
 
     public void setUserImages(List<SharePersonBean> imageList) {
         pileView.removeAllViews();
+        if (imageList == null) return;
         for (int i = 0; i < imageList.size(); i++) {
             CircleImageView image = (CircleImageView) LayoutInflater.from(context).inflate(R.layout.item_group_round_share_user, pileView, false);
             ImageLoader.load(context, image, imageList.get(i).getAvatar());

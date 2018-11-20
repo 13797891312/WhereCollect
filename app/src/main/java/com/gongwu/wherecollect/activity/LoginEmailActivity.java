@@ -2,6 +2,7 @@ package com.gongwu.wherecollect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -24,6 +25,7 @@ import com.zhaojin.myviews.Loading;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -71,6 +73,14 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
                 SaveDate.getInstence(LoginEmailActivity.this).setUser(JsonUtils.jsonFromObject(user));
                 MyApplication.setUser(user);
                 EventBus.getDefault().post(new EventBusMsg.ChangeUser());
+                //先停止请求消息接口的服务 在开始
+                EventBus.getDefault().post(new EventBusMsg.stopService());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        EventBus.getDefault().post(new EventBusMsg.startService());
+                    }
+                }, 1000);
                 Intent intent = new Intent(LoginEmailActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -80,6 +90,12 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
             protected void otherCode() {
                 super.otherCode();
                 Toast.makeText(context, "账号密码错误", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
+                Toast.makeText(context, "您的帐号已经在高版本使用过,请使用IOS版", Toast.LENGTH_SHORT).show();
             }
         };
         HttpClient.login(this, map, listenner);

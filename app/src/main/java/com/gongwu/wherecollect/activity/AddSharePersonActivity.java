@@ -171,26 +171,23 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
 
     @Override
     public void onItemClick(int positions, View view) {
-        //如果是从空间点进来的直接共享该空间 不用去选择空间
-        if (sharedLocationBean != null) {
-            location_codes = sharedLocationBean.getCode();
-            content_text = sharedLocationBean.getName();
-            return;
-        }
         //点击+号进来的 需要选择共享的空间
         if (datas != null && datas.size() >= positions) {
             selectBean = datas.get(positions);
+            //如果是从空间点进来的直接共享该空间 不用去选择空间
+            if (sharedLocationBean != null) {
+                location_codes = sharedLocationBean.getCode();
+                content_text = sharedLocationBean.getName();
+                startDialog();
+                return;
+            }
             Intent intent = new Intent(AddSharePersonActivity.this, SelectShareSpaceActivity.class);
             startActivityForResult(intent, START_CODE);
         }
     }
 
-    private void shareUserLocation() {
-
-    }
-
     /**
-     * 获取历史搜索的用户
+     * 请求用户共享空间
      */
     private void shareOldUserLocation() {
         Map<String, String> params = new HashMap<>();
@@ -208,6 +205,9 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
         HttpClient.shareOldUserLocation(this, params, listener);
     }
 
+    /**
+     * 获取历史搜索的用户
+     */
     private void initData() {
         Map<String, String> params = new HashMap<>();
         params.put("uid", MyApplication.getUser(this).getId());
@@ -227,6 +227,9 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
         HttpClient.getAddSharePersonOldList(this, params, listener);
     }
 
+    /**
+     * 扫描用户二维码获取信息
+     */
     private void getUserCodeData(String usid) {
         Map<String, String> params = new HashMap<>();
         params.put("uid", MyApplication.getUser(this).getId());
