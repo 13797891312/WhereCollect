@@ -197,10 +197,10 @@ public class ObjectInfoEditView extends LinearLayout {
 
     private void setjjiage() {
         //后台赋值是乱的 列表跟 家具里面的物品 价格参数不一样
-        if (!bean.getPrice().equals("0")) {
-            jiageEdit.setText(bean.getPrice());
-        } else {
+        if (bean.getPrice().equals("0") || bean.getPrice().equals("0.0")) {
             jiageEdit.setText("");
+        } else {
+            jiageEdit.setText(bean.getPrice());
         }
     }
 

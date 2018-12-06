@@ -26,7 +26,7 @@ public class PileAvertView extends LinearLayout {
     PileView pileView;
 
     private Context context = null;
-    public static final int VISIBLE_COUNT = 2;//默认显示个数
+    public static final int VISIBLE_COUNT = 3;//默认显示个数
 
     public PileAvertView(Context context) {
         this(context, null);
@@ -50,24 +50,32 @@ public class PileAvertView extends LinearLayout {
 
     //如果imageList>visiableCount,显示List最上面的几个
     public void setAvertImages(List<SharePersonBean> imageList, int visibleCount) {
-        List<SharePersonBean> visibleList = null;
+        List<SharePersonBean> visibleList;
         if (imageList.size() > visibleCount) {
             visibleList = imageList.subList(imageList.size() - 1 - visibleCount, imageList.size() - 1);
+        } else {
+            visibleList = imageList;
         }
         pileView.removeAllViews();
-        for (int i = 0; i < imageList.size(); i++) {
+        for (int i = 0; i < visibleList.size(); i++) {
             CircleImageView image = (CircleImageView) LayoutInflater.from(context).inflate(R.layout.item_group_round_avert, pileView, false);
-            ImageLoader.load(context, image, imageList.get(i).getAvatar());
+            ImageLoader.load(context, image, visibleList.get(i).getAvatar());
             pileView.addView(image);
         }
     }
 
     public void setUserImages(List<SharePersonBean> imageList) {
-        pileView.removeAllViews();
         if (imageList == null) return;
-        for (int i = 0; i < imageList.size(); i++) {
+        List<SharePersonBean> visibleList;
+        if (imageList.size() > VISIBLE_COUNT) {
+            visibleList = imageList.subList(imageList.size() - 1 - VISIBLE_COUNT, imageList.size() - 1);
+        } else {
+            visibleList = imageList;
+        }
+        pileView.removeAllViews();
+        for (int i = 0; i < visibleList.size(); i++) {
             CircleImageView image = (CircleImageView) LayoutInflater.from(context).inflate(R.layout.item_group_round_share_user, pileView, false);
-            ImageLoader.load(context, image, imageList.get(i).getAvatar());
+            ImageLoader.load(context, image, visibleList.get(i).getAvatar());
             pileView.addView(image);
         }
     }

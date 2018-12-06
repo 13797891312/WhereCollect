@@ -326,6 +326,8 @@ public class ObjectBean implements Serializable {
     }
 
     public String getPrice() {
+        //越来越乱 = =
+        if (TextUtils.isEmpty(price) && price_max == 0) return "";
         String str = TextUtils.isEmpty(price) ? price_max + "" : price;
         return str.replaceAll("元", "").replaceAll("CNY ", "");
     }

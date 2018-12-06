@@ -159,8 +159,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
         } else {
             content = "是否邀请@" + selectBean.getNickname() + ",并共享" + content_text + "?" + "\n（共享后，双方可同时查看和编辑该空间及空间内物品）";
         }
-        DialogUtil.show("", content, "确定", "取消", (Activity) context, new DialogInterface.OnClickListener
-                () {
+        DialogUtil.show("", content, "确定", "取消", (Activity) context, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 shareOldUserLocation();
@@ -198,7 +197,11 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
             @Override
             protected void code2000(ResponseResult r) {
                 super.code2000(r);
-                setResult(RESULT_OK);
+                if (getIntent().getIntExtra("startType", -1) == START_CODE) {
+                    MyShareActivity.start(context);
+                }else{
+                    setResult(RESULT_OK);
+                }
                 finish();
             }
         };
@@ -235,6 +238,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
         params.put("uid", MyApplication.getUser(this).getId());
         params.put("usid", usid);
         PostListenner listener = new PostListenner(this) {
+
             @Override
             protected void code2000(ResponseResult r) {
                 super.code2000(r);
@@ -251,6 +255,12 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
 
             @Override
             protected void error() {
+                ToastUtil.show(context, "该用户不存在", Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
                 ToastUtil.show(context, "该用户不存在", Toast.LENGTH_SHORT);
             }
 

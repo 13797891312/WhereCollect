@@ -106,21 +106,19 @@ public class MainDrawerView extends LinearLayout {
                 adpter.notifyDataSetChanged();
                 break;
             case R.id.summit:
-                List<Map<String, Object>> temp = new ArrayList<>();
+                StringBuilder querySb = new StringBuilder();
+                querySb.append("[");
                 for (int i = 0; i < filterList.size(); i++) {
                     for (int j = 0; j < filterList.get(i).getSelectSubs().size(); j++) {
                         String query = filterList.get(i).getSelectSubs().get(j).getQuery();
-                        Map<String, Object> map = JsonUtils.mapFromJson(query);
-                        temp.add(map);
+                        querySb.append(query).append(",");
                     }
                 }
-                if (temp.size() > 1) {
-                    query = JsonUtils.jsonFromObject(temp);
-                } else if (temp.size() == 1) {
-                    query = JsonUtils.jsonFromObject(temp.get(0));
-                } else {
-                    query = "";
+                if (querySb.toString().endsWith(",")){
+                    querySb.delete(querySb.length()-1,querySb.length());
                 }
+                querySb.append("]");
+                query = querySb.toString();
                 ((MainActivity) context).idDrawerlayout.closeDrawer(Gravity.RIGHT);
                 EventBus.getDefault().post(EventBusMsg.OBJECT_FITLER);
                 break;

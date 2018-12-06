@@ -1,9 +1,11 @@
 package com.gongwu.wherecollect.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
@@ -17,10 +19,12 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.UMAuthListener;
@@ -136,27 +140,40 @@ public class LoginActivity extends BaseViewActivity {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
-                logoutTest(MyApplication.getUser(context));
-                UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
-                user.setOpenid(infoMap.get("uid"));
-                SaveDate.getInstence(LoginActivity.this).setUser(JsonUtils.jsonFromObject(user));
-                MyApplication.setUser(user);
-                EventBus.getDefault().post(user);
-                EventBus.getDefault().post(new EventBusMsg.ChangeUser());
-                //先停止在开始
-                EventBus.getDefault().post(new EventBusMsg.stopService());
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        EventBus.getDefault().post(new EventBusMsg.startService());
-                    }
-                }, 1000);
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                final UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                if (TextUtils.isEmpty(user.getMax_version())) {
+                    startMainActivity(user,infoMap.get("uid"));
+                } else {
+                    DialogUtil.show("提示", TextUtils.isEmpty(user.getLogin_messag()) ? "您的帐号已经在高版本使用过,请使用IOS版" : user.getLogin_messag(), "继续", "取消", LoginActivity.this, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startMainActivity(user,infoMap.get("uid"));
+                        }
+                    }, null);
+                }
             }
         };
-        HttpClient.login(this, map, listenner);
+        HttpClient.login(this, map, StringUtils.getCurrentVersionName(context), listenner);
+    }
+
+    private void startMainActivity(UserBean user,String uid) {
+        logoutTest(MyApplication.getUser(context));
+        user.setOpenid(uid);
+        SaveDate.getInstence(LoginActivity.this).setUser(JsonUtils.jsonFromObject(user));
+        MyApplication.setUser(user);
+        EventBus.getDefault().post(user);
+        EventBus.getDefault().post(new EventBusMsg.ChangeUser());
+        //先停止在开始
+        EventBus.getDefault().post(new EventBusMsg.stopService());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                EventBus.getDefault().post(new EventBusMsg.startService());
+            }
+        }, 1000);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**

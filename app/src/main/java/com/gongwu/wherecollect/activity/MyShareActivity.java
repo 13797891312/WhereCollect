@@ -78,12 +78,12 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
         mAdapter = new CustomPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
         mTabView.setSelection(0);
-        new Handler().post(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 fragments.get(0).onShow();
             }
-        });
+        },500);
 
     }
 
@@ -134,7 +134,6 @@ public class MyShareActivity extends BaseViewActivity implements ViewPager.OnPag
     }
 
     private void isShowAddShareBtn(int position) {
-        LogUtil.e("position:"+position);
         switch (position) {
             case 0:
                 addShareBtn.setVisibility(View.VISIBLE);

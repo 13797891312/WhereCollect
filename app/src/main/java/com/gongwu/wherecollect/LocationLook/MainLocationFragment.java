@@ -229,7 +229,9 @@ public class MainLocationFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.share_iv:
-                AddSharePersonActivity.start(getContext());
+                Intent intent = new Intent(getActivity(),AddSharePersonActivity.class);
+                intent.putExtra("startType",101);
+                startActivity(intent);
                 break;
             default:
                 break;

@@ -2,6 +2,7 @@ package com.gongwu.wherecollect.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.SharePersonBean;
+import com.gongwu.wherecollect.entity.SharedLocationBean;
 import com.gongwu.wherecollect.util.ImageLoader;
 
 import java.util.List;
@@ -48,8 +50,13 @@ public class SharePersonListAdapter extends RecyclerView.Adapter<SharePersonList
         ImageLoader.loadCircle(mContext, holder.userIconIv, bean.getAvatar(), R.mipmap.ic_launcher);
         holder.userNameTv.setText(bean.getNickname());
         String s = "";
-        for (int i = 0; i < bean.getShared_locations().size(); i++) {
-            s += bean.getShared_locations().get(i).getName() + " ";
+        if (bean.getShared_locations() != null && bean.getShared_locations().size() > 0) {
+            for (int i = 0; i < bean.getShared_locations().size(); i++) {
+                SharedLocationBean locationBean = bean.getShared_locations().get(i);
+                if (locationBean != null && !TextUtils.isEmpty(locationBean.getName())) {
+                    s += locationBean.getName() + " ";
+                }
+            }
         }
         holder.userSpaceTv.setText(s);
         if (!bean.isValid()) {

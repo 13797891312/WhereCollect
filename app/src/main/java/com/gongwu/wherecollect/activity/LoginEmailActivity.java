@@ -1,5 +1,6 @@
 package com.gongwu.wherecollect.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,9 +18,11 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.util.StringUtils;
 import com.zhaojin.myviews.Loading;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,24 +69,17 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
-                logoutTest(MyApplication.getUser(context));
-                UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
-                user.setOpenid(pwdEdit.getText().toString());
-                user.setPassLogin(true);
-                SaveDate.getInstence(LoginEmailActivity.this).setUser(JsonUtils.jsonFromObject(user));
-                MyApplication.setUser(user);
-                EventBus.getDefault().post(new EventBusMsg.ChangeUser());
-                //先停止请求消息接口的服务 在开始
-                EventBus.getDefault().post(new EventBusMsg.stopService());
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        EventBus.getDefault().post(new EventBusMsg.startService());
-                    }
-                }, 1000);
-                Intent intent = new Intent(LoginEmailActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                final UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
+                if (TextUtils.isEmpty(user.getMax_version())) {
+                    startMainActivity(user);
+                } else {
+                    DialogUtil.show("提示", TextUtils.isEmpty(user.getLogin_messag()) ? "您的帐号已经在高版本使用过,请使用IOS版" : user.getLogin_messag(), "继续", "取消", LoginEmailActivity.this, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startMainActivity(user);
+                        }
+                    }, null);
+                }
             }
 
             @Override
@@ -98,7 +94,27 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
                 Toast.makeText(context, "您的帐号已经在高版本使用过,请使用IOS版", Toast.LENGTH_SHORT).show();
             }
         };
-        HttpClient.login(this, map, listenner);
+        HttpClient.login(this, map, StringUtils.getCurrentVersionName(context), listenner);
+    }
+
+    private void startMainActivity(UserBean user) {
+        logoutTest(MyApplication.getUser(context));
+        user.setOpenid(pwdEdit.getText().toString());
+        user.setPassLogin(true);
+        SaveDate.getInstence(LoginEmailActivity.this).setUser(JsonUtils.jsonFromObject(user));
+        MyApplication.setUser(user);
+        EventBus.getDefault().post(new EventBusMsg.ChangeUser());
+        //先停止请求消息接口的服务 在开始
+        EventBus.getDefault().post(new EventBusMsg.stopService());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                EventBus.getDefault().post(new EventBusMsg.startService());
+            }
+        }, 1000);
+        Intent intent = new Intent(LoginEmailActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void initView() {
@@ -107,8 +123,7 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
     }
 
     private void setBtn() {
-        if (TextUtils.isEmpty(emailEdit.getText())
-                || TextUtils.isEmpty(pwdEdit.getText())) {
+        if (TextUtils.isEmpty(emailEdit.getText()) || TextUtils.isEmpty(pwdEdit.getText())) {
             confirm.setEnabled(false);
             return;
         }

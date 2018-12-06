@@ -37,6 +37,7 @@ public class SharePersonDetailsSpaceListAdapter extends RecyclerView.Adapter<Sha
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         SharedLocationBean bean = datas.get(position);
+        if (bean == null) return;
         holder.space_name_tv.setText(bean.getName());
         if (userId.equals(bean.getUser_id())) {
             holder.space_lock_iv.setVisibility(View.VISIBLE);

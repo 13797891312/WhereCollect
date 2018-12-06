@@ -120,6 +120,10 @@ public class SelectShareSpaceActivity extends BaseViewActivity {
                 }
             }
         }
+        if (TextUtils.isEmpty(location_codes)) {
+            ToastUtil.show(this, "请选择共享的空间", Toast.LENGTH_SHORT);
+            return;
+        }
         if (addMore && beans.size() == 0) {
             ToastUtil.show(this, "请选择共享的空间", Toast.LENGTH_SHORT);
             return;

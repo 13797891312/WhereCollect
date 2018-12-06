@@ -389,6 +389,7 @@ public class PersonActivity extends BaseViewActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         if (changeHeaderdialog != null) {
             changeHeaderdialog.onActivityResult(requestCode, resultCode, data);
         }

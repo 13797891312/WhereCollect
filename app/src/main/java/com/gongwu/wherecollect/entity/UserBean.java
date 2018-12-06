@@ -60,6 +60,8 @@ public class UserBean {
     private String mobile = "";
     private String openid;
     private String usid;
+    private String max_version;
+    private String login_messag;
 
     private boolean isPassLogin;
 
@@ -252,6 +254,22 @@ public class UserBean {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getMax_version() {
+        return max_version;
+    }
+
+    public void setMax_version(String max_version) {
+        this.max_version = max_version;
+    }
+
+    public String getLogin_messag() {
+        return login_messag;
+    }
+
+    public void setLogin_messag(String login_messag) {
+        this.login_messag = login_messag;
     }
 
     public static class ScoreBean {

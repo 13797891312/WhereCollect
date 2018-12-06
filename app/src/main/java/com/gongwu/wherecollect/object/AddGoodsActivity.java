@@ -95,7 +95,7 @@ public class AddGoodsActivity extends BaseViewActivity {
     @Bind(R.id.add_code_layout)
     LinearLayout add_code_layout;
 
-    private ObjectBean tempBean = new ObjectBean();
+    private ObjectBean tempBean;
     private File imgFile;
     private File imgOldFile;
     private final int imgMax = 1;
@@ -115,6 +115,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_goods);
         ButterKnife.bind(this);
+        tempBean = new ObjectBean();
         titleLayout.setBack(true, null);
         titleLayout.setTitle(getResources().getString(R.string.add_goods_text));
         type = getIntent().getIntExtra("type", 0);
