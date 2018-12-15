@@ -118,6 +118,10 @@ public class MainDrawerView extends LinearLayout {
                     querySb.delete(querySb.length()-1,querySb.length());
                 }
                 querySb.append("]");
+                if (!querySb.toString().equals(",")){
+                    querySb.delete(0,1);
+                    querySb.delete(querySb.length()-1,querySb.length());
+                }
                 query = querySb.toString();
                 ((MainActivity) context).idDrawerlayout.closeDrawer(Gravity.RIGHT);
                 EventBus.getDefault().post(EventBusMsg.OBJECT_FITLER);

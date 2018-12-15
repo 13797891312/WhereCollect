@@ -37,9 +37,7 @@ public class PrefsManager {
      * METHODS FOR SHOWCASE SEQUENCES
      */
     int getSequenceStatus() {
-        return context
-                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                .getInt(STATUS + showcaseID, SEQUENCE_NEVER_STARTED);
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getInt(STATUS + showcaseID, SEQUENCE_NEVER_STARTED);
 
     }
 
@@ -65,5 +63,11 @@ public class PrefsManager {
 
     public void close() {
         context = null;
+    }
+
+    public static int getCode(Context context, String showcaseID) {
+        SharedPreferences internal = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        int s = internal.getInt(STATUS + showcaseID, SEQUENCE_NEVER_STARTED);
+        return s;
     }
 }

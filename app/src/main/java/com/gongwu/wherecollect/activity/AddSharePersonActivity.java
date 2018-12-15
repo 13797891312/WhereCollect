@@ -117,7 +117,11 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
                 onBackPressed();
                 break;
             case R.id.add_share_scan_ib:
-                startActivityForResult(new Intent(context, CaptureActivity.class), START_CODE);
+                Intent intent = new Intent(context, CaptureActivity.class);
+                intent.putExtra("title","添加共享人");
+                intent.putExtra("content","请对方打开“我的”中的二维码进行扫码\n添加");
+                startActivityForResult(intent, START_CODE);
+
                 break;
             case R.id.delete_btn:
                 deleteBtn.setVisibility(View.GONE);
@@ -197,9 +201,9 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
             @Override
             protected void code2000(ResponseResult r) {
                 super.code2000(r);
-                if (getIntent().getIntExtra("startType", -1) == START_CODE) {
+                if (getIntent().getIntExtra("startType", -1) == START_CODE&&!selectBean.isValid()) {
                     MyShareActivity.start(context);
-                }else{
+                } else {
                     setResult(RESULT_OK);
                 }
                 finish();

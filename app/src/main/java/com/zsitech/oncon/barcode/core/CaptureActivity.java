@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -51,8 +52,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
 
-public final class CaptureActivity extends BaseViewActivity implements
-        SurfaceHolder.Callback {
+public final class CaptureActivity extends BaseViewActivity implements SurfaceHolder.Callback {
     public static final int result = 869;
     //判断扫描结果
     static final int PARSE_BARCODE_SUC = 3035;
@@ -77,17 +77,12 @@ public final class CaptureActivity extends BaseViewActivity implements
                     if (mProgress != null && mProgress.isShowing()) {
                         mProgress.dismiss();
                     }
-                    new AlertDialog.Builder(CaptureActivity.this)
-                            .setTitle("提示")
-                            .setMessage("扫描失败！")
-                            .setPositiveButton("确定",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
+                    new AlertDialog.Builder(CaptureActivity.this).setTitle("提示").setMessage("扫描失败！").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
                     break;
             }
             super.handleMessage(msg);
@@ -106,6 +101,8 @@ public final class CaptureActivity extends BaseViewActivity implements
     private InactivityTimer inactivityTimer;
     private PopupWindow pop;
     private Dialog dialog;
+    private TextView titleView;
+    private TextView contentView;
 
     private static ParsedResult parseResult(Result rawResult) {
         return ResultParser.parseResult(rawResult);
@@ -153,6 +150,14 @@ public final class CaptureActivity extends BaseViewActivity implements
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
         viewfinderView.setCameraManager(cameraManager);
         statusView = (TextView) findViewById(R.id.status_view);
+        titleView = (TextView) findViewById(R.id.title_ca);
+        contentView = (TextView) findViewById(R.id.capture_content_view);
+        String title = getIntent().getStringExtra("title");
+        if (!TextUtils.isEmpty(title)){
+            String content = getIntent().getStringExtra("content");
+            titleView.setText(title);
+            contentView.setText(content);
+        }
     }
 
     public String parsLocalPic(String path) {
@@ -165,8 +170,7 @@ public final class CaptureActivity extends BaseViewActivity implements
         options.inJustDecodeBounds = false; // 获取新的大小
         // 缩放比
         int be = (int) (options.outHeight / (float) 200);
-        if (be <= 0)
-            be = 1;
+        if (be <= 0) be = 1;
         options.inSampleSize = be;
         bitmap = BitmapFactory.decodeFile(path, options);
         int w = bitmap.getWidth();
@@ -191,8 +195,7 @@ public final class CaptureActivity extends BaseViewActivity implements
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    final Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         android.util.Log.i("steven", "data.getData()" + data);
         if (data != null) {
@@ -203,11 +206,9 @@ public final class CaptureActivity extends BaseViewActivity implements
             final ContentResolver resolver = getContentResolver();
             if (requestCode == from_photo) {
                 if (resultCode == RESULT_OK) {
-                    Cursor cursor = getContentResolver().query(data.getData(),
-                            null, null, null, null);
+                    Cursor cursor = getContentResolver().query(data.getData(), null, null, null, null);
                     if (cursor.moveToFirst()) {
-                        photoPath = cursor.getString(cursor
-                                .getColumnIndex(MediaStore.Images.Media.DATA));
+                        photoPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     }
                     cursor.close();
                     new Thread(new Runnable() {
@@ -237,8 +238,7 @@ public final class CaptureActivity extends BaseViewActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        WindowManager manager = (WindowManager) this
-                .getSystemService(Context.WINDOW_SERVICE);
+        WindowManager manager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         Point p = new Point();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -252,8 +252,7 @@ public final class CaptureActivity extends BaseViewActivity implements
         lastResult = null;
         resetStatusView();
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams
-                (width, height);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
         surfaceView.setLayoutParams(layoutParams);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
@@ -309,8 +308,7 @@ public final class CaptureActivity extends BaseViewActivity implements
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (holder == null) {
-            Log.e(TAG,
-                    "*** WARNING *** surfaceCreated() gave us a null surface!");
+            Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
         }
         if (!hasSurface) {
             hasSurface = true;
@@ -324,8 +322,7 @@ public final class CaptureActivity extends BaseViewActivity implements
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                               int height) {
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
     }
 
     // 解析二维码
@@ -335,13 +332,9 @@ public final class CaptureActivity extends BaseViewActivity implements
         ResultHandler resultHandler = new ResultHandler(parseResult(rawResult));
         boolean fromLiveScan = barcode != null;
         if (barcode == null) {
-            android.util.Log.i("steven",
-                    "rawResult.getBarcodeFormat().toString():"
-                            + rawResult.getBarcodeFormat().toString());
-            android.util.Log.i("steven", "resultHandler.getType().toString():"
-                    + resultHandler.getType().toString());
-            android.util.Log.i("steven", "resultHandler.getDisplayContents():"
-                    + resultHandler.getDisplayContents());
+            android.util.Log.i("steven", "rawResult.getBarcodeFormat().toString():" + rawResult.getBarcodeFormat().toString());
+            android.util.Log.i("steven", "resultHandler.getType().toString():" + resultHandler.getType().toString());
+            android.util.Log.i("steven", "resultHandler.getDisplayContents():" + resultHandler.getDisplayContents());
         } else {
             String string = resultHandler.getDisplayContents().toString();
             //如果是扫描用户二维码
@@ -362,15 +355,13 @@ public final class CaptureActivity extends BaseViewActivity implements
             throw new IllegalStateException("No SurfaceHolder provided");
         }
         if (cameraManager.isOpen()) {
-            Log.w(TAG,
-                    "initCamera() while already open -- late SurfaceView callback?");
+            Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
             return;
         }
         try {
             cameraManager.openDriver(surfaceHolder);
             if (handler == null) {
-                handler = new CaptureActivityHandler(this, decodeFormats,
-                        characterSet, cameraManager);
+                handler = new CaptureActivityHandler(this, decodeFormats, characterSet, cameraManager);
             }
         } catch (IOException ioe) {
             Log.w(TAG, ioe);

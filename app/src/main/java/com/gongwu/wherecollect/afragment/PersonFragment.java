@@ -71,8 +71,7 @@ public class PersonFragment extends BaseFragment {
     private View view;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_person, container, false);
         }
@@ -101,9 +100,7 @@ public class PersonFragment extends BaseFragment {
         });
     }
 
-    @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout,
-            R.id.user_code_layout, R.id.my_share_layout, R.id.refresh_help_iv
-            , R.id.person_high_opinion_layout, R.id.user_share_app})
+    @OnClick({R.id.person_layout, R.id.feedback_layout, R.id.message_list_layout, R.id.user_code_layout, R.id.my_share_layout, R.id.refresh_help_iv, R.id.person_high_opinion_layout, R.id.user_share_app})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -212,8 +209,7 @@ public class PersonFragment extends BaseFragment {
      */
     public void refreshUi() {
         user = MyApplication.getUser(getActivity());
-        if (user == null)
-            return;
+        if (user == null) return;
         ImageLoader.loadCircle(getActivity(), personIv, user.getAvatar(), R.mipmap.ic_launcher);
         userName.setText(user.getNickname());
         boolean isBreathLook = SaveDate.getInstence(getContext()).getBreathLook(user.getId());
@@ -265,8 +261,18 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     public void onShow() {
+        initHelpView();
         if (user != null && !TextUtils.isEmpty(user.getOpenid())) {
             getUserInfoData();
+        }
+    }
+
+    private void initHelpView() {
+        int s = PrefsManager.getCode(getContext(), "mainlocation");
+        if (PrefsManager.SEQUENCE_NEVER_STARTED != s) {
+            refreshHelpIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.refresh_help));
+        } else {
+            refreshHelpIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.refresh_help_gray));
         }
     }
 }

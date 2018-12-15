@@ -23,6 +23,7 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.SpaceEditDialog;
@@ -178,9 +179,11 @@ public class SpaceEditActivity extends BaseViewActivity {
                                     protected void code2000(final ResponseResult r) {
                                         super.code2000(r);
                                         MainLocationFragment.mlist.remove(position);
+                                        SaveDate.getInstence(context).setSpace(JsonUtils.jsonFromObject(MainLocationFragment.mlist));
                                         myAdapter.notifyItemRemoved(position);
                                         EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
                                         EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+
                                     }
                                 };
                                 HttpClient.deleteLocation(SpaceEditActivity.this, map, listenner);
@@ -206,6 +209,7 @@ public class SpaceEditActivity extends BaseViewActivity {
                         super.code2000(r);
                         LocationBean bean = JsonUtils.objectFromJson(r.getResult(), LocationBean.class);
                         MainLocationFragment.mlist.add(bean);
+                        SaveDate.getInstence(context).setSpace(JsonUtils.jsonFromObject(MainLocationFragment.mlist));
                         myAdapter.notifyDataSetChanged();
                         EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
                     }

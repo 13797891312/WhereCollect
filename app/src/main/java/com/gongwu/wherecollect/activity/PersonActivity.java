@@ -306,6 +306,7 @@ public class PersonActivity extends BaseViewActivity {
                 changeInfo("birthday", bd);
             }
         };
+        dialog.setCancelBtnText(true);
         dialog.show();
         dialog.setDateMax();
     }

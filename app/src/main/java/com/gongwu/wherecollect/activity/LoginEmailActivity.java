@@ -88,11 +88,6 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
                 Toast.makeText(context, "账号密码错误", Toast.LENGTH_SHORT).show();
             }
 
-            @Override
-            protected void codeOther(ResponseResult r) {
-                super.codeOther(r);
-                Toast.makeText(context, "您的帐号已经在高版本使用过,请使用IOS版", Toast.LENGTH_SHORT).show();
-            }
         };
         HttpClient.login(this, map, StringUtils.getCurrentVersionName(context), listenner);
     }
