@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chang_wang_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clipChildren="false">
+
+    <RelativeLayout
+        android:id="@+id/title_layuout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_hight"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/title_hight"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:text="标题"
+            android:textColor="@color/black_txt"
+            android:textSize="@dimen/f_17" />
+
+        <ImageButton
+            android:id="@+id/image_back"
+            android:layout_width="@dimen/title_hight"
+            android:layout_height="@dimen/title_hight"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/select_white_bg" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dip_22"
+        android:layout_marginEnd="@dimen/dip_30"
+        android:layout_marginStart="@dimen/dip_30">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_54"
+            android:padding="@dimen/dip_8">
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dip_20"
+        android:layout_marginEnd="@dimen/dip_24"
+        android:layout_marginStart="@dimen/dip_24">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_54"
+            android:padding="@dimen/dip_8">
+
+            <TextView
+                android:id="@+id/goods_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/f_15"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/progressbar_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textSize="@dimen/f_15"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/progressbar_view"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_7"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="@dimen/dip_6"
+                android:layout_marginStart="@dimen/dip_6" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/cardView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dip_16"
+        android:layout_marginEnd="@dimen/dip_24"
+        android:layout_marginStart="@dimen/dip_24"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/no_good_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/no"
+            android:gravity="center"
+            android:text="没有"
+            android:textColor="@color/color333"
+            android:textSize="@dimen/f_14" />
+
+        <TextView
+            android:id="@+id/back_good_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/back"
+            android:gravity="center"
+            android:text="反悔"
+            android:textColor="@color/color333"
+            android:textSize="@dimen/f_14" />
+
+        <TextView
+            android:id="@+id/yes_good_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/yes"
+            android:gravity="center"
+            android:text="有"
+            android:textColor="@color/color333"
+            android:textSize="@dimen/f_14" />
+    </LinearLayout>
+
+</RelativeLayout>

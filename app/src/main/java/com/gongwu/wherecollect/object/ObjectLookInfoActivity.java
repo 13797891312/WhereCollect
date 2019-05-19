@@ -137,8 +137,9 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
      */
     private void editLocatio() {
         if (StringUtils.isEmpty(bean.getLocations())) {
-            Intent intent = new Intent(context, ImportSelectFurnitureActivity.class);
-            context.startActivity(intent);
+            List<ObjectBean> objectBeans = new ArrayList<>();
+            objectBeans.add(bean);
+            ImportSelectFurnitureActivity.start(context, objectBeans);
         } else {
             final List<BaseBean> temp = bean.getLocations();
             DialogUtil.show("提示", "将原有位置清空？", "确定", "取消", ((Activity) context), new DialogInterface.OnClickListener() {
@@ -192,8 +193,7 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
 //    }
 
     private void initValues() {
-        if (bean == null)
-            return;
+        if (bean == null) return;
         if (bean.getObject_url().contains("http")) {
             goodsImageIv.setHead(IMG_COLOR_CODE, "", bean.getObject_url());
         } else if (bean.getObject_url().contains("#")) {
@@ -209,8 +209,7 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         setLocation();
     }
 
-    @OnClick({R.id.edit_goods_iv, R.id.ac_location_btn, R.id.objrct_position_set_iv
-            , R.id.goods_image_iv})
+    @OnClick({R.id.edit_goods_iv, R.id.ac_location_btn, R.id.objrct_position_set_iv, R.id.goods_image_iv})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {

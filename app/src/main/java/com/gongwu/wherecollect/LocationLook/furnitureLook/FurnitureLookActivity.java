@@ -20,6 +20,7 @@ import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
@@ -73,7 +74,29 @@ public class FurnitureLookActivity extends BaseViewActivity {
             }
         }
         initView(objectBean);
+        initLocation();
         EventBus.getDefault().register(objectListView);
+    }
+
+    private void initLocation() {
+        List<ObjectBean> objectBeans = (List<ObjectBean>) getIntent().getSerializableExtra("objectBeans");
+        if (objectBeans != null && objectBeans.size() > 0) {
+            objectListView.initCWListView(objectBeans);
+            objectListView.setOnFinishActivityLisener(new FurnitureObectListView.OnFinishActivityLisener() {
+                @Override
+                public void finishActivity() {
+                    EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+                    finish();
+                }
+            });
+            titleLayout.setBack(true, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+                    finish();
+                }
+            });
+        }
     }
 
     private void initView(final ObjectBean objectBean) {
@@ -84,8 +107,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
         structView.init(drawerLayout, furnitureObject.getLayers(), furnitureObject.getRatio());
         structView.setBean(furnitureObject);
 //        objectListView.init(furnitureObject, (List<ObjectBean>) getIntent().getSerializableExtra("list"));
-        objectListView.init(furnitureObject, MainLocationFragment.objectMap.get(MainLocationFragment.mlist.get((
-                (FurnitureLookActivity) context).spacePosition).getCode()));
+        objectListView.init(furnitureObject, MainLocationFragment.objectMap.get(MainLocationFragment.mlist.get(((FurnitureLookActivity) context).spacePosition).getCode()));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

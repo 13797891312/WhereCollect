@@ -615,4 +615,28 @@ public class HttpClient {
         CustomPostRequest request = new CustomPostRequest("api/app/v330/a/discontinue", params, listenner);
         Queue.getQueue(context).add(request);
     }
+
+    /**
+     * 获取常忘物品的list
+     */
+    public static void getCangWangList(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v350/object-recommend-group-new", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 获取常忘物品详情的list
+     */
+    public static void getCangWangDetailList(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v350/object-recommend-group-objects", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 设置常忘物品有没有
+     */
+    public static void setCangWangDetail(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v350/object-recommend-option", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
 }

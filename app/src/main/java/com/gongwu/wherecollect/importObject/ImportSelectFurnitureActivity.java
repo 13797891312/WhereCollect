@@ -1,17 +1,27 @@
 package com.gongwu.wherecollect.importObject;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.gongwu.wherecollect.LocationEdit.LocationEditActivity;
 import com.gongwu.wherecollect.LocationLook.LocationIndicatorView;
+import com.gongwu.wherecollect.LocationLook.LocationObectListView;
 import com.gongwu.wherecollect.LocationLook.LocationPage;
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
+import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
+import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.view.ObjectView;
 import com.zhaojin.myviews.TagViewPager;
@@ -22,25 +32,45 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 public class ImportSelectFurnitureActivity extends BaseViewActivity {
     View view;
     @Bind(R.id.indicatorView)
     LocationIndicatorView indicatorView;
     @Bind(R.id.tagViewPager)
     TagViewPager viewPager;
+    @Bind(R.id.objectListView)
+    LocationObectListView objectListView;
+    @Bind(R.id.impor_btn)
+    TextView hintText;
+
     private Map<Integer, LocationPage> pageMap = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        titleLayout.setBack(true, null);
-        titleLayout.setTitle("归入物品");
         setContentView(R.layout.activity_import_selectfurniture);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+        initView();
+        initPage();
+        initData();
+    }
+
+    private void initView() {
+        titleLayout.setBack(true, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+                finish();
+            }
+        });
+        titleLayout.setTitle("归入物品");
         titleLayout.textBtn.setText("编辑");
         titleLayout.textBtn.setVisibility(View.VISIBLE);
         titleLayout.textBtn.setOnClickListener(new View.OnClickListener() {
@@ -51,13 +81,6 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
                 finish();
             }
         });
-        initView();
-        indicatorView.init(MainLocationFragment.mlist);
-        EventBus.getDefault().register(this);
-        initPage();
-    }
-
-    private void initView() {
         //桌布空间头点击事件
         indicatorView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -65,11 +88,25 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
                 viewPager.setCurrentItem(indicatorView.getSelection());
             }
         });
+        indicatorView.init(MainLocationFragment.mlist);
+        objectListView.setSelectShape(false);
+        objectListView.adapter.setOnItemClickListener(new MyOnItemClickListener() {
+            @Override
+            public void onItemClick(int positions, View view) {
+                startShakeByView(hintText, 10, 400);
+            }
+        });
+    }
+
+    private void initData() {
+        List<ObjectBean> objectBeans = (List<ObjectBean>) getIntent().getSerializableExtra("objectBeans");
+        if (objectBeans != null && objectBeans.size() > 0) {
+            objectListView.notifyData(objectBeans, -1);
+        }
     }
 
     private void initPage() {
-        viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 0,
-                0, 0, 0);
+        viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 0, 0, 0, 0);
         viewPager.setAutoNext(false, 0);
         viewPager.setId(14);
         viewPager.setOnGetView(new TagViewPager.OnGetView() {
@@ -83,13 +120,13 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
                     public void itemClick(ObjectView view) {
                         Intent intent = new Intent(context, FurnitureLookActivity.class);
                         intent.putExtra("furnitureObject", view.getObjectBean());
-                        intent.putExtra("list", (Serializable) MainLocationFragment.objectMap.get
-                                (MainLocationFragment.mlist.get
-                                (viewPager.getCurrentItem()).getCode()));
+                        intent.putExtra("list", (Serializable) MainLocationFragment.objectMap.get(MainLocationFragment.mlist.get(viewPager.getCurrentItem()).getCode()));
                         intent.putExtra("position", viewPager.getCurrentItem());
-                        intent.putExtra("title", indicatorView.getCurrentLocation().getName() + ">" + view
-                                .getObjectBean()
-                                .getName());
+                        intent.putExtra("title", indicatorView.getCurrentLocation().getName() + ">" + view.getObjectBean().getName());
+                        List<ObjectBean> objectBeans = (List<ObjectBean>) getIntent().getSerializableExtra("objectBeans");
+                        if (objectBeans != null && objectBeans.size() > 0) {
+                            intent.putExtra("objectBeans", (Serializable) objectBeans);
+                        }
                         startActivity(intent);
                         finish();
                     }
@@ -123,6 +160,14 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
         viewPager.setCurrentItem(indicatorView.getSelection());
     }
 
+    private void startShakeByView(View view, float shakeDegrees, long duration) {
+        Animation rotateAnim = new TranslateAnimation(-shakeDegrees, shakeDegrees, 0, 0);
+        rotateAnim.setDuration(duration / 10);
+        rotateAnim.setRepeatMode(Animation.REVERSE);
+        rotateAnim.setRepeatCount(3);
+        view.startAnimation(rotateAnim);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -143,5 +188,13 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
         if (page != null) {
             page.getNetData("", MainLocationFragment.mlist.get(msg.position).getCode());
         }
+    }
+
+    public static void start(Context context, List<ObjectBean> objectBeans) {
+        Intent intent = new Intent(context, ImportSelectFurnitureActivity.class);
+        if (intent != null) {
+            intent.putExtra("objectBeans", (Serializable) objectBeans);
+        }
+        context.startActivity(intent);
     }
 }

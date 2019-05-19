@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginLeft="@dimen/dip_12"
+    android:layout_marginRight="@dimen/dip_12"
+    android:background="@drawable/home01_bg_card"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/portrait"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_300"
+        android:contentDescription="@null"
+        android:scaleType="fitXY" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:minHeight="@dimen/dip_64"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dip_12"
+            android:layout_marginTop="@dimen/dip_4"
+            android:textColor="@color/color333"
+            android:textStyle="bold"
+            android:textSize="@dimen/f_17"/>
+
+        <TextView
+            android:id="@+id/type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name_tv"
+            android:layout_marginStart="@dimen/dip_12"
+            android:layout_marginTop="@dimen/dip_2"
+            android:textColor="#999999"
+            android:textSize="@dimen/f_15" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-    <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_centerInParent="true"
-                  android:layout_gravity="center_horizontal"
-                  android:gravity="center_horizontal"
-                  android:orientation="vertical"
-                  android:id="@+id/linearLayout"
-                  android:paddingBottom="@dimen/dip_8"
-                  android:paddingTop="@dimen/dip_8">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dip_8"
+        android:paddingTop="@dimen/dip_8">
+
         <TextView
             android:id="@+id/error_msg_tv"
             android:layout_width="wrap_content"
@@ -20,29 +23,57 @@
             android:layout_marginTop="4dp"
             android:text="空空如也~"
             android:textColor="@color/black_26"
-            android:textSize="@dimen/f_17"/>
-
+            android:textSize="@dimen/f_17" />
 
     </LinearLayout>
 
-    <LinearLayout android:layout_width="wrap_content"
-                  android:orientation="vertical"
-                  android:paddingBottom="10dp"
-                  android:id="@+id/quick_layout"
-                  android:visibility="gone"
-                  android:layout_centerHorizontal="true"
-                  android:layout_below="@+id/linearLayout"
-                  android:layout_height="wrap_content">
-    <TextView
+    <LinearLayout
+        android:id="@+id/quick_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="快速构建你的家"
-        android:textColor="@color/maincolor"
-        android:textSize="@dimen/f_17"/>
-        <View android:layout_width="match_parent"
-              android:background="@color/maincolor"
-              android:layout_marginTop="2dp"
-              android:layout_height="1dp"></View>
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="快速构建你的家"
+            android:textColor="@color/maincolor"
+            android:textSize="@dimen/f_17" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/maincolor" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_good_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="快速添加常忘物品"
+            android:textColor="@color/maincolor"
+            android:textSize="@dimen/f_17" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/maincolor" />
     </LinearLayout>
 </RelativeLayout>

@@ -11,18 +11,25 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.activity.AddChangWangGoodActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.adapter.GoodsMainGridViewAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
+import com.gongwu.wherecollect.entity.ChangWangBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.ShareUserBean;
+import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.object.ObjectLookInfoActivity;
+import com.gongwu.wherecollect.quickadd.QuickSpaceSelectListActivity;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.ErrorView;
@@ -42,6 +49,7 @@ import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainGoodsFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     View view;
@@ -49,10 +57,18 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     PullToRefreshGridView goodsGridView;
     @Bind(R.id.empty)
     ErrorView empty;
+    @Bind(R.id.empty_good_layout)
+    View emptyGoodLayout;
+    @Bind(R.id.add_changwang_tv)
+    TextView addCWGoodView;
+
     int page = 1;
+    private UserBean user;
+    private String changWangCode, goodType;
     private GoodsMainGridViewAdapter gridViewAdapter;
     private List<ObjectBean> mList = new ArrayList<>();
     private List<ShareUserBean> shareUserBeans = new ArrayList<>();
+
 
     public MainGoodsFragment() {
         // Required empty public constructor
@@ -77,17 +93,22 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_fragment1_goods, container, false);
         ButterKnife.bind(this, view);
+        user = MyApplication.getUser(getActivity());
         String cache = SaveDate.getInstence(getActivity()).getObjectList();//取缓存
         if (TextUtils.isEmpty(cache)) {//没有缓存
             getData(true);
         } else {
             mList.addAll(JsonUtils.listFromJson(cache, ObjectBean.class));
             getData(false);
+        }
+        //判断常忘物品
+        emptyGoodLayout.setVisibility(user != null ? View.VISIBLE : View.GONE);
+        if (user != null) {
+            getCangWangList();
         }
         EventBus.getDefault().register(this);
         initRecyclerView();
@@ -122,6 +143,27 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
         EventBus.getDefault().unregister(this);
     }
 
+    @OnClick({R.id.empty_good_layout, R.id.add_changwang_tv})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.empty_good_layout:
+                if (MainLocationFragment.mlist.size() > 0) {
+                    if (!TextUtils.isEmpty(changWangCode)) {
+                        AddChangWangGoodActivity.start(getContext(), goodType, changWangCode);
+                    }
+                } else {
+                    Intent intent = new Intent(getActivity(), QuickSpaceSelectListActivity.class);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.add_changwang_tv:
+                AddChangWangGoodActivity.start(getContext(), goodType, changWangCode);
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         ObjectBean objectBean = mList.get(i);
@@ -148,14 +190,12 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
      * 获取物品列表
      */
     public void getData(boolean isShowDialog) {
-        if (MyApplication.getUser(getActivity()) == null)
-            return;
+        if (MyApplication.getUser(getActivity()) == null) return;
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(getActivity()).getId());
         map.put("query", ((MainActivity) getActivity()).filterView.getQuery());
         map.put("page", "" + page);
-        PostListenner listenner = new PostListenner(getActivity(), isShowDialog ? Loading.show(null, getActivity(),
-                "正在加载") : null) {
+        PostListenner listenner = new PostListenner(getActivity(), isShowDialog ? Loading.show(null, getActivity(), "正在加载") : null) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
@@ -166,8 +206,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                     mList.clear();
                 } else {
                     if (StringUtils.isEmpty(temp)) {
-                        Toast.makeText(getActivity(), "没有更多数据了", Toast.LENGTH_SHORT)
-                                .show();
+                        Toast.makeText(getActivity(), "没有更多数据了", Toast.LENGTH_SHORT).show();
                     }
                 }
                 int index = mList.size();
@@ -181,6 +220,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                 if (page != 1 && goodsGridView.mRefreshableView != null) {
                     goodsGridView.mRefreshableView.smoothScrollToPosition(index);
                 }
+                if (mList.size() > 0 && !TextUtils.isEmpty(changWangCode)) addCWGoodView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -190,6 +230,48 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
             }
         };
         HttpClient.getGoodsList(getActivity(), map, listenner);
+    }
+
+    //获取常忘物品list
+    private void getCangWangList() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", user.getId());
+        PostListenner listenner = new PostListenner(getActivity(), null) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                List<ChangWangBean> changWangBeans = JsonUtils.listFromJson(r.getResult(), ChangWangBean.class);
+                addChangWangData(changWangBeans);
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.getCangWangList(getActivity(), map, listenner);
+    }
+
+    //判断是否引导添加常忘物品
+    private void addChangWangData(List<ChangWangBean> changWangBeans) {
+        if (changWangBeans != null && changWangBeans.size() > 0) {
+            ChangWangBean aiWangBean = changWangBeans.get(0);
+            //name=爱忘爆款
+            if (aiWangBean.getObject_count() > aiWangBean.getComplete()) {
+                goodType = aiWangBean.getName();
+                changWangCode = aiWangBean.getCode();
+                addCWGoodView.setVisibility(View.VISIBLE);
+            } else if (changWangBeans.size() > 1) {
+                //name=热门备余物
+                ChangWangBean reMenBean = changWangBeans.get(1);
+                if (reMenBean.getObject_count() > reMenBean.getComplete()) {
+                    goodType = reMenBean.getName();
+                    changWangCode = reMenBean.getCode();
+                    addCWGoodView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+        if (mList.size() == 0) addCWGoodView.setVisibility(View.GONE);
     }
 
     /**
@@ -218,5 +300,6 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     public void onMessageEvent(EventBusMsg.updateShareMsg msg) {
         page = 0;
         goodsGridView.setRefreshing(true);
+        getCangWangList();
     }
 }

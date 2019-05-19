@@ -178,7 +178,8 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".activity.SelectShareSpaceActivity" />
         <activity android:name=".activity.SharePersonDetailsActivity" />
-        <activity android:name=".activity.ShareSpaceDetailsActivity"></activity>
+        <activity android:name=".activity.ShareSpaceDetailsActivity" />
+        <activity android:name=".activity.AddChangWangGoodActivity"></activity>
     </application>
 
 </manifest>

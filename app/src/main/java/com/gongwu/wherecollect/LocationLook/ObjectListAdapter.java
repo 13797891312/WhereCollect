@@ -33,10 +33,15 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
     Context context;
     List<ObjectBean> mlist;
     public int selectPostion = -1;
+    private boolean selectShape = true;
 
     public ObjectListAdapter(Context context, List<ObjectBean> list) {
         this.context = context;
         this.mlist = list;
+    }
+
+    public void setSelectShape(boolean selectShape) {
+        this.selectShape = selectShape;
     }
 
     @Override
@@ -47,12 +52,17 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        if (position == selectPostion) {
+        if (position == selectPostion && selectShape) {
             holder.linearLayout.setBackgroundResource(R.drawable.shape_maincolor_stock);
         } else {
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.trans));
         }
         ObjectBean tempBean = mlist.get(position);
+        if (tempBean.isSelect()) {
+            holder.linearLayout.setBackgroundResource(R.drawable.shape_maincolor_stock);
+        } else {
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.trans));
+        }
         if (refresh) {
             holder.imageNameTv.setVisibility(View.VISIBLE);
             holder.imageNameTv.setText(tempBean.getName());

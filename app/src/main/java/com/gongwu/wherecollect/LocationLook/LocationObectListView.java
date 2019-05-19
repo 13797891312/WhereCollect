@@ -84,6 +84,10 @@ public class LocationObectListView extends RecyclerView {
         });
     }
 
+    public void setSelectShape(boolean selectShape) {
+        adapter.setSelectShape(selectShape);
+    }
+
     /**
      * 获取数据并刷新UI
      */
@@ -98,6 +102,11 @@ public class LocationObectListView extends RecyclerView {
         adapter.selectPostion = -1;
         adapter.notifyDataSetChanged();
     }
+
+    public void removeData(int i) {
+        list.remove(i);
+    }
+
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {

@@ -120,7 +120,12 @@ public class ObjectBean implements Serializable {
      * _id : 58e239928f2536ae3a933fad
      */
     private List<BaseBean> categories;
-
+    //常忘物品功能 判断是否做出筛选  none还没有判断物品  add是有物品 view是没有物品
+    private String opt;
+    private String recommend_category;
+    private String recommend_category_name;
+    private String recommend_group;
+    private String recommend_group_name;
     /**
      * 获取初始尺寸
      *
@@ -129,6 +134,46 @@ public class ObjectBean implements Serializable {
      */
     public static float getInitSize(Context context) {
         return BaseViewActivity.getScreenWidth(((Activity) context)) / 4;
+    }
+
+    public String getOpt() {
+        return opt;
+    }
+
+    public void setOpt(String opt) {
+        this.opt = opt;
+    }
+
+    public String getRecommend_category() {
+        return recommend_category;
+    }
+
+    public void setRecommend_category(String recommend_category) {
+        this.recommend_category = recommend_category;
+    }
+
+    public String getRecommend_category_name() {
+        return recommend_category_name;
+    }
+
+    public void setRecommend_category_name(String recommend_category_name) {
+        this.recommend_category_name = recommend_category_name;
+    }
+
+    public String getRecommend_group() {
+        return recommend_group;
+    }
+
+    public void setRecommend_group(String recommend_group) {
+        this.recommend_group = recommend_group;
+    }
+
+    public String getRecommend_group_name() {
+        return recommend_group_name;
+    }
+
+    public void setRecommend_group_name(String recommend_group_name) {
+        this.recommend_group_name = recommend_group_name;
     }
 
     public int getIs_share() {
@@ -616,8 +661,7 @@ public class ObjectBean implements Serializable {
     public void setPosition(Context context, float x, float y) {
         x = x < 0 ? 0 : x;
         y = y < 0 ? 0 : y;
-        x = x > BaseViewActivity.getScreenWidth(((Activity) context)) - getWidth(context) ? BaseViewActivity
-                .getScreenWidth(((Activity) context)) - getWidth(context) : x;
+        x = x > BaseViewActivity.getScreenWidth(((Activity) context)) - getWidth(context) ? BaseViewActivity.getScreenWidth(((Activity) context)) - getWidth(context) : x;
         if (position == null) {
             position = new Point();
         }

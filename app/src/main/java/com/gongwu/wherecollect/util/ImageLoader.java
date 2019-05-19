@@ -91,6 +91,7 @@ public class ImageLoader {
                 .load(url)
                 .dontAnimate()
                 .error(errorRes)
+                .placeholder(errorRes)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(new CenterCrop(context), new GlideRoundTransform(context, radio))
                 .into(iv);

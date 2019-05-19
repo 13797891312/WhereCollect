@@ -36,6 +36,7 @@
     <dimen name="dip_16">16dip</dimen>
     <dimen name="dip_18">18dip</dimen>
     <dimen name="dip_20">20dip</dimen>
+    <dimen name="dip_21">21dip</dimen>
     <dimen name="dip_22">22dip</dimen>
     <dimen name="dip_24">24dip</dimen>
     <dimen name="dip_30">30dip</dimen>
@@ -63,10 +64,17 @@
     <dimen name="dip_200">200dip</dimen>
     <dimen name="dip_210">210dip</dimen>
     <dimen name="dip_254">254dip</dimen>
+    <dimen name="dip_300">300dip</dimen>
     <dimen name="dip_322">322dip</dimen>
     <dimen name="msg_count_shape">20px</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="elevation_normal">4dp</dimen>
+    <dimen name="elevation_large">8dp</dimen>
+    <dimen name="card_corner_radius">6dp</dimen>
+    <dimen name="margin_fab">16dp</dimen>
+    <dimen name="padding_normal">8dp</dimen>
+    <dimen name="padding_swipestack">6dp</dimen>
 </resources>

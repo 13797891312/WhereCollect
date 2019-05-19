@@ -84,7 +84,7 @@ public class MainActivity extends BaseViewActivity {
         initBugly();
         checkSDcard();
         initView();
-        //启动Android定时器，并且启动服务
+        //启动Android定时器，并且启动服务 请求消息接口
         TimerService.getConnet(this);
         //        test();
     }

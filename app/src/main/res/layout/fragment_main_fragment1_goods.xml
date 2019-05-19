@@ -1,21 +1,32 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
+
+    <TextView
+        android:id="@+id/add_changwang_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_30"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dip_4"
+        android:text="常忘备余物快速添加,看看“有没有”"
+        android:textSize="@dimen/f_12"
+        android:visibility="gone" />
+
     <com.handmark.pulltorefresh.library.PullToRefreshGridView
         android:id="@id/swipe_target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/add_changwang_tv"
         android:background="@color/white"
         android:paddingLeft="5dp"
-        android:scrollbars="none">
-    </com.handmark.pulltorefresh.library.PullToRefreshGridView>
+        android:scrollbars="none" />
+
     <com.gongwu.wherecollect.view.ErrorView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
-    </com.gongwu.wherecollect.view.ErrorView>
+        android:visibility="gone" />
 
-</FrameLayout>
+</RelativeLayout>
