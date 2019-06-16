@@ -28,7 +28,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
     private ArrayList<View> cacheItems = new ArrayList<>();
 
     //缩放层叠效果
-    private int yOffsetStep = 56; // view叠加垂直偏移量的步长
+    private int yOffsetStep = 70; // view叠加垂直偏移量的步长
     private static final float SCALE_STEP = 0.08f; // view叠加缩放的步长
     //缩放层叠效果
 

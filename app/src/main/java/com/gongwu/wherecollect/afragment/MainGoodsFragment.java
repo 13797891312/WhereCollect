@@ -2,7 +2,6 @@ package com.gongwu.wherecollect.afragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +23,10 @@ import com.gongwu.wherecollect.entity.ChangWangBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.ShareUserBean;
-import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.object.ObjectLookInfoActivity;
 import com.gongwu.wherecollect.quickadd.QuickSpaceSelectListActivity;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
-import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.ErrorView;
@@ -63,7 +60,6 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     TextView addCWGoodView;
 
     int page = 1;
-    private UserBean user;
     private String changWangCode, goodType;
     private GoodsMainGridViewAdapter gridViewAdapter;
     private List<ObjectBean> mList = new ArrayList<>();
@@ -97,7 +93,6 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_fragment1_goods, container, false);
         ButterKnife.bind(this, view);
-        user = MyApplication.getUser(getActivity());
         String cache = SaveDate.getInstence(getActivity()).getObjectList();//取缓存
         if (TextUtils.isEmpty(cache)) {//没有缓存
             getData(true);
@@ -106,8 +101,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
             getData(false);
         }
         //判断常忘物品
-        emptyGoodLayout.setVisibility(user != null ? View.VISIBLE : View.GONE);
-        if (user != null) {
+        if (!MyApplication.getUser(getContext()).isTest()) {
             getCangWangList();
         }
         EventBus.getDefault().register(this);
@@ -220,7 +214,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                 if (page != 1 && goodsGridView.mRefreshableView != null) {
                     goodsGridView.mRefreshableView.smoothScrollToPosition(index);
                 }
-                if (mList.size() > 0 && !TextUtils.isEmpty(changWangCode)) addCWGoodView.setVisibility(View.VISIBLE);
+                setViewEmpty();
             }
 
             @Override
@@ -235,7 +229,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     //获取常忘物品list
     private void getCangWangList() {
         Map<String, String> map = new TreeMap<>();
-        map.put("uid", user.getId());
+        map.put("uid", MyApplication.getUser(getActivity()).getId());
         PostListenner listenner = new PostListenner(getActivity(), null) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -268,10 +262,21 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                     goodType = reMenBean.getName();
                     changWangCode = reMenBean.getCode();
                     addCWGoodView.setVisibility(View.VISIBLE);
+                } else {
+                    changWangCode = null;
                 }
             }
         }
-        if (mList.size() == 0) addCWGoodView.setVisibility(View.GONE);
+        setViewEmpty();
+    }
+
+    private void setViewEmpty(){
+        if (mList.size() > 0) {
+            addCWGoodView.setVisibility(!TextUtils.isEmpty(changWangCode) ? View.VISIBLE : View.GONE);
+        } else {
+            addCWGoodView.setVisibility(View.GONE);
+            emptyGoodLayout.setVisibility(!TextUtils.isEmpty(changWangCode) ? View.VISIBLE : View.GONE);
+        }
     }
 
     /**
@@ -293,13 +298,32 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     public void onMessageEvent(EventBusMsg.ChangeUser msg) {
         page = 0;
         goodsGridView.setRefreshing(true);
+        changWangCode = null;
+        if (!MyApplication.getUser(getContext()).isTest()) {
+            getCangWangList();
+        }
         ((MainActivity) getActivity()).filterView.getFilterList();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.updateShareMsg msg) {
+        addCWGoodView.setVisibility(View.GONE);
+        changWangCode = null;
         page = 0;
         goodsGridView.setRefreshing(true);
-        getCangWangList();
+        if (!MyApplication.getUser(getContext()).isTest()) {
+            getCangWangList();
+        }
+    }
+
+    @Override
+    public void onShow() {
+        addCWGoodView.setVisibility(View.GONE);
+        changWangCode = null;
+        page = 0;
+        goodsGridView.setRefreshing(true);
+        if (!MyApplication.getUser(getContext()).isTest()) {
+            getCangWangList();
+        }
     }
 }

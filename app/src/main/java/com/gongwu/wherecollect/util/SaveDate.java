@@ -18,10 +18,10 @@ public class SaveDate {
      * 得到一个单例对象
      ***/
     public static SaveDate getInstence(Context con) {
-        if (SAVEDATE == null) {
+        if (SAVEDATE == null && con != null) {
             SAVEDATE = new SaveDate(con);
         }
-        if (sharedPreferences == null) {
+        if (sharedPreferences == null && con != null) {
             sharedPreferences = con.getSharedPreferences("saveDate", Context.MODE_PRIVATE);
         }
         return SAVEDATE;
@@ -251,5 +251,35 @@ public class SaveDate {
 
     public boolean getBreathLook(String uid) {
         return sharedPreferences.getBoolean(String.format("breathlook%s", uid), false);
+    }
+
+    /**
+     * 分享app
+     *
+     * @param uid
+     */
+    public void setShareApp(String uid, boolean isShareApp) {
+        Editor ed = sharedPreferences.edit();
+        ed.putBoolean(String.format("shareapp%s", uid), isShareApp);
+        ed.commit();
+    }
+
+    public boolean getShareApp(String uid) {
+        return sharedPreferences.getBoolean(String.format("shareapp%s", uid), false);
+    }
+
+    /**
+     * 统计位置物品数量
+     *
+     * @param uid
+     */
+    public void setGoodsNum(String uid, int num) {
+        Editor ed = sharedPreferences.edit();
+        ed.putInt(String.format("goodsnum%s", uid), num);
+        ed.commit();
+    }
+
+    public int getGoodsNum(String uid) {
+        return sharedPreferences.getInt(String.format("goodsnum%s", uid), 0);
     }
 }

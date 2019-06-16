@@ -44,12 +44,11 @@ import butterknife.OnClick;
 
 public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeFlingAdapterView.onFlingListener {
 
-    private static final String HAVA_GOOD = "add";
-    private static final String NOT_HAVA_GOOD = "view";
-    private static final String REGRETS_GOOD = "delete";
-    private static final String BLANK_GOOD = "none";
+    private static final String HAVA_GOOD = "add";//有
+    private static final String NOT_HAVA_GOOD = "view";//没有
+    private static final String REGRETS_GOOD = "delete";//反悔
+    private static final String BLANK_GOOD = "none";//未选择
 
-    //    @Bind(R.id.swipe_view)
     SwipeFlingAdapterView mSwipeView;
     @Bind(R.id.chang_wang_layout)
     RelativeLayout contentLayout;
@@ -111,6 +110,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mSwipeView.getLayoutParams();
         int topDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics());
         lp.setMargins(0, topDip, 0, 0);
+        lp.height = 1600;
         mSwipeView.setLayoutParams(lp);
         mSwipeView.setAdapter(mAdapter);
         mSwipeView.setIsNeedSwipe(true);
@@ -134,15 +134,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
                 if (selectedList.size() > 0) {
                     ObjectBean regrets = selectedList.get(selectedList.size() - 1);
                     regrets.setOpt(BLANK_GOOD);
-                    setCangWangDetail(regrets.getId(), REGRETS_GOOD);
-                    if (addGoodList.containsKey(regrets.getId())) {
-                        addGoodList.remove(regrets.getId());
-                    }
-                    changWangList.add(0, regrets);
-                    selectedList.remove(regrets);
-                    mProgressBar.setProgress(mProgressBar.getMax() - changWangList.size() + 1);
-                    pbarTextView.setText(mProgressBar.getProgress() + "/" + mProgressBar.getMax());
-                    initSwipeView();
+                    setCangWangDetail(regrets, REGRETS_GOOD);
                 } else {
                     ToastUtil.show(this, "暂无物品反悔", Toast.LENGTH_SHORT);
                 }
@@ -157,20 +149,6 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
 
     @Override
     public void removeFirstObjectInAdapter() {
-        if (changWangList.size() > 0) {
-            if (changWangList.size() == 1) {
-                if (addGoodList.size() > 0) {
-                    ImportSelectFurnitureActivity.start(context, new ArrayList<>(addGoodList.values()));
-                }
-                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
-                finish();
-            } else {
-                mProgressBar.setProgress(mProgressBar.getProgress() + 1);
-                pbarTextView.setText(mProgressBar.getProgress() + "/" + mProgressBar.getMax());
-                selectedList.add(changWangList.get(0));
-                mAdapter.remove(0);
-            }
-        }
     }
 
     @Override
@@ -178,7 +156,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
         if (dataObject != null) {
             ObjectBean objectBean = (ObjectBean) dataObject;
             objectBean.setOpt(NOT_HAVA_GOOD);
-            setCangWangDetail(objectBean.getId(), objectBean.getOpt());
+            setCangWangDetail(objectBean, objectBean.getOpt());
         }
     }
 
@@ -187,8 +165,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
         if (dataObject != null) {
             ObjectBean objectBean = (ObjectBean) dataObject;
             objectBean.setOpt(HAVA_GOOD);
-            addGoodList.put(objectBean.get_id(), objectBean);
-            setCangWangDetail(objectBean.getId(), objectBean.getOpt());
+            setCangWangDetail(objectBean, objectBean.getOpt());
         }
     }
 
@@ -227,6 +204,10 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
                 mProgressBar.setProgress(selectedList.size() + 1);
                 pbarTextView.setText(mProgressBar.getProgress() + "/" + mProgressBar.getMax());
                 mAdapter.notifyDataSetChanged();
+                if (changWangList.size() == 0) {
+                    EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+                    finish();
+                }
             }
 
             @Override
@@ -238,22 +219,59 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
     }
 
     //设置常忘物品有没有
-    private void setCangWangDetail(final String object_id, String option) {
+    private void setCangWangDetail(final ObjectBean object, final String option) {
         if (MyApplication.getUser(context) == null) return;
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(context).getId());
-        map.put("object_id", object_id);
+        map.put("object_id", object.getId());
         map.put("option", option);
         PostListenner listenner = new PostListenner(context, null) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 try {
-                    JSONObject jsonObject = new JSONObject(r.getResult());
-                    String id = jsonObject.getString("id");
-                    if (!TextUtils.isEmpty(id)) {
-                        addGoodList.get(object_id).set_id(id);
-                        addGoodList.get(object_id).setId(id);
+                    //添加
+                    if (HAVA_GOOD.equals(option)) {
+                        ObjectBean newBean = new ObjectBean();
+                        newBean.set_id(object.get_id());
+                        newBean.setName(object.getName());
+                        newBean.setObject_url(object.getObject_url());
+                        newBean.setUpdated_at(object.getUpdated_at());
+                        newBean.setCreated_at(object.getCreated_at());
+                        newBean.setOpt(HAVA_GOOD);
+                        addGoodList.put(newBean.getId(), newBean);
+                        JSONObject jsonObject = new JSONObject(r.getResult());
+                        String id = jsonObject.getString("id");
+                        if (!TextUtils.isEmpty(id)) {
+                            addGoodList.get(object.getId()).set_id(id);
+                        }
+                    }
+                    //反悔
+                    if (REGRETS_GOOD.equals(option)) {
+                        if (addGoodList.containsKey(object.getId())) {
+                            addGoodList.remove(object.getId());
+                        }
+                        changWangList.add(0, object);
+                        selectedList.remove(object);
+                        mProgressBar.setProgress(mProgressBar.getMax() - changWangList.size() + 1);
+                        pbarTextView.setText(mProgressBar.getProgress() + "/" + mProgressBar.getMax());
+                        initSwipeView();
+                    }
+                    //接口成功还没有删除做了标记的物品,反悔的物品不删除
+                    if (!REGRETS_GOOD.equals(option) && changWangList.size() > 0) {
+                        mProgressBar.setProgress(mProgressBar.getProgress() + 1);
+                        pbarTextView.setText(mProgressBar.getProgress() + "/" + mProgressBar.getMax());
+                        selectedList.add(changWangList.get(0));
+                        //删除标记物品
+                        mAdapter.remove(0);
+                    }
+                    //删除做了标记的物品后
+                    if (changWangList.size() == 0) {
+                        if (addGoodList.size() > 0) {
+                            ImportSelectFurnitureActivity.start(context, new ArrayList<>(addGoodList.values()));
+                        }
+                        EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+                        finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -272,6 +290,8 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        contentLayout.removeView(mSwipeView);
+        mSwipeView = null;
     }
 
     public static void start(Context context, String changWangName, String changWangCode) {
@@ -282,4 +302,11 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
         }
         context.startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+        super.onBackPressed();
+    }
+
 }

@@ -1,18 +1,18 @@
 apply plugin: 'com.android.library'
 android {
 
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 27
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion 17
+        targetSdkVersion 27
     }
 }
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:25.+'
-    compile 'com.yanzhenjie:loading:1.0.2'
-    compile 'com.android.support:appcompat-v7:25.+'
-    compile 'com.android.support:design:25.+'
+    implementation 'com.android.support:recyclerview-v7:27.+'
+    implementation 'com.yanzhenjie:loading:1.0.2'
+    implementation 'com.android.support:appcompat-v7:27.+'
+    implementation 'com.android.support:design:27.+'
 }

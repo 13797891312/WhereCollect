@@ -59,6 +59,7 @@ public class CustomTableRowLayout extends RelativeLayout {
             findObject=null;
         }
     };
+    private int num;
     public CustomTableRowLayout(Context context) {
         this(context, null);
     }
@@ -91,6 +92,7 @@ public class CustomTableRowLayout extends RelativeLayout {
             shape = s;
         }
         this.childBeans = childBeans;
+        num = childBeans.size();
         selectBeans.clear();
         initChild();
         setShape(shape);
@@ -138,6 +140,7 @@ public class CustomTableRowLayout extends RelativeLayout {
      * 上下拆分
      */
     public List<ObjectBean> splitUpAndDown() {
+        num++;
         List<ObjectBean> resultList = new ArrayList<>();
         nextActions.clear();
         addAction();
@@ -170,7 +173,7 @@ public class CustomTableRowLayout extends RelativeLayout {
         childBeans.add(tempBeanBottom);
         selectBeans.get(0).setSelect(false);
         selectBeans.clear();
-        tempBeanBottom.setName("隔层" + childBeans.size());
+        tempBeanBottom.setName("隔层" + num);
         initChild();
         resultList.add(tempBeanBottom);
         resultList.add(tempBeanUp);
@@ -181,6 +184,7 @@ public class CustomTableRowLayout extends RelativeLayout {
      * 左右拆分
      */
     public List<ObjectBean> splitLeftAndRight() {
+        num++;
         List<ObjectBean> resultList = new ArrayList<>();
         nextActions.clear();
         addAction();
@@ -208,12 +212,12 @@ public class CustomTableRowLayout extends RelativeLayout {
         scaleRight.setX(bean.getScale().getX() / 2);
         scaleRight.setY(bean.getScale().getY());
         tempBeanRight.setScale(scaleRight);
+        tempBeanRight.setName("隔层" + num);
         childBeans.removeAll(selectBeans);
         childBeans.add(tempBeanLeft);
         childBeans.add(tempBeanRight);
         selectBeans.get(0).setSelect(false);
         selectBeans.clear();
-        tempBeanRight.setName("隔层" + childBeans.size());
         initChild();
         resultList.add(tempBeanLeft);
         resultList.add(tempBeanRight);

@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gongwu.wherecollect.LocationLook.LocationObectListView;
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
@@ -41,6 +42,7 @@ import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ShowCaseUtil;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.BoxEditDialog;
 import com.gongwu.wherecollect.view.ErrorView;
 import com.zhaojin.myviews.Loading;
@@ -669,6 +671,10 @@ public class FurnitureObectListView extends RelativeLayout {
         String code;
         String location_code = "";
         List<BaseBean> locations;
+        if (objectBean == null) {
+            ToastUtil.show(context, "结构异常,请退出重新设置", Toast.LENGTH_SHORT);
+            return;
+        }
         if (boxAdapter.selectPostion == -1) {
             code = objectBean.getCode();
             if (objectBean.getParents().size() > 0) {
@@ -705,23 +711,24 @@ public class FurnitureObectListView extends RelativeLayout {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
+                MyApplication.addGood = true;
                 adapter.notifyDataSetChanged();
+                List<ObjectBean> temp = MainLocationFragment.objectMap.get(MainLocationFragment.mlist.get(((FurnitureLookActivity) context).spacePosition).getCode());
+                if (temp != null) {
+                    temp.addAll(chooseMap.values());
+                    EventBus.getDefault().post(new EventBusMsg.ImportObject(((FurnitureLookActivity) context).spacePosition));
+                    EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                    int oldNum = SaveDate.getInstence(context).getGoodsNum(userId);
+                    SaveDate.getInstence(context).setGoodsNum(userId, oldNum + chooseMap.size());
+                }
                 if (mCWListView.getVisibility() == View.VISIBLE) {
                     //全部勾选则关闭界面
                     if (mCWList.size() > 0) {
                         mCWListView.notifyData(null, -1);
                     } else {
                         if (finishListener != null) {
-                            EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
                             finishListener.finishActivity();
                         }
-                    }
-                } else {
-                    List<ObjectBean> temp = MainLocationFragment.objectMap.get(MainLocationFragment.mlist.get(((FurnitureLookActivity) context).spacePosition).getCode());
-                    if (temp != null) {
-                        temp.addAll(chooseMap.values());
-                        EventBus.getDefault().post(new EventBusMsg.ImportObject(((FurnitureLookActivity) context).spacePosition));
-                        EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                     }
                 }
             }

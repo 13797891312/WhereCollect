@@ -1,8 +1,11 @@
 package com.gongwu.wherecollect.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
@@ -32,7 +35,11 @@ import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.PermissionUtil;
+import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.util.ShareUtil;
 import com.gongwu.wherecollect.util.ToastUtil;
+import com.gongwu.wherecollect.view.CommomDialog;
+import com.gongwu.wherecollect.view.HighOpinionDialog;
 import com.gongwu.wherecollect.view.MainDrawerView;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
@@ -66,9 +73,7 @@ public class MainActivity extends BaseViewActivity {
     @Bind(R.id.add_btn)
     ImageButton addBtn;
     long exitTime;
-    private int tabImages[][] = {
-            {R.drawable.icon_tab1_active, R.drawable.icon_tab1_normal},
-            {R.drawable.icon_tab2_active, R.drawable.icon_tab2_normal}};
+    private int tabImages[][] = {{R.drawable.icon_tab1_active, R.drawable.icon_tab1_normal}, {R.drawable.icon_tab2_active, R.drawable.icon_tab2_normal}};
     private String title[] = {"查看", "我的"};
     private AlertDialog dialog;
 
@@ -137,14 +142,11 @@ public class MainActivity extends BaseViewActivity {
         myFragmentLayout.setWhereTab(0);
         myFragmentLayout.setOnChangeFragmentListener(new MyFragmentLayout1.ChangeFragmentListener() {
             @Override
-            public void change(int lastPosition, int positon,
-                               View lastTabView, View currentTabView) {
+            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
                 // TODO Auto-generated method stub
                 titleLayout.setTitle(title[positon]);
-                ((ImageView) lastTabView.findViewById(R.id.tab_img))
-                        .setImageResource(tabImages[lastPosition][1]);
-                ((ImageView) currentTabView.findViewById(R.id.tab_img))
-                        .setImageResource(tabImages[positon][0]);
+                ((ImageView) lastTabView.findViewById(R.id.tab_img)).setImageResource(tabImages[lastPosition][1]);
+                ((ImageView) currentTabView.findViewById(R.id.tab_img)).setImageResource(tabImages[positon][0]);
                 ((BaseFragment) fragments.get(positon)).onShow();
             }
         });
@@ -177,6 +179,9 @@ public class MainActivity extends BaseViewActivity {
         if (isMessage) {
             return;
         }
+        isMessage = true;
+        if (!PermissionUtil.judgeXuanFuPermission(context, getResources().getString(R.string.permission_xuanfu)))
+            return;
         final MessageBean messageBean = msg.messageBean;
         String okStr = "";
         String okUrl = "";
@@ -186,14 +191,11 @@ public class MainActivity extends BaseViewActivity {
             for (int i = 0; i < messageBean.getButtons().size(); i++) {
                 if (messageBean.getButtons().get(i).getColor().equals("SUCCESS")) {
                     okStr = messageBean.getButtons().get(i).getText();
-                    okUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
-                            messageBean.getButtons().get(i).getApi_url();
+                    okUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" : messageBean.getButtons().get(i).getApi_url();
                 }
-                if (messageBean.getButtons().get(i).getColor().equals("DANGER")
-                        || messageBean.getButtons().get(i).getColor().equals("DEFAULT")) {
+                if (messageBean.getButtons().get(i).getColor().equals("DANGER") || messageBean.getButtons().get(i).getColor().equals("DEFAULT")) {
                     cancelStr = messageBean.getButtons().get(i).getText();
-                    cancelUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" :
-                            messageBean.getButtons().get(i).getApi_url();
+                    cancelUrl = TextUtils.isEmpty(messageBean.getButtons().get(i).getApi_url()) ? "" : messageBean.getButtons().get(i).getApi_url();
                 }
             }
         } else {
@@ -202,8 +204,7 @@ public class MainActivity extends BaseViewActivity {
         }
         final String finalOkUrl = okUrl;
         final String finalCancelUrl = cancelUrl;
-        isMessage = true;
-        dialog = DialogUtil.showMsg("", messageBean.getContent(), okStr, cancelStr, this, new DialogInterface.OnClickListener() {
+        dialog = DialogUtil.showMsg("", messageBean.getContent(), okStr, cancelStr, MainActivity.this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 isMessage = false;
@@ -329,15 +330,13 @@ public class MainActivity extends BaseViewActivity {
         switch (v.getId()) {
             case R.id.add_btn:
                 if (MyApplication.getUser(context).isTest()) {
-                    DialogUtil.show("注意", "目前为试用账号，登录后将清空试用账号所有数据", "去登录", "知道了", MainActivity.this, new
-                            DialogInterface
-                                    .OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(context, LoginActivity.class);
-                                    startActivity(intent);
-                                }
-                            }, new DialogInterface.OnClickListener() {
+                    DialogUtil.show("注意", "目前为试用账号，登录后将清空试用账号所有数据", "去登录", "知道了", MainActivity.this, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(context, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(context, AddGoodsActivity.class);
@@ -376,5 +375,28 @@ public class MainActivity extends BaseViewActivity {
     protected void onRestart() {
         super.onRestart();
         isMessage = false;
+        if (MyApplication.addGood && MyApplication.getUser(context) != null && !MyApplication.getUser(context).isTest()) {
+            int num = SaveDate.getInstence(context).getGoodsNum(MyApplication.getUser(context).getId());
+            LogUtil.e("tag", "num:" + num);
+            boolean show = SaveDate.getInstence(context).getShareApp(MyApplication.getUser(context).getId());
+            if (num >= 30 && !show) {
+                showShareDialog();
+            }
+        }
+    }
+
+    private void showShareDialog() {
+        //弹出提示框
+        new CommomDialog(context, R.style.dialog, "你已有30件物品不用费心记了，\n把这份小省心也推荐给好友吧？", new CommomDialog.OnCloseListener() {
+            @Override
+            public void onClick(Dialog dialog, boolean confirm) {
+                if (confirm) {
+                    SaveDate.getInstence(context).setShareApp(MyApplication.getUser(context).getId(), true);
+                    ShareUtil.openShareAppDialog(MainActivity.this);
+                } else {
+                    MyApplication.addGood = false;
+                }
+            }
+        }).show();
     }
 }

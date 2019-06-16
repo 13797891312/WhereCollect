@@ -5,8 +5,8 @@ apply plugin: 'com.android.application'
 def API_HOST_RELEASE = "\"https://www.shouner.com/\""
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "28.0.3"
 
     signingConfigs {
         config {
@@ -20,15 +20,17 @@ android {
     defaultConfig {
         applicationId "com.gongwu.wherecollect"
         minSdkVersion 17
-        targetSdkVersion 22
+        targetSdkVersion 27
         versionCode 9
         versionName "3.5.0"
+        flavorDimensions "9"
         buildConfigField("String", "URL", "${API_HOST_RELEASE}")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86"
         }
-
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+        multiDexEnabled true
     }
 
     productFlavors {
@@ -86,7 +88,6 @@ android {
 
         debug {
             minifyEnabled false
-            buildConfigField("String", "CHANNEL", "shounaer")
             buildConfigField("boolean", "LOGSHOW", "true")
             buildConfigField("String", "CHANNEL", "\"shounaer\"")
             signingConfig signingConfigs.config
@@ -102,39 +103,43 @@ android {
 }
 
 dependencies {
-    compile project(':public_library')
-    compile project(':listView')
-    compile project(':volley-master')
-    compile project(':showcase')
-    compile project(':nice-spinner-master')
-    compile project(':recyclerview-swipe')
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    compile 'com.android.support:gridlayout-v7:25.+'
-    compile 'com.android.support:appcompat-v7:25.+'
-    compile 'com.jakewharton:butterknife:7.+'
-    compile 'com.android.support:support-v4:25.+'
-    compile 'com.yanzhenjie:loading:1.0.2'
-    compile 'com.android.support:cardview-v7:25.+'
-    testCompile 'junit:junit:4.12'
-    compile files('libs/glide.jar')
-    compile files('libs/SocialSDK_QQ_Simplify.jar')
-    compile files('libs/SocialSDK_WeChat_Simplify.jar')
-    compile files('libs/umeng_shareboard_widget.jar')
-    compile files('libs/umeng_social_api.jar')
-    compile files('libs/umeng_social_net.jar')
-    compile files('libs/umeng_social_shareboard.jar')
-    compile files('libs/umeng_social_shareview.jar')
-    compile files('libs/umeng_social_tool.jar')
-    compile files('libs/gson-2.2.2.jar')
-    compile files('libs/eventbus-3.0.0.jar')
-    compile 'org.litepal.android:core:1.3.2'
-    compile 'com.qiniu:qiniu-android-sdk:7.3.+'
-    compile files('libs/barcode_core.jar')
-    compile 'com.umeng.analytics:analytics:latest.integration'
+    implementation project(':public_library')
+    implementation project(':listView')
+    implementation project(':volley-master')
+    implementation project(':showcase')
+    implementation project(':nice-spinner-master')
+    implementation project(':recyclerview-swipe')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    implementation 'com.android.support:gridlayout-v7:27.+'
+    implementation 'com.android.support:appcompat-v7:27.+'
+    implementation 'com.jakewharton:butterknife:7.+'
+    implementation 'com.android.support:support-v4:27.+'
+    implementation 'com.android.support:design:27.+'
+    implementation 'com.android.support:recyclerview-v7:27.+'
+    implementation 'com.yanzhenjie:loading:1.0.2'
+    implementation 'com.android.support:cardview-v7:27.+'
+    testImplementation 'junit:junit:4.12'
+    implementation files('libs/glide.jar')
+    implementation files('libs/SocialSDK_QQ_Simplify.jar')
+    implementation files('libs/SocialSDK_WeChat_Simplify.jar')
+    implementation files('libs/umeng_shareboard_widget.jar')
+    implementation files('libs/umeng_social_api.jar')
+    implementation files('libs/umeng_social_net.jar')
+    implementation files('libs/umeng_social_shareboard.jar')
+    implementation files('libs/umeng_social_shareview.jar')
+    implementation files('libs/umeng_social_tool.jar')
+    implementation files('libs/gson-2.2.2.jar')
+    implementation files('libs/eventbus-3.0.0.jar')
+    implementation 'org.litepal.android:core:1.3.2'
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.+'
+    implementation files('libs/barcode_core.jar')
+    implementation 'com.umeng.analytics:analytics:latest.integration'
     //    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
-    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
-    compile 'com.github.yalantis:ucrop:2.2.1'
-    compile files('libs/SocialSDK_Sina_Simplify.jar')
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    implementation 'com.github.yalantis:ucrop:2.2.1'
+    implementation files('libs/SocialSDK_Sina_Simplify.jar')
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+//    implementation 'com.github.bumptech.glide:glide:4.6.1'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 }

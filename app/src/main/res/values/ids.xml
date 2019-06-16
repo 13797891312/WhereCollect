@@ -14,4 +14,5 @@
     <item name="home" type="id"/>
     <item name="return_scan_result" type="id"/>
     <item name="dgv_wobble_tag" type="id"/>
+    <item name="glide_tag_id" type="id"/>
 </resources>

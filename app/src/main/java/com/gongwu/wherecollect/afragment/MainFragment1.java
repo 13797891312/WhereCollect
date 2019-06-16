@@ -244,8 +244,9 @@ public class MainFragment1 extends BaseFragment implements View.OnClickListener 
 
     @Override
     public void onShow() {
-        if (myFragmentLayout != null && myFragmentLayout.getCurrentPosition() == 1) {
-            ((BaseFragment) fragments.get(1)).onShow();
+        if (myFragmentLayout != null) {
+            int position = myFragmentLayout.getCurrentPosition();
+            ((BaseFragment) fragments.get(position)).onShow();
         }
     }
 }

@@ -448,7 +448,7 @@ public class PersonActivity extends BaseViewActivity {
 
         @Override
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-            ToastUtil.show(context, "授权失败:" + throwable.toString(), Toast.LENGTH_LONG);
+            DialogUtil.show("提示", "授权失败,请检查是否装有第三方应用", "好的", "", PersonActivity.this, null, null);
         }
 
         @Override

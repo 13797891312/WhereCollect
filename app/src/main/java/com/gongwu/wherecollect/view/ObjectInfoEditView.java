@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -111,6 +112,8 @@ public class ObjectInfoEditView extends LinearLayout {
                 }
             }
         });
+        //默认两位小数
+        jiageEdit.setFilters(new InputFilter[]{new MoneyValueFilter()});
         jiageEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -1,7 +1,6 @@
 package com.gongwu.wherecollect.adapter;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
-import com.gongwu.wherecollect.util.ImageLoader;
-
-import org.w3c.dom.Text;
+import com.gongwu.wherecollect.util.GlideRoundTransform;
 
 import java.util.List;
 
@@ -79,8 +79,13 @@ public class SwipeCardViewAdapter extends BaseAdapter {
         ObjectBean bean = mData.get(position);
         holder.goodName.setText(bean.getName());
         holder.goodType.setText(bean.getRecommend_category_name());
-        holder.mImageView.setImageResource(R.drawable.ic_img_error);
-        ImageLoader.load(mContext, holder.mImageView, 6, bean.getObjectUrl(), R.drawable.ic_img_error);
+        holder.mImageView.setImageDrawable(null);
+        Glide.with(mContext)
+                .load(bean.getObjectUrl())
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new CenterCrop(mContext), new GlideRoundTransform(mContext, 6))
+                .into(holder.mImageView);
         return convertView;
     }
 

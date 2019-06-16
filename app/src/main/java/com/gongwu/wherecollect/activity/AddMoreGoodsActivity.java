@@ -45,6 +45,9 @@ import com.zsitech.oncon.barcode.core.CaptureActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +66,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
 
     private final int BOOK_CODE = 0x132;
     /**
-     *判断AddMoreGoodsActivity是否显示
+     * 判断AddMoreGoodsActivity是否显示
      * 显示的时候,AddGoodsActivity不接收eventBus发送的淘宝商品信息
      */
     public static boolean START_MORE_ACTIVITY = false;
@@ -191,12 +194,9 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("user_id", MyApplication.getUser(this).getId());
         map.put("ISBN", ISBN);
-        map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get
-                (tempBean.getCategories().size() - 1).getCode());
-        map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean
-                .getChannel().split(">")));
-        map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean
-                .getColor().split("、")));
+        map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get(tempBean.getCategories().size() - 1).getCode());
+        map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean.getChannel().split(">")));
+        map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
         map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
         map.put("price_max", tempBean.getPrice() + "");
         map.put("price_min", tempBean.getPrice() + "");
@@ -204,16 +204,34 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         map.put("star", tempBean.getStar() + "");
         map.put("buy_date", tempBean.getBuy_date());
         map.put("expire_date", tempBean.getExpire_date());
-        PostListenner listenner = new PostListenner(this, Loading.show(null, context,
-                "正在加载")) {
+        PostListenner listenner = new PostListenner(this, Loading.show(null, context, "正在加载")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
-                Intent intent = new Intent(context, ImportSelectFurnitureActivity.class);
-                startActivity(intent);
-                finish();
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                 EventBus.getDefault().post(EventBusMsg.ACTIVITY_FINISH);
+                JSONArray features = null;// 创建一个包含原始json串的json对象
+                List<ObjectBean> objectBeans = new ArrayList<>();
+                try {
+                    features = new JSONArray(r.getResult());
+                    for (int i = 0; i < features.length(); i++) {
+                        JSONObject info = features.getJSONObject(i);// 获取features数组的第i个json对象
+                        String color = info.getString("color");
+                        String channel = info.getString("channel");
+                        info.remove("color");
+                        info.remove("channel");
+                        List<String> colors = JsonUtils.listFromJson(color, String.class);
+                        List<String> channels = JsonUtils.listFromJson(channel, String.class);
+                        ObjectBean bean = JsonUtils.objectFromJson(info.toString(), ObjectBean.class);
+                        bean.setColors(colors);
+                        bean.setChannels(channels);
+                        objectBeans.add(bean);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                ImportSelectFurnitureActivity.start(context, objectBeans);
+                finish();
             }
 
             @Override
@@ -229,12 +247,14 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
      */
     private void startDialog() {
         //添加
-        mDialog = new AddGoodsDialog(context,mDatas.size()) {
+        mDialog = new AddGoodsDialog(context, mDatas.size()) {
             @Override
             public void result(ObjectBean bean) {
                 //上传
-                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4")
-                        && !bean.getObject_url().contains("#")) {
+                if (!TextUtils.isEmpty(bean.getObject_url()) &&
+                        !bean.getObject_url().contains("7xroa4") &&
+                        !bean.getObject_url().contains("#") &&
+                        !bean.getObject_url().contains("cdn.shouner.com/object/image")) {
                     upLoadImg(bean);
                     return;
                 }
@@ -502,4 +522,5 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         START_MORE_ACTIVITY = false;
         EventBus.getDefault().unregister(this);
     }
+
 }

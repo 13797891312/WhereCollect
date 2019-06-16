@@ -214,7 +214,7 @@
             android:gravity="center_vertical"
             android:hint="请输入价格"
             android:imeOptions="actionDone"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:maxLines="1"
             android:paddingTop="1dp"
             android:singleLine="true"

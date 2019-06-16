@@ -40,6 +40,7 @@ import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.GoodsImageView;
@@ -51,6 +52,9 @@ import com.zsitech.oncon.barcode.core.CaptureActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -255,8 +259,7 @@ public class AddGoodsActivity extends BaseViewActivity {
 
     }
 
-    @OnClick({R.id.add_shopping_layout, R.id.add_code_layout, R.id.camera_iv,
-            R.id.add_other_content_tv, R.id.commit_btn, R.id.add_other_content_edit_iv, R.id.textBtn})
+    @OnClick({R.id.add_shopping_layout, R.id.add_code_layout, R.id.camera_iv, R.id.add_other_content_tv, R.id.commit_btn, R.id.add_other_content_edit_iv, R.id.textBtn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.add_shopping_layout:
@@ -381,12 +384,9 @@ public class AddGoodsActivity extends BaseViewActivity {
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("ISBN", ISBN);
-        map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get
-                (tempBean.getCategories().size() - 1).getCode());
-        map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean
-                .getChannel().split(">")));
-        map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean
-                .getColor().split("、")));
+        map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get(tempBean.getCategories().size() - 1).getCode());
+        map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean.getChannel().split(">")));
+        map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
         map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
         map.put("price_max", tempBean.getPrice() + "");
         map.put("price_min", tempBean.getPrice() + "");
@@ -403,16 +403,35 @@ public class AddGoodsActivity extends BaseViewActivity {
         map.put("expire_date", tempBean.getExpire_date());
         PostListenner listenner = new PostListenner(this) {
             @Override
-            protected void code2000(final ResponseResult r) {
+            protected void code2000(ResponseResult r) {
                 super.code2000(r);
+                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                 if (type == 0) {
-                    Intent intent = new Intent(context, ImportSelectFurnitureActivity.class);
-                    startActivity(intent);
+                    JSONArray features = null;// 创建一个包含原始json串的json对象
+                    List<ObjectBean> objectBeans = new ArrayList<>();
+                    try {
+                        features = new JSONArray(r.getResult());
+                        for (int i = 0; i < features.length(); i++) {
+                            JSONObject info = features.getJSONObject(i);// 获取features数组的第i个json对象
+                            String color = info.getString("color");
+                            String channel = info.getString("channel");
+                            info.remove("color");
+                            info.remove("channel");
+                            List<String> colors = JsonUtils.listFromJson(color, String.class);
+                            List<String> channels = JsonUtils.listFromJson(channel, String.class);
+                            ObjectBean bean = JsonUtils.objectFromJson(info.toString(), ObjectBean.class);
+                            bean.setColors(colors);
+                            bean.setChannels(channels);
+                            objectBeans.add(bean);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ImportSelectFurnitureActivity.start(context, objectBeans);
                 } else {
                     setResult(RESULT_OK);
                 }
                 finish();
-                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
             }
 
             @Override
@@ -462,8 +481,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         map.put("color", JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
         map.put("buy_date", tempBean.getBuy_date());
         map.put("expire_date", tempBean.getExpire_date());
-        PostListenner listenner = new PostListenner(this, Loading.show(null, this,
-                "正在加载")) {
+        PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在加载")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
@@ -583,14 +601,12 @@ public class AddGoodsActivity extends BaseViewActivity {
                             AddGoodsActivity.this.runOnUiThread(new Runnable() {//回主线程
                                 @Override
                                 public void run() {
-                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", (Activity) context, new
-                                            DialogInterface.OnClickListener
-                                                    () {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    getBookResult(book);
-                                                }
-                                            }, null);
+                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", (Activity) context, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            getBookResult(book);
+                                        }
+                                    }, null);
                                 }
                             });
                         } catch (Exception e) {
@@ -645,14 +661,12 @@ public class AddGoodsActivity extends BaseViewActivity {
                             AddGoodsActivity.this.runOnUiThread(new Runnable() {//回主线程
                                 @Override
                                 public void run() {
-                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", (Activity) context, new
-                                            DialogInterface.OnClickListener
-                                                    () {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    getBookResult(book);
-                                                }
-                                            }, null);
+                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", (Activity) context, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            getBookResult(book);
+                                        }
+                                    }, null);
                                 }
                             });
                         } catch (Exception e) {
@@ -824,59 +838,18 @@ public class AddGoodsActivity extends BaseViewActivity {
         config.setDelay(200); // half second between each showcase view
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "addGoods");
         sequence.setConfig(config);
-        MaterialShowcaseView sequenceItem1 = (new MaterialShowcaseView.Builder(this)).setTarget(goods_name_and_image_layout)
-                .setContentText("名称和图片至少添加一项")
-                .setTargetTouchable(false)
-                .setDismissOnTouch(true)
-                .setShapePadding(0)
-                .setDelay(200)
-                .setMaskColour(getResources().getColor(R.color.black_70))
-                .setDismissOnTargetTouch(true)
-                .withRectangleShape(false).build();
+        MaterialShowcaseView sequenceItem1 = (new MaterialShowcaseView.Builder(this)).setTarget(goods_name_and_image_layout).setContentText("名称和图片至少添加一项").setTargetTouchable(false).setDismissOnTouch(true).setShapePadding(0).setDelay(200).setMaskColour(getResources().getColor(R.color.black_70)).setDismissOnTargetTouch(true).withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem1);
-        MaterialShowcaseView sequenceItem2 = (new MaterialShowcaseView.Builder(this))
-                .setTarget(add_shopping_layout).
-                        setContentText("复制链接导入\n复制淘口令、天猫和京东链\n接，自动抓取物品数据")
-                .setTargetTouchable(false)
-                .setMaskColour(getResources().getColor(R.color.black_70))
-                .setDismissOnTouch(true)
-                .setShapePadding(0)
-                .setDelay(200)
-                .setDismissOnTargetTouch(false)
-                .withRectangleShape(false).build();
+        MaterialShowcaseView sequenceItem2 = (new MaterialShowcaseView.Builder(this)).setTarget(add_shopping_layout).
+                setContentText("复制链接导入\n复制淘口令、天猫和京东链\n接，自动抓取物品数据").setTargetTouchable(false).setMaskColour(getResources().getColor(R.color.black_70)).setDismissOnTouch(true).setShapePadding(0).setDelay(200).setDismissOnTargetTouch(false).withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem2);
-        MaterialShowcaseView sequenceItem3 = (new MaterialShowcaseView.Builder(this))
-                .setTarget(add_code_layout).
-                        setContentText("扫条码导入\n支持图书扫码，及电脑端淘宝\n、天猫、京东网页商品二维\n码扫描")
-                .setTargetTouchable(false)
-                .setMaskColour(getResources().getColor(R.color.black_70))
-                .setDismissOnTouch(true)
-                .setShapePadding(0)
-                .setDelay(200)
-                .setDismissOnTargetTouch(false)
-                .withRectangleShape(false).build();
+        MaterialShowcaseView sequenceItem3 = (new MaterialShowcaseView.Builder(this)).setTarget(add_code_layout).
+                setContentText("扫条码导入\n支持图书扫码，及电脑端淘宝\n、天猫、京东网页商品二维\n码扫描").setTargetTouchable(false).setMaskColour(getResources().getColor(R.color.black_70)).setDismissOnTouch(true).setShapePadding(0).setDelay(200).setDismissOnTargetTouch(false).withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem3);
-        MaterialShowcaseView sequenceItem4 = (new MaterialShowcaseView.Builder(this))
-                .setTarget(otherLayout)
-                .setContentText("其他属性\n为方便筛选查找，还可添加数\n量、时间、分类、购获渠道等\n更多物品属性")
-                .setTargetTouchable(false)
-                .setMaskColour(getResources().getColor(R.color.black_70))
-                .setDismissOnTouch(true)
-                .setDelay(200)
-                .setShapePadding(0)
-                .setDismissOnTargetTouch(false)
-                .withRectangleShape(false).build();
+        MaterialShowcaseView sequenceItem4 = (new MaterialShowcaseView.Builder(this)).setTarget(otherLayout).setContentText("其他属性\n为方便筛选查找，还可添加数\n量、时间、分类、购获渠道等\n更多物品属性").setTargetTouchable(false).setMaskColour(getResources().getColor(R.color.black_70)).setDismissOnTouch(true).setDelay(200).setShapePadding(0).setDismissOnTargetTouch(false).withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem4);
-        MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(this))
-                .setTarget(addMoreTv).
-                        setContentText("批量添加\n选择共同属性，批量添加多\n个物品")
-                .setTargetTouchable(false)
-                .setMaskColour(getResources().getColor(R.color.black_70))
-                .setDismissOnTouch(true)
-                .setShapePadding(0)
-                .setDelay(200)
-                .setDismissOnTargetTouch(false)
-                .withRectangleShape(false).build();
+        MaterialShowcaseView sequenceItem5 = (new MaterialShowcaseView.Builder(this)).setTarget(addMoreTv).
+                setContentText("批量添加\n选择共同属性，批量添加多\n个物品").setTargetTouchable(false).setMaskColour(getResources().getColor(R.color.black_70)).setDismissOnTouch(true).setShapePadding(0).setDelay(200).setDismissOnTargetTouch(false).withRectangleShape(false).build();
         sequence.addSequenceItem(sequenceItem5);
         sequence.start();
     }

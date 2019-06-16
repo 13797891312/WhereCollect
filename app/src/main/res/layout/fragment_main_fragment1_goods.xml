@@ -2,17 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.gongwu.wherecollect.afragment.MainFragment1">
 
     <TextView
         android:id="@+id/add_changwang_tv"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dip_30"
+        android:layout_height="@dimen/dip_36"
+        android:layout_marginEnd="@dimen/dip_10"
+        android:layout_marginStart="@dimen/dip_10"
+        android:layout_marginTop="@dimen/dip_10"
+        android:background="@drawable/shape_chang_wang_text_bg"
+        android:drawableEnd="@drawable/go_icon"
+        android:drawablePadding="@dimen/dip_6"
+        android:drawableStart="@drawable/ymy_icon"
         android:gravity="center_vertical"
         android:padding="@dimen/dip_4"
+        android:visibility="gone"
         android:text="常忘备余物快速添加,看看“有没有”"
-        android:textSize="@dimen/f_12"
-        android:visibility="gone" />
+        android:textSize="@dimen/f_12" />
 
     <com.handmark.pulltorefresh.library.PullToRefreshGridView
         android:id="@id/swipe_target"

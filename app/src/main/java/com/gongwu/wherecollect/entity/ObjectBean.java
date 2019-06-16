@@ -530,6 +530,22 @@ public class ObjectBean implements Serializable {
         this.coordinates = coordinates;
     }
 
+    public List<String> getChannels() {
+        return channels;
+    }
+
+    public void setChannels(List<String> channels) {
+        this.channels = channels;
+    }
+
+    public List<String> getColors() {
+        return colors;
+    }
+
+    public void setColors(List<String> colors) {
+        this.colors = colors;
+    }
+
     public List<BaseBean> getLocations() {
         return locations;
     }

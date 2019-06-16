@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
@@ -42,7 +43,8 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtil.d("TimerService", "onStartCommand");
-        if (intent.getStringExtra("flags").equals("3")) {
+        if (intent!=null&&!TextUtils.isEmpty(intent.getStringExtra("flags"))&&
+                intent.getStringExtra("flags").equals("3")) {
             //判断当系统版本大于20，即超过Android5.0时，我们采用线程循环的方式请求。
             //当小于5.0时的系统则采用定时唤醒服务的方式执行循环
             int currentapiVersion = android.os.Build.VERSION.SDK_INT;

@@ -116,7 +116,7 @@ public class PersonFragment extends BaseFragment {
                 MessageListActivity.start(getContext());
                 break;
             case R.id.user_code_layout://二维码
-                Glide.with(getContext()).load(user.getAvatar()).asBitmap().into(new SimpleTarget<Bitmap>() {
+                Glide.with(getContext()).load(user.getAvatar().equals("http://7xroa4.com1.z0.glb.clouddn.com/default/shounaer_icon.png") ? R.drawable.icon_app : user.getAvatar()).asBitmap().into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         UserCodeDialog userCodeDialog = new UserCodeDialog(getActivity());

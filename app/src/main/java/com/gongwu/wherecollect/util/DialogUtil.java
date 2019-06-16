@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.util;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.view.WindowManager;
 
@@ -37,15 +38,15 @@ public class DialogUtil {
      * @param msg       消息
      * @param okStr     确认按钮文字
      * @param cancalStr 取消按钮文字
-     * @param context
+     * @param activity
      * @param listener1 确认监听
      * @param listener2 取消监听
      * @return
      */
     public static AlertDialog show(String title, String msg, String okStr, String cancalStr,
-                                   Activity context, DialogInterface.OnClickListener listener1,
+                                   Activity activity, DialogInterface.OnClickListener listener1,
                                    DialogInterface.OnClickListener listener2) {
-        AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(context)
+        AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(activity)
                 .setTitle(title)
                 .setPositiveButton(okStr, listener1)
                 .setNegativeButton(cancalStr, listener2)
@@ -55,8 +56,8 @@ public class DialogUtil {
         dialog.show();
         WindowManager.LayoutParams params =
                 dialog.getWindow().getAttributes();
-        if (BaseViewActivity.getScreenWidth(context) < BaseViewActivity.getScreenHeigth(context)) {
-            params.width = (int) (BaseViewActivity.getScreenWidth(context) * 6.0f / 7.0f);
+        if (BaseViewActivity.getScreenWidth(activity) < BaseViewActivity.getScreenHeigth(activity)) {
+            params.width = (int) (BaseViewActivity.getScreenWidth(activity) * 6.0f / 7.0f);
         }
         dialog.getWindow().setAttributes(params);
         return dialog;
@@ -81,7 +82,18 @@ public class DialogUtil {
                 .setNegativeButton(cancalStr, listener2)
                 .setMessage(msg)
                 .create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        // 加入系统服务
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//6.0
+//                    mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+//                } else {
+//                    mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//                }
+        //8.0系统加强后台管理，禁止在其他应用和窗口弹提醒弹窗，如果要弹，必须使用TYPE_APPLICATION_OVERLAY
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY));
+        }else {
+            dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_SYSTEM_ALERT));
+        }
         dialog.setCancelable(false);
         dialog.show();
         WindowManager.LayoutParams params =

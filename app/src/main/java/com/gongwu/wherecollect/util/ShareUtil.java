@@ -102,6 +102,24 @@ public class ShareUtil {
                 .open();
     }
 
+    /**
+     * 打开分享app面板
+     *
+     * @param context
+     */
+    public static void openShareAppDialog(Activity context) {
+        UMImage thumb = new UMImage(context, R.drawable.icon_lun);
+        UMWeb web = new UMWeb("http://www.shouner.com/");
+        web.setTitle("我用“收哪儿”记录家中常忘物品位置，推荐你试试");//标题
+        web.setThumb(thumb);  //缩略图
+        web.setDescription("找东西,不操心");//描述
+        new ShareAction(context)
+                .withMedia(web)
+                .setDisplayList(SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.SINA, SHARE_MEDIA.QQ,
+                        SHARE_MEDIA.QZONE)
+                .open();
+    }
+
     public static void shareFromSys(Context context, Bitmap bitmap) {
         Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, null, null));
         Intent shareIntent = new Intent();

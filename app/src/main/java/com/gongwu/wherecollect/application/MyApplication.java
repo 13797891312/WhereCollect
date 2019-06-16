@@ -31,6 +31,7 @@ public class MyApplication extends Application {
             .getAbsolutePath() + "/shouner/";
     private static UserBean user;
     private static Context appContext;
+    public static boolean addGood = false;
 
     public static UserBean getUser(Context context) {
         if (user == null) {

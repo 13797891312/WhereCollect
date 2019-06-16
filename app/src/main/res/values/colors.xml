@@ -99,4 +99,8 @@
 
     <color name="vifrification">#60ffffff</color>   <!-- 透明 -->
     <color name="green_text_color">#209b40</color>
+
+    <color name="font_common_1">#424242</color>
+    <color name="font_common_2">#a1a1a1</color>
+    <color name="commom_background">#f3f3f3</color>
 </resources>

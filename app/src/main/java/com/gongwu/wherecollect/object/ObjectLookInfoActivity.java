@@ -165,8 +165,9 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
                             }
                             bean.getLocations().clear();
                             goodsInfoView.init(bean);
-                            Intent intent = new Intent(ObjectLookInfoActivity.this, ImportSelectFurnitureActivity.class);
-                            startActivity(intent);
+                            List<ObjectBean> objectBeans = new ArrayList<>();
+                            objectBeans.add(bean);
+                            ImportSelectFurnitureActivity.start(context, objectBeans);
                         }
                     };
                     HttpClient.removeObjectFromFurnitrue(context, map, listenner);
