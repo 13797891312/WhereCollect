@@ -8,16 +8,15 @@
     <TextView
         android:id="@+id/noSelect_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dip_36"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
         android:gravity="center"
         android:singleLine="true"
         android:text="选择上方隔层,可添加收纳盒和物品"
         android:textColor="@color/black_26"
         android:textSize="@dimen/f_14"
         android:visibility="gone" />
-
+    <!--收纳盒布局-->
     <LinearLayout
         android:id="@+id/indicatorLayout"
         android:layout_width="match_parent"
@@ -30,7 +29,7 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="@dimen/dip_36"
             android:gravity="center"
             android:singleLine="true"
             android:text="未选择隔层"
@@ -49,19 +48,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
+    <!--收纳盒里面的物品-->
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/goods_list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="6dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:visibility="gone" />
 
     <com.gongwu.wherecollect.view.ErrorView
         android:id="@+id/emtpy_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:id="@+id/move_layout"

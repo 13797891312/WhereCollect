@@ -15,6 +15,9 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.Button;
@@ -77,7 +80,7 @@ public class FurnitureObectListView extends RelativeLayout {
     List<ObjectBean> mFilterBoxList = new ArrayList<>();//盒子筛选后列表
     List<ObjectBean> mCWList = new ArrayList<>();//常忘物品列表
     Context context;
-    @Bind(R.id.recyclerView)
+    @Bind(R.id.goods_list_view)
     public RecyclerView recyclerView;
     @Bind(R.id.title)
     TextView title;
@@ -110,6 +113,8 @@ public class FurnitureObectListView extends RelativeLayout {
     private OnitemClickLisener listener;
     private OnFinishActivityLisener finishListener;
     private BoxListAdapter boxAdapter;
+    private boolean cwFunction;//判断是否为物品界面添加定位
+    private boolean cwSelect;//判断物品是否勾选
 
     public FurnitureObectListView(Context context) {
         this(context, null);
@@ -189,6 +194,7 @@ public class FurnitureObectListView extends RelativeLayout {
                                 if (mCWListView.getVisibility() == View.VISIBLE) {
                                     mCWList.add(filterList.get(position));
                                     mCWListView.notifyData(mCWList, -1);
+                                    if (filterList.size() == 0) emtpyView.setVisibility(VISIBLE);
                                 }
                                 mList.remove(filterList.remove(position));
                                 adapter.notifyDataSetChanged();
@@ -222,11 +228,18 @@ public class FurnitureObectListView extends RelativeLayout {
      *
      * @param datas
      */
+
     public void initCWListView(List<ObjectBean> datas) {
+        cwFunction = true;
         mList.clear();
         mCWList.clear();
         filterList.clear();
         adapter.notifyDataSetChanged();
+        imporBtn.setText("放置此处");
+        noSelectTv.setVisibility(View.GONE);
+        recyclerView.setVisibility(GONE);
+        emtpyView.setVisibility(VISIBLE);
+        indicatorLayout.setVisibility(INVISIBLE);
         if (datas != null && datas.size() > 0) {
             mCWList.addAll(datas);
             mCWListView.setVisibility(View.VISIBLE);
@@ -236,14 +249,21 @@ public class FurnitureObectListView extends RelativeLayout {
                 public void onItemClick(int positions, View view) {
                     mCWList.get(positions).setSelect(!mCWList.get(positions).isSelect());
                     mCWListView.adapter.notifyDataSetChanged();
+                    //隔层要选中
                     for (ObjectBean objectBean : mCWList) {
                         if (objectBean.isSelect()) {
-                            imporBtn.setSelected(true);
+                            if (addBtn.isSelected()) {
+                                emtpyView.setErrorMsg("点击“放置此处”完成物品定位");
+                                imporBtn.setSelected(true);
+                            }
+                            cwSelect = true;
                             break;
                         } else {
                             imporBtn.setSelected(false);
+                            cwSelect = false;
                         }
                     }
+                    if (!imporBtn.isSelected() && addBtn.isSelected()) emtpyView.setErrorMsg("请选择下方要放置的物品");
                 }
             });
         }
@@ -307,20 +327,32 @@ public class FurnitureObectListView extends RelativeLayout {
     public void notifyObject(ObjectBean bean, ObjectBean boxBean) {
         this.objectBean = bean;
         if (objectBean == null) {
-            noSelectTv.setVisibility(VISIBLE);
-            indicatorLayout.setVisibility(GONE);
+            if (!cwFunction) {
+                noSelectTv.setVisibility(VISIBLE);
+                indicatorLayout.setVisibility(GONE);
+            } else {
+                indicatorLayout.setVisibility(INVISIBLE);
+                emtpyView.setVisibility(VISIBLE);
+            }
             addBtn.setSelected(false);
             imporBtn.setSelected(false);
             moveCommit.setEnabled(false);
+            emtpyView.setErrorMsg("请选择上方隔层,可添加物品和收纳盒");
         } else {
+            if (!cwFunction) {
+                noSelectTv.setVisibility(GONE);
+            } else {
+                emtpyView.setVisibility(GONE);
+            }
+            indicatorLayout.setVisibility(VISIBLE);
             addBtn.setSelected(true);
             if (mCWListView.getVisibility() != View.VISIBLE) {
                 imporBtn.setSelected(true);
             }
-            noSelectTv.setVisibility(GONE);
-            indicatorLayout.setVisibility(VISIBLE);
+            if (cwSelect) imporBtn.setSelected(true);
             title.setText(objectBean.getName());
             moveCommit.setEnabled(true);
+            if (addBtn.isSelected()) emtpyView.setErrorMsg(cwSelect ? "点击“放置此处”完成物品定位" : "请选择下方要放置的物品");
         }
         if (boxBean == null) {//选择了隔层
             notifyInducation(objectBean);
@@ -419,11 +451,11 @@ public class FurnitureObectListView extends RelativeLayout {
                     dialog.setType(0);
                     dialog.show();
                 } else {
-                    AnimationUtil.StartTada(noSelectTv, 1.0f);
+                    AnimationUtil.StartTranslate(cwFunction ? emtpyView : noSelectTv);
                 }
                 break;
             case R.id.impor_btn:
-                if (imporBtn.isSelected()) {
+                if (addBtn.isSelected() && imporBtn.isSelected()) {
                     if (mCWListView.getVisibility() == View.VISIBLE) {
                         addCWLocation();
                     } else {
@@ -431,7 +463,7 @@ public class FurnitureObectListView extends RelativeLayout {
                         ((Activity) context).startActivityForResult(intent, 100);
                     }
                 } else {
-                    AnimationUtil.StartTada(noSelectTv, 1.0f);
+                    AnimationUtil.StartTranslate(cwFunction ? emtpyView : noSelectTv);
                 }
                 break;
             case R.id.title:
@@ -848,7 +880,7 @@ public class FurnitureObectListView extends RelativeLayout {
         }
         if (indicatorLayout.getVisibility() == VISIBLE && (!mFilterBoxList.isEmpty())) {
             ShowCaseUtil.showCaseForObject(((Activity) context), indicatorLayout, title);
-            AnimationUtil.StartTada(title, 1.0f);
+            AnimationUtil.StartTranslate(title);
         }
     }
 

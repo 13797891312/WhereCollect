@@ -4,6 +4,9 @@ import android.animation.Keyframe;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 
 /**
  * Function:
@@ -64,6 +67,14 @@ public class AnimationUtil {
                 setDuration(500);
         animator.start();
         return animator;
+    }
+    public static void StartTranslate(View view) {
+        TranslateAnimation animation = new TranslateAnimation(15, -15, 0, 0);
+        animation.setInterpolator(new OvershootInterpolator());
+        animation.setDuration(60);
+        animation.setRepeatCount(4);
+        animation.setRepeatMode(Animation.REVERSE);
+        view.startAnimation(animation);
     }
 
     /**
