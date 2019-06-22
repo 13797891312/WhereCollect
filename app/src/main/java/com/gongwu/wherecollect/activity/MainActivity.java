@@ -1,5 +1,7 @@
 package com.gongwu.wherecollect.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,9 +9,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.volley.request.HttpClient;
@@ -41,6 +45,8 @@ import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.CommomDialog;
 import com.gongwu.wherecollect.view.HighOpinionDialog;
 import com.gongwu.wherecollect.view.MainDrawerView;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.zhaojin.myviews.MyFragmentLayout1;
@@ -58,9 +64,12 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 
 public class MainActivity extends BaseViewActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     public List<Fragment> fragments = new ArrayList();
     @Bind(R.id.id_drawerlayout)
     public DrawerLayout idDrawerlayout;
@@ -87,11 +96,35 @@ public class MainActivity extends BaseViewActivity {
         titleLayout.setVisibility(View.GONE);
         EventBus.getDefault().register(this);
         initBugly();
-        checkSDcard();
         initView();
         //启动Android定时器，并且启动服务 请求消息接口
         TimerService.getConnet(this);
-        //        test();
+        checkPermissionRequestEach(this, false);
+    }
+
+    public void checkPermissionRequestEach(FragmentActivity activity, final boolean start) {
+        RxPermissions permissions = new RxPermissions(activity);
+        permissions.setLogging(true);
+        permissions.requestEachCombined(Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA).subscribe(new Consumer<Permission>() {
+            @Override
+            public void accept(Permission permission) throws Exception {
+                if (permission.granted) {//全部同意后调用
+                    if (start) {
+                        CameraVideoActivity.start(context,false);
+                    }
+                } else if (permission.shouldShowRequestPermissionRationale) {//只要有一个选择：禁止，但没有选择“以后不再询问”，以后申请权限，会继续弹出提示
+                    if (start) {
+                        new PermissionUtil(MainActivity.this, getResources().getString(R.string.permission_record));
+                    }
+                } else {//只要有一个选择：禁止，但选择“以后不再询问”，以后申请权限，不会继续弹出提示
+                    if (start) {
+                        new PermissionUtil(MainActivity.this, getResources().getString(R.string.permission_sdcard));
+                    }
+                }
+            }
+        });
     }
 
     private void initBugly() {
@@ -99,16 +132,6 @@ public class MainActivity extends BaseViewActivity {
         Beta.autoCheckUpgrade = true;
         Bugly.init(getApplicationContext(), "2c5269d1f5", true);
         Beta.checkUpgrade(false, false);//检测更新
-    }
-
-    /**
-     * 检测是否有SD卡或者储存权限
-     */
-    private void checkSDcard() {
-        File file = new File(MyApplication.CACHEPATH);
-        if (!file.canWrite()) {
-            new PermissionUtil(this, getResources().getString(R.string.permission_sdcard));
-        }
     }
 
     private void initView() {
@@ -339,14 +362,12 @@ public class MainActivity extends BaseViewActivity {
                     }, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(context, AddGoodsActivity.class);
-                            startActivity(intent);
+                            checkPermissionRequestEach(MainActivity.this, true);
+//                            CameraVideoActivity.start(context);
                         }
                     }).setCancelable(true);
                 } else {
-//                    Intent intent = new Intent(context, ObjectsAddActivity.class);
-//                    startActivity(intent);
-                    AddGoodsActivity.start(context);
+                    checkPermissionRequestEach(MainActivity.this, true);
                 }
                 break;
         }

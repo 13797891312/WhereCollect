@@ -11,7 +11,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="permission_record">麦克风没有声音或被占用,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
-    <string name="permission_sdcard">没有储存权限或SD卡,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
+    <string name="permission_sdcard">没有储存权限或拍照,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
     <string name="permission_xuanfu">没有悬浮窗口权限,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
     <string name="permission_capture">调用相机失败,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
 

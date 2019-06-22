@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId "com.gongwu.wherecollect"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 9
         versionName "3.5.0"
@@ -142,4 +142,9 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 //    implementation 'com.github.bumptech.glide:glide:4.6.1'
 //    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    //rxjava2
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
+    //rxpermissions
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }

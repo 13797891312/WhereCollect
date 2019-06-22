@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dip_254"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="@dimen/dip_60"
+    android:background="@drawable/home01_bg_card"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dip_16">
+
+
+    <ImageView
+        android:id="@+id/add_goods_iv"
+        android:layout_width="@dimen/dip_120"
+        android:layout_height="@dimen/dip_120"
+        android:layout_marginBottom="@dimen/dip_10"
+        android:layout_marginTop="@dimen/dip_30"
+        android:src="@drawable/select_pic" />
+
+    <EditText
+        android:id="@+id/goods_name_et"
+        android:layout_width="@dimen/dip_160"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dip_32"
+        android:gravity="center"
+        android:hint="请输入名称"
+        android:imeOptions="actionDone"
+        android:lines="1"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:singleLine="true"
+        android:textColor="@color/black_txt"
+        android:textColorHint="@color/divider"
+        android:textSize="@dimen/f_15"
+        android:theme="@style/MyEditText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_12" />
+
+    <LinearLayout
+        android:id="@+id/code_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_44"
+        android:background="@drawable/select_changheader_btn_other"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dip_4"
+                android:src="@drawable/scan_s" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="扫码添加"
+                android:textColor="@color/maincolor"
+                android:textSize="@dimen/f_15" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="仅支持电商平台二维码"
+            android:textColor="@color/black_other_one"
+            android:textSize="@dimen/f_10" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_12" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_48"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/cancel_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/select_changheader_btn_other"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/maincolor"
+            android:textSize="@dimen/f_15" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="wrap_content"
+            android:background="@color/black_12" />
+
+        <TextView
+            android:id="@+id/submit_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/select_changheader_btn_other"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/maincolor"
+            android:textSize="@dimen/f_15" />
+    </LinearLayout>
+</LinearLayout>

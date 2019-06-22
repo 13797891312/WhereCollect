@@ -17,7 +17,13 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:name=".application.MyApplication"
@@ -45,15 +51,16 @@
             android:name="com.gongwu.wherecollect.util.SimpleGlideModule"
             android:value="GlideModule" />
 
-        <!-- <provider -->
-        <!-- android:name="android.support.v4.content.FileProvider" -->
-        <!-- android:authorities="com.gongwu.wherecollect.fileprovider" -->
-        <!-- android:grantUriPermissions="true" -->
-        <!-- android:exported="false"> -->
-        <!-- <meta-data -->
-        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
-        <!-- android:resource="@xml/filepaths" /> -->
-        <!-- </provider> -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <service
             android:name=".service.TimerService"
             android:enabled="true"
@@ -170,7 +177,8 @@
         <activity android:name=".record.RecordLookActivity" />
         <activity android:name=".object.AddGoodsActivity" />
         <activity android:name=".activity.AddGoodsOtherContentActivity" />
-        <activity android:name=".activity.AddMoreGoodsActivity" />
+        <activity android:name=".activity.AddMoreGoodsActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".activity.AddGoodsRemindActivity" />
         <activity android:name=".activity.RemindGoodsDetailsActivity" />
         <activity android:name=".activity.PersonActivity" />
@@ -182,7 +190,8 @@
         <activity android:name=".activity.SelectShareSpaceActivity" />
         <activity android:name=".activity.SharePersonDetailsActivity" />
         <activity android:name=".activity.ShareSpaceDetailsActivity" />
-        <activity android:name=".activity.AddChangWangGoodActivity"></activity>
+        <activity android:name=".activity.AddChangWangGoodActivity" />
+        <activity android:name=".activity.CameraVideoActivity" />
     </application>
 
 </manifest>

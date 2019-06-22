@@ -17,8 +17,10 @@ import android.widget.Toast;
 import com.gongwu.wherecollect.application.MyApplication;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -497,5 +499,30 @@ public class FileUtil {
             e.printStackTrace();
             return bitmap;
         }
+    }
+
+    public static File compress(File originFile) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        //设置此参数是仅仅读取图片的宽高到options中，不会将整张图片读到内存中，防止oom
+        options.inJustDecodeBounds = true;
+        Bitmap emptyBitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
+
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = 8;
+        Bitmap resultBitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        resultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        File newFile = new File(MyApplication.CACHEPATH, System.currentTimeMillis() + ".png");
+        try {
+            FileOutputStream fos = new FileOutputStream(newFile);
+            fos.write(bos.toByteArray());
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newFile;
     }
 }

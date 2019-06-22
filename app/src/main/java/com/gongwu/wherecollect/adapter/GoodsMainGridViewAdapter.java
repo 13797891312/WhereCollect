@@ -74,7 +74,7 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
             holder.image.setBackgroundResource(0);
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
-        } else if (!TextUtils.isEmpty(bean.getObject_url())) {
+        } else if (!TextUtils.isEmpty(bean.getObject_url())&&!bean.getObject_url().contains("/")) {
             holder.image.setImageDrawable(null);
             holder.image.setBackgroundResource(0);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));

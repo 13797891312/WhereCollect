@@ -75,7 +75,7 @@ public class FlingCardListener implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-    	
+
     	try {
 	        switch (event.getAction() & MotionEvent.ACTION_MASK) {
 	            case MotionEvent.ACTION_DOWN:
@@ -89,8 +89,8 @@ public class FlingCardListener implements View.OnTouchListener {
 	                // Save the ID of this pointer
 	                mActivePointerId = event.getPointerId(0);
 	                final float x = event.getX(mActivePointerId);
-	                final float y = event.getY(mActivePointerId);					
-	
+	                final float y = event.getY(mActivePointerId);
+
 	                // Remember where we started
 	                aDownTouchX = x;
 	                aDownTouchY = y;
@@ -98,7 +98,7 @@ public class FlingCardListener implements View.OnTouchListener {
 	                // have the values from the magnifier frame
                     aPosX = frame.getX();
                     aPosY = frame.getY();
-	
+
 	                if (y < objectH/2) {
 	                    touchPosition = TOUCH_ABOVE;
 	                } else {
@@ -108,7 +108,7 @@ public class FlingCardListener implements View.OnTouchListener {
 
 	            case MotionEvent.ACTION_POINTER_DOWN:
 	                break;
-	
+
 	            case MotionEvent.ACTION_POINTER_UP:
 	                // Extract the index of the pointer that left the touch sensor
 	                final int pointerIndex = (event.getAction() &
@@ -122,28 +122,28 @@ public class FlingCardListener implements View.OnTouchListener {
 	                }
 	                break;
 	            case MotionEvent.ACTION_MOVE:
-	
+
 	                // Find the index of the active pointer and fetch its position
 	                final int pointerIndexMove = event.findPointerIndex(mActivePointerId);
 	                final float xMove = event.getX(pointerIndexMove);
 	                final float yMove = event.getY(pointerIndexMove);
-	                
+
 	                // from http://android-developers.blogspot.com/2010/06/making-sense-of-multitouch.html
 	                // Calculate the distance moved
 	                final float dx = xMove - aDownTouchX;
 	                final float dy = yMove - aDownTouchY;
-	
+
 	                // Move the frame
 	                aPosX += dx;
 	                aPosY += dy;
-	
+
 	                // calculate the rotation degrees
 	                float distObjectX = aPosX - objectX;
 	                float rotation = BASE_ROTATION_DEGREES * 2f * distObjectX / parentWidth;
 	                if (touchPosition == TOUCH_BELOW) {
 	                    rotation = -rotation;
 	                }
-	
+
 	                // in this area would be code for doing something with the view as the frame moves.
                     if (isNeedSwipe) {
                         frame.setX(aPosX);

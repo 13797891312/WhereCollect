@@ -7,12 +7,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.volley.request.QiNiuUploadUtil;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,12 +22,15 @@ import com.bumptech.glide.Glide;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.AddMoreGoodsListAdapter;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
+import com.gongwu.wherecollect.adapter.StackAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
+import com.gongwu.wherecollect.object.AddGoodsActivity;
+import com.gongwu.wherecollect.swipecardview.SwipeFlingAdapterView;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
 import com.gongwu.wherecollect.util.JsonUtils;
@@ -62,7 +67,7 @@ import butterknife.OnClick;
 /**
  * 批量添加
  */
-public class AddMoreGoodsActivity extends BaseViewActivity {
+public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFlingAdapterView.onFlingListener {
 
     private final int BOOK_CODE = 0x132;
     /**
@@ -77,15 +82,24 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     SwipeMenuRecyclerView mListView;
     @Bind(R.id.more_commit_btn)
     Button commitBtn;
+    //    @Bind(R.id.swipe_view)
+    SwipeFlingAdapterView mSwipeView;
+    @Bind(R.id.content_layout)
+    RelativeLayout contentLayout;
+
     private ObjectBean tempBean;
     private AddGoodsDialog mDialog;
     private List<ObjectBean> mDatas;
+
     private AddMoreGoodsListAdapter mAdapter;
     /**
      * 记录点击的item
      */
     private int currentItem = -1;
 
+    private StackAdapter mStackAdapter;
+
+    private List<ObjectBean> selectImgs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +114,57 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         initView();
         initData();
         initEvent();
-        startDialog();
+        List<String> list = getIntent().getStringArrayListExtra("imgList");
+        if (list != null && list.size() > 0) {
+            // 为AdapterViewFlipper设置Adapter
+            initSwipeViewAdapter();
+            initSwipeView();
+            upLoadSelectImgs(list);
+            addGoodsTv.setEnabled(false);
+            commitBtn.setEnabled(false);
+        } else {
+            startDialog();
+        }
+    }
+
+    private void initSwipeViewAdapter() {
+        mStackAdapter = new StackAdapter(context, selectImgs) {
+            @Override
+            public void selectItem(boolean select, String name, String url) {
+                if (select) {
+                    ObjectBean objectBean = new ObjectBean();
+                    objectBean.setObject_url(url);
+                    objectBean.setName(name);
+                    mDatas.add(objectBean);
+                    mAdapter.notifyDataSetChanged();
+                }
+                mSwipeView.swipeRight();
+//                mStackAdapter.remove(0);
+            }
+
+            @Override
+            public void onClickCamera() {
+                qrBook();
+            }
+        };
+    }
+
+    private void initSwipeView() {
+        if (mSwipeView != null) {
+            contentLayout.removeView(mSwipeView);
+        }
+        mSwipeView = new SwipeFlingAdapterView(context);
+        mSwipeView.setMaxVisible(4);
+        mSwipeView.setMinStackInAdapter(4);
+        contentLayout.addView(mSwipeView);
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mSwipeView.getLayoutParams();
+        int topDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics());
+        lp.setMargins(0, topDip, 0, 0);
+        lp.height = 1600;
+        mSwipeView.setLayoutParams(lp);
+        mSwipeView.setAdapter(mStackAdapter);
+        mSwipeView.setIsNeedSwipe(true);
+        mSwipeView.setFlingListener(this);
     }
 
     private void initView() {
@@ -174,14 +238,16 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
     }
 
     private void initImgUrls() {
-        List<String> name = new ArrayList<>();
-        List<String> files = new ArrayList<>();
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> files = new ArrayList<>();
         for (int i = 0; i < mDatas.size(); i++) {
             ObjectBean bean = mDatas.get(i);
             name.add(bean.getName());
             files.add(bean.getObject_url());
         }
-        addObjects(name, files);
+        AddGoodsOtherContentActivity.start(context, name, files, AddGoodsActivity.MORE_TYPE);
+        finish();
+//        addObjects(name, files);
     }
 
     /**
@@ -194,16 +260,18 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         map.put("uid", MyApplication.getUser(this).getId());
         map.put("user_id", MyApplication.getUser(this).getId());
         map.put("ISBN", ISBN);
-        map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get(tempBean.getCategories().size() - 1).getCode());
-        map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean.getChannel().split(">")));
-        map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
-        map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
-        map.put("price_max", tempBean.getPrice() + "");
-        map.put("price_min", tempBean.getPrice() + "");
-        map.put("season", tempBean.getSeason());
-        map.put("star", tempBean.getStar() + "");
-        map.put("buy_date", tempBean.getBuy_date());
-        map.put("expire_date", tempBean.getExpire_date());
+        if (tempBean != null) {
+            map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get(tempBean.getCategories().size() - 1).getCode());
+            map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean.getChannel().split(">")));
+            map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
+            map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
+            map.put("price_max", tempBean.getPrice() + "");
+            map.put("price_min", tempBean.getPrice() + "");
+            map.put("season", tempBean.getSeason());
+            map.put("star", tempBean.getStar() + "");
+            map.put("buy_date", tempBean.getBuy_date());
+            map.put("expire_date", tempBean.getExpire_date());
+        }
         PostListenner listenner = new PostListenner(this, Loading.show(null, context, "正在加载")) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -251,10 +319,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             @Override
             public void result(ObjectBean bean) {
                 //上传
-                if (!TextUtils.isEmpty(bean.getObject_url()) &&
-                        !bean.getObject_url().contains("7xroa4") &&
-                        !bean.getObject_url().contains("#") &&
-                        !bean.getObject_url().contains("cdn.shouner.com/object/image")) {
+                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4") && !bean.getObject_url().contains("#") && !bean.getObject_url().contains("cdn.shouner.com/object/image")) {
                     upLoadImg(bean);
                     return;
                 }
@@ -301,17 +366,23 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                 super.finish(list);
                 //currentItem不为默认值时，修改记录的item的值
                 objectBean.setObject_url(list.get(0));
-                if (currentItem != -1) {
-                    mDatas.set(currentItem, objectBean);
-                    currentItem = -1;
+                if (selectImgs != null && selectImgs.size() > 0) {
+                    selectImgs.remove(0);
+                    selectImgs.add(0, objectBean);
+                    initSwipeView();
                 } else {
-                    //为默认值，就是新添加的
-                    mDatas.add(objectBean);
+                    if (currentItem != -1) {
+                        mDatas.set(currentItem, objectBean);
+                        currentItem = -1;
+                    } else {
+                        //为默认值，就是新添加的
+                        mDatas.add(objectBean);
+                    }
+                    mAdapter.notifyDataSetChanged();
                 }
                 if (loading != null) {
                     loading.dismiss();
                 }
-                mAdapter.notifyDataSetChanged();
             }
         };
         uploadUtil.start();
@@ -340,6 +411,31 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
                 if (loading != null) {
                     loading.dismiss();
                 }
+            }
+        };
+        uploadUtil.start();
+    }
+
+    private void upLoadSelectImgs(List<String> strings) {
+        List<File> list = new ArrayList<>();
+        for (String bean : strings) {
+            list.add(new File(bean));
+        }
+        loading = Loading.show(loading, this, "上传中...");
+        QiNiuUploadUtil uploadUtil = new QiNiuUploadUtil(this, list, "object/image/") {
+            @Override
+            protected void finish(List<String> list) {
+                super.finish(list);
+                if (loading != null) {
+                    loading.dismiss();
+                }
+                selectImgs.clear();
+                for (String s : list) {
+                    ObjectBean objectBean = new ObjectBean();
+                    objectBean.setObject_url(s);
+                    selectImgs.add(objectBean);
+                }
+                mStackAdapter.notifyDataSetChanged();
             }
         };
         uploadUtil.start();
@@ -499,14 +595,26 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
             temp.add(book.getCategory());
             tempBean.setCategories(temp);
         }
-        mDialog.setObjectBean(tempBean);
-        mDialog.show();
+        if (selectImgs != null && selectImgs.size() > 0) {
+            upLoadImg(tempBean);
+        } else if (mDialog != null) {
+            mDialog.setObjectBean(tempBean);
+            mDialog.show();
+        }
     }
 
     public static void start(Context context, ObjectBean objectBean) {
         Intent intent = new Intent(context, AddMoreGoodsActivity.class);
         if (objectBean != null) {
             intent.putExtra("bean", objectBean);
+        }
+        context.startActivity(intent);
+    }
+
+    public static void start(Context context, ArrayList<String> lists) {
+        Intent intent = new Intent(context, AddMoreGoodsActivity.class);
+        if (lists != null) {
+            intent.putStringArrayListExtra("imgList", lists);
         }
         context.startActivity(intent);
     }
@@ -523,4 +631,33 @@ public class AddMoreGoodsActivity extends BaseViewActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void removeFirstObjectInAdapter() {
+
+    }
+
+    @Override
+    public void onLeftCardExit(Object dataObject) {
+
+    }
+
+    @Override
+    public void onRightCardExit(Object dataObject) {
+        mStackAdapter.remove(0);
+        if (selectImgs.size() == 0) {
+            mSwipeView.setVisibility(View.GONE);
+            addGoodsTv.setEnabled(true);
+            commitBtn.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onAdapterAboutToEmpty(int itemsInAdapter) {
+
+    }
+
+    @Override
+    public void onScroll(float progress, float scrollXProgress) {
+
+    }
 }

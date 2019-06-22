@@ -61,8 +61,8 @@ import static android.content.Context.CLIPBOARD_SERVICE;
  */
 public class SelectImgDialog {
     private static final int VIDEO_CAPTURE = 156;
-    public final int REQUST_CAMARE = 0x02;
-    public final int REQUST_PHOTOSELECT = 0x03;
+    public static final int REQUST_CAMARE = 0x02;
+    public static final int REQUST_PHOTOSELECT = 0x03;
     File mOutputFile;
     Bitmap bm;
     Activity context;
@@ -100,11 +100,9 @@ public class SelectImgDialog {
             file.mkdir();
         }
         mOutputFile = new File(sdPath, System.currentTimeMillis() + ".jpg");
-        dialog = new Dialog(context,
-                R.style.Transparent2);
+        dialog = new Dialog(context, R.style.Transparent2);
         dialog.setCanceledOnTouchOutside(true);
-        View view = View.inflate(context,
-                R.layout.layout_selectimg, null);
+        View view = View.inflate(context, R.layout.layout_selectimg, null);
         ButterKnife.bind(this, view);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,11 +125,9 @@ public class SelectImgDialog {
             file.mkdir();
         }
         mOutputFile = new File(sdPath, System.currentTimeMillis() + ".jpg");
-        dialog = new Dialog(context,
-                R.style.Transparent2);
+        dialog = new Dialog(context, R.style.Transparent2);
         dialog.setCanceledOnTouchOutside(true);
-        View view = View.inflate(context,
-                R.layout.layout_selectimg, null);
+        View view = View.inflate(context, R.layout.layout_selectimg, null);
         ButterKnife.bind(this, view);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,13 +156,11 @@ public class SelectImgDialog {
             }
         } else if (resultCode == Activity.RESULT_OK && requestCode == VIDEO_CAPTURE) {
             Uri uri = data.getData();
-            Cursor cursor = context.getContentResolver().query(uri, null, null,
-                    null, null);
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
             if (cursor != null && cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID));
                 String filePath = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
-                Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(),
-                        id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
+                Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
                 //ThumbnailUtils类2.2以上可用
                 // Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath, Thumbnails.MICRO_KIND);
                 cursor.close();
@@ -269,8 +263,7 @@ public class SelectImgDialog {
         //是否隐藏底部容器，默认显示
         options.setHideBottomControls(true);
         options.setFreeStyleCropEnabled(false);
-        uCrop.withOptions(options)
-                .withMaxResultSize(720, 720);
+        uCrop.withOptions(options).withMaxResultSize(720, 720);
         //设置裁剪图片的宽高比，比如16：9（设置后就不能选择其他比例了、选择面板就不会出现了）
         uCrop.withAspectRatio(1, 1);
         uCrop.start(((Activity) context));
@@ -291,23 +284,16 @@ public class SelectImgDialog {
     private void camare() {
         try {
             if (!PermissionUtil.cameraIsCanUse()) {
-                new PermissionUtil(SelectImgDialog.this.context, SelectImgDialog.this.context
-                        .getResources
-                                ().getString(R.string.permission_capture));
+                new PermissionUtil(SelectImgDialog.this.context, SelectImgDialog.this.context.getResources().getString(R.string.permission_capture));
                 return;
             }
-            Intent newIntent = new Intent(
-                    MediaStore.ACTION_IMAGE_CAPTURE);
-            newIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(mOutputFile));
-            SelectImgDialog.this.context
-                    .startActivityForResult(newIntent,
-                            REQUST_CAMARE);
+            Intent newIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            newIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutputFile));
+            SelectImgDialog.this.context.startActivityForResult(newIntent, REQUST_CAMARE);
             // ##############################
         } catch (Exception e) {
             e.printStackTrace();
-            new PermissionUtil(SelectImgDialog.this.context, SelectImgDialog.this.context.getResources
-                    ().getString(R.string.permission_capture));
+            new PermissionUtil(SelectImgDialog.this.context, SelectImgDialog.this.context.getResources().getString(R.string.permission_capture));
         }
         dialog.dismiss();
     }
@@ -316,8 +302,7 @@ public class SelectImgDialog {
         // ######### 调到图片选择界面##########
         Intent i = new Intent(context, ImageGridActivity.class);
         i.putExtra("max", imgMax);
-        SelectImgDialog.this.context
-                .startActivityForResult(i, REQUST_PHOTOSELECT);
+        SelectImgDialog.this.context.startActivityForResult(i, REQUST_PHOTOSELECT);
         // ###############################
         dialog.dismiss();
     }
@@ -348,14 +333,12 @@ public class SelectImgDialog {
                             context.runOnUiThread(new Runnable() {//回主线程
                                 @Override
                                 public void run() {
-                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", context, new
-                                            DialogInterface.OnClickListener
-                                                    () {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    getBookResult(book);
-                                                }
-                                            }, null);
+                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", context, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            getBookResult(book);
+                                        }
+                                    }, null);
                                 }
                             });
                         } catch (Exception e) {
@@ -401,14 +384,12 @@ public class SelectImgDialog {
                             context.runOnUiThread(new Runnable() {//回主线程
                                 @Override
                                 public void run() {
-                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", context, new
-                                            DialogInterface.OnClickListener
-                                                    () {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    getBookResult(book);
-                                                }
-                                            }, null);
+                                    DialogUtil.show("提醒", "此操作会将部分共同属性刷新，是否继续?", "继续", "取消", context, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            getBookResult(book);
+                                        }
+                                    }, null);
                                 }
                             });
                         } catch (Exception e) {

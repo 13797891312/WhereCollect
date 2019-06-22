@@ -29,6 +29,8 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AddGoodsOtherContentActivity;
 import com.gongwu.wherecollect.activity.AddMoreGoodsActivity;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
+import com.gongwu.wherecollect.activity.CameraVideoActivity;
+import com.gongwu.wherecollect.activity.CameraVideoActivity$$ViewBinder;
 import com.gongwu.wherecollect.activity.ImportHelpActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
@@ -127,6 +129,25 @@ public class AddGoodsActivity extends BaseViewActivity {
         initView();
         initEvent();
         initData();
+        String filePath = getIntent().getStringExtra("filePath");
+        if (!TextUtils.isEmpty(filePath)) {
+            imgFile = new File(filePath);
+            setCameraIvParams(100);
+            cameraIv.setHead(IMG_COLOR_CODE, "", imgFile.getAbsolutePath());
+            tempBean.setObject_url(imgFile.getAbsolutePath());
+            setCommitBtnEnable(true);
+        } else {
+            String saomaResult = getIntent().getStringExtra("saomaResult");
+            if (!TextUtils.isEmpty(saomaResult)) {
+                if (saomaResult.contains("http")) {
+                    //网络商城
+                    importBuy(saomaResult);
+                } else {
+                    //书本
+                    getBookInfo(saomaResult);
+                }
+            }
+        }
     }
 
     /**
@@ -307,12 +328,13 @@ public class AddGoodsActivity extends BaseViewActivity {
      * 批量添加界面
      */
     private void startAddMoreGoodsActivity() {
-        Intent addMoreIntent = new Intent(context, AddGoodsOtherContentActivity.class);
-        if (tempBean != null) {
-            addMoreIntent.putExtra("tempBean", tempBean);
-            addMoreIntent.putExtra("type", MORE_TYPE);
-        }
-        startActivityForResult(addMoreIntent, MORE_CODE);
+//        Intent addMoreIntent = new Intent(context, AddGoodsOtherContentActivity.class);
+//        if (tempBean != null) {
+//            addMoreIntent.putExtra("tempBean", tempBean);
+//            addMoreIntent.putExtra("type", MORE_TYPE);
+//        }
+//        startActivityForResult(addMoreIntent, MORE_CODE);
+        CameraVideoActivity.start(context, true);
     }
 
     /**
@@ -798,8 +820,10 @@ public class AddGoodsActivity extends BaseViewActivity {
      *
      * @param context
      */
-    public static void start(Context context) {
+    public static void start(Context context, String filePath, String saomaResult) {
         Intent intent = new Intent(context, AddGoodsActivity.class);
+        intent.putExtra("filePath", filePath);
+        intent.putExtra("saomaResult", saomaResult);
         context.startActivity(intent);
     }
 
