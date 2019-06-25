@@ -112,7 +112,7 @@ public class MainActivity extends BaseViewActivity {
             public void accept(Permission permission) throws Exception {
                 if (permission.granted) {//全部同意后调用
                     if (start) {
-                        CameraVideoActivity.start(context,false);
+                        CameraFragmentMainActivity.start(context,false);
                     }
                 } else if (permission.shouldShowRequestPermissionRationale) {//只要有一个选择：禁止，但没有选择“以后不再询问”，以后申请权限，会继续弹出提示
                     if (start) {
@@ -363,7 +363,6 @@ public class MainActivity extends BaseViewActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             checkPermissionRequestEach(MainActivity.this, true);
-//                            CameraVideoActivity.start(context);
                         }
                     }).setCancelable(true);
                 } else {

@@ -8,7 +8,9 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -501,6 +503,20 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 根据 文件获取uri
+     * @param context 上下文对象
+     * @param file 文件
+     * @return uri
+     */
+    public static Uri getUriFromFile(Context context, File file) {
+        if (Build.VERSION.SDK_INT >= 24) {
+            return FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+        } else {
+            return Uri.fromFile(file);
+        }
+    }
+
     public static File compress(File originFile) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         //设置此参数是仅仅读取图片的宽高到options中，不会将整张图片读到内存中，防止oom
@@ -508,7 +524,7 @@ public class FileUtil {
         Bitmap emptyBitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
 
         options.inJustDecodeBounds = false;
-        options.inSampleSize = 8;
+        options.inSampleSize = 4;
         Bitmap resultBitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         resultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);

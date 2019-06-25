@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/black_12">
+<FrameLayout
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+<RelativeLayout
+    android:background="@color/black_12"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_hight">
+
+    <ImageView
+        android:id="@+id/back_view"
+        android:layout_width="@dimen/dip_24"
+        android:layout_height="@dimen/dip_24"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/dip_12"
+        android:layout_marginTop="@dimen/dip_8"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/icon_amera_back"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/dip_20"
+        android:text="拍照添加"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_14" />
+
+    <TextView
+        android:id="@+id/continuous_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/dip_10"
+        android:layout_marginEnd="@dimen/dip_16"
+        android:background="@drawable/shape_camera_add_text_bg"
+        android:paddingStart="@dimen/dip_6"
+        android:paddingTop="@dimen/dip_4"
+        android:paddingEnd="@dimen/dip_6"
+        android:paddingBottom="@dimen/dip_4"
+        android:text="批量添加"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_12" />
+</RelativeLayout>
+
+<RelativeLayout
+    android:id="@+id/layout_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dip_130"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:background="@color/black_12"
+    android:paddingTop="@dimen/dip_20"
+    android:paddingBottom="@dimen/dip_20">
+
+    <LinearLayout
+        android:id="@+id/camera_select_img_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dip_16"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/select_img_iv"
+            android:layout_width="@dimen/dip_58"
+            android:layout_height="@dimen/dip_58"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_camera_img" />
+
+        <TextView
+            android:id="@+id/select_img_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="@dimen/dip_10"
+            android:text="图库"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/record_button"
+            android:layout_width="@dimen/dip_58"
+            android:layout_height="@dimen/dip_58"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_camera" />
+
+        <TextView
+            android:id="@+id/video_hint_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dip_10"
+            android:text="点击拍照"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_camera_saoma"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="@dimen/dip_16"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/saoma_iv"
+            android:layout_width="@dimen/dip_58"
+            android:layout_height="@dimen/dip_58"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_camera_saoma" />
+
+        <TextView
+            android:id="@+id/saoma_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dip_10"
+            android:text="扫码"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/images_list_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/dip_16"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/images_view"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/num_text"
+                android:layout_width="@dimen/dip_16"
+                android:layout_height="@dimen/dip_16"
+                android:layout_alignTop="@id/images_view"
+                android:layout_alignEnd="@id/images_view"
+                android:background="@drawable/shape_camera_num"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/f_8" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/images_view"
+            android:layout_marginTop="@dimen/dip_10"
+            android:text="确定"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+<LinearLayout
+    android:id="@+id/video_switch_flash_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@id/layout_bottom"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="@dimen/dip_12"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/video_switch_flash"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/flash_close"
+        android:scaleType="center" />
+
+    <TextView
+        android:id="@+id/video_switch_flash_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dip_6"
+        android:text="打卡闪光灯"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_10" />
+</LinearLayout>
+
+</RelativeLayout>

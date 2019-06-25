@@ -1,4 +1,4 @@
-include ':app'
+include ':app', ':camerafragment'
 include ':public_library'
 include ':listView'
 include ':showcase'

@@ -29,8 +29,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AddGoodsOtherContentActivity;
 import com.gongwu.wherecollect.activity.AddMoreGoodsActivity;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
-import com.gongwu.wherecollect.activity.CameraVideoActivity;
-import com.gongwu.wherecollect.activity.CameraVideoActivity$$ViewBinder;
+import com.gongwu.wherecollect.activity.CameraFragmentMainActivity;
 import com.gongwu.wherecollect.activity.ImportHelpActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
@@ -76,6 +75,8 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
  * 添加物品界面
  */
 public class AddGoodsActivity extends BaseViewActivity {
+    private static final String TAG = AddGoodsActivity.class.getSimpleName();
+
     @Bind(R.id.textBtn)
     TextView addMoreTv;
     @Bind(R.id.goods_name_et)
@@ -334,7 +335,7 @@ public class AddGoodsActivity extends BaseViewActivity {
 //            addMoreIntent.putExtra("type", MORE_TYPE);
 //        }
 //        startActivityForResult(addMoreIntent, MORE_CODE);
-        CameraVideoActivity.start(context, true);
+        CameraFragmentMainActivity.start(context, true);
     }
 
     /**
@@ -387,6 +388,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             @Override
             protected void finish(List<String> list) {
                 super.finish(list);
+                LogUtil.e(TAG,"url:"+list.get(0));
                 if (editGoodsType == 1) {
                     tempBean.setObject_url(list.get(0));
                     addObject();
