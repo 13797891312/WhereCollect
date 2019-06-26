@@ -162,24 +162,23 @@ public class CameraFragmentMainActivity extends BaseViewActivity {
                 AddGoodsActivity.start(context, FileUtil.compress(new File(temp.get(0).getBigUri())).getAbsolutePath(), "");
                 finish();
             } else if (temp.size() > 1) {
-                List<String> mlist = new ArrayList<>();
                 for (ImageData id : temp) {
-                    mlist.add(id.getBigUri());
+                    files.add(FileUtil.compress(new File(id.getBigUri())).getAbsolutePath());
+                }
+                selectImgIv.setImageResource(R.drawable.icon_camera_img_enable);
+                selectImgTv.setTextColor(getResources().getColor(R.color.color999));
+                selectImgView.setEnabled(false);
+                cameraSaoma.setVisibility(View.GONE);
+                imagesLayout.setVisibility(View.VISIBLE);
+                continuousText.setVisibility(View.GONE);
+                imagesView.setImageURI(FileUtil.getUriFromFile(context, new File(files.get(files.size()-1))));
+                numText.setText(String.valueOf(files.size()));
+                if (files.size() == maxImags) {
+                    AddMoreGoodsActivity.start(context, files);
+                    finish();
                 }
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        if (addMore) {
-            intent.setClass(context, AddMoreGoodsActivity.class);
-        } else {
-            intent.setClass(context, AddGoodsActivity.class);
-        }
-        startActivity(intent);
-        super.onBackPressed();
     }
 
     @OnClick(R.id.record_button)
@@ -189,12 +188,10 @@ public class CameraFragmentMainActivity extends BaseViewActivity {
             cameraFragment.takePhotoOrCaptureVideo(new CameraFragmentResultAdapter() {
                 @Override
                 public void onVideoRecorded(String filePath) {
-                    Toast.makeText(getBaseContext(), "onVideoRecorded " + filePath, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onPhotoTaken(byte[] bytes, String filePath) {
-                    Toast.makeText(getBaseContext(), "onPhotoTaken " + filePath, Toast.LENGTH_SHORT).show();
                     File file = new File(filePath);
                     //批量
                     if (continuous) {
@@ -221,6 +218,17 @@ public class CameraFragmentMainActivity extends BaseViewActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        if (addMore) {
+            intent.setClass(context, AddMoreGoodsActivity.class);
+        } else {
+            intent.setClass(context, AddGoodsActivity.class);
+        }
+        startActivity(intent);
+        super.onBackPressed();
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
