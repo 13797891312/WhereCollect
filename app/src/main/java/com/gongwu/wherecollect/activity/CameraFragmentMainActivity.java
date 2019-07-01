@@ -202,7 +202,7 @@ public class CameraFragmentMainActivity extends BaseViewActivity {
                         imagesLayout.setVisibility(View.VISIBLE);
                         continuousText.setVisibility(View.GONE);
                         files.add(FileUtil.compress(file).getAbsolutePath());
-                        imagesView.setImageURI(FileUtil.getUriFromFile(context, file));
+                        imagesView.setImageURI(FileUtil.getUriFromFile(context, new File(files.get(files.size()-1))));
                         numText.setText(String.valueOf(files.size()));
                         if (files.size() == maxImags) {
                             AddMoreGoodsActivity.start(context, files);

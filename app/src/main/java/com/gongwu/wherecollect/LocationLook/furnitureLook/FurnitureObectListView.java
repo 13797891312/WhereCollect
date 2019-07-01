@@ -162,12 +162,19 @@ public class FurnitureObectListView extends RelativeLayout {
         adapter.setOnItemClickListener(new MyOnItemClickListener() {
             @Override
             public void onItemClick(int positions, View view) {
+                //添加物品跳转过来,点击空间内的物品直接删除并移到未导入list
+                if (mCWListView.getVisibility() == View.VISIBLE) {
+                    deleteGoods(positions);
+                    return;
+                }
+                //从家具界面点击过来,先给选中状态
                 if (getSelectObjectId().equals(filterList.get(positions).get_id())) {
                     Intent intent = new Intent(context, ObjectLookInfoActivity.class);
                     intent.putExtra("bean", filterList.get(positions));
                     context.startActivity(intent);
                     return;
                 }
+                //然后再点击的话进去物品详情界面
                 ((FurnitureLookActivity) context).selectObject = filterList.get(positions);
                 adapter.notifyDataSetChanged();
                 ((FurnitureLookActivity) context).findObject(filterList.get(positions));
@@ -182,25 +189,7 @@ public class FurnitureObectListView extends RelativeLayout {
                 DialogUtil.show("提示", "将物品移出该位置 ？物品不会被删除", "确定", "取消", ((Activity) context), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Map<String, String> map = new TreeMap<>();
-                        map.put("code", filterList.get(position).getId());
-                        map.put("uid", MyApplication.getUser(context).getId());
-                        PostListenner listenner = new PostListenner(context) {
-                            @Override
-                            protected void code2000(final ResponseResult r) {
-                                super.code2000(r);
-                                EventBus.getDefault().post(new EventBusMsg.ImportObject(((FurnitureLookActivity) context).spacePosition));
-                                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
-                                if (mCWListView.getVisibility() == View.VISIBLE) {
-                                    mCWList.add(filterList.get(position));
-                                    mCWListView.notifyData(mCWList, -1);
-                                    if (filterList.size() == 0) emtpyView.setVisibility(VISIBLE);
-                                }
-                                mList.remove(filterList.remove(position));
-                                adapter.notifyDataSetChanged();
-                            }
-                        };
-                        HttpClient.removeObjectFromFurnitrue(context, map, listenner);
+                        deleteGoods(position);
                     }
                 }, null);
             }
@@ -221,6 +210,32 @@ public class FurnitureObectListView extends RelativeLayout {
             }
         });
         notifyObject(null, null);
+    }
+
+    /**
+     * 删除物品
+     * @param position
+     */
+    private void deleteGoods(final int position){
+        Map<String, String> map = new TreeMap<>();
+        map.put("code", filterList.get(position).getId());
+        map.put("uid", MyApplication.getUser(context).getId());
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                EventBus.getDefault().post(new EventBusMsg.ImportObject(((FurnitureLookActivity) context).spacePosition));
+                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                if (mCWListView.getVisibility() == View.VISIBLE) {
+                    mCWList.add(filterList.get(position));
+                    mCWListView.notifyData(mCWList, -1);
+                    if (filterList.size() == 0) emtpyView.setVisibility(VISIBLE);
+                }
+                mList.remove(filterList.remove(position));
+                adapter.notifyDataSetChanged();
+            }
+        };
+        HttpClient.removeObjectFromFurnitrue(context, map, listenner);
     }
 
     /**
@@ -337,7 +352,7 @@ public class FurnitureObectListView extends RelativeLayout {
             addBtn.setSelected(false);
             imporBtn.setSelected(false);
             moveCommit.setEnabled(false);
-            emtpyView.setErrorMsg("请选择上方隔层,可添加物品和收纳盒");
+            if (mCWListView.getVisibility()==View.VISIBLE)emtpyView.setErrorMsg("请选择上方隔层,可添加物品和收纳盒");
         } else {
             if (!cwFunction) {
                 noSelectTv.setVisibility(GONE);
@@ -352,7 +367,7 @@ public class FurnitureObectListView extends RelativeLayout {
             if (cwSelect) imporBtn.setSelected(true);
             title.setText(objectBean.getName());
             moveCommit.setEnabled(true);
-            if (addBtn.isSelected()) emtpyView.setErrorMsg(cwSelect ? "点击“放置此处”完成物品定位" : "请选择下方要放置的物品");
+            if (addBtn.isSelected()&&mCWListView.getVisibility()==View.VISIBLE) emtpyView.setErrorMsg(cwSelect ? "点击“放置此处”完成物品定位" : "请选择下方要放置的物品");
         }
         if (boxBean == null) {//选择了隔层
             notifyInducation(objectBean);

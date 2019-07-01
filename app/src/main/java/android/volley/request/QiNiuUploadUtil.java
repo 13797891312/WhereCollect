@@ -68,7 +68,7 @@ public class QiNiuUploadUtil {
         }).start();
     }
 
-    private void upLoad(String key, String token, File file) {
+    private void upLoad(String key, String token, final File file) {
         uploadManager.put(file, key, token,
                 new UpCompletionHandler() {
                     @Override
@@ -89,7 +89,7 @@ public class QiNiuUploadUtil {
                                             finish(urls);
                                         }
                                     });
-                                    FileUtil.deleteFolderFile(MyApplication.CACHEPATH, false);
+                                    FileUtil.deleteFolderFile(file.getAbsolutePath());
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

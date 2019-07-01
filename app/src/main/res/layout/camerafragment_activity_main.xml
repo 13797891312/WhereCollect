@@ -168,7 +168,7 @@ android:background="@color/black_12">
                 android:layout_height="58dp"
                 android:layout_centerHorizontal="true"
                 android:background="@null"
-                android:scaleType="fitXY" />
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/num_text"

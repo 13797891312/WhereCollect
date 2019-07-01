@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -39,7 +37,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ImportSelectFurnitureActivity extends BaseViewActivity {
-    View view;
     @Bind(R.id.indicatorView)
     LocationIndicatorView indicatorView;
     @Bind(R.id.tagViewPager)
@@ -128,7 +125,7 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
                             intent.putExtra("objectBeans", (Serializable) objectBeans);
                         }
                         startActivity(intent);
-                        finish();
+//                        finish();
                     }
 
                     @Override

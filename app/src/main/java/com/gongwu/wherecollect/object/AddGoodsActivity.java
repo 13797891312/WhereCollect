@@ -455,6 +455,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                 } else {
                     setResult(RESULT_OK);
                 }
+                FileUtil.deleteFolderFiles(MyApplication.CACHEPATH,false);
                 finish();
             }
 

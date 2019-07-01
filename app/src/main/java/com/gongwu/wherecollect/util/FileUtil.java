@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.util;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+
 public class FileUtil {
     public static final String FOLDER_SHOT_MIX = "/ShotMix"; // 截屏答题（合成后）
     public static final String FOLDER_SHOT_ORG = "/ShotOrg"; // 截屏答题（合成前）
@@ -346,18 +348,34 @@ public class FileUtil {
     }
 
     /**
-     * 删除指定目录下文件及目录
+     * 删除指定目录下文件
      *
      * @return
      */
-    public static void deleteFolderFile(String filePath, boolean deleteThisPath) {
+    public static void deleteFolderFile(String filePath) {
+        if (!TextUtils.isEmpty(filePath)) {
+            try {
+                File file = new File(filePath);
+                if (!file.isDirectory()) {// 如果是文件，删除
+                    file.delete();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 删除指定目录下文件及目录
+     */
+    public static void deleteFolderFiles(String filePath, boolean deleteThisPath) {
         if (!TextUtils.isEmpty(filePath)) {
             try {
                 File file = new File(filePath);
                 if (file.isDirectory()) {// 处理目录
                     File files[] = file.listFiles();
                     for (int i = 0; i < files.length; i++) {
-                        deleteFolderFile(files[i].getAbsolutePath(), true);
+                        deleteFolderFiles(files[i].getAbsolutePath(), true);
                     }
                 }
                 if (deleteThisPath) {
@@ -370,7 +388,6 @@ public class FileUtil {
                     }
                 }
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -505,8 +522,9 @@ public class FileUtil {
 
     /**
      * 根据 文件获取uri
+     *
      * @param context 上下文对象
-     * @param file 文件
+     * @param file    文件
      * @return uri
      */
     public static Uri getUriFromFile(Context context, File file) {
@@ -517,6 +535,12 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 图片压缩
+     *
+     * @param originFile
+     * @return
+     */
     public static File compress(File originFile) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         //设置此参数是仅仅读取图片的宽高到options中，不会将整张图片读到内存中，防止oom
@@ -524,16 +548,19 @@ public class FileUtil {
         Bitmap emptyBitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
 
         options.inJustDecodeBounds = false;
-        options.inSampleSize = 4;
+//        options.inSampleSize = 2;
         Bitmap resultBitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
+        Bitmap bitmap = centerSquareScaleBitmap(resultBitmap, 500);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        resultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         File newFile = new File(MyApplication.CACHEPATH, System.currentTimeMillis() + ".png");
         try {
             FileOutputStream fos = new FileOutputStream(newFile);
             fos.write(bos.toByteArray());
             fos.flush();
             fos.close();
+            //删除原文件
+            originFile.delete();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -541,4 +568,47 @@ public class FileUtil {
         }
         return newFile;
     }
+
+    /**
+     * @param bitmap     原图
+     * @param edgeLength 希望得到的正方形部分的边长
+     * @return 缩放截取正中部分后的位图。
+     */
+    public static Bitmap centerSquareScaleBitmap(Bitmap bitmap, int edgeLength) {
+        if (null == bitmap || edgeLength <= 0) {
+            return null;
+        }
+
+        Bitmap result = bitmap;
+        int widthOrg = bitmap.getWidth();
+        int heightOrg = bitmap.getHeight();
+
+        if (widthOrg > edgeLength && heightOrg > edgeLength) {
+            //压缩到一个最小长度是edgeLength的bitmap
+            int longerEdge = (int) (edgeLength * Math.max(widthOrg, heightOrg) / Math.min(widthOrg, heightOrg));
+            int scaledWidth = widthOrg > heightOrg ? longerEdge : edgeLength;
+            int scaledHeight = widthOrg > heightOrg ? edgeLength : longerEdge;
+            Bitmap scaledBitmap;
+
+            try {
+                scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true);
+            } catch (Exception e) {
+                return null;
+            }
+
+            //从图中截取正中间的正方形部分。
+            int xTopLeft = (scaledWidth - edgeLength) / 2;
+            int yTopLeft = (scaledHeight - edgeLength) / 2;
+
+            try {
+                result = Bitmap.createBitmap(scaledBitmap, xTopLeft, yTopLeft, edgeLength, edgeLength);
+                scaledBitmap.recycle();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        return result;
+    }
+
 }

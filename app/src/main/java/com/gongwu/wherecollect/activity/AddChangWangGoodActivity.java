@@ -221,6 +221,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
     //设置常忘物品有没有
     private void setCangWangDetail(final ObjectBean object, final String option) {
         if (MyApplication.getUser(context) == null) return;
+        mSwipeView.setIsNeedSwipe(false);
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(context).getId());
         map.put("object_id", object.getId());
@@ -230,6 +231,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 try {
+                    mSwipeView.setIsNeedSwipe(true);
                     //添加
                     if (HAVA_GOOD.equals(option)) {
                         ObjectBean newBean = new ObjectBean();

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
-import com.gongwu.wherecollect.util.StringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -44,7 +43,6 @@ public class StackAdapter extends BaseAdapter {
         }
     }
 
-
     @Override
     public int getCount() {
         return mlist.size();
@@ -61,7 +59,7 @@ public class StackAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
         if (view == null) {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_stack_adapter_layout, viewGroup, false);
@@ -95,15 +93,21 @@ public class StackAdapter extends BaseAdapter {
                 onClickCamera();
             }
         });
-        holder.goodsNameEt.setText(bean.getName());
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage(i);
+            }
+        });
         return view;
     }
 
     public void selectItem(boolean select, String name, String url) {
     }
 
-    public void onClickCamera() {
-    }
+    public void onClickCamera() {}
+
+    public void selectImage(int position){}
 
     public class ViewHolder {
         @Bind(R.id.add_goods_iv)

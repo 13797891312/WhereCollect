@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -66,7 +67,12 @@ public class AddGoodsDialog extends Dialog {
     public void setObjectBean(ObjectBean bean) {
         if (bean != null) {
             this.bean = bean;
-            initData();
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    initData();
+                }
+            });
         } else {
             this.bean = new ObjectBean();
         }
@@ -88,8 +94,6 @@ public class AddGoodsDialog extends Dialog {
                 ImageLoader.loadFromFile(context, file, addGoodsIv);
                 imgOldFile = file;
             }
-        } else {
-
         }
     }
 

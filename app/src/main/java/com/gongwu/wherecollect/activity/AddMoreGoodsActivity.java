@@ -1,5 +1,6 @@
 package com.gongwu.wherecollect.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -33,10 +34,12 @@ import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.swipecardview.SwipeFlingAdapterView;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
+import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.AddGoodsDialog;
+import com.gongwu.wherecollect.view.SelectImgDialog;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -87,7 +90,6 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
     @Bind(R.id.content_layout)
     RelativeLayout contentLayout;
 
-    private ObjectBean tempBean;
     private AddGoodsDialog mDialog;
     private List<ObjectBean> mDatas;
 
@@ -112,7 +114,6 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
         EventBus.getDefault().register(this);
         START_MORE_ACTIVITY = true;
         initView();
-        initData();
         initEvent();
         List<String> list = getIntent().getStringArrayListExtra("imgList");
         if (list != null && list.size() > 0) {
@@ -123,7 +124,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
             addGoodsTv.setEnabled(false);
             commitBtn.setEnabled(false);
         } else {
-            startDialog();
+            startDialog(null);
         }
     }
 
@@ -131,22 +132,59 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
         mStackAdapter = new StackAdapter(context, selectImgs) {
             @Override
             public void selectItem(boolean select, String name, String url) {
+                //点击确定设置缓解文件为null
+                imgOldFile= null;
                 if (select) {
                     ObjectBean objectBean = new ObjectBean();
                     objectBean.setObject_url(url);
                     objectBean.setName(name);
-                    mDatas.add(objectBean);
-                    mAdapter.notifyDataSetChanged();
+                    upLoadImg(objectBean);
                 }
                 mSwipeView.swipeRight();
-//                mStackAdapter.remove(0);
             }
 
             @Override
             public void onClickCamera() {
                 qrBook();
             }
+
+            @Override
+            public void selectImage(int position) {
+                //编辑图片判断文件是否为null
+                if (imgOldFile==null){
+                    imgOldFile = new File(selectImgs.get(position).getObject_url());
+                }
+                showSelectDialog();
+            }
         };
+    }
+
+    /**
+     * 图片选择
+     */
+    private SelectImgDialog selectImgDialog;
+    private File imgOldFile;
+    private void showSelectDialog() {
+        selectImgDialog = new SelectImgDialog((Activity) context, null, 1, imgOldFile) {
+            @Override
+            public void getResult(List<File> list) {
+                super.getResult(list);
+                //相册获取的图片
+                imgOldFile = list.get(0);
+                selectImgDialog.cropBitmap(imgOldFile);
+            }
+
+            @Override
+            protected void resultFile(File file) {
+                super.resultFile(file);
+                //剪切后的图片
+                selectImgs.get(0).setObject_url(file.getAbsolutePath());
+                initSwipeView();
+            }
+        };
+        selectImgDialog.hintLayout();
+        //编辑选择是否隐藏的 根据imgOldFile来判断
+        selectImgDialog.showEditIV(imgOldFile == null ? View.GONE : View.VISIBLE);
     }
 
     private void initSwipeView() {
@@ -172,18 +210,13 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
         addGoodsTv.setVisibility(View.VISIBLE);
     }
 
-    private void initData() {
-        tempBean = (ObjectBean) getIntent().getSerializableExtra("bean");
-    }
-
     private void initEvent() {
         mAdapter = new AddMoreGoodsListAdapter(context, mDatas);
         mAdapter.setOnItemClickListener(new MyOnItemClickListener() {
             @Override
             public void onItemClick(int positions, View view) {
                 currentItem = positions;
-                mDialog.setObjectBean(mDatas.get(positions));
-                mDialog.show();
+                startDialog(mDatas.get(positions));
             }
         });
         // 创建菜单：
@@ -225,7 +258,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.textBtn:
-                startDialog();
+                startDialog(null);
                 break;
             case R.id.more_commit_btn:
                 if (mDatas.size() > 0) {
@@ -237,6 +270,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
         }
     }
 
+    //整理参数跳转到共同属性界面
     private void initImgUrls() {
         ArrayList<String> name = new ArrayList<>();
         ArrayList<String> files = new ArrayList<>();
@@ -246,111 +280,53 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
             files.add(bean.getObject_url());
         }
         AddGoodsOtherContentActivity.start(context, name, files, AddGoodsActivity.MORE_TYPE);
+        FileUtil.deleteFolderFiles(MyApplication.CACHEPATH,false);
         finish();
-//        addObjects(name, files);
-    }
-
-    /**
-     * 添加物品
-     */
-    private void addObjects(List<String> name, List<String> files) {
-        Map<String, String> map = new TreeMap<>();
-        map.put("name", JsonUtils.jsonFromObject(name));
-        map.put("image_urls", JsonUtils.jsonFromObject(files));
-        map.put("uid", MyApplication.getUser(this).getId());
-        map.put("user_id", MyApplication.getUser(this).getId());
-        map.put("ISBN", ISBN);
-        if (tempBean != null) {
-            map.put("category_codes", StringUtils.isEmpty(tempBean.getCategories()) ? "" : tempBean.getCategories().get(tempBean.getCategories().size() - 1).getCode());
-            map.put("channel", TextUtils.isEmpty(tempBean.getChannel()) ? "" : JsonUtils.jsonFromObject(tempBean.getChannel().split(">")));
-            map.put("color", TextUtils.isEmpty(tempBean.getColor()) ? "" : JsonUtils.jsonFromObject(tempBean.getColor().split("、")));
-            map.put("detail", TextUtils.isEmpty(tempBean.getDetail()) ? "" : tempBean.getDetail());
-            map.put("price_max", tempBean.getPrice() + "");
-            map.put("price_min", tempBean.getPrice() + "");
-            map.put("season", tempBean.getSeason());
-            map.put("star", tempBean.getStar() + "");
-            map.put("buy_date", tempBean.getBuy_date());
-            map.put("expire_date", tempBean.getExpire_date());
-        }
-        PostListenner listenner = new PostListenner(this, Loading.show(null, context, "正在加载")) {
-            @Override
-            protected void code2000(final ResponseResult r) {
-                super.code2000(r);
-                EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
-                EventBus.getDefault().post(EventBusMsg.ACTIVITY_FINISH);
-                JSONArray features = null;// 创建一个包含原始json串的json对象
-                List<ObjectBean> objectBeans = new ArrayList<>();
-                try {
-                    features = new JSONArray(r.getResult());
-                    for (int i = 0; i < features.length(); i++) {
-                        JSONObject info = features.getJSONObject(i);// 获取features数组的第i个json对象
-                        String color = info.getString("color");
-                        String channel = info.getString("channel");
-                        info.remove("color");
-                        info.remove("channel");
-                        List<String> colors = JsonUtils.listFromJson(color, String.class);
-                        List<String> channels = JsonUtils.listFromJson(channel, String.class);
-                        ObjectBean bean = JsonUtils.objectFromJson(info.toString(), ObjectBean.class);
-                        bean.setColors(colors);
-                        bean.setChannels(channels);
-                        objectBeans.add(bean);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                ImportSelectFurnitureActivity.start(context, objectBeans);
-                finish();
-            }
-
-            @Override
-            protected void onFinish() {
-                super.onFinish();
-            }
-        };
-        HttpClient.addMoreGoods(this, map, listenner);
     }
 
     /**
      * 添加物品的dialog
      */
-    private void startDialog() {
-        //添加
-        mDialog = new AddGoodsDialog(context, mDatas.size()) {
-            @Override
-            public void result(ObjectBean bean) {
-                //上传
-                if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4") && !bean.getObject_url().contains("#") && !bean.getObject_url().contains("cdn.shouner.com/object/image")) {
-                    upLoadImg(bean);
-                    return;
+    private void startDialog(ObjectBean objectBean) {
+        if (mDialog == null) {
+            //添加
+            mDialog = new AddGoodsDialog(context, mDatas.size()) {
+                @Override
+                public void result(ObjectBean bean) {
+                    //上传
+                    if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("7xroa4") && !bean.getObject_url().contains("#") && !bean.getObject_url().contains("cdn.shouner.com/object/image")) {
+                        upLoadImg(bean);
+                        return;
+                    }
+                    //currentItem不为默认值时，修改记录的item的值
+                    if (currentItem != -1) {
+                        mDatas.set(currentItem, bean);
+                        currentItem = -1;
+                    } else {
+                        //为默认值，就是新添加的
+                        mDatas.add(bean);
+                    }
+                    mAdapter.notifyDataSetChanged();
                 }
-                //currentItem不为默认值时，修改记录的item的值
-                if (currentItem != -1) {
-                    mDatas.set(currentItem, bean);
+
+                @Override
+                public void results(List<ObjectBean> beans) {
+                    upLoadImgs(beans);
+                }
+
+                @Override
+                public void cancel() {
                     currentItem = -1;
-                } else {
-                    //为默认值，就是新添加的
-                    mDatas.add(bean);
                 }
-                mAdapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void results(List<ObjectBean> beans) {
-                upLoadImgs(beans);
-            }
-
-            @Override
-            public void cancel() {
-                currentItem = -1;
-            }
-
-            @Override
-            public void scanCode() {
-                qrBook();
-            }
-        };
-        mDialog.setObjectBean(null);
+                @Override
+                public void scanCode() {
+                    qrBook();
+                }
+            };
+        }
         mDialog.show();
+        mDialog.setObjectBean(objectBean);
     }
 
     /**
@@ -366,20 +342,20 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
                 super.finish(list);
                 //currentItem不为默认值时，修改记录的item的值
                 objectBean.setObject_url(list.get(0));
-                if (selectImgs != null && selectImgs.size() > 0) {
-                    selectImgs.remove(0);
-                    selectImgs.add(0, objectBean);
-                    initSwipeView();
+//                if (selectImgs != null && selectImgs.size() > 0) {
+//                    selectImgs.remove(0);
+//                    selectImgs.add(0, objectBean);
+//                    initSwipeView();
+//                } else {
+                if (currentItem != -1) {
+                    mDatas.set(currentItem, objectBean);
+                    currentItem = -1;
                 } else {
-                    if (currentItem != -1) {
-                        mDatas.set(currentItem, objectBean);
-                        currentItem = -1;
-                    } else {
-                        //为默认值，就是新添加的
-                        mDatas.add(objectBean);
-                    }
-                    mAdapter.notifyDataSetChanged();
+                    //为默认值，就是新添加的
+                    mDatas.add(objectBean);
                 }
+                mAdapter.notifyDataSetChanged();
+//                }
                 if (loading != null) {
                     loading.dismiss();
                 }
@@ -417,28 +393,12 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
     }
 
     private void upLoadSelectImgs(List<String> strings) {
-        List<File> list = new ArrayList<>();
-        for (String bean : strings) {
-            list.add(new File(bean));
+        for (String s : strings) {
+            ObjectBean objectBean = new ObjectBean();
+            objectBean.setObject_url(s);
+            selectImgs.add(objectBean);
         }
-        loading = Loading.show(loading, this, "上传中...");
-        QiNiuUploadUtil uploadUtil = new QiNiuUploadUtil(this, list, "object/image/") {
-            @Override
-            protected void finish(List<String> list) {
-                super.finish(list);
-                if (loading != null) {
-                    loading.dismiss();
-                }
-                selectImgs.clear();
-                for (String s : list) {
-                    ObjectBean objectBean = new ObjectBean();
-                    objectBean.setObject_url(s);
-                    selectImgs.add(objectBean);
-                }
-                mStackAdapter.notifyDataSetChanged();
-            }
-        };
-        uploadUtil.start();
+        mStackAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -453,6 +413,9 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
         super.onActivityResult(requestCode, resultCode, data);
         if (mDialog != null) {
             mDialog.onActivityResult(requestCode, resultCode, data);
+        }
+        if (selectImgDialog != null) {
+            selectImgDialog.onActivityResult(requestCode, resultCode, data);
         }
         if (requestCode == BOOK_CODE && resultCode == CaptureActivity.result) {//扫描的到结果
             String result = data.getStringExtra("result");
@@ -646,6 +609,7 @@ public class AddMoreGoodsActivity extends BaseViewActivity implements SwipeFling
         mStackAdapter.remove(0);
         if (selectImgs.size() == 0) {
             mSwipeView.setVisibility(View.GONE);
+            selectImgDialog = null;
             addGoodsTv.setEnabled(true);
             commitBtn.setEnabled(true);
         }
