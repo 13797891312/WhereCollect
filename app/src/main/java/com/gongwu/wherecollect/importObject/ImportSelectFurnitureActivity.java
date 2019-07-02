@@ -3,6 +3,7 @@ package com.gongwu.wherecollect.importObject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -37,6 +38,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ImportSelectFurnitureActivity extends BaseViewActivity {
+
+    private static final int START_ACT_CODE = 0x213;
+
     @Bind(R.id.indicatorView)
     LocationIndicatorView indicatorView;
     @Bind(R.id.tagViewPager)
@@ -47,6 +51,7 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
     TextView hintText;
 
     private Map<Integer, LocationPage> pageMap = new HashMap<>();
+    private List<ObjectBean> objectBeans;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +80,7 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ImportSelectFurnitureActivity.this, LocationEditActivity.class);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
         //桌布空间头点击事件
@@ -96,7 +101,7 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
     }
 
     private void initData() {
-        List<ObjectBean> objectBeans = (List<ObjectBean>) getIntent().getSerializableExtra("objectBeans");
+        objectBeans = (List<ObjectBean>) getIntent().getSerializableExtra("objectBeans");
         if (objectBeans != null && objectBeans.size() > 0) {
             objectListView.notifyData(objectBeans, -1);
         }
@@ -120,11 +125,10 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
                         intent.putExtra("list", (Serializable) MainLocationFragment.objectMap.get(MainLocationFragment.mlist.get(viewPager.getCurrentItem()).getCode()));
                         intent.putExtra("position", viewPager.getCurrentItem());
                         intent.putExtra("title", indicatorView.getCurrentLocation().getName() + ">" + view.getObjectBean().getName());
-                        List<ObjectBean> objectBeans = (List<ObjectBean>) getIntent().getSerializableExtra("objectBeans");
                         if (objectBeans != null && objectBeans.size() > 0) {
                             intent.putExtra("objectBeans", (Serializable) objectBeans);
                         }
-                        startActivity(intent);
+                        startActivityForResult(intent, START_ACT_CODE);
 //                        finish();
                     }
 
@@ -163,6 +167,20 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
         rotateAnim.setRepeatMode(Animation.REVERSE);
         rotateAnim.setRepeatCount(3);
         view.startAnimation(rotateAnim);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == START_ACT_CODE && resultCode == RESULT_OK) {
+            List<ObjectBean> resultBeans = (List<ObjectBean>) data.getSerializableExtra("objectBeans");
+            if (resultBeans != null && resultBeans.size() > 0) {
+                objectBeans = resultBeans;
+                objectListView.notifyData(objectBeans, -1);
+            } else {
+                finish();
+            }
+        }
     }
 
     @Override

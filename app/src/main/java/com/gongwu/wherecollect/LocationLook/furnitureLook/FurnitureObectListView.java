@@ -238,6 +238,10 @@ public class FurnitureObectListView extends RelativeLayout {
         HttpClient.removeObjectFromFurnitrue(context, map, listenner);
     }
 
+    public List<ObjectBean> getCWList(){
+       return mCWList;
+    }
+
     /**
      * 常忘物品添加
      *

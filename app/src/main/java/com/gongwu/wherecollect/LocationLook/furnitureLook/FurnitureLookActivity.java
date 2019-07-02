@@ -30,6 +30,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,12 @@ public class FurnitureLookActivity extends BaseViewActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_furniture_look);
         ButterKnife.bind(this);
-        titleLayout.setBack(true, null);
+        titleLayout.setBack(true, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setActResult();
+            }
+        });
         title = getIntent().getStringExtra("title");
         spacePosition = getIntent().getIntExtra("position", 0);
         titleLayout.setTitle(title);
@@ -85,15 +91,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
             objectListView.setOnFinishActivityLisener(new FurnitureObectListView.OnFinishActivityLisener() {
                 @Override
                 public void finishActivity() {
-                    EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
-                    finish();
-                }
-            });
-            titleLayout.setBack(true, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
-                    finish();
+                    setActResult();
                 }
             });
         }
@@ -298,5 +296,16 @@ public class FurnitureLookActivity extends BaseViewActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onEvent(context, "030201");
+    }
+
+    private void setActResult() {
+        EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
+        Intent intent = new Intent();
+        if (objectListView != null && objectListView.getCWList() != null && objectListView.getCWList().size() > 0) {
+            List<ObjectBean> beans = objectListView.getCWList();
+            intent.putExtra("objectBeans", (Serializable) beans);
+        }
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

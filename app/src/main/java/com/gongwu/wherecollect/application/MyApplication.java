@@ -27,7 +27,7 @@ import java.io.File;
  * @since JDK 1.7
  */
 public class MyApplication extends Application {
-    public static final String CACHEPATH = Environment.getExternalStorageDirectory()
+    public static  String CACHEPATH = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + "/shouner/";
     private static UserBean user;
     private static Context appContext;

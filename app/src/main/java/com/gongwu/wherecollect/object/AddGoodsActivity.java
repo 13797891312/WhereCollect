@@ -133,6 +133,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         String filePath = getIntent().getStringExtra("filePath");
         if (!TextUtils.isEmpty(filePath)) {
             imgFile = new File(filePath);
+            imgOldFile = new File(filePath);
             setCameraIvParams(100);
             cameraIv.setHead(IMG_COLOR_CODE, "", imgFile.getAbsolutePath());
             tempBean.setObject_url(imgFile.getAbsolutePath());

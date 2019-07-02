@@ -1,19 +1,17 @@
 package com.gongwu.wherecollect.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.volley.request.HttpClient;
@@ -27,13 +25,11 @@ import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
-import com.gongwu.wherecollect.afragment.MainFragment2;
 import com.gongwu.wherecollect.afragment.PersonFragment;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
-import com.gongwu.wherecollect.object.AddGoodsActivity;
 import com.gongwu.wherecollect.service.TimerService;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
@@ -43,7 +39,6 @@ import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ShareUtil;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.CommomDialog;
-import com.gongwu.wherecollect.view.HighOpinionDialog;
 import com.gongwu.wherecollect.view.MainDrawerView;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -55,7 +50,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -102,17 +96,28 @@ public class MainActivity extends BaseViewActivity {
         checkPermissionRequestEach(this, false);
     }
 
-    public void checkPermissionRequestEach(FragmentActivity activity, final boolean start) {
+    private void checkPermissionRequestEach(FragmentActivity activity, boolean start) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+            requestPermission(activity, start,
+                    Manifest.permission.CAMERA);
+            MyApplication.CACHEPATH = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
+        } else {
+            requestPermission(activity, start,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA);
+        }
+    }
+
+    private void requestPermission(FragmentActivity activity, final boolean start, String... apermissions) {
         RxPermissions permissions = new RxPermissions(activity);
         permissions.setLogging(true);
-        permissions.requestEachCombined(Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA).subscribe(new Consumer<Permission>() {
+        permissions.requestEachCombined(apermissions).subscribe(new Consumer<Permission>() {
             @Override
             public void accept(Permission permission) throws Exception {
                 if (permission.granted) {//全部同意后调用
                     if (start) {
-                        CameraFragmentMainActivity.start(context,false);
+                        CameraFragmentMainActivity.start(context, false);
                     }
                 } else if (permission.shouldShowRequestPermissionRationale) {//只要有一个选择：禁止，但没有选择“以后不再询问”，以后申请权限，会继续弹出提示
                     if (start) {
