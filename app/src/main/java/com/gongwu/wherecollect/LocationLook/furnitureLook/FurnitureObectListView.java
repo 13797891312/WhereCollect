@@ -255,6 +255,7 @@ public class FurnitureObectListView extends RelativeLayout {
         filterList.clear();
         adapter.notifyDataSetChanged();
         imporBtn.setText("放置此处");
+        emtpyView.setErrorMsg("请选择上方隔层,可添加物品和收纳盒");
         noSelectTv.setVisibility(View.GONE);
         recyclerView.setVisibility(GONE);
         emtpyView.setVisibility(VISIBLE);
