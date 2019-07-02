@@ -130,6 +130,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         initView();
         initEvent();
         initData();
+        //
         String filePath = getIntent().getStringExtra("filePath");
         if (!TextUtils.isEmpty(filePath)) {
             imgFile = new File(filePath);
