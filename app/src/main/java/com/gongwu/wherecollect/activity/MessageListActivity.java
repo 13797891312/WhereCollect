@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
@@ -26,6 +27,7 @@ import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.view.ErrorView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -46,6 +48,10 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
     SwipeToLoadLayout mSwipeToLoadLayout;
     @Bind(R.id.swipe_target)
     RecyclerView mRecyclerView;
+    @Bind(R.id.empty)
+    ErrorView emptyView;
+    @Bind(R.id.empty_img)
+    ImageView empty_img;
 
     private int page;
     private List<MessageBean> datas = new ArrayList<>();
@@ -73,6 +79,8 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdapter = new MessageListAdapter(context, datas);
         mRecyclerView.setAdapter(mAdapter);
+        empty_img.setVisibility(View.VISIBLE);
+        emptyView.setErrorMsg("暂无消息");
     }
 
     @Override
@@ -161,6 +169,7 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
                 }
                 datas.addAll(temp);
                 mAdapter.notifyDataSetChanged();
+                emptyView.setVisibility(datas.size() > 0 ? View.GONE : View.VISIBLE);
             }
 
             @Override

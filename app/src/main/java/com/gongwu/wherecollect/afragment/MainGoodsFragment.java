@@ -10,6 +10,7 @@ import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,8 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     View emptyGoodLayout;
     @Bind(R.id.add_changwang_tv)
     TextView addCWGoodView;
+    @Bind(R.id.empty_img)
+    ImageView empty_img;
 
     int page = 1;
     private String changWangCode, goodType;
@@ -105,6 +108,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
             getCangWangList();
         }
         EventBus.getDefault().register(this);
+        empty_img.setVisibility(View.VISIBLE);
         initRecyclerView();
         return view;
     }
@@ -270,7 +274,7 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
         setViewEmpty();
     }
 
-    private void setViewEmpty(){
+    private void setViewEmpty() {
         if (mList.size() > 0) {
             addCWGoodView.setVisibility(!TextUtils.isEmpty(changWangCode) ? View.VISIBLE : View.GONE);
         } else {
