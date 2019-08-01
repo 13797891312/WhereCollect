@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/base_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/shape_divider_line"
+    android:dividerPadding="1px"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    >
+
+    <LinearLayout
+        android:id="@+id/share_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_hight"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:minHeight="@dimen/title_hight"
+        android:orientation="horizontal"
+        >
+
+        <ImageButton
+            android:id="@+id/share_back_btn"
+            android:layout_width="@dimen/title_hight"
+            android:layout_height="@dimen/title_hight"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/select_white_bg"
+            android:paddingRight="4dp"
+            android:visibility="invisible"
+            android:src="@drawable/back_icon"
+            />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+
+            <com.gongwu.wherecollect.LocationLook.TabLocationView
+                android:id="@+id/my_share_title_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@color/white"
+                />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/add_my_share_tv"
+            android:layout_width="@dimen/dip_48"
+            android:layout_height="@dimen/dip_48"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/select_white_bg"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="@color/color666"
+            android:textSize="@dimen/f_23"
+            />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/my_share_view_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/share_layout"
+        android:background="@color/white"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        />
+</LinearLayout>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/activity_bg"
+    tools:context=".afragment.RemindFragment">
+
+    <RelativeLayout
+        android:id="@+id/remind_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_hight"
+        android:minHeight="@dimen/title_hight">
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:text="@string/remind_title_text"
+            android:textColor="@color/black_txt"
+            android:textSize="@dimen/f_17" />
+
+        <TextView
+            android:id="@+id/add_remind"
+            android:layout_width="@dimen/dip_64"
+            android:layout_height="@dimen/dip_30"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dip_14"
+            android:background="@drawable/shape_remind_add_bg"
+            android:elevation="@dimen/dip_2"
+            android:gravity="center"
+            android:text="新建"
+            android:textColor="@color/remind_add_text_color"
+            android:textSize="@dimen/f_15" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/remind_title_layout"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/remind_unfinish_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dip_10"
+            android:layout_marginEnd="@dimen/dip_10"
+            android:layout_weight="1"
+            android:background="@drawable/shape_remind_item_bg"
+            android:elevation="@dimen/dip_2">
+
+            <RelativeLayout
+                android:id="@+id/remind_unfinish_title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_60"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/remind_unfinish_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dip_14"
+                    android:text="@string/remind_unfinish_text"
+                    android:textColor="@color/remind_unfinish_text_color"
+                    android:textSize="@dimen/f_24" />
+
+                <TextView
+                    android:id="@+id/remind_unfinish_num_text_view"
+                    android:layout_width="@dimen/dip_40"
+                    android:layout_height="@dimen/dip_30"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/dip_16"
+                    android:background="@drawable/shape_remind_num_bg"
+                    android:gravity="center"
+                    android:textColor="@color/remind_unfinish_text_color"
+                    android:textSize="@dimen/f_20"
+                    android:visibility="gone"
+                    tools:text="5" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/remind_finished_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_60"
+            android:layout_marginStart="@dimen/dip_10"
+            android:layout_marginTop="@dimen/dip_24"
+            android:layout_marginEnd="@dimen/dip_10"
+            android:layout_marginBottom="@dimen/dip_76"
+            android:background="@drawable/shape_remind_item_bg"
+            android:elevation="@dimen/dip_2">
+
+            <RelativeLayout
+                android:id="@+id/remind_finished_title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_60"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/remind_finished_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dip_14"
+                    android:text="@string/remind_finished_text"
+                    android:textColor="@color/remind_add_text_color"
+                    android:textSize="@dimen/f_24" />
+
+                <TextView
+                    android:id="@+id/remind_finished_num_text_view"
+                    android:layout_width="@dimen/dip_40"
+                    android:layout_height="@dimen/dip_30"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/dip_16"
+                    android:background="@drawable/shape_remind_num_bg"
+                    android:gravity="center"
+                    android:textColor="@color/remind_add_text_color"
+                    android:textSize="@dimen/f_20"
+                    android:visibility="gone"
+                    tools:text="5" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

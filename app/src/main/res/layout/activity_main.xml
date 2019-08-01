@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/id_drawerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.gongwu.wherecollect.activity.MainActivity">
+
         <com.zhaojin.myviews.MyFragmentLayout1
             android:id="@+id/myFragmentLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <ImageButton android:id="@+id/add_btn"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_alignParentBottom="true"
-                     android:layout_centerHorizontal="true"
-                     android:layout_marginBottom="@dimen/dip_6"
-                     android:background="@color/transparent"
-                     android:src="@drawable/icon_tab_add"
-                     android:visibility="visible"/>
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dip_10"
+            android:background="@color/transparent"
+            android:src="@drawable/tab_add_icon"
+            android:visibility="visible" />
     </RelativeLayout>
+
     <com.gongwu.wherecollect.view.MainDrawerView
         android:id="@+id/filterView"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:orientation="vertical">
-    </com.gongwu.wherecollect.view.MainDrawerView>
+        android:orientation="vertical"/>
 </android.support.v4.widget.DrawerLayout>

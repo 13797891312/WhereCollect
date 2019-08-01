@@ -7,9 +7,6 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="permission_record">麦克风没有声音或被占用,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
     <string name="permission_sdcard">没有储存权限或拍照,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
     <string name="permission_xuanfu">没有悬浮窗口权限,请到手机的"设置-权限管理-收哪儿"打开所有权限</string>
@@ -32,4 +29,17 @@
     <string name="goods_remind_details_text">提醒详情</string>
     <string name="delete_text">删除</string>
     <string name="cancel_text">取消</string>
+    <string name="remind_unfinish_text">未完成</string>
+    <string name="remind_finished_text">已完成</string>
+    <string name="remind_title_text">我的提醒</string>
+    <string name="add_remind_title_text">新建提醒</string>
+    <string name="finished_text">完成</string>
+    <string name="remind_good_text">关联物品</string>
+    <string name="remind_time_text">提醒时间</string>
+    <string name="remind_first_text">优先处理</string>
+    <string name="remind_overdue_time_text">过期提醒</string>
+    <string name="remind_overdue_time_hint_text">开启后过期将每日提醒</string>
+    <string name="remind_remarks_text">说明备注</string>
+    <string name="title_text">标题</string>
+
 </resources>

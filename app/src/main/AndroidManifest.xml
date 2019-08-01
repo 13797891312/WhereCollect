@@ -33,20 +33,17 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".activity.AddRemindActivity"></activity>
         <!-- 设置最大屏幕比例，适配全面屏 -->
-
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" />
-        <!-- ###########友盟 -->
+            android:value="2.1" /> <!-- ###########友盟 -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5a2de126f43e484ca70000ef" />
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${CHANNEL_VALUE}" /> <!-- 渠道号，多渠道这里使用了占位符$ -->
-
         <meta-data
             android:name="com.gongwu.wherecollect.util.SimpleGlideModule"
             android:value="GlideModule" />
@@ -103,9 +100,7 @@
             android:name="com.umeng.qq.tencent.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- ###########友盟 -->
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- ###########友盟 -->
         <activity
             android:name=".activity.StartActivity"
             android:screenOrientation="portrait">
@@ -177,8 +172,9 @@
         <activity android:name=".record.RecordLookActivity" />
         <activity android:name=".object.AddGoodsActivity" />
         <activity android:name=".activity.AddGoodsOtherContentActivity" />
-        <activity android:name=".activity.AddMoreGoodsActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity
+            android:name=".activity.AddMoreGoodsActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".activity.AddGoodsRemindActivity" />
         <activity android:name=".activity.RemindGoodsDetailsActivity" />
         <activity android:name=".activity.PersonActivity" />

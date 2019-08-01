@@ -103,4 +103,7 @@
     <color name="font_common_1">#424242</color>
     <color name="font_common_2">#a1a1a1</color>
     <color name="commom_background">#f3f3f3</color>
+    <color name="activity_bg">#F6F6F6</color>
+    <color name="remind_add_text_color">#32BE74</color>
+    <color name="remind_unfinish_text_color">#FEA964</color>
 </resources>

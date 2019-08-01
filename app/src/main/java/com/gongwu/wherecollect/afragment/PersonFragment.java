@@ -253,8 +253,8 @@ public class PersonFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
     }

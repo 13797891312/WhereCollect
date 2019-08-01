@@ -172,32 +172,6 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/my_share_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/select_white_bg"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:paddingBottom="@dimen/dip_4"
-                        android:paddingTop="@dimen/dip_4">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/share_icon" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dip_4"
-                            android:layout_weight="1"
-                            android:text="我的共享"
-                            android:textColor="#434343"
-                            android:textSize="@dimen/f_14" />
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/user_code_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -248,13 +222,6 @@
                             android:textColor="#434343"
                             android:textSize="@dimen/f_14" />
                     </LinearLayout>
-                </TableRow>
-
-                <!--TableRow来定义行-->
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:id="@+id/message_list_layout"
@@ -281,6 +248,13 @@
                             android:textColor="#434343"
                             android:textSize="@dimen/f_14" />
                     </LinearLayout>
+                </TableRow>
+
+                <!--TableRow来定义行-->
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:id="@+id/person_high_opinion_layout"
@@ -334,6 +308,34 @@
                             android:textColor="#434343"
                             android:textSize="@dimen/f_14" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/my_share_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:background="@drawable/select_white_bg"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/dip_4"
+                        android:paddingTop="@dimen/dip_4">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/share_icon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dip_4"
+                            android:layout_weight="1"
+                            android:text="我的共享"
+                            android:textColor="#434343"
+                            android:textSize="@dimen/f_14" />
+                    </LinearLayout>
+
                 </TableRow>
             </TableLayout>
         </LinearLayout>

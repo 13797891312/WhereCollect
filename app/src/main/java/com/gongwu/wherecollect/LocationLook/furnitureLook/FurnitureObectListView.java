@@ -242,6 +242,10 @@ public class FurnitureObectListView extends RelativeLayout {
        return mCWList;
     }
 
+    public View getMoveLayout(){
+        return moveLayout;
+    }
+
     /**
      * 常忘物品添加
      *

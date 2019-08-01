@@ -14,6 +14,7 @@
     <dimen name="f_21">21sp</dimen>
     <dimen name="f_22">22sp</dimen>
     <dimen name="f_23">23sp</dimen>
+    <dimen name="f_24">24sp</dimen>
 
     <dimen name="dip_2">2dip</dimen>
     <dimen name="dip_3">3dip</dimen>
@@ -37,9 +38,11 @@
     <dimen name="dip_45">45dip</dimen>
     <dimen name="dip_48">48dip</dimen>
     <dimen name="dip_50">50dip</dimen>
+    <dimen name="dip_52">52dip</dimen>
     <dimen name="dip_54">54dip</dimen>
     <dimen name="dip_60">60dip</dimen>
     <dimen name="dip_64">64dip</dimen>
+    <dimen name="dip_76">76dip</dimen>
     <dimen name="dip_80">80dip</dimen>
     <dimen name="dip_90">90dip</dimen>
     <dimen name="dip_100">100dip</dimen>

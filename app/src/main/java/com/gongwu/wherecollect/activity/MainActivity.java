@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -26,6 +27,8 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.afragment.PersonFragment;
+import com.gongwu.wherecollect.afragment.RemindFragment;
+import com.gongwu.wherecollect.afragment.ShareListFragment;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
@@ -76,8 +79,12 @@ public class MainActivity extends BaseViewActivity {
     @Bind(R.id.add_btn)
     ImageButton addBtn;
     long exitTime;
-    private int tabImages[][] = {{R.drawable.icon_tab1_active, R.drawable.icon_tab1_normal}, {R.drawable.icon_tab2_active, R.drawable.icon_tab2_normal}};
-    private String title[] = {"查看", "我的"};
+    private int tabImages[][] = {
+            {R.drawable.icon_tab1_active, R.drawable.icon_tab1_normal},
+            {R.drawable.icon_tab3_active, R.drawable.icon_tab3_normal},
+            {R.drawable.icon_tab4_active, R.drawable.icon_tab4_normal},
+            {R.drawable.icon_tab2_active, R.drawable.icon_tab2_normal}};
+    private String title[] = {"查看","提醒","共享", "我的"};
     private AlertDialog dialog;
 
     @Override
@@ -163,6 +170,8 @@ public class MainActivity extends BaseViewActivity {
         });
         fragments.add(MainFragment1.newInstance());
 //        fragments.add(MainFragment2.newInstance());
+        fragments.add(RemindFragment.newInstance());
+        fragments.add(ShareListFragment.newInstance());
         fragments.add(PersonFragment.newInstance());
         myFragmentLayout = (MyFragmentLayout1) this.findViewById(R.id.myFragmentLayout);
         myFragmentLayout.setScorllToNext(false);
@@ -179,13 +188,14 @@ public class MainActivity extends BaseViewActivity {
             }
         });
         myFragmentLayout.setAdapter(fragments, R.layout.tablayout_main_activity, 0x101);
-        myFragmentLayout.overrideTabClickListenner(1, new View.OnClickListener() {
+        myFragmentLayout.getViewPager().setOffscreenPageLimit(4);
+        myFragmentLayout.overrideTabClickListenner(3, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (MyApplication.getUser(context).isTest()) {
                     startActivity(new Intent(context, LoginActivity.class));
                 } else {
-                    myFragmentLayout.setCurrenItem(1);
+                    myFragmentLayout.setCurrenItem(3);
                 }
             }
         });
@@ -423,5 +433,11 @@ public class MainActivity extends BaseViewActivity {
                 }
             }
         }).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fragments.get(myFragmentLayout.getCurrentPosition()).onActivityResult(requestCode, resultCode, data);
     }
 }

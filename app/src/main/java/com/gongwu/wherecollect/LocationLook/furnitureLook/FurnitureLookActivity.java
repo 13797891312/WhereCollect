@@ -305,6 +305,10 @@ public class FurnitureLookActivity extends BaseViewActivity {
             List<ObjectBean> beans = objectListView.getCWList();
             intent.putExtra("objectBeans", (Serializable) beans);
         }
+        if (objectListView != null && objectListView.getMoveLayout() != null && objectListView.getMoveLayout().getVisibility()==View.VISIBLE) {
+            ObjectBean moveBox = (ObjectBean) objectListView.getMoveLayout().getTag();
+            intent.putExtra("moveBean", (Serializable) moveBox);
+        }
         setResult(RESULT_OK, intent);
         finish();
     }
