@@ -41,5 +41,9 @@
     <string name="remind_overdue_time_hint_text">开启后过期将每日提醒</string>
     <string name="remind_remarks_text">说明备注</string>
     <string name="title_text">标题</string>
+    <string name="add_remind_et_hint_text">请输入标题</string>
+    <string name="add_relation_et_hint_text">物品名称</string>
+    <string name="act_title_relation">关联物品</string>
+    <string name="classification_text">分类</string>
 
 </resources>

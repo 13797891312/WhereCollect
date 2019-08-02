@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg"
+    tools:context=".activity.RelationGoodsActivity">
+
+    <include
+        android:id="@+id/relation_title_layout"
+        layout="@layout/layout_title_bar_all_other" />
+
+    <LinearLayout
+        android:id="@+id/relation_search_layout"
+        android:layout_width="@dimen/dip_350"
+        android:layout_height="@dimen/dip_34"
+        android:layout_below="@id/relation_title_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dip_6"
+        android:layout_marginBottom="@dimen/dip_12"
+        android:background="@drawable/shape_relation_search_bg"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dip_16"
+            android:layout_marginEnd="@dimen/dip_34"
+            android:text="@string/classification_text"
+            android:textSize="@dimen/f_14" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_arrow" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dip_22"
+            android:layout_marginStart="@dimen/dip_8"
+            android:layout_marginEnd="@dimen/dip_14"
+            android:background="@color/split_color" />
+
+        <EditText
+            android:id="@+id/add_remind_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/dip_16"
+            android:background="@null"
+            android:gravity="center|start"
+            android:hint="@string/add_relation_et_hint_text"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:textColor="@color/black_87"
+            android:textColorHint="@color/black_other_one"
+            android:textSize="@dimen/f_14" />
+    </LinearLayout>
+
+    <com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/relation_search_layout"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.gongwu.wherecollect.swipetoloadlayout.RefreshHeadView
+            android:id="@id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/dip_10"
+            android:paddingBottom="@dimen/dip_10" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!--<com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView-->
+        <!--android:id="@id/swipe_load_more_footer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="@dimen/dip_10"-->
+        <!--android:layout_marginTop="@dimen/dip_10"-->
+        <!--android:gravity="center"-->
+        <!--/>-->
+
+    </com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout>
+
+</RelativeLayout>

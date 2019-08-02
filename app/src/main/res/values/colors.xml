@@ -106,4 +106,7 @@
     <color name="activity_bg">#F6F6F6</color>
     <color name="remind_add_text_color">#32BE74</color>
     <color name="remind_unfinish_text_color">#FEA964</color>
+    <color name="split_color">#DEDEDE</color>
+    <color name="act_relation_goods_text_color">#151515</color>
+    <color name="act_relation_goods_text_hint_color">#888888</color>
 </resources>

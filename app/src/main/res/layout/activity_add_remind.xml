@@ -14,7 +14,7 @@
         android:id="@+id/remind_goods_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_44"
-        android:layout_marginTop="@dimen/dip_24"
+        android:layout_marginTop="@dimen/dip_12"
         android:background="@drawable/select_white_bg"
         android:paddingLeft="@dimen/dip_16"
         android:paddingRight="@dimen/dip_16">
@@ -66,11 +66,17 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@null"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:gravity="center|end"
+            android:hint="@string/add_remind_et_hint_text"
             android:textColor="@color/black_87"
+            android:textColorHint="@color/black_other_one"
             android:textSize="@dimen/f_15" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/remind_time_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_44"
         android:layout_marginTop="@dimen/dip_36"
@@ -82,7 +88,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:drawablePadding="@dimen/dip_8"
             android:gravity="center"
             android:text="@string/remind_time_text"
             android:textColor="@color/black_87"
@@ -117,7 +122,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:drawablePadding="@dimen/dip_8"
             android:gravity="center"
             android:text="@string/remind_first_text"
             android:textColor="@color/black_87"
@@ -128,8 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dip_4" />
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
     <View
@@ -151,7 +154,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:drawablePadding="@dimen/dip_8"
             android:gravity="center"
             android:text="@string/remind_overdue_time_text"
             android:textColor="@color/black_87"
@@ -163,10 +165,9 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/dip_20"
             android:layout_toEndOf="@id/remind_overdue_time_text"
-            android:drawablePadding="@dimen/dip_8"
             android:gravity="center"
             android:text="@string/remind_overdue_time_hint_text"
-            android:textColor="@color/black_87"
+            android:textColor="@color/black_40"
             android:textSize="@dimen/f_11" />
 
         <android.support.v7.widget.SwitchCompat
@@ -174,8 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dip_4" />
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
     <View
@@ -186,20 +186,34 @@
         android:background="@color/black_12" />
 
     <RelativeLayout
+        android:id="@+id/remind_remarks_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dip_44"
+        android:layout_height="wrap_content"
         android:background="@drawable/select_white_bg"
+        android:minHeight="@dimen/dip_100"
         android:paddingLeft="@dimen/dip_16"
         android:paddingRight="@dimen/dip_16">
         <!--android:drawableLeft="@drawable/icon_a_wx"-->
         <TextView
+            android:id="@+id/remind_remarks_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:drawablePadding="@dimen/dip_8"
+            android:layout_marginTop="@dimen/dip_8"
             android:gravity="center"
             android:text="@string/remind_remarks_text"
             android:textColor="@color/black_87"
+            android:textSize="@dimen/f_15" />
+
+        <TextView
+            android:id="@+id/remind_remarks_content_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/remind_remarks_text_view"
+            android:layout_marginTop="@dimen/dip_8"
+            android:layout_marginEnd="@dimen/dip_40"
+            android:layout_marginBottom="@dimen/dip_8"
+            android:gravity="center"
+            android:textColor="@color/black_40"
             android:textSize="@dimen/f_15" />
 
         <TextView
