@@ -8,14 +8,17 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.gongwu.wherecollect.R;
-import com.gongwu.wherecollect.util.EventBusMsg;
-import com.gongwu.wherecollect.util.SaveDate;
+import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.util.DateUtil;
 
-import org.greenrobot.eventbus.EventBus;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +31,11 @@ public class AddRemindActivity extends BaseViewActivity {
 
     private static final int START_CODE = 0x523;
 
+    private static final int END_YEAR = DateUtil.getNowYear() + 2;//时间选择最大年限
+    private static final int END_MONTH = 11;//时间选择最大月份
+    private static final int END_DAY = 31;//时间选择最大日期
+    private long selectTime = 0;
+
     @Bind(R.id.title_text_view)
     TextView titleTv;
     @Bind(R.id.add_remind_finished_tv)
@@ -38,6 +46,8 @@ public class AddRemindActivity extends BaseViewActivity {
     SwitchCompat mFirstSwitch;
     @Bind(R.id.remind_overdue_time_switch)
     SwitchCompat mOverdueTimeSwitch;
+    @Bind(R.id.remind_time_tv)
+    TextView selectTimeTv;
 
 
     @Override
@@ -71,12 +81,44 @@ public class AddRemindActivity extends BaseViewActivity {
                 mEditText.setCursorVisible(true);
                 break;
             case R.id.remind_time_layout://提醒时间
+                showDateDialog();
                 break;
             case R.id.add_remind_finished_tv://完成
                 break;
         }
     }
 
+    /**
+     * 时间选择dialog
+     */
+    private void showDateDialog() {
+        Calendar selectDate = Calendar.getInstance();
+        selectDate.setTime(new Date(selectTime == 0 ? System.currentTimeMillis() : selectTime));
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(DateUtil.getNowYear(), DateUtil.getNowMonthNum(), DateUtil.getNowDay());
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(END_YEAR, END_MONTH, END_DAY);
+        //时间选择器
+        TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                selectTimeTv.setText(DateUtil.dateToString(date, DateUtil.DatePattern.ONLY_MINUTE));
+                selectTime = date.getTime();
+            }
+        }).setType(new boolean[]{true, true, true, true, true, false})
+                .setCancelText("取消")//取消按钮文字
+                .setSubmitText("确定")//确认按钮文字
+                .isCyclic(false)
+                .setDate(selectDate)
+                .setRangDate(startDate, endDate)
+                .setLabel("年", "月", "日", "时", "分", "")
+                .build();
+        pvTime.show();
+    }
+
+    /**
+     * 监听
+     */
     private void initEvent() {
         //优先处理
         mFirstSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -98,7 +140,10 @@ public class AddRemindActivity extends BaseViewActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == START_CODE && resultCode == RESULT_OK) {
+            ObjectBean selectBean = (ObjectBean) data.getSerializableExtra("objectBean");
+            if (selectBean != null) {
 
+            }
         }
     }
 

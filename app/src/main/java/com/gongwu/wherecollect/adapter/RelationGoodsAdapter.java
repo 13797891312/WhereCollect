@@ -49,7 +49,7 @@ public class RelationGoodsAdapter extends RecyclerView.Adapter<RelationGoodsAdap
             holder.image.setBackgroundResource(0);
             ImageLoader.load(mContext, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
-        } else if (!TextUtils.isEmpty(bean.getObject_url())&&!bean.getObject_url().contains("/")) {
+        } else if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("/")) {
             holder.image.setImageDrawable(null);
             holder.image.setBackgroundResource(0);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
@@ -69,7 +69,6 @@ public class RelationGoodsAdapter extends RecyclerView.Adapter<RelationGoodsAdap
     @Override
     public int getItemCount() {
         return mData == null ? 0 : mData.size();
-
     }
 
     /**
@@ -79,7 +78,7 @@ public class RelationGoodsAdapter extends RecyclerView.Adapter<RelationGoodsAdap
      */
     public String getLoction(ObjectBean bean) {
         if (StringUtils.isEmpty(bean.getLocations())) {
-            return "";
+            return "未归位";
         }
         Collections.sort(bean.getLocations(), new Comparator<BaseBean>() {
             @Override
@@ -94,7 +93,7 @@ public class RelationGoodsAdapter extends RecyclerView.Adapter<RelationGoodsAdap
                 sb.append("/");
             }
         }
-        return sb.length() == 0 ? "" : sb.toString();
+        return sb.length() == 0 ? "未归位" : sb.toString();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

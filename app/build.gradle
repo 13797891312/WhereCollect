@@ -149,4 +149,5 @@ dependencies {
     //rxpermissions
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation project(':camerafragment')
+    implementation 'com.contrarywind:Android-PickerView:4.1.8'
 }

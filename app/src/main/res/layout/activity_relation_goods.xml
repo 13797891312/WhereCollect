@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activity_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".activity.RelationGoodsActivity">
 
     <include
@@ -43,7 +45,7 @@
             android:background="@color/split_color" />
 
         <EditText
-            android:id="@+id/add_remind_et"
+            android:id="@+id/relation_goods_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/dip_16"
@@ -54,7 +56,8 @@
             android:singleLine="true"
             android:textColor="@color/black_87"
             android:textColorHint="@color/black_other_one"
-            android:textSize="@dimen/f_14" />
+            android:textSize="@dimen/f_14"
+            android:theme="@style/MyEditText"/>
     </LinearLayout>
 
     <com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout
@@ -78,14 +81,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <!--<com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView-->
-        <!--android:id="@id/swipe_load_more_footer"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="@dimen/dip_10"-->
-        <!--android:layout_marginTop="@dimen/dip_10"-->
-        <!--android:gravity="center"-->
-        <!--/>-->
+        <com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView
+            android:id="@id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dip_10"
+            android:layout_marginBottom="@dimen/dip_10"
+            android:gravity="center" />
 
     </com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout>
 

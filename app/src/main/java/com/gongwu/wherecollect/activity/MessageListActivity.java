@@ -53,7 +53,8 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
     @Bind(R.id.empty_img)
     ImageView empty_img;
 
-    private int page;
+    private static final int DEFAULT_PAGE = 1;
+    private int page = DEFAULT_PAGE;
     private List<MessageBean> datas = new ArrayList<>();
     private MessageListAdapter mAdapter;
 
@@ -158,12 +159,12 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 List<MessageBean> temp = JsonUtils.listFromJsonWithSubKey(r.getResult(), MessageBean.class, "items");
-                if (page == 1) {//如果是第一页就缓存下
+                if (page == DEFAULT_PAGE) {//如果是第一页就缓存下
                     datas.clear();
                 } else {
                     if (StringUtils.isEmpty(temp)) {
-                        page = 1;
-                        Toast.makeText(context, "没有更多数据了", Toast.LENGTH_SHORT)
+                        page --;
+                        Toast.makeText(context, getString(R.string.no_more_data), Toast.LENGTH_SHORT)
                                 .show();
                     }
                 }
@@ -188,7 +189,7 @@ public class MessageListActivity extends BaseViewActivity implements MyOnItemCli
 
     @Override
     public void onRefresh() {
-        page = 1;
+        page = DEFAULT_PAGE;
         getData();
     }
 

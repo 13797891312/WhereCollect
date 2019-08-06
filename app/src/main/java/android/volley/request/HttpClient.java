@@ -639,4 +639,12 @@ public class HttpClient {
         CustomPostRequest request = new CustomPostRequest("api/app/v350/object-recommend-option", params, listenner);
         Queue.getQueue(context).add(request);
     }
+
+    /**
+     * 获取关联物品列表
+     */
+    public static void getRelationGoodsList(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomGetRequest request = new CustomGetRequest("api/app/v350/object-list", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
 }

@@ -72,7 +72,8 @@
             android:hint="@string/add_remind_et_hint_text"
             android:textColor="@color/black_87"
             android:textColorHint="@color/black_other_one"
-            android:textSize="@dimen/f_15" />
+            android:textSize="@dimen/f_15"
+            android:theme="@style/MyEditText"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -94,6 +95,7 @@
             android:textSize="@dimen/f_15" />
 
         <TextView
+            android:id="@+id/remind_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
