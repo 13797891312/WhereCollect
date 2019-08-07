@@ -8,74 +8,113 @@ import java.util.Locale;
 
 public class DateUtil {
 
-    private DateUtil(){}
+    private DateUtil() {
+    }
 
     /**
      * 枚举日期格式
      */
-    public enum DatePattern{
+    public enum DatePattern {
         /**
          * 格式："yyyy-MM-dd HH:mm:ss"
          */
-        ALL_TIME{public String getValue(){return "yyyy-MM-dd HH:mm:ss";}},
+        ALL_TIME {
+            public String getValue() {
+                return "yyyy-MM-dd HH:mm:ss";
+            }
+        },
         /**
          * 格式："yyyy-MM"
          */
-        ONLY_MONTH{public String getValue(){return "yyyy-MM";}},
+        ONLY_MONTH {
+            public String getValue() {
+                return "yyyy-MM";
+            }
+        },
         /**
          * 格式："yyyy-MM-dd"
          */
-        ONLY_DAY{public String getValue(){return "yyyy-MM-dd";}},
+        ONLY_DAY {
+            public String getValue() {
+                return "yyyy-MM-dd";
+            }
+        },
         /**
          * 格式："yyyy-MM-dd HH"
          */
-        ONLY_HOUR{public String getValue(){return "yyyy-MM-dd HH";}},
+        ONLY_HOUR {
+            public String getValue() {
+                return "yyyy-MM-dd HH";
+            }
+        },
         /**
          * 格式："yyyy-MM-dd HH:mm"
          */
-        ONLY_MINUTE{public String getValue(){return "yyyy-MM-dd HH:mm";}},
+        ONLY_MINUTE {
+            public String getValue() {
+                return "yyyy-MM-dd HH:mm";
+            }
+        },
         /**
          * 格式："MM-dd"
          */
-        ONLY_MONTH_DAY{public String getValue(){return "MM-dd";}},
+        ONLY_MONTH_DAY {
+            public String getValue() {
+                return "MM-dd";
+            }
+        },
         /**
          * 格式："MM-dd HH:mm"
          */
-        ONLY_MONTH_SEC{public String getValue(){return "MM-dd HH:mm";}},
+        ONLY_MONTH_SEC {
+            public String getValue() {
+                return "MM-dd HH:mm";
+            }
+        },
         /**
          * 格式："HH:mm:ss"
          */
-        ONLY_TIME{public String getValue(){return "HH:mm:ss";}},
+        ONLY_TIME {
+            public String getValue() {
+                return "HH:mm:ss";
+            }
+        },
         /**
          * 格式："HH:mm"
          */
-        ONLY_HOUR_MINUTE{public String getValue(){return "HH:mm";}};
+        ONLY_HOUR_MINUTE {
+            public String getValue() {
+                return "HH:mm";
+            }
+        };
 
         public abstract String getValue();
     }
 
     /**
      * 获取当前时间
-     * @return    返回当前时间，格式2017-05-04    10:54:21
+     *
+     * @return 返回当前时间，格式2017-05-04    10:54:21
      */
-    public static String getNowDate(DatePattern pattern){
+    public static String getNowDate(DatePattern pattern) {
         String dateString = null;
         Calendar calendar = Calendar.getInstance();
         Date dateNow = calendar.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern.getValue(),Locale.CHINA);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern.getValue(), Locale.CHINA);
         dateString = sdf.format(dateNow);
         return dateString;
     }
 
     /**
      * 将一个日期字符串转换成Data对象
-     * @param dateString    日期字符串
-     * @param pattern        转换格式
-     * @return    返回转换后的日期对象
+     *
+     * @param dateString 日期字符串
+     * @param pattern    转换格式
+     * @return 返回转换后的日期对象
      */
-    public static Date stringToDate(String dateString, DatePattern pattern){
+    public static Date stringToDate(String dateString, DatePattern pattern) {
         Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern.getValue(),Locale.CHINA);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern.getValue(), Locale.CHINA);
         try {
             date = sdf.parse(dateString);
         } catch (ParseException e) {
@@ -86,12 +125,21 @@ public class DateUtil {
 
     /**
      * 将date转换成字符串
+     *
      * @param date    日期
-     * @param pattern    日期的目标格式
+     * @param pattern 日期的目标格式
      * @return
      */
-    public static String dateToString(Date date, DatePattern pattern){
+    public static String dateToString(Date date, DatePattern pattern) {
         String string = "";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern.getValue(), Locale.CHINA);
+        string = sdf.format(date);
+        return string;
+    }
+
+    public static String dateToString(long time, DatePattern pattern) {
+        String string = "";
+        Date date = new Date(time);
         SimpleDateFormat sdf = new SimpleDateFormat(pattern.getValue(), Locale.CHINA);
         string = sdf.format(date);
         return string;
@@ -99,12 +147,12 @@ public class DateUtil {
 
     /**
      * 获取指定日期周几
-     * @param date    指定日期
-     * @return
-     * 返回值为： "周日", "周一", "周二", "周三", "周四", "周五", "周六"
+     *
+     * @param date 指定日期
+     * @return 返回值为： "周日", "周一", "周二", "周三", "周四", "周五", "周六"
      */
-    public static String getWeekOfDate(Date date){
-        String[] weekDays = { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
+    public static String getWeekOfDate(Date date) {
+        String[] weekDays = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -115,69 +163,75 @@ public class DateUtil {
 
     /**
      * 获取指定日期对应周几的序列
-     * @param date    指定日期
-     * @return    周一：1    周二：2    周三：3    周四：4    周五：5    周六：6    周日：7
+     *
+     * @param date 指定日期
+     * @return 周一：1    周二：2    周三：3    周四：4    周五：5    周六：6    周日：7
      */
-    public static int getIndexWeekOfDate(Date date){
+    public static int getIndexWeekOfDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int index = calendar.get(Calendar.DAY_OF_WEEK);
-        if(index == 1){
+        if (index == 1) {
             return 7;
-        }else{
+        } else {
             return --index;
         }
     }
 
     /**
      * 返回当前月份
+     *
      * @return
      */
-    public static int getNowMonth(){
+    public static int getNowMonth() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.MONTH) + 1;
     }
 
-    public static int getNowMonthNum(){
+    public static int getNowMonthNum() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.MONTH);
     }
 
     /**
      * 获取当前月号
+     *
      * @return
      */
-    public static int getNowDay(){
+    public static int getNowDay() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.DATE);
     }
 
     /**
      * 获取当前年份
+     *
      * @return
      */
-    public static int getNowYear(){
+    public static int getNowYear() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.YEAR);
     }
 
     /**
      * 获取本月份的天数
+     *
      * @return
      */
-    public static int getNowDaysOfMonth(){
+    public static int getNowDaysOfMonth() {
         Calendar calendar = Calendar.getInstance();
-        return daysOfMonth(calendar.get(Calendar.YEAR),calendar.get(Calendar.DATE) + 1);
+        return daysOfMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.DATE) + 1);
     }
 
     /**
      * 获取指定月份的天数
-     * @param year    年份
-     * @param month    月份
-     * @return    对应天数
+     *
+     * @param year  年份
+     * @param month 月份
+     * @return 对应天数
      */
-    public static int daysOfMonth(int year,int month){
-        switch(month){
+    public static int daysOfMonth(int year, int month) {
+        switch (month) {
             case 1:
             case 3:
             case 5:
@@ -192,9 +246,9 @@ public class DateUtil {
             case 11:
                 return 30;
             case 2:
-                if((year % 4 ==0 && year % 100 == 0) || year % 400 != 0){
+                if ((year % 4 == 0 && year % 100 == 0) || year % 400 != 0) {
                     return 29;
-                }else{
+                } else {
                     return 28;
                 }
             default:

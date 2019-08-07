@@ -10,6 +10,7 @@ buildscript {
         mavenLocal()
         maven { url "https://maven.google.com" }
         maven { url 'https://dl.google.com/dl/android/maven2/' }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
@@ -28,6 +29,7 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
 }
 

@@ -12,13 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
-import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.StringUtils;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -63,37 +60,12 @@ public class RelationGoodsAdapter extends RecyclerView.Adapter<RelationGoodsAdap
             holder.imgTv.setText(bean.getName());
         }
         holder.mGoodsNameTv.setText(bean.getName());
-        holder.mGoodsLocationTv.setText(getLoction(bean));
+        holder.mGoodsLocationTv.setText(StringUtils.getGoodsLoction(bean));
     }
 
     @Override
     public int getItemCount() {
         return mData == null ? 0 : mData.size();
-    }
-
-    /**
-     * 拼接位置
-     *
-     * @return
-     */
-    public String getLoction(ObjectBean bean) {
-        if (StringUtils.isEmpty(bean.getLocations())) {
-            return "未归位";
-        }
-        Collections.sort(bean.getLocations(), new Comparator<BaseBean>() {
-            @Override
-            public int compare(BaseBean lhs, BaseBean rhs) {
-                return lhs.getLevel() - rhs.getLevel();
-            }
-        });
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < StringUtils.getListSize(bean.getLocations()); i++) {
-            sb.append(bean.getLocations().get(i).getName());
-            if (i != bean.getLocations().size() - 1) {
-                sb.append("/");
-            }
-        }
-        return sb.length() == 0 ? "未归位" : sb.toString();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

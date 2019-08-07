@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activity_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context=".activity.AddRemindActivity">
 
@@ -42,6 +44,64 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/remind_goods_details_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_150"
+        android:layout_marginStart="@dimen/dip_16"
+        android:layout_marginTop="@dimen/dip_12"
+        android:layout_marginEnd="@dimen/dip_16"
+        android:background="@drawable/shape_remind_item_bg">
+
+        <ImageView
+            android:id="@+id/goods_iv"
+            android:layout_width="@dimen/dip_76"
+            android:layout_height="@dimen/dip_76"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dip_18" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dip_114"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/goods_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                tools:text="名称:" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/black_12" />
+
+            <TextView
+                android:id="@+id/goods_classify_tv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                tools:text="分类:" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/black_12" />
+
+            <TextView
+                android:id="@+id/goods_location_tv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                tools:text="位置:" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_44"
         android:layout_marginTop="@dimen/dip_36"
@@ -66,15 +126,15 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@null"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
             android:gravity="center|end"
             android:hint="@string/add_remind_et_hint_text"
+            android:singleLine="true"
             android:textColor="@color/black_87"
             android:textColorHint="@color/black_other_one"
             android:textSize="@dimen/f_15"
-            android:theme="@style/MyEditText"/>
+            android:theme="@style/MyEditText" />
     </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/remind_time_layout"

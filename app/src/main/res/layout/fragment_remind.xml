@@ -39,92 +39,130 @@
             android:textSize="@dimen/f_15" />
     </RelativeLayout>
 
-    <LinearLayout
+    <com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/remind_title_layout"
-        android:orientation="vertical">
+        android:layout_marginBottom="@dimen/dip_76"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.gongwu.wherecollect.swipetoloadlayout.RefreshHeadView
+            android:id="@id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/dip_10"
+            android:paddingBottom="@dimen/dip_10" />
 
         <LinearLayout
-            android:id="@+id/remind_unfinish_layout"
+            android:id="@id/swipe_target"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dip_10"
-            android:layout_marginEnd="@dimen/dip_10"
-            android:layout_weight="1"
-            android:background="@drawable/shape_remind_item_bg"
-            android:elevation="@dimen/dip_2">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/remind_unfinish_title_layout"
+            <LinearLayout
+                android:id="@+id/remind_unfinish_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dip_60"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dip_10"
+                android:layout_marginEnd="@dimen/dip_10"
+                android:background="@drawable/shape_remind_item_bg"
+                android:elevation="@dimen/dip_2"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/remind_unfinish_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dip_14"
-                    android:text="@string/remind_unfinish_text"
-                    android:textColor="@color/remind_unfinish_text_color"
-                    android:textSize="@dimen/f_24" />
+                <RelativeLayout
+                    android:id="@+id/remind_unfinish_title_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dip_60"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/remind_unfinish_num_text_view"
-                    android:layout_width="@dimen/dip_40"
-                    android:layout_height="@dimen/dip_30"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/dip_16"
-                    android:background="@drawable/shape_remind_num_bg"
-                    android:gravity="center"
-                    android:textColor="@color/remind_unfinish_text_color"
-                    android:textSize="@dimen/f_20"
-                    android:visibility="gone"
-                    tools:text="5" />
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/remind_unfinish_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dip_14"
+                        android:text="@string/remind_unfinish_text"
+                        android:textColor="@color/remind_unfinish_text_color"
+                        android:textSize="@dimen/f_24" />
+
+                    <TextView
+                        android:id="@+id/remind_unfinish_num_text_view"
+                        android:layout_width="@dimen/dip_40"
+                        android:layout_height="@dimen/dip_30"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/dip_16"
+                        android:background="@drawable/shape_remind_num_bg"
+                        android:gravity="center"
+                        android:textColor="@color/remind_unfinish_text_color"
+                        android:textSize="@dimen/f_20"
+                        android:visibility="gone"
+                        tools:text="5" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/remind_unfinish_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/remind_finished_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dip_10"
+                android:layout_marginTop="@dimen/dip_24"
+                android:layout_marginEnd="@dimen/dip_10"
+                android:background="@drawable/shape_remind_item_bg"
+                android:elevation="@dimen/dip_2"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/remind_finished_title_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dip_60"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/remind_finished_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dip_14"
+                        android:text="@string/remind_finished_text"
+                        android:textColor="@color/remind_add_text_color"
+                        android:textSize="@dimen/f_24" />
+
+                    <TextView
+                        android:id="@+id/remind_finished_num_text_view"
+                        android:layout_width="@dimen/dip_40"
+                        android:layout_height="@dimen/dip_30"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/dip_16"
+                        android:background="@drawable/shape_remind_num_bg"
+                        android:gravity="center"
+                        android:textColor="@color/remind_add_text_color"
+                        android:textSize="@dimen/f_20"
+                        android:visibility="gone"
+                        tools:text="5" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/remind_finished_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/remind_finished_layout"
+        <com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView
+            android:id="@id/swipe_load_more_footer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dip_60"
-            android:layout_marginStart="@dimen/dip_10"
-            android:layout_marginTop="@dimen/dip_24"
-            android:layout_marginEnd="@dimen/dip_10"
-            android:layout_marginBottom="@dimen/dip_76"
-            android:background="@drawable/shape_remind_item_bg"
-            android:elevation="@dimen/dip_2">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dip_10"
+            android:layout_marginBottom="@dimen/dip_10"
+            android:gravity="center" />
 
-            <RelativeLayout
-                android:id="@+id/remind_finished_title_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dip_60"
-                android:gravity="center_vertical">
+    </com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout>
 
-                <TextView
-                    android:id="@+id/remind_finished_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dip_14"
-                    android:text="@string/remind_finished_text"
-                    android:textColor="@color/remind_add_text_color"
-                    android:textSize="@dimen/f_24" />
-
-                <TextView
-                    android:id="@+id/remind_finished_num_text_view"
-                    android:layout_width="@dimen/dip_40"
-                    android:layout_height="@dimen/dip_30"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/dip_16"
-                    android:background="@drawable/shape_remind_num_bg"
-                    android:gravity="center"
-                    android:textColor="@color/remind_add_text_color"
-                    android:textSize="@dimen/f_20"
-                    android:visibility="gone"
-                    tools:text="5" />
-            </RelativeLayout>
-
-        </LinearLayout>
-    </LinearLayout>
 </RelativeLayout>

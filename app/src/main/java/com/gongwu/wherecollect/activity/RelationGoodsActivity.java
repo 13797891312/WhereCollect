@@ -23,6 +23,7 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.swipetoloadlayout.OnLoadMoreListener;
 import com.gongwu.wherecollect.swipetoloadlayout.OnRefreshListener;
 import com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 
@@ -52,8 +53,7 @@ public class RelationGoodsActivity extends BaseViewActivity implements OnRefresh
     @Bind(R.id.relation_goods_et)
     EditText mEditText;
 
-    private static final int DEFAULT_PAGE = 1;
-    private int page = DEFAULT_PAGE;
+    private int page = AppConstant.DEFAULT_PAGE;
     private RelationGoodsAdapter mAdapter;
     private List<ObjectBean> mLists = new ArrayList<>();
 
@@ -103,13 +103,13 @@ public class RelationGoodsActivity extends BaseViewActivity implements OnRefresh
                     e.printStackTrace();
                 }
                 List<ObjectBean> lists = JsonUtils.listFromJson(TextUtils.isEmpty(json) ? "" : json, ObjectBean.class);
-                if (page == DEFAULT_PAGE) {
+                if (page == AppConstant.DEFAULT_PAGE) {
                     mLists.clear();
                 }
                 if (lists != null && lists.size() > 0) {
                     mLists.addAll(lists);
                 } else {
-                    if (page > DEFAULT_PAGE) page--;
+                    if (page > AppConstant.DEFAULT_PAGE) page--;
                     ToastUtil.show(context, getString(R.string.no_more_data), Toast.LENGTH_SHORT);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -138,7 +138,7 @@ public class RelationGoodsActivity extends BaseViewActivity implements OnRefresh
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    page = DEFAULT_PAGE;
+                    page = AppConstant.DEFAULT_PAGE;
                     if (mSwipeToLoadLayout != null) {
                         mSwipeToLoadLayout.setRefreshing(true);
                     }
@@ -180,7 +180,7 @@ public class RelationGoodsActivity extends BaseViewActivity implements OnRefresh
      */
     @Override
     public void onRefresh() {
-        page = DEFAULT_PAGE;
+        page = AppConstant.DEFAULT_PAGE;
         initData();
     }
 

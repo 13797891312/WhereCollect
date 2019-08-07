@@ -46,5 +46,9 @@
     <string name="act_title_relation">关联物品</string>
     <string name="classification_text">分类</string>
     <string name="no_more_data">没有更多数据了</string>
-
+    <string name="add_remind_title_hint">请输入标题</string>
+    <string name="add_remind_time_hint">请设置提醒时间</string>
+    <string name="remind_goods_name_text">名称: %1$s</string>
+    <string name="remind_goods_classify_text">分类: %1$s</string>
+    <string name="remind_goods_location_text">位置: %1$s</string>
 </resources>

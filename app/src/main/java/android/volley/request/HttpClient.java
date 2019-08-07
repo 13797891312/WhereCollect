@@ -639,12 +639,27 @@ public class HttpClient {
         CustomPostRequest request = new CustomPostRequest("api/app/v350/object-recommend-option", params, listenner);
         Queue.getQueue(context).add(request);
     }
-
+    //------------3.6提醒-----------------
+    /**
+     * 添加提醒
+     */
+    public static void addRemind(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v350/remind", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
     /**
      * 获取关联物品列表
      */
     public static void getRelationGoodsList(Context context, Map<String, String> params, PostListenner listenner) {
         CustomGetRequest request = new CustomGetRequest("api/app/v350/object-list", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
+
+    /**
+     * 获取提醒列表
+     */
+    public static void getRemindList(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomGetRequest request = new CustomGetRequest("api/app/v350/remind-list", params, listenner);
         Queue.getQueue(context).add(request);
     }
 }

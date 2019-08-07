@@ -5,20 +5,38 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.view.View;
+import android.volley.request.HttpClient;
+import android.volley.request.PostListenner;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DateUtil;
+import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.util.ToastUtil;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,6 +53,7 @@ public class AddRemindActivity extends BaseViewActivity {
     private static final int END_MONTH = 11;//时间选择最大月份
     private static final int END_DAY = 31;//时间选择最大日期
     private long selectTime = 0;
+    private ObjectBean selectGoods;
 
     @Bind(R.id.title_text_view)
     TextView titleTv;
@@ -48,6 +67,20 @@ public class AddRemindActivity extends BaseViewActivity {
     SwitchCompat mOverdueTimeSwitch;
     @Bind(R.id.remind_time_tv)
     TextView selectTimeTv;
+    @Bind(R.id.remind_remarks_content_tx)
+    TextView remarksTv;
+    @Bind(R.id.remind_goods_layout)
+    RelativeLayout addRemindGoodsLayout;
+    @Bind(R.id.remind_goods_details_layout)
+    RelativeLayout remindGoodsDetailsLayout;
+    @Bind(R.id.goods_iv)
+    ImageView goodsIv;
+    @Bind(R.id.goods_name_tv)
+    TextView goodsNameTv;
+    @Bind(R.id.goods_classify_tv)
+    TextView goodsClassifyTv;
+    @Bind(R.id.goods_location_tv)
+    TextView goodsLocationTv;
 
 
     @Override
@@ -62,12 +95,12 @@ public class AddRemindActivity extends BaseViewActivity {
     private void initView() {
         titleTv.setText(getResources().getText(R.string.add_remind_title_text));
         titleLayout.setVisibility(View.GONE);
+        remindGoodsDetailsLayout.setVisibility(View.GONE);
         addRemindFinishedTv.setVisibility(View.VISIBLE);
-        mEditText.setCursorVisible(false);
         mFirstSwitch.setChecked(true);
     }
 
-    @OnClick({R.id.back_bt, R.id.remind_goods_layout, R.id.add_remind_et,
+    @OnClick({R.id.back_bt, R.id.remind_goods_layout,
             R.id.remind_time_layout, R.id.add_remind_finished_tv})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -77,15 +110,61 @@ public class AddRemindActivity extends BaseViewActivity {
             case R.id.remind_goods_layout://关联物品
                 startActivityForResult(new Intent(this, RelationGoodsActivity.class), START_CODE);
                 break;
-            case R.id.add_remind_et://标题
-                mEditText.setCursorVisible(true);
-                break;
             case R.id.remind_time_layout://提醒时间
+                StringUtils.hideKeyboard(mEditText);
                 showDateDialog();
                 break;
             case R.id.add_remind_finished_tv://完成
+                submitRemindHttpPost();
                 break;
         }
+    }
+
+    private void submitRemindHttpPost() {
+        if (TextUtils.isEmpty(mEditText.getText().toString().trim())) {
+            ToastUtil.show(context, getResources().getString(R.string.add_remind_title_hint), Toast.LENGTH_SHORT);
+            return;
+        }
+        if (selectTime == 0) {
+            ToastUtil.show(context, getResources().getString(R.string.add_remind_time_hint), Toast.LENGTH_SHORT);
+            return;
+        }
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("title", mEditText.getText().toString().trim());
+        map.put("description", remarksTv.getText().toString().trim());
+        map.put("tips_time", selectTime + "");
+        map.put("first", mFirstSwitch.isChecked() ? "1" : "0");
+        map.put("repeat", mOverdueTimeSwitch.isChecked() ? "1" : "0");
+        if (addRemindGoodsLayout.getVisibility() == View.GONE) {
+            map.put("associated_object_id", selectGoods != null ? selectGoods.getId() : "");
+            map.put("associated_object_url", selectGoods != null ? selectGoods.getObject_url() : "");
+        }
+        if (!TextUtils.isEmpty(AppConstant.DEVICE_TOKEN)) {
+            map.put("device_token", AppConstant.DEVICE_TOKEN);
+        }
+        PostListenner listenner = new PostListenner(context, null) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                try {
+                    JSONObject jsonObject = new JSONObject(r.getResult());
+                    int code = jsonObject.getInt("ok");
+                    if (AppConstant.ADD_REMIND_SUCCESS == code) {
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.addRemind(context, map, listenner);
     }
 
     /**
@@ -124,14 +203,14 @@ public class AddRemindActivity extends BaseViewActivity {
         mFirstSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                StringUtils.hideKeyboard(mEditText);
             }
         });
         //过期提醒
         mOverdueTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                StringUtils.hideKeyboard(mEditText);
             }
         });
     }
@@ -140,10 +219,26 @@ public class AddRemindActivity extends BaseViewActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == START_CODE && resultCode == RESULT_OK) {
-            ObjectBean selectBean = (ObjectBean) data.getSerializableExtra("objectBean");
-            if (selectBean != null) {
-
+            ObjectBean objectBean = (ObjectBean) data.getSerializableExtra("objectBean");
+            if (objectBean != null) {
+                selectGoods = objectBean;
+                setSelectGoods(selectGoods);
             }
+        }
+    }
+
+    /**
+     * 初始化关联物品数据
+     */
+    private void setSelectGoods(ObjectBean selectGoods) {
+        addRemindGoodsLayout.setVisibility(View.GONE);
+        remindGoodsDetailsLayout.setVisibility(View.VISIBLE);
+        goodsNameTv.setText(String.format(getString(R.string.remind_goods_name_text), selectGoods.getName()));
+        goodsLocationTv.setText(String.format(getString(R.string.remind_goods_location_text), StringUtils.getGoodsLoction(selectGoods)));
+        goodsClassifyTv.setText(String.format(getString(R.string.remind_goods_classify_text), StringUtils.getGoodsClassify(selectGoods)));
+        ImageLoader.load(context, goodsIv, selectGoods.getObject_url());
+        if (TextUtils.isEmpty(mEditText.getText().toString().trim())) {
+            mEditText.setText(selectGoods.getName());
         }
     }
 

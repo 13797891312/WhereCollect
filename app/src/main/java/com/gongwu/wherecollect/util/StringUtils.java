@@ -18,11 +18,17 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.entity.BaseBean;
+import com.gongwu.wherecollect.entity.ObjectBean;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -582,6 +588,64 @@ public class StringUtils {
                 return "#7ECEF4";
             default:
                 return "#35BFBB";
+        }
+    }
+
+    /**
+     * 拼接位置
+     *
+     * @return
+     */
+    public static String getGoodsLoction(ObjectBean bean) {
+        if (StringUtils.isEmpty(bean.getLocations())) {
+            return "";
+        }
+        Collections.sort(bean.getLocations(), new Comparator<BaseBean>() {
+            @Override
+            public int compare(BaseBean lhs, BaseBean rhs) {
+                return lhs.getLevel() - rhs.getLevel();
+            }
+        });
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < StringUtils.getListSize(bean.getLocations()); i++) {
+            sb.append(bean.getLocations().get(i).getName());
+            if (i != bean.getLocations().size() - 1) {
+                sb.append("/");
+            }
+        }
+        return sb.length() == 0 ? "" : sb.toString();
+    }
+
+    /**
+     * 拼接分类
+     *
+     * @return
+     */
+    public static String getGoodsClassify(ObjectBean bean) {
+        if (StringUtils.isEmpty(bean.getCategories())) {
+            return "";
+        }
+        Collections.sort(bean.getCategories(), new Comparator<BaseBean>() {
+            @Override
+            public int compare(BaseBean lhs, BaseBean rhs) {
+                return lhs.getLevel() - rhs.getLevel();
+            }
+        });
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < StringUtils.getListSize(bean.getCategories()); i++) {
+            sb.append(bean.getCategories().get(i).getName());
+            if (i != bean.getCategories().size() - 1) {
+                sb.append("/");
+            }
+        }
+        return sb.length() == 0 ? "" : sb.toString();
+    }
+
+    public static void hideKeyboard(View view){
+        InputMethodManager imm = (InputMethodManager) view.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
         }
     }
 }

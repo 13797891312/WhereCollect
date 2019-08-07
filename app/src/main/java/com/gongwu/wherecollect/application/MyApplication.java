@@ -1,15 +1,22 @@
 package com.gongwu.wherecollect.application;
+
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.gongwu.wherecollect.BuildConfig;
 import com.gongwu.wherecollect.entity.UserBean;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -19,6 +26,7 @@ import com.umeng.socialize.media.UMImage;
 import org.litepal.LitePalApplication;
 
 import java.io.File;
+
 /**
  * Function:
  * Date: 2017/8/29
@@ -27,7 +35,7 @@ import java.io.File;
  * @since JDK 1.7
  */
 public class MyApplication extends Application {
-    public static  String CACHEPATH = Environment.getExternalStorageDirectory()
+    public static String CACHEPATH = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + "/shouner/";
     private static UserBean user;
     private static Context appContext;
@@ -84,5 +92,20 @@ public class MyApplication extends Application {
         UMShareConfig config = new UMShareConfig();
         config.isNeedAuthOnGetUserInfo(true);
         UMShareAPI.get(this).setShareConfig(config);
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "de26ade0140020dd98cc6999598a4ff6");
+        //获取消息推送代理示例
+        //注册推送服务，每次调用register方法都会回调该接口
+        PushAgent.getInstance(this).register(new IUmengRegisterCallback() {
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
+                AppConstant.DEVICE_TOKEN = deviceToken;
+                LogUtil.e("PushAgent register Success");
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+            }
+        });
     }
 }
