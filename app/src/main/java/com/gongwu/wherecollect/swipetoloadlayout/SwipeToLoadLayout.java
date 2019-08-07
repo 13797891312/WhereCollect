@@ -20,7 +20,7 @@ import com.gongwu.wherecollect.R;
  * Created by Aspsine on 2015/8/13.
  */
 public class SwipeToLoadLayout extends ViewGroup {
-//
+
     private static final String TAG = SwipeToLoadLayout.class.getSimpleName();
 
     private static final int DEFAULT_SWIPING_TO_REFRESH_TO_DEFAULT_SCROLLING_DURATION = 200;
