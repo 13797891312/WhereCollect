@@ -39,21 +39,12 @@
             android:textSize="@dimen/f_15" />
     </RelativeLayout>
 
-    <com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout
-        android:id="@+id/swipeToLoadLayout"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/remind_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/remind_title_layout"
-        android:layout_marginBottom="@dimen/dip_76"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <com.gongwu.wherecollect.swipetoloadlayout.RefreshHeadView
-            android:id="@id/swipe_refresh_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="@dimen/dip_10"
-            android:paddingBottom="@dimen/dip_10" />
+        android:layout_marginBottom="@dimen/dip_60">
 
         <LinearLayout
             android:id="@id/swipe_target"
@@ -114,6 +105,7 @@
                 android:layout_marginStart="@dimen/dip_10"
                 android:layout_marginTop="@dimen/dip_24"
                 android:layout_marginEnd="@dimen/dip_10"
+                android:layout_marginBottom="@dimen/dip_20"
                 android:background="@drawable/shape_remind_item_bg"
                 android:elevation="@dimen/dip_2"
                 android:orientation="vertical">
@@ -154,15 +146,7 @@
                     android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-        <com.gongwu.wherecollect.swipetoloadlayout.LoadMoreView
-            android:id="@id/swipe_load_more_footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dip_10"
-            android:layout_marginBottom="@dimen/dip_10"
-            android:gravity="center" />
-
-    </com.gongwu.wherecollect.swipetoloadlayout.SwipeToLoadLayout>
 
 </RelativeLayout>
