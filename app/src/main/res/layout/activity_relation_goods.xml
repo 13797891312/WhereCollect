@@ -7,7 +7,7 @@
     android:background="@color/activity_bg"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".activity.RelationGoodsActivity">
+    tools:context=".activity.RelationGoodsListActivity">
 
     <include
         android:id="@+id/relation_title_layout"

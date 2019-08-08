@@ -38,6 +38,7 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" /> <!-- ###########友盟 -->
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5a2de126f43e484ca70000ef" />
@@ -47,9 +48,6 @@
             android:name="UMENG_CHANNEL"
             android:value="${CHANNEL_VALUE}" />
 
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="${CHANNEL_VALUE}" /> <!-- 渠道号，多渠道这里使用了占位符$ -->
         <meta-data
             android:name="com.gongwu.wherecollect.util.SimpleGlideModule"
             android:value="GlideModule" />
@@ -194,8 +192,9 @@
         <activity android:name=".activity.ShareSpaceDetailsActivity" />
         <activity android:name=".activity.AddChangWangGoodActivity" />
         <activity android:name=".activity.CameraFragmentMainActivity" />
-        <activity android:name=".activity.RelationGoodsActivity"/>
-        <activity android:name=".activity.AddRemindActivity" />
+        <activity android:name=".activity.RelationGoodsListActivity" />
+        <activity android:name=".activity.EditRemindActivity" />
+        <activity android:name=".activity.RemindRemarksActivity"/>
     </application>
 
 </manifest>

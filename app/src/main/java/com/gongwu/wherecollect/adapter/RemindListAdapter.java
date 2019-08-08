@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.RemindBean;
 import com.gongwu.wherecollect.util.DateUtil;
+import com.gongwu.wherecollect.util.ImageLoader;
 
 import java.util.List;
 
@@ -44,6 +45,13 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
             holder.imgLayout.setVisibility(View.GONE);
         } else {
             holder.imgLayout.setVisibility(View.VISIBLE);
+        }
+        holder.imgIv.setImageDrawable(null);
+        if (TextUtils.isEmpty(remindBean.getAssociated_object_url())) {
+            holder.imgIv.setVisibility(View.GONE);
+        } else {
+            holder.imgIv.setVisibility(View.VISIBLE);
+            ImageLoader.placeholderLoad(mContext, holder.imgIv, remindBean.getAssociated_object_url(), R.drawable.ic_img_error);
         }
         holder.remindNameTv.setText(remindBean.getTitle());
         holder.remindTimeTv.setText(DateUtil.dateToString(remindBean.getTips_time(), DateUtil.DatePattern.ONLY_MINUTE));

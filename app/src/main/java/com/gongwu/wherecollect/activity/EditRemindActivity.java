@@ -12,6 +12,7 @@ import android.volley.request.PostListenner;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.RemindBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DateUtil;
@@ -45,14 +47,16 @@ import butterknife.OnClick;
 /**
  * 3.6 添加提醒功能
  */
-public class AddRemindActivity extends BaseViewActivity {
+public class EditRemindActivity extends BaseViewActivity {
 
     private static final int START_CODE = 0x523;
+    private static final int START_REMARKS_CODE = 0x423;
 
     private static final int END_YEAR = DateUtil.getNowYear() + 2;//时间选择最大年限
     private static final int END_MONTH = 11;//时间选择最大月份
     private static final int END_DAY = 31;//时间选择最大日期
     private long selectTime = 0;
+    private boolean edit = false;
     private ObjectBean selectGoods;
 
     @Bind(R.id.title_text_view)
@@ -81,15 +85,26 @@ public class AddRemindActivity extends BaseViewActivity {
     TextView goodsClassifyTv;
     @Bind(R.id.goods_location_tv)
     TextView goodsLocationTv;
+    @Bind(R.id.edit_remind_detail_layout)
+    LinearLayout editDetailLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_remind);
+        setContentView(R.layout.activity_edit_remind);
         ButterKnife.bind(this);
         initView();
         initEvent();
+        initData();
+    }
+
+    private void initData() {
+        RemindBean remindBean = (RemindBean) getIntent().getSerializableExtra("remind_bean");
+        if (remindBean != null) {
+            addRemindFinishedTv.setVisibility(View.GONE);
+            editDetailLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initView() {
@@ -101,14 +116,14 @@ public class AddRemindActivity extends BaseViewActivity {
     }
 
     @OnClick({R.id.back_bt, R.id.remind_goods_layout,
-            R.id.remind_time_layout, R.id.add_remind_finished_tv})
+            R.id.remind_time_layout, R.id.add_remind_finished_tv, R.id.remind_remarks_layout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_bt://返回
                 finish();
                 break;
             case R.id.remind_goods_layout://关联物品
-                startActivityForResult(new Intent(this, RelationGoodsActivity.class), START_CODE);
+                startActivityForResult(new Intent(this, RelationGoodsListActivity.class), START_CODE);
                 break;
             case R.id.remind_time_layout://提醒时间
                 StringUtils.hideKeyboard(mEditText);
@@ -116,6 +131,15 @@ public class AddRemindActivity extends BaseViewActivity {
                 break;
             case R.id.add_remind_finished_tv://完成
                 submitRemindHttpPost();
+                break;
+            case R.id.remind_remarks_layout:
+                Intent intent = new Intent(context, RemindRemarksActivity.class);
+                if (!TextUtils.isEmpty(remarksTv.getText().toString())) {
+                    intent.putExtra("remind_remarks", remarksTv.getText().toString());
+                }
+                startActivityForResult(intent, START_REMARKS_CODE);
+                break;
+            default:
                 break;
         }
     }
@@ -138,7 +162,7 @@ public class AddRemindActivity extends BaseViewActivity {
         map.put("repeat", mOverdueTimeSwitch.isChecked() ? "1" : "0");
         if (addRemindGoodsLayout.getVisibility() == View.GONE) {
             map.put("associated_object_id", selectGoods != null ? selectGoods.getId() : "");
-            map.put("associated_object_url", selectGoods != null ? selectGoods.getObject_url() : "");
+            map.put("associated_object_url", selectGoods != null ? (selectGoods.getObject_url().contains("http") ? selectGoods.getObject_url() : "") : "");
         }
         if (!TextUtils.isEmpty(AppConstant.DEVICE_TOKEN)) {
             map.put("device_token", AppConstant.DEVICE_TOKEN);
@@ -151,6 +175,7 @@ public class AddRemindActivity extends BaseViewActivity {
                     JSONObject jsonObject = new JSONObject(r.getResult());
                     int code = jsonObject.getInt("ok");
                     if (AppConstant.ADD_REMIND_SUCCESS == code) {
+                        setResult(RESULT_OK);
                         finish();
                     }
                 } catch (JSONException e) {
@@ -225,6 +250,9 @@ public class AddRemindActivity extends BaseViewActivity {
                 setSelectGoods(selectGoods);
             }
         }
+        if (requestCode == START_REMARKS_CODE && resultCode == RESULT_OK) {
+            remarksTv.setText(data.getStringExtra("remind_remarks"));
+        }
     }
 
     /**
@@ -236,14 +264,14 @@ public class AddRemindActivity extends BaseViewActivity {
         goodsNameTv.setText(String.format(getString(R.string.remind_goods_name_text), selectGoods.getName()));
         goodsLocationTv.setText(String.format(getString(R.string.remind_goods_location_text), StringUtils.getGoodsLoction(selectGoods)));
         goodsClassifyTv.setText(String.format(getString(R.string.remind_goods_classify_text), StringUtils.getGoodsClassify(selectGoods)));
-        ImageLoader.load(context, goodsIv, selectGoods.getObject_url());
+        if (!TextUtils.isEmpty(selectGoods.getObjectUrl()) && selectGoods.getObjectUrl().contains("http")) {
+            ImageLoader.load(context, goodsIv, selectGoods.getObject_url());
+        } else {
+            goodsIv.setBackgroundColor(getResources().getColor(R.color.colorf9));
+        }
         if (TextUtils.isEmpty(mEditText.getText().toString().trim())) {
             mEditText.setText(selectGoods.getName());
         }
     }
 
-    public static void start(Context context) {
-        Intent intent = new Intent(context, AddRemindActivity.class);
-        context.startActivity(intent);
-    }
 }

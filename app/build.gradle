@@ -156,4 +156,7 @@ dependencies {
     implementation 'com.umeng.umsdk:utdid:1.1.5.3'
     //PushSDK
     implementation 'com.umeng.umsdk:push:6.0.1'
+    //
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
 }

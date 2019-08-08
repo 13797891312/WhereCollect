@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".activity.RemindRemarksActivity">
+
+    <TextView
+        android:id="@+id/remind_remarks_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dip_16"
+        android:layout_marginTop="@dimen/dip_10"
+        android:text="@string/remind_remarks_hint_text"
+        android:textColor="@color/black_40"
+        android:textSize="@dimen/f_14" />
+
+    <EditText
+        android:id="@+id/remind_remarks_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_200"
+        android:layout_below="@id/remind_remarks_tv"
+        android:layout_marginStart="@dimen/dip_16"
+        android:layout_marginTop="@dimen/dip_10"
+        android:layout_marginEnd="@dimen/dip_16"
+        android:background="@color/white"
+        android:gravity="start"
+        android:maxLength="150"
+        android:padding="@dimen/dip_16"
+        android:textColor="@color/black_87"
+        android:textSize="@dimen/f_15"
+        android:theme="@style/MyEditText" />
+
+    <TextView
+        android:id="@+id/remind_remarks_text_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/remind_remarks_et"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dip_10"
+        android:layout_marginEnd="@dimen/dip_16"
+        android:text="0/150"
+        android:textColor="@color/black_40"
+        android:textSize="@dimen/f_13" />
+</RelativeLayout>

@@ -109,4 +109,5 @@
     <color name="split_color">#DEDEDE</color>
     <color name="act_relation_goods_text_color">#151515</color>
     <color name="act_relation_goods_text_hint_color">#888888</color>
+    <color name="remind_delete_text_color">#FE6464</color>
 </resources>

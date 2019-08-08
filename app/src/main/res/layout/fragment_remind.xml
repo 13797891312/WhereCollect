@@ -39,12 +39,16 @@
             android:textSize="@dimen/f_15" />
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/remind_swipe_refresh_layout"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/remind_title_layout"
         android:layout_marginBottom="@dimen/dip_60">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@id/swipe_target"
@@ -55,9 +59,10 @@
             <LinearLayout
                 android:id="@+id/remind_unfinish_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginStart="@dimen/dip_10"
                 android:layout_marginEnd="@dimen/dip_10"
+                android:layout_weight="1"
                 android:background="@drawable/shape_remind_item_bg"
                 android:elevation="@dimen/dip_2"
                 android:orientation="vertical">
@@ -91,11 +96,24 @@
                         tools:text="5" />
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/remind_unfinish_recycler_view"
+                <RelativeLayout
+                    android:id="@+id/remind_un_list_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/empty_un_iv"
+                        android:layout_width="@dimen/dip_100"
+                        android:layout_height="@dimen/dip_100"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/icon_no_notice" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/remind_unfinish_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </RelativeLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -139,14 +157,32 @@
                         tools:text="5" />
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/remind_finished_recycler_view"
+                <RelativeLayout
+                    android:id="@+id/remind_list_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/empty_iv"
+                        android:layout_width="@dimen/dip_100"
+                        android:layout_height="@dimen/dip_100"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/icon_no_notice" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/remind_finished_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </RelativeLayout>
+
             </LinearLayout>
         </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
 
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlClassicsSpinnerStyle="Translate" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </RelativeLayout>

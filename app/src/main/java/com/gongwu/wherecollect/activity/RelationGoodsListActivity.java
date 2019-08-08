@@ -42,7 +42,7 @@ import butterknife.OnClick;
 /**
  * 3.6关联物品
  */
-public class RelationGoodsActivity extends BaseViewActivity implements OnRefreshListener, MyOnItemClickListener, OnLoadMoreListener {
+public class RelationGoodsListActivity extends BaseViewActivity implements OnRefreshListener, MyOnItemClickListener, OnLoadMoreListener {
 
     @Bind(R.id.title_text_view)
     TextView titleTv;

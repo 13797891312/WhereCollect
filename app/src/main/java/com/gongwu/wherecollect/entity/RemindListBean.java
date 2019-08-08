@@ -1,8 +1,9 @@
 package com.gongwu.wherecollect.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class RemindListBean {
+public class RemindListBean implements Serializable {
     private List<RemindBean> reminds;
     private int doneCount;
     private int unDoneCount;

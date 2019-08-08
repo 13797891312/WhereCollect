@@ -51,4 +51,7 @@
     <string name="remind_goods_name_text">名称: %1$s</string>
     <string name="remind_goods_classify_text">分类: %1$s</string>
     <string name="remind_goods_location_text">位置: %1$s</string>
+    <string name="remind_remarks_title_text">说明备注</string>
+    <string name="remind_remarks_hint_text">说明备注描述</string>
+    <string name="remind_remarks_num_text">%1$s/150</string>
 </resources>
