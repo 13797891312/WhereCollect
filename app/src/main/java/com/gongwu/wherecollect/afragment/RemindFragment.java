@@ -1,6 +1,8 @@
 package com.gongwu.wherecollect.afragment;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -44,7 +46,7 @@ import butterknife.OnClick;
 /**
  * 3.6提醒列表
  */
-public class RemindFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener {
+public class RemindFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String CODE_UNFINISH = "0";
     private static final String CODE_FINISHED = "1";
@@ -61,12 +63,14 @@ public class RemindFragment extends BaseFragment implements OnRefreshListener, O
     RecyclerView unfinishListView;
     @Bind(R.id.remind_finished_recycler_view)
     RecyclerView finishedListView;
-    @Bind(R.id.swipeToLoadLayout)
-    SwipeToLoadLayout mSwipeToLoadLayout;
+    //    @Bind(R.id.swipeToLoadLayout)
+//    SwipeToLoadLayout mSwipeToLoadLayout;
     @Bind(R.id.remind_unfinish_num_text_view)
     TextView unfinishNumTv;
     @Bind(R.id.remind_finished_num_text_view)
     TextView finishedNumTv;
+    @Bind(R.id.remind_swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RemindListAdapter mUnAdapter;
     private RemindListAdapter mAdapter;
@@ -106,6 +110,11 @@ public class RemindFragment extends BaseFragment implements OnRefreshListener, O
     }
 
     private void initView() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white, null));
+            mSwipeRefreshLayout.setColorSchemeColors(//刷新控件动画中的颜色
+                    getResources().getColor(R.color.maincolor, null));
+        }
         unfinishListView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         finishedListView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mUnAdapter = new RemindListAdapter(getContext(), mUnData);
@@ -115,8 +124,9 @@ public class RemindFragment extends BaseFragment implements OnRefreshListener, O
     }
 
     private void initEvent() {
-        mSwipeToLoadLayout.setOnRefreshListener(this);
-        mSwipeToLoadLayout.setOnLoadMoreListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+//        mSwipeToLoadLayout.setOnRefreshListener(this);
+//        mSwipeToLoadLayout.setOnLoadMoreListener(this);
     }
 
     @OnClick({R.id.add_remind, R.id.remind_unfinish_title_layout, R.id.remind_finished_title_layout})
@@ -165,9 +175,10 @@ public class RemindFragment extends BaseFragment implements OnRefreshListener, O
             finishedLayout.setLayoutParams(unlp);
             done = CODE_FINISHED;
         }
-        if (mSwipeToLoadLayout != null) {
+        if (mSwipeRefreshLayout != null) {
             page = AppConstant.DEFAULT_PAGE;
-            mSwipeToLoadLayout.setRefreshing(true);
+            mSwipeRefreshLayout.setRefreshing(true);
+            httpPostRemindList();
         }
     }
 
@@ -184,7 +195,8 @@ public class RemindFragment extends BaseFragment implements OnRefreshListener, O
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 initRecyclerLayout();
-                closeLoading(mSwipeToLoadLayout);
+//                closeLoading(mSwipeToLoadLayout);
+                mSwipeRefreshLayout.setRefreshing(false);
                 RemindListBean remindListBean = JsonUtils.objectFromJson(r.getResult(), RemindListBean.class);
                 if (remindListBean != null) {
                     unfinishNumTv.setVisibility(View.VISIBLE);
@@ -217,7 +229,8 @@ public class RemindFragment extends BaseFragment implements OnRefreshListener, O
             @Override
             protected void onFinish() {
                 super.onFinish();
-                closeLoading(mSwipeToLoadLayout);
+//                closeLoading(mSwipeToLoadLayout);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         };
         HttpClient.getRemindList(getContext(), map, listenner);
@@ -238,24 +251,17 @@ public class RemindFragment extends BaseFragment implements OnRefreshListener, O
     @Override
     public void onShow() {
         if (!init) {
-            if (mSwipeToLoadLayout != null) {
-                mSwipeToLoadLayout.setRefreshing(true);
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                httpPostRemindList();
             }
         }
     }
 
     @Override
     public void onRefresh() {
-        if (mSwipeToLoadLayout != null) {
+        if (mSwipeRefreshLayout != null) {
             page = AppConstant.DEFAULT_PAGE;
-            httpPostRemindList();
-        }
-    }
-
-    @Override
-    public void onLoadMore() {
-        if (mSwipeToLoadLayout != null) {
-            page++;
             httpPostRemindList();
         }
     }
