@@ -1,6 +1,8 @@
 package com.gongwu.wherecollect.entity;
 
-public class RemindBean {
+import java.io.Serializable;
+
+public class RemindBean implements Serializable {
     private boolean timeout;
     private String _id;
     private String title;

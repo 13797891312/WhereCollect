@@ -115,8 +115,9 @@ public class EditRemindActivity extends BaseViewActivity {
         mFirstSwitch.setChecked(true);
     }
 
-    @OnClick({R.id.back_bt, R.id.remind_goods_layout,
-            R.id.remind_time_layout, R.id.add_remind_finished_tv, R.id.remind_remarks_layout})
+    @OnClick({R.id.back_bt, R.id.remind_goods_layout, R.id.remind_time_layout,
+            R.id.add_remind_finished_tv, R.id.remind_remarks_layout,
+            R.id.edit_remind_delete_tv, R.id.edit_remind_submit_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_bt://返回
@@ -138,6 +139,10 @@ public class EditRemindActivity extends BaseViewActivity {
                     intent.putExtra("remind_remarks", remarksTv.getText().toString());
                 }
                 startActivityForResult(intent, START_REMARKS_CODE);
+                break;
+            case R.id.edit_remind_delete_tv:
+                break;
+            case R.id.edit_remind_submit_tv:
                 break;
             default:
                 break;

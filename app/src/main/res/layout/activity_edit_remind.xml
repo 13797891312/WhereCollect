@@ -301,31 +301,33 @@
     <LinearLayout
         android:id="@+id/edit_remind_detail_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dip_50"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/dip_16"
         android:layout_marginEnd="@dimen/dip_16"
         android:layout_marginBottom="@dimen/dip_24"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/edit_remind_delete_tv"
             android:layout_width="0dp"
             android:layout_height="@dimen/dip_44"
             android:layout_weight="1"
-            android:background="@drawable/shape_remind_bt_bg"
-            android:elevation="@dimen/dip_2"
+            android:background="@drawable/select_remind_bt_bg"
             android:gravity="center"
             android:text="删除"
             android:textColor="@color/remind_delete_text_color"
             android:textSize="@dimen/f_15" />
 
         <TextView
+            android:id="@+id/edit_remind_submit_tv"
             android:layout_width="0dp"
             android:layout_height="@dimen/dip_44"
             android:layout_marginStart="@dimen/dip_24"
             android:layout_weight="1"
-            android:background="@drawable/shape_remind_bt_bg"
-            android:elevation="@dimen/dip_2"
+            android:background="@drawable/select_remind_bt_bg"
             android:gravity="center"
             android:text="标记完成"
             android:textColor="@color/remind_add_text_color"
