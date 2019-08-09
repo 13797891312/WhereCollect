@@ -110,4 +110,6 @@
     <color name="act_relation_goods_text_color">#151515</color>
     <color name="act_relation_goods_text_hint_color">#888888</color>
     <color name="remind_delete_text_color">#FE6464</color>
+    <color name="remind_time_out_color">#FF4646</color>
+    <color name="remind_first_color">#FEA964</color>
 </resources>

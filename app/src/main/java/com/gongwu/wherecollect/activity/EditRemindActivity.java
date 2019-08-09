@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
@@ -24,12 +26,15 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.RemindBean;
+import com.gongwu.wherecollect.entity.RemindDetailsBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DateUtil;
 import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
+import com.zhaojin.myviews.Loading;
 
 
 import org.json.JSONException;
@@ -55,9 +60,6 @@ public class EditRemindActivity extends BaseViewActivity {
     private static final int END_YEAR = DateUtil.getNowYear() + 2;//时间选择最大年限
     private static final int END_MONTH = 11;//时间选择最大月份
     private static final int END_DAY = 31;//时间选择最大日期
-    private long selectTime = 0;
-    private boolean edit = false;
-    private ObjectBean selectGoods;
 
     @Bind(R.id.title_text_view)
     TextView titleTv;
@@ -87,7 +89,13 @@ public class EditRemindActivity extends BaseViewActivity {
     TextView goodsLocationTv;
     @Bind(R.id.edit_remind_detail_layout)
     LinearLayout editDetailLayout;
+    @Bind(R.id.edit_remind_submit_tv)
+    TextView editSubmitTv;
 
+    private long selectTime = 0;
+    private boolean edit = false;
+    private ObjectBean selectGoods;
+    private RemindDetailsBean detailsBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,15 +103,17 @@ public class EditRemindActivity extends BaseViewActivity {
         setContentView(R.layout.activity_edit_remind);
         ButterKnife.bind(this);
         initView();
-        initEvent();
         initData();
     }
 
     private void initData() {
         RemindBean remindBean = (RemindBean) getIntent().getSerializableExtra("remind_bean");
         if (remindBean != null) {
+            titleTv.setText(getResources().getText(R.string.remind_details_title_text));
             addRemindFinishedTv.setVisibility(View.GONE);
-            editDetailLayout.setVisibility(View.VISIBLE);
+            getRemindDetailsHttpGet(remindBean);
+        } else {
+            initEvent();
         }
     }
 
@@ -133,22 +143,139 @@ public class EditRemindActivity extends BaseViewActivity {
             case R.id.add_remind_finished_tv://完成
                 submitRemindHttpPost();
                 break;
-            case R.id.remind_remarks_layout:
+            case R.id.remind_remarks_layout://说明备注
                 Intent intent = new Intent(context, RemindRemarksActivity.class);
                 if (!TextUtils.isEmpty(remarksTv.getText().toString())) {
                     intent.putExtra("remind_remarks", remarksTv.getText().toString());
                 }
                 startActivityForResult(intent, START_REMARKS_CODE);
                 break;
-            case R.id.edit_remind_delete_tv:
+            case R.id.edit_remind_delete_tv://删除
+                deleteRemind();
                 break;
-            case R.id.edit_remind_submit_tv:
+            case R.id.edit_remind_submit_tv://标记已完成
+                setRemindDone();
                 break;
             default:
                 break;
         }
     }
 
+    /**
+     * 获取提醒详情
+     */
+    public void getRemindDetailsHttpGet(final RemindBean remindBean) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("remind_id", remindBean.get_id());
+        if (!TextUtils.isEmpty(remindBean.getAssociated_object_id())) {
+            map.put("associated_object_id", remindBean.getAssociated_object_id());
+        }
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                editDetailLayout.setVisibility(View.VISIBLE);
+                if (remindBean.getDone() == 1) {
+                    editSubmitTv.setVisibility(View.GONE);
+                }
+                detailsBean = JsonUtils.objectFromJson(r.getResult(), RemindDetailsBean.class);
+                //设置物品
+                if (detailsBean.getAssociated_object() != null) {
+                    setSelectGoods(detailsBean.getAssociated_object());
+                    selectGoods = detailsBean.getAssociated_object();
+                }
+                //标题
+                mEditText.setText(detailsBean.getTitle());
+                //时间
+                if (detailsBean.getTips_time() != 0) {
+                    selectTimeTv.setText(DateUtil.dateToString(new Date(detailsBean.getTips_time()), DateUtil.DatePattern.ONLY_MINUTE));
+                    selectTime = detailsBean.getTips_time();
+                }
+                //优化
+                mFirstSwitch.setChecked(detailsBean.getFirst() == 0 ? false : true);
+                //重复提醒
+                mOverdueTimeSwitch.setChecked(detailsBean.getRepeat() == 0 ? false : true);
+                //备注
+                remarksTv.setText(detailsBean.getDescription());
+                initEvent();
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.getRemindDetails(context, map, listenner);
+    }
+
+    /**
+     * 删除提醒
+     */
+    public void deleteRemind() {
+        if (detailsBean == null) return;
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("remind_id", detailsBean.get_id());
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                try {
+                    JSONObject jsonObject = new JSONObject(r.getResult());
+                    int code = jsonObject.getInt("ok");
+                    if (AppConstant.ADD_REMIND_SUCCESS == code) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.deteleRemind(context, map, listenner);
+    }
+
+    /**
+     * 标记已完成
+     */
+    public void setRemindDone() {
+        if (detailsBean == null) return;
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("remind_id", detailsBean.get_id());
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                try {
+                    JSONObject jsonObject = new JSONObject(r.getResult());
+                    int code = jsonObject.getInt("ok");
+                    if (AppConstant.ADD_REMIND_SUCCESS == code) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.setRemindDone(context, map, listenner);
+    }
+
+    /**
+     * 添加提醒
+     */
     private void submitRemindHttpPost() {
         if (TextUtils.isEmpty(mEditText.getText().toString().trim())) {
             ToastUtil.show(context, getResources().getString(R.string.add_remind_title_hint), Toast.LENGTH_SHORT);
@@ -172,6 +299,9 @@ public class EditRemindActivity extends BaseViewActivity {
         if (!TextUtils.isEmpty(AppConstant.DEVICE_TOKEN)) {
             map.put("device_token", AppConstant.DEVICE_TOKEN);
         }
+        if (detailsBean != null) {
+            map.put("remind_id", detailsBean.get_id());
+        }
         PostListenner listenner = new PostListenner(context, null) {
             @Override
             protected void code2000(final ResponseResult r) {
@@ -194,7 +324,11 @@ public class EditRemindActivity extends BaseViewActivity {
                 super.onFinish();
             }
         };
-        HttpClient.addRemind(context, map, listenner);
+        if (detailsBean != null) {
+            HttpClient.updateRemind(context, map, listenner);
+        } else {
+            HttpClient.addRemind(context, map, listenner);
+        }
     }
 
     /**
@@ -225,6 +359,15 @@ public class EditRemindActivity extends BaseViewActivity {
         pvTime.show();
     }
 
+
+    private void editSubmitBtEnable() {
+        if (!edit && detailsBean != null) {
+            edit = true;
+            editDetailLayout.setVisibility(View.GONE);
+            addRemindFinishedTv.setVisibility(View.VISIBLE);
+        }
+    }
+
     /**
      * 监听
      */
@@ -234,6 +377,7 @@ public class EditRemindActivity extends BaseViewActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 StringUtils.hideKeyboard(mEditText);
+                editSubmitBtEnable();
             }
         });
         //过期提醒
@@ -241,6 +385,23 @@ public class EditRemindActivity extends BaseViewActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 StringUtils.hideKeyboard(mEditText);
+                editSubmitBtEnable();
+            }
+        });
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                editSubmitBtEnable();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
@@ -257,6 +418,9 @@ public class EditRemindActivity extends BaseViewActivity {
         }
         if (requestCode == START_REMARKS_CODE && resultCode == RESULT_OK) {
             remarksTv.setText(data.getStringExtra("remind_remarks"));
+            if (detailsBean != null && remarksTv.getText().toString().trim().equals(detailsBean.getDescription())) {
+                editSubmitBtEnable();
+            }
         }
     }
 

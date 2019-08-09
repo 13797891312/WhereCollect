@@ -99,6 +99,7 @@ public class ForgetPWDActivity extends BaseViewActivity implements TextWatcher {
      * 获取验证码
      */
     private void getCode() {
+        if (MyApplication.getUser(this) == null) return;
         Map<String, String> map = new HashMap<>();
         map.put("uid", MyApplication.getUser(this).getId());
         PostListenner listenner = new PostListenner(this, Loading.show(null, this, "正在发送")) {

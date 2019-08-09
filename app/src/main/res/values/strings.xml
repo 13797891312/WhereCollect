@@ -33,6 +33,7 @@
     <string name="remind_finished_text">已完成</string>
     <string name="remind_title_text">我的提醒</string>
     <string name="add_remind_title_text">新建提醒</string>
+    <string name="remind_details_title_text">提醒详情</string>
     <string name="finished_text">完成</string>
     <string name="remind_good_text">关联物品</string>
     <string name="remind_time_text">提醒时间</string>
@@ -54,4 +55,5 @@
     <string name="remind_remarks_title_text">说明备注</string>
     <string name="remind_remarks_hint_text">说明备注描述</string>
     <string name="remind_remarks_num_text">%1$s/150</string>
+    <string name="remind_first_label_text">优先</string>
 </resources>

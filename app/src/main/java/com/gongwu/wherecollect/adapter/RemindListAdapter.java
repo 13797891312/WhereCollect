@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.RemindBean;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DateUtil;
 import com.gongwu.wherecollect.util.ImageLoader;
 
@@ -41,20 +41,43 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         RemindBean remindBean = mData.get(i);
-        if (TextUtils.isEmpty(remindBean.getAssociated_object_url())) {
-            holder.imgLayout.setVisibility(View.GONE);
-        } else {
-            holder.imgLayout.setVisibility(View.VISIBLE);
-        }
-        holder.imgIv.setImageDrawable(null);
+        //是否含有物品信息
         if (TextUtils.isEmpty(remindBean.getAssociated_object_url())) {
             holder.imgIv.setVisibility(View.GONE);
         } else {
-            holder.imgIv.setVisibility(View.VISIBLE);
-            ImageLoader.placeholderLoad(mContext, holder.imgIv, remindBean.getAssociated_object_url(), R.drawable.ic_img_error);
+            //图片
+            holder.imgIv.setImageDrawable(null);
+            if (TextUtils.isEmpty(remindBean.getAssociated_object_url())) {
+                holder.imgIv.setVisibility(View.GONE);
+            } else {
+                holder.imgIv.setVisibility(View.VISIBLE);
+                ImageLoader.placeholderLoad(mContext, holder.imgIv, remindBean.getAssociated_object_url(), R.drawable.ic_img_error);
+            }
         }
+        //超时字体颜色
+        if (remindBean.getDone() != AppConstant.REMIND_FINISH_CODE && remindBean.isTimeout()) {
+            holder.remindNameTv.setTextColor(mContext.getResources().getColor(R.color.color999));
+            holder.remindTimeTv.setTextColor(mContext.getResources().getColor(R.color.remind_time_out_color));
+        } else {
+            holder.remindNameTv.setTextColor(mContext.getResources().getColor(R.color.act_relation_goods_text_color));
+            holder.remindTimeTv.setTextColor(mContext.getResources().getColor(R.color.color999));
+        }
+        //优先tab
+        if (remindBean.getFirst() == AppConstant.REMIND_FINISH_CODE && !remindBean.isTimeout()) {
+            holder.firstLabelTv.setVisibility(View.VISIBLE);
+        } else {
+            holder.firstLabelTv.setVisibility(View.GONE);
+        }
+        holder.remindNameTv.setText("");
+        holder.remindTimeTv.setText("");
+        holder.remindDescriptionTv.setText("");
+        //标题
         holder.remindNameTv.setText(remindBean.getTitle());
-        holder.remindTimeTv.setText(DateUtil.dateToString(remindBean.getTips_time(), DateUtil.DatePattern.ONLY_MINUTE));
+        //时间
+        if (remindBean.getTips_time() != 0) {
+            holder.remindTimeTv.setText(DateUtil.dateToString(remindBean.getTips_time(), DateUtil.DatePattern.ONLY_MINUTE));
+        }
+        //备注
         holder.remindDescriptionTv.setText(TextUtils.isEmpty(remindBean.getDescription()) ? "" : remindBean.getDescription());
     }
 
@@ -65,18 +88,16 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Bind(R.id.item_remind_img_layout)
-        RelativeLayout imgLayout;
         @Bind(R.id.item_remind_goods_iv)
         ImageView imgIv;
-        @Bind(R.id.no_url_img_tv)
-        TextView imgTv;
         @Bind(R.id.item_remind_name_tv)
         TextView remindNameTv;
         @Bind(R.id.item_remind_time_tv)
         TextView remindTimeTv;
         @Bind(R.id.item_remind_description_tv)
         TextView remindDescriptionTv;
+        @Bind(R.id.remind_first_label_tv)
+        TextView firstLabelTv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -33,6 +33,7 @@ import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.quickadd.QuickSpaceSelectListActivity;
 import com.gongwu.wherecollect.record.MakeRecordActivity;
 import com.gongwu.wherecollect.util.AnimationUtil;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.BitmapUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
@@ -229,8 +230,8 @@ public class MainLocationFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.share_iv:
-                Intent intent = new Intent(getActivity(),AddSharePersonActivity.class);
-                intent.putExtra("startType",101);
+                Intent intent = new Intent(getActivity(), AddSharePersonActivity.class);
+                intent.putExtra("startType", 101);
                 startActivity(intent);
                 break;
             default:
@@ -324,7 +325,7 @@ public class MainLocationFragment extends BaseFragment {
                         intent.putExtra("title", indicatorView.getCurrentLocation().getName() + ">" + view
                                 .getObjectBean()
                                 .getName());
-                        startActivity(intent);
+                        getActivity().startActivityForResult(intent, AppConstant.START_FURNITURE_LOOK_ACT_CODE);
                     }
 
                     @Override

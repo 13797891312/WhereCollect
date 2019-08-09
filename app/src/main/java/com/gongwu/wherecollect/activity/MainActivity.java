@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.volley.request.HttpClient;
@@ -34,6 +35,7 @@ import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.service.TimerService;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.LogUtil;
@@ -42,11 +44,14 @@ import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.ShareUtil;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.CommomDialog;
+import com.gongwu.wherecollect.view.FloatWindowView;
 import com.gongwu.wherecollect.view.MainDrawerView;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.Screen;
 import com.zhaojin.myviews.MyFragmentLayout1;
 
 import org.greenrobot.eventbus.EventBus;
@@ -84,7 +89,7 @@ public class MainActivity extends BaseViewActivity {
             {R.drawable.icon_tab3_active, R.drawable.icon_tab3_normal},
             {R.drawable.icon_tab4_active, R.drawable.icon_tab4_normal},
             {R.drawable.icon_tab2_active, R.drawable.icon_tab2_normal}};
-    private String title[] = {"查看","提醒","共享", "我的"};
+    private String title[] = {"查看", "提醒", "共享", "我的"};
     private AlertDialog dialog;
 
     @Override
@@ -192,7 +197,7 @@ public class MainActivity extends BaseViewActivity {
         myFragmentLayout.overrideTabClickListenner(3, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MyApplication.getUser(context).isTest()) {
+                if (MyApplication.getUser(MainActivity.this).isTest()) {
                     startActivity(new Intent(context, LoginActivity.class));
                 } else {
                     myFragmentLayout.setCurrenItem(3);
@@ -357,6 +362,8 @@ public class MainActivity extends BaseViewActivity {
         //停止由服务启动的循环
         Intent intent = new Intent(this, TimerService.class);
         stopService(intent);
+        //销毁
+        FloatWindow.destroy();
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         myFragmentLayout = null;
@@ -367,7 +374,7 @@ public class MainActivity extends BaseViewActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_btn:
-                if (MyApplication.getUser(context).isTest()) {
+                if (MyApplication.getUser(MainActivity.this).isTest()) {
                     DialogUtil.show("注意", "目前为试用账号，登录后将清空试用账号所有数据", "去登录", "知道了", MainActivity.this, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -410,10 +417,10 @@ public class MainActivity extends BaseViewActivity {
     protected void onRestart() {
         super.onRestart();
         isMessage = false;
-        if (MyApplication.addGood && MyApplication.getUser(context) != null && !MyApplication.getUser(context).isTest()) {
-            int num = SaveDate.getInstence(context).getGoodsNum(MyApplication.getUser(context).getId());
+        if (MyApplication.addGood && MyApplication.getUser(MainActivity.this) != null && !MyApplication.getUser(MainActivity.this).isTest()) {
+            int num = SaveDate.getInstence(MainActivity.this).getGoodsNum(MyApplication.getUser(MainActivity.this).getId());
             LogUtil.e("tag", "num:" + num);
-            boolean show = SaveDate.getInstence(context).getShareApp(MyApplication.getUser(context).getId());
+            boolean show = SaveDate.getInstence(MainActivity.this).getShareApp(MyApplication.getUser(MainActivity.this).getId());
             if (num >= 30 && !show) {
                 showShareDialog();
             }
@@ -426,7 +433,7 @@ public class MainActivity extends BaseViewActivity {
             @Override
             public void onClick(Dialog dialog, boolean confirm) {
                 if (confirm) {
-                    SaveDate.getInstence(context).setShareApp(MyApplication.getUser(context).getId(), true);
+                    SaveDate.getInstence(MainActivity.this).setShareApp(MyApplication.getUser(MainActivity.this).getId(), true);
                     ShareUtil.openShareAppDialog(MainActivity.this);
                 } else {
                     MyApplication.addGood = false;
@@ -438,6 +445,38 @@ public class MainActivity extends BaseViewActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        fragments.get(myFragmentLayout.getCurrentPosition()).onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppConstant.START_FURNITURE_LOOK_ACT_CODE) {
+            ObjectBean moveBean = (ObjectBean) data.getSerializableExtra("moveBean");
+            if (moveBean != null) {
+                initFloatView(moveBean);
+            }
+        } else {
+            fragments.get(myFragmentLayout.getCurrentPosition()).onActivityResult(requestCode, resultCode, data);
+        }
     }
+
+    private FloatWindowView floatView;
+
+    private void initFloatView(ObjectBean moveBean) {
+        if (!PermissionUtil.judgeXuanFuPermission(context, getResources().getString(R.string.permission_xuanfu)))
+            return;
+        if (FloatWindow.get("float") == null) {
+            floatView = new FloatWindowView(getApplicationContext());
+            floatView.setNameTv(moveBean.getName());
+            FloatWindow
+                    .with(getApplicationContext())
+                    .setView(floatView)
+                    .setX(Screen.width, 0.85f)//设置控件初始位置
+                    .setY(Screen.height, 0.7f)
+                    .setDesktopShow(true)//桌面显示
+                    .setTag("float")
+                    .build();
+        } else {
+            if (floatView != null) {
+                floatView.setNameTv(moveBean.getName());
+            }
+            FloatWindow.get("float").show();
+        }
+    }
+
 }

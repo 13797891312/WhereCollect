@@ -141,4 +141,6 @@ public class AppConstant {
 
     public static final int ADD_REMIND_SUCCESS = 1;
     public static final int DEFAULT_PAGE = 1;
+    public static final int REMIND_FINISH_CODE = 1;
+    public static final int START_FURNITURE_LOOK_ACT_CODE = 0x956;
 }

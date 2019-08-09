@@ -298,6 +298,12 @@ public class FurnitureLookActivity extends BaseViewActivity {
         MobclickAgent.onEvent(context, "030201");
     }
 
+    @Override
+    public void onBackPressed() {
+        setActResult();
+        super.onBackPressed();
+    }
+
     private void setActResult() {
         EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
         Intent intent = new Intent();
@@ -305,7 +311,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
             List<ObjectBean> beans = objectListView.getCWList();
             intent.putExtra("objectBeans", (Serializable) beans);
         }
-        if (objectListView != null && objectListView.getMoveLayout() != null && objectListView.getMoveLayout().getVisibility()==View.VISIBLE) {
+        if (objectListView != null && objectListView.getMoveLayout() != null && objectListView.getMoveLayout().getVisibility() == View.VISIBLE) {
             ObjectBean moveBox = (ObjectBean) objectListView.getMoveLayout().getTag();
             intent.putExtra("moveBean", (Serializable) moveBox);
         }

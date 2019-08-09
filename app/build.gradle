@@ -21,9 +21,9 @@ android {
         applicationId "com.gongwu.wherecollect"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 9
-        versionName "3.5.0"
-        flavorDimensions "9"
+        versionCode 10
+        versionName "3.6.0"
+        flavorDimensions "10"
         buildConfigField("String", "URL", "${API_HOST_RELEASE}")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -156,7 +156,9 @@ dependencies {
     implementation 'com.umeng.umsdk:utdid:1.1.5.3'
     //PushSDK
     implementation 'com.umeng.umsdk:push:6.0.1'
-    //
+    //SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
+    //FloatWindow
+    implementation 'com.github.yhaolpz:FloatWindow:1.0.9'
 }

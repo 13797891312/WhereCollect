@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/float_name_tv"
+        android:layout_width="@dimen/dip_60"
+        android:layout_height="@dimen/dip_60"
+        android:background="@drawable/select_float_window_bg"
+        android:gravity="center"
+        android:padding="@dimen/dip_10"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_16" />
+</FrameLayout>

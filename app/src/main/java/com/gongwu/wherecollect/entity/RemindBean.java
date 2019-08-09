@@ -11,6 +11,7 @@ public class RemindBean implements Serializable {
     private int first;
     private int done;
     private String associated_object_url;
+    private String associated_object_id;
     private String description;
 
     public boolean isTimeout() {
@@ -75,6 +76,14 @@ public class RemindBean implements Serializable {
 
     public void setAssociated_object_url(String associated_object_url) {
         this.associated_object_url = associated_object_url;
+    }
+
+    public String getAssociated_object_id() {
+        return associated_object_id;
+    }
+
+    public void setAssociated_object_id(String associated_object_id) {
+        this.associated_object_id = associated_object_id;
     }
 
     public String getDescription() {
