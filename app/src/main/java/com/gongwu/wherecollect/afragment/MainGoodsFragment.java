@@ -311,7 +311,9 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.updateShareMsg msg) {
-        addCWGoodView.setVisibility(View.GONE);
+        if (addCWGoodView != null) {
+            addCWGoodView.setVisibility(View.GONE);
+        }
         changWangCode = null;
         page = 0;
         goodsGridView.setRefreshing(true);
@@ -322,7 +324,9 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
 
     @Override
     public void onShow() {
-        addCWGoodView.setVisibility(View.GONE);
+        if (addCWGoodView != null) {
+            addCWGoodView.setVisibility(View.GONE);
+        }
         changWangCode = null;
         page = 0;
         goodsGridView.setRefreshing(true);
