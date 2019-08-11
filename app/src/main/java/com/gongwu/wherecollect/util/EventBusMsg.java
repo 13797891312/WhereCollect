@@ -173,6 +173,19 @@ public class EventBusMsg {
     }
 
     /**
+     * 迁移盒子
+     */
+    public static class FloatBoxMsg {
+        public boolean show;
+        public String title;
+
+        public FloatBoxMsg(boolean show, String title) {
+            this.show = show;
+            this.title = title;
+        }
+    }
+
+    /**
      * 获取msglist
      */
     public static class GetMessageList {
@@ -196,7 +209,7 @@ public class EventBusMsg {
 
     public static class startService {
     }
-    
+
     public static class stopService {
     }
 }

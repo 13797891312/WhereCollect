@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
+import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.UserBean;
@@ -25,6 +26,7 @@ import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
+import com.gongwu.wherecollect.view.FloatWindowView;
 import com.gongwu.wherecollect.view.drawerLayout.DrawerLayout;
 import com.umeng.analytics.MobclickAgent;
 
@@ -52,6 +54,9 @@ public class FurnitureLookActivity extends BaseViewActivity {
     TextView expandedTv;
     @Bind(R.id.drawerLayout)
     DrawerLayout drawerLayout;
+    @Bind(R.id.float_view)
+    FloatWindowView floatView;
+
     private String title;
     public ObjectBean selectObject;//选择的需要变高亮物品
     private UserBean user;
@@ -94,6 +99,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
                     setActResult();
                 }
             });
+
         }
     }
 
@@ -131,10 +137,14 @@ public class FurnitureLookActivity extends BaseViewActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 objectListView.show();
+                if (structView.getChildView() != null) {
+                    floatView.setEnabled(true);
+                }
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
+                floatView.setEnabled(false);
                 objectListView.hide();
             }
 
@@ -149,6 +159,19 @@ public class FurnitureLookActivity extends BaseViewActivity {
             //传入id，当用户切换隔层的时候 好判断是否开启呼吸查看
             objectListView.setUserId(user.getId());
         }
+        if (MainActivity.floatBean != null) {
+            floatView.setEnabled(false);
+            floatView.setVisibility(View.VISIBLE);
+            floatView.setNameTv(MainActivity.floatBean.getName());
+        } else {
+            floatView.setVisibility(View.GONE);
+        }
+        structView.setSelectItemViewListener(new FurnitureDrawerView.SelectItemViewListener() {
+            @Override
+            public void selectItemView(boolean select) {
+                floatView.setEnabled(select);
+            }
+        });
     }
 
     private long animTime = 5000;

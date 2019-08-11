@@ -158,8 +158,6 @@ public class LoginEmailActivity extends BaseViewActivity implements TextWatcher 
         finish();
     }
 
-    ;
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

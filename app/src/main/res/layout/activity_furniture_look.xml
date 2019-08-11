@@ -36,10 +36,10 @@
                     android:layout_alignParentRight="true"
                     android:background="@drawable/shape_furniture_textview"
                     android:gravity="center"
-                    android:paddingBottom="@dimen/dip_8"
                     android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingTop="@dimen/dip_8"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="@dimen/dip_8"
                     android:text="查看结构"
                     android:textColor="@color/white"
                     android:textSize="@dimen/f_15" />
@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:layout_marginLeft="0dp"
-                android:orientation="vertical"/>
+                android:orientation="vertical" />
         </com.gongwu.wherecollect.view.drawerLayout.DrawerLayout>
 
         <com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureObectListView
@@ -60,6 +60,16 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/red"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
     </LinearLayout>
+
+    <com.gongwu.wherecollect.view.FloatWindowView
+        android:id="@+id/float_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/dip_16"
+        android:layout_marginBottom="@dimen/dip_212"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -68,6 +68,8 @@ import io.reactivex.functions.Consumer;
 public class MainActivity extends BaseViewActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    public static ObjectBean floatBean;
+
     public List<Fragment> fragments = new ArrayList();
     @Bind(R.id.id_drawerlayout)
     public DrawerLayout idDrawerlayout;
@@ -442,6 +444,9 @@ public class MainActivity extends BaseViewActivity {
         if (requestCode == AppConstant.START_FURNITURE_LOOK_ACT_CODE) {
             ObjectBean moveBean = (ObjectBean) data.getSerializableExtra("moveBean");
             if (moveBean != null) {
+                floatBean = moveBean;
+                EventBusMsg.FloatBoxMsg msg = new EventBusMsg.FloatBoxMsg(true, floatBean.getName());
+                EventBus.getDefault().post(msg);
             }
         } else {
             fragments.get(myFragmentLayout.getCurrentPosition()).onActivityResult(requestCode, resultCode, data);

@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook.furnitureLook;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Function:
  * Date: 2017/8/28
@@ -52,6 +54,10 @@ public class FurnitureDrawerView extends LinearLayout {
 
     public void setBean(ObjectBean bean) {
         this.bean = bean;
+    }
+
+    public ChildView getChildView() {
+        return selectView;
     }
 
     /**
@@ -96,7 +102,7 @@ public class FurnitureDrawerView extends LinearLayout {
                 if (view.isEdit()) {
                     selectView = view;
                     ((FurnitureLookActivity) context).refrushListView(view.getObjectBean());
-                    if(tablelayout.findView!=null&&tablelayout.findView==selectView){
+                    if (tablelayout.findView != null && tablelayout.findView == selectView) {
                         new Handler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -104,20 +110,17 @@ public class FurnitureDrawerView extends LinearLayout {
                             }
                         });
                     }
+                    if (selectItemViewListener != null) {
+                        selectItemViewListener.selectItemView(true);
+                    }
                 } else {
                     ((FurnitureLookActivity) context).refrushListView(null);
+                    if (selectItemViewListener != null) {
+                        selectItemViewListener.selectItemView(false);
+                    }
                 }
             }
         });
-        //        tablelayout.setOnClickListener(new OnClickListener() {
-        //            @Override
-        //            public void onClick(View v) {
-        //                if(selectView!=null){
-        //                    selectView.setEditable(false);
-        //                    selectView=null;
-        //                }
-        //            }
-        //        });
     }
 
     @OnClick({R.id.close_tv, R.id.dissView})
@@ -136,4 +139,13 @@ public class FurnitureDrawerView extends LinearLayout {
         }
     }
 
+    private SelectItemViewListener selectItemViewListener;
+
+    public void setSelectItemViewListener(SelectItemViewListener selectItemViewListener) {
+        this.selectItemViewListener = selectItemViewListener;
+    }
+
+    public interface SelectItemViewListener {
+        void selectItemView(boolean select);
+    }
 }

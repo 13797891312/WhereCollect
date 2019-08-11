@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/float_name_tv"
@@ -12,4 +12,21 @@
         android:padding="@dimen/dip_10"
         android:textColor="@color/white"
         android:textSize="@dimen/f_16" />
-</FrameLayout>
+
+    <TextView
+        android:id="@+id/hint_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/float_name_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dip_6"
+        android:textColor="@color/black_87"
+        android:textSize="@dimen/f_14" />
+
+    <ImageView
+        android:id="@+id/float_iv"
+        android:layout_width="@dimen/dip_60"
+        android:layout_height="@dimen/dip_60"
+        android:src="@drawable/shape_float_un_bg"
+        android:visibility="gone" />
+</RelativeLayout>

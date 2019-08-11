@@ -41,6 +41,7 @@ import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.gongwu.wherecollect.view.ErrorView;
+import com.gongwu.wherecollect.view.FloatWindowView;
 import com.gongwu.wherecollect.view.ObjectView;
 import com.umeng.analytics.MobclickAgent;
 import com.zhaojin.myviews.Loading;
@@ -86,6 +87,8 @@ public class MainLocationFragment extends BaseFragment {
     FrameLayout listviewLayout;
     @Bind(R.id.share_iv)
     ImageView shareIv;
+    @Bind(R.id.float_view)
+    FloatWindowView floatView;
 
     private UserBean user;
     boolean isLoaded = false;
@@ -140,6 +143,7 @@ public class MainLocationFragment extends BaseFragment {
 
 
     private void initView() {
+        floatView.setEnabled(false);
         //桌布空间头点击事件
         indicatorView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -520,6 +524,16 @@ public class MainLocationFragment extends BaseFragment {
                     beanList.remove(i);
                 }
             }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.FloatBoxMsg floatBoxMsg) {
+        if (floatBoxMsg.show) {
+            floatView.setVisibility(View.VISIBLE);
+            floatView.setNameTv(floatBoxMsg.title);
+        } else {
+            floatView.setVisibility(View.GONE);
         }
     }
 
