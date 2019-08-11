@@ -1,5 +1,7 @@
 package com.gongwu.wherecollect.LocationLook.furnitureLook;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,10 +19,12 @@ import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
+import com.gongwu.wherecollect.adapter.OnFloatClickListener;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout;
+import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
 import com.gongwu.wherecollect.util.LogUtil;
@@ -170,6 +174,45 @@ public class FurnitureLookActivity extends BaseViewActivity {
             @Override
             public void selectItemView(boolean select) {
                 floatView.setEnabled(select);
+            }
+        });
+        objectListView.setFloatShow(new FurnitureObectListView.FloatShowListener() {
+            @Override
+            public void floatShow(ObjectBean select, boolean show) {
+                if (show) {
+                    MainActivity.floatBean = select;
+                    floatView.setEnabled(true);
+                    floatView.setVisibility(View.VISIBLE);
+                    floatView.setNameTv(MainActivity.floatBean.getName());
+                } else {
+                    floatView.setVisibility(View.GONE);
+                }
+            }
+        });
+        floatView.setOnFloatClickListener(new OnFloatClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (floatView.getEnable()) {
+                    objectListView.floatbox = true;
+                    objectListView.getMoveLayout().setTag(MainActivity.floatBean);
+                    if (MainActivity.floatBean.isLayer()) {
+                        objectListView.moveLayer();
+                    } else {
+                        objectListView.moveBox();
+                    }
+                }
+            }
+
+            @Override
+            public void onLongClick(View view) {
+                //删除
+                DialogUtil.show("提示", "是否取消迁移", "确定", "取消", (Activity) context, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.floatBean = null;
+                        floatView.setVisibility(View.GONE);
+                    }
+                }, null);
             }
         });
     }
@@ -334,7 +377,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
             List<ObjectBean> beans = objectListView.getCWList();
             intent.putExtra("objectBeans", (Serializable) beans);
         }
-        if (objectListView != null && objectListView.getMoveLayout() != null && objectListView.getMoveLayout().getVisibility() == View.VISIBLE) {
+        if (objectListView != null && floatView.getVisibility() == View.VISIBLE) {
             ObjectBean moveBox = (ObjectBean) objectListView.getMoveLayout().getTag();
             intent.putExtra("moveBean", (Serializable) moveBox);
         }

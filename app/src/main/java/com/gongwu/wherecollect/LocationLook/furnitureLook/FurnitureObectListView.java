@@ -15,9 +15,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
 import android.widget.Button;
@@ -29,6 +26,7 @@ import android.widget.Toast;
 import com.gongwu.wherecollect.LocationLook.LocationObectListView;
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
 import com.gongwu.wherecollect.R;
+import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.adapter.MyOnItemLongClickListener;
 import com.gongwu.wherecollect.application.MyApplication;
@@ -200,10 +198,11 @@ public class FurnitureObectListView extends RelativeLayout {
                 DialogUtil.show("提示", "整体迁移该隔层内收纳盒和物品?", "确定", "取消", ((Activity) context), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        moveLayout.setVisibility(VISIBLE);
-                        btnlayout.setVisibility(GONE);
                         objectBean.setLayer(true);
                         moveLayout.setTag(objectBean);
+                        if (floatShowListener != null) {
+                            floatShowListener.floatShow(objectBean, true);
+                        }
                     }
                 }, null);
                 return false;
@@ -214,9 +213,10 @@ public class FurnitureObectListView extends RelativeLayout {
 
     /**
      * 删除物品
+     *
      * @param position
      */
-    private void deleteGoods(final int position){
+    private void deleteGoods(final int position) {
         Map<String, String> map = new TreeMap<>();
         map.put("code", filterList.get(position).getId());
         map.put("uid", MyApplication.getUser(context).getId());
@@ -238,11 +238,11 @@ public class FurnitureObectListView extends RelativeLayout {
         HttpClient.removeObjectFromFurnitrue(context, map, listenner);
     }
 
-    public List<ObjectBean> getCWList(){
-       return mCWList;
+    public List<ObjectBean> getCWList() {
+        return mCWList;
     }
 
-    public View getMoveLayout(){
+    public View getMoveLayout() {
         return moveLayout;
     }
 
@@ -287,7 +287,8 @@ public class FurnitureObectListView extends RelativeLayout {
                             cwSelect = false;
                         }
                     }
-                    if (!imporBtn.isSelected() && addBtn.isSelected()) emtpyView.setErrorMsg("请选择下方要放置的物品");
+                    if (!imporBtn.isSelected() && addBtn.isSelected())
+                        emtpyView.setErrorMsg("请选择下方要放置的物品");
                 }
             });
         }
@@ -318,9 +319,12 @@ public class FurnitureObectListView extends RelativeLayout {
                     @Override
                     protected void move() {
                         super.move();
-                        moveLayout.setVisibility(VISIBLE);
-                        btnlayout.setVisibility(GONE);
+//                        moveLayout.setVisibility(VISIBLE);
+//                        btnlayout.setVisibility(GONE);
                         moveLayout.setTag(mFilterBoxList.get(position));
+                        if (floatShowListener != null) {
+                            floatShowListener.floatShow(mFilterBoxList.get(position), true);
+                        }
                     }
                 };
                 dialog.setTitle("编辑收纳盒");
@@ -361,7 +365,8 @@ public class FurnitureObectListView extends RelativeLayout {
             addBtn.setSelected(false);
             imporBtn.setSelected(false);
             moveCommit.setEnabled(false);
-            if (mCWListView.getVisibility()==View.VISIBLE)emtpyView.setErrorMsg("请选择上方隔层,可添加物品和收纳盒");
+            if (mCWListView.getVisibility() == View.VISIBLE)
+                emtpyView.setErrorMsg("请选择上方隔层,可添加物品和收纳盒");
         } else {
             if (!cwFunction) {
                 noSelectTv.setVisibility(GONE);
@@ -376,7 +381,8 @@ public class FurnitureObectListView extends RelativeLayout {
             if (cwSelect) imporBtn.setSelected(true);
             title.setText(objectBean.getName());
             moveCommit.setEnabled(true);
-            if (addBtn.isSelected()&&mCWListView.getVisibility()==View.VISIBLE) emtpyView.setErrorMsg(cwSelect ? "点击“放置此处”完成物品定位" : "请选择下方要放置的物品");
+            if (addBtn.isSelected() && mCWListView.getVisibility() == View.VISIBLE)
+                emtpyView.setErrorMsg(cwSelect ? "点击“放置此处”完成物品定位" : "请选择下方要放置的物品");
         }
         if (boxBean == null) {//选择了隔层
             notifyInducation(objectBean);
@@ -534,10 +540,11 @@ public class FurnitureObectListView extends RelativeLayout {
     /**
      * 盒子迁移
      */
-    private void moveBox() {
+    public void moveBox() {
         final ObjectBean moveBox = (ObjectBean) moveLayout.getTag();
         for (int i = 0; i < StringUtils.getListSize(moveBox.getParents()); i++) {
             if (moveBox.getParents() != null && moveBox.getParents().get(i).getCode().equals(objectBean.getCode())) {
+                ToastUtil.show(context, "无法迁移到同一个地方", Toast.LENGTH_SHORT);
                 return;
             }
         }
@@ -569,6 +576,11 @@ public class FurnitureObectListView extends RelativeLayout {
                 msg1.hasObjectChanged = true;
                 msg1.hasFurnitureChanged = false;
                 EventBus.getDefault().post(msg1);
+                if (floatbox) {
+                    getNetDate("");
+                    MainActivity.floatBean = null;
+                    floatShowListener.floatShow(null, false);
+                }
             }
         };
         HttpClient.moveFurniture(context, map, listenner);
@@ -577,9 +589,10 @@ public class FurnitureObectListView extends RelativeLayout {
     /**
      * 隔层迁移
      */
-    private void moveLayer() {
+    public void moveLayer() {
         final ObjectBean moveBox = (ObjectBean) moveLayout.getTag();
         if (moveBox.getCode().equals(objectBean.getCode())) {
+            ToastUtil.show(context, "无法迁移到同一个地方", Toast.LENGTH_SHORT);
             return;
         }
         Map<String, String> map = new TreeMap<>();
@@ -611,6 +624,11 @@ public class FurnitureObectListView extends RelativeLayout {
                 EventBusMsg.EditLocationMsg msg = new EventBusMsg.EditLocationMsg(((FurnitureLookActivity) context).spacePosition);
                 msg.hasObjectChanged = true;
                 EventBus.getDefault().post(msg);
+                if (floatbox) {
+                    getNetDate("");
+                    MainActivity.floatBean = null;
+                    floatShowListener.floatShow(null, false);
+                }
             }
         };
         HttpClient.moveLayer(context, map, listenner);
@@ -842,6 +860,8 @@ public class FurnitureObectListView extends RelativeLayout {
         getNetDate(cache);
     }
 
+    public boolean floatbox;
+
     /**
      * 获取网络数据
      */
@@ -854,9 +874,10 @@ public class FurnitureObectListView extends RelativeLayout {
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
                 ACacheClient.saveFurnitrueDetail(context, MyApplication.getUser(context).getId(), furnitureBean.getCode(), r.getResult());
-                if (r.getResult().equals(cache)) {
+                if (r.getResult().equals(cache) && !floatbox) {
                     return;
                 }
+                floatbox = false;
                 mBoxList.clear();
                 mFilterBoxList.clear();
                 List<ObjectBean> tempBoxObjects = JsonUtils.listFromJsonWithSubKey(r.getResult(), ObjectBean.class, "locations");
@@ -926,12 +947,22 @@ public class FurnitureObectListView extends RelativeLayout {
         return ((FurnitureLookActivity) context).selectObject == null ? "" : ((FurnitureLookActivity) context).selectObject.get_id();
     }
 
-    public static interface OnitemClickLisener {
-        public void itemClick(int position, ObjectBean bean, View view);
+    public interface OnitemClickLisener {
+        void itemClick(int position, ObjectBean bean, View view);
     }
 
-    public static interface OnFinishActivityLisener {
-        public void finishActivity();
+    public interface OnFinishActivityLisener {
+        void finishActivity();
     }
 
+
+    private FloatShowListener floatShowListener;
+
+    public void setFloatShow(FloatShowListener floatShowListener) {
+        this.floatShowListener = floatShowListener;
+    }
+
+    public interface FloatShowListener {
+        void floatShow(ObjectBean select, boolean show);
+    }
 }

@@ -70,6 +70,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/dip_16"
-        android:layout_marginBottom="@dimen/dip_212"
+        android:layout_marginBottom="@dimen/dip_50"
         android:visibility="gone" />
 </RelativeLayout>

@@ -21,10 +21,15 @@ public class FloatWindowView extends LinearLayout {
     private TextView hintTv;
     private ImageView floatIv;
     private Context mContext;
+    private boolean enabled;
 
     public FloatWindowView(Context context) {
         super(context);
         initView(context, null);
+    }
+
+    public boolean getEnable() {
+        return enabled;
     }
 
     public FloatWindowView(Context context, AttributeSet attrs) {
@@ -41,7 +46,7 @@ public class FloatWindowView extends LinearLayout {
         nameTv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (enabled) return;
+                if (!enabled) return;
                 if (onClickListener != null) {
                     onClickListener.onClick(nameTv);
                 }
@@ -65,8 +70,6 @@ public class FloatWindowView extends LinearLayout {
         }
     }
 
-    private boolean enabled;
-
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (enabled) {
@@ -80,7 +83,7 @@ public class FloatWindowView extends LinearLayout {
 
     public OnFloatClickListener onClickListener;
 
-    public void setOnItemClickListener(OnFloatClickListener listener) {
+    public void setOnFloatClickListener(OnFloatClickListener listener) {
         this.onClickListener = listener;
     }
 }

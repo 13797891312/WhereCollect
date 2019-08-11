@@ -447,6 +447,9 @@ public class MainActivity extends BaseViewActivity {
                 floatBean = moveBean;
                 EventBusMsg.FloatBoxMsg msg = new EventBusMsg.FloatBoxMsg(true, floatBean.getName());
                 EventBus.getDefault().post(msg);
+            } else {
+                EventBusMsg.FloatBoxMsg msg = new EventBusMsg.FloatBoxMsg(false, "");
+                EventBus.getDefault().post(msg);
             }
         } else {
             fragments.get(myFragmentLayout.getCurrentPosition()).onActivityResult(requestCode, resultCode, data);

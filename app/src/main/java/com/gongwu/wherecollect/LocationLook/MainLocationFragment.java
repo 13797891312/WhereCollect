@@ -1,5 +1,7 @@
 package com.gongwu.wherecollect.LocationLook;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.gongwu.wherecollect.LocationLook.furnitureLook.FurnitureLookActivity;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AddSharePersonActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
+import com.gongwu.wherecollect.adapter.OnFloatClickListener;
 import com.gongwu.wherecollect.afragment.BaseFragment;
 import com.gongwu.wherecollect.afragment.MainFragment1;
 import com.gongwu.wherecollect.application.MyApplication;
@@ -35,6 +38,7 @@ import com.gongwu.wherecollect.record.MakeRecordActivity;
 import com.gongwu.wherecollect.util.AnimationUtil;
 import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.BitmapUtil;
+import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
@@ -160,6 +164,24 @@ public class MainLocationFragment extends BaseFragment {
                     pageMap.get(indicatorView.getSelection()).findView(bean);
                     MobclickAgent.onEvent(getActivity(), "030301");
                 }
+            }
+        });
+        floatView.setOnFloatClickListener(new OnFloatClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+
+            @Override
+            public void onLongClick(View view) {
+                //删除
+                DialogUtil.show("提示", "是否取消迁移", "确定", "取消", getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.floatBean = null;
+                        floatView.setVisibility(View.GONE);
+                    }
+                }, null);
             }
         });
         user = MyApplication.getUser(getActivity());
