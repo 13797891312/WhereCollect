@@ -2,14 +2,15 @@ package com.gongwu.wherecollect.afragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.volley.request.HttpClient;
 import android.volley.request.PostListenner;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.AddChangWangGoodActivity;
 import com.gongwu.wherecollect.activity.MainActivity;
 import com.gongwu.wherecollect.adapter.GoodsMainGridViewAdapter;
+import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ChangWangBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
@@ -26,13 +28,15 @@ import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.entity.ShareUserBean;
 import com.gongwu.wherecollect.object.ObjectLookInfoActivity;
 import com.gongwu.wherecollect.quickadd.QuickSpaceSelectListActivity;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.ErrorView;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhaojin.myviews.Loading;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,10 +53,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainGoodsFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class MainGoodsFragment extends BaseFragment implements MyOnItemClickListener {
     View view;
-    @Bind(R.id.swipe_target)
-    PullToRefreshGridView goodsGridView;
     @Bind(R.id.empty)
     ErrorView empty;
     @Bind(R.id.empty_good_layout)
@@ -61,6 +63,10 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     TextView addCWGoodView;
     @Bind(R.id.empty_img)
     ImageView empty_img;
+    @Bind(R.id.refresh_layout)
+    RefreshLayout mRefreshLayout;
+    @Bind(R.id.swipe_target)
+    RecyclerView mRecyclerView;
 
     int page = 1;
     private String changWangCode, goodType;
@@ -70,14 +76,11 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
 
 
     public MainGoodsFragment() {
-        // Required empty public constructor
     }
 
     public static MainGoodsFragment newInstance() {
         MainGoodsFragment fragment = new MainGoodsFragment();
         Bundle args = new Bundle();
-        //        args.putString(ARG_PARAM1, param1);
-        //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,10 +88,6 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //        if (getArguments() != null) {
-        //            mParam1 = getArguments().getString(ARG_PARAM1);
-        //            mParam2 = getArguments().getString(ARG_PARAM2);
-        //        }
     }
 
     @Override
@@ -115,23 +114,24 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
 
     private void initRecyclerView() {
         gridViewAdapter = new GoodsMainGridViewAdapter(getActivity(), mList);
-        goodsGridView.setAdapter(gridViewAdapter);
-        goodsGridView.setMode(PullToRefreshBase.Mode.BOTH);
-        goodsGridView.getRefreshableView().setNumColumns(2);
-        goodsGridView.setOnItemClickListener(this);
-        goodsGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 2);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(gridViewAdapter);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
-                page = 1;
+            public void onRefresh(@NonNull RefreshLayout mRefreshLayout) {
+                page = AppConstant.DEFAULT_PAGE;
                 getData(false);
             }
-
+        });
+        mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+            public void onLoadMore(@NonNull RefreshLayout mRefreshLayout) {
                 page++;
                 getData(false);
             }
         });
+        gridViewAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -162,28 +162,6 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        ObjectBean objectBean = mList.get(i);
-        Intent intent = new Intent(getActivity(), ObjectLookInfoActivity.class);
-        intent.putExtra("bean", objectBean);
-        if (objectBean.getIs_share() == 1 && objectBean.getShare_users() != null && objectBean.getShare_users().size() > 0) {
-            List<String> share_users = objectBean.getShare_users();
-            List<ShareUserBean> shareUserData = new ArrayList<>();
-            for (int a = 0; a < share_users.size(); a++) {
-                String shareUserId = share_users.get(a);
-                for (int b = 0; b < shareUserBeans.size(); b++) {
-                    ShareUserBean bean = shareUserBeans.get(b);
-                    if (bean.get_id().equals(shareUserId)) {
-                        shareUserData.add(bean);
-                    }
-                }
-            }
-            intent.putExtra("shareUsers", (Serializable) shareUserData);
-        }
-        startActivity(intent);
-    }
-
     /**
      * 获取物品列表
      */
@@ -197,6 +175,8 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
+                mRefreshLayout.finishRefresh(true);
+                mRefreshLayout.finishLoadMore(true);
                 List temp = JsonUtils.listFromJsonWithSubKey(r.getResult(), ObjectBean.class, "items");
                 List shareUserdata = JsonUtils.listFromJsonWithSubKey(r.getResult(), ShareUserBean.class, "users");
                 if (page == 1) {//如果是第一页就缓存下
@@ -207,24 +187,18 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
                         Toast.makeText(getActivity(), "没有更多数据了", Toast.LENGTH_SHORT).show();
                     }
                 }
-                int index = mList.size();
                 mList.addAll(temp);
                 shareUserBeans.clear();
                 shareUserBeans.addAll(shareUserdata);
-                goodsGridView.setAdapter(null);
-                goodsGridView.setAdapter(gridViewAdapter);
                 gridViewAdapter.notifyDataSetChanged();
-                goodsGridView.setEmptyView(empty);
-                if (page != 1 && goodsGridView.mRefreshableView != null) {
-                    goodsGridView.mRefreshableView.smoothScrollToPosition(index);
-                }
                 setViewEmpty();
             }
 
             @Override
             protected void onFinish() {
                 super.onFinish();
-                goodsGridView.onRefreshComplete();
+                mRefreshLayout.finishRefresh(true);
+                mRefreshLayout.finishLoadMore(true);
             }
         };
         HttpClient.getGoodsList(getActivity(), map, listenner);
@@ -290,7 +264,9 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     public void onMessageEvent(String string) {
         if (EventBusMsg.OBJECT_CHANGE.equals(string) || EventBusMsg.OBJECT_FITLER.equals(string)) {
             page = 0;
-            goodsGridView.setRefreshing(true);
+            if (mRefreshLayout != null) {
+                mRefreshLayout.autoRefresh();
+            }
             if (EventBusMsg.OBJECT_CHANGE.equals((string))) {
                 ((MainActivity) getActivity()).filterView.getFilterList();
             }
@@ -301,7 +277,9 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.ChangeUser msg) {
         page = 0;
-        goodsGridView.setRefreshing(true);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.autoRefresh();
+        }
         changWangCode = null;
         if (!MyApplication.getUser(getContext()).isTest()) {
             getCangWangList();
@@ -316,7 +294,9 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
         }
         changWangCode = null;
         page = 0;
-        goodsGridView.setRefreshing(true);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.autoRefresh();
+        }
         if (!MyApplication.getUser(getContext()).isTest()) {
             getCangWangList();
         }
@@ -329,9 +309,33 @@ public class MainGoodsFragment extends BaseFragment implements AdapterView.OnIte
         }
         changWangCode = null;
         page = 0;
-        goodsGridView.setRefreshing(true);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.autoRefresh();
+        }
         if (!MyApplication.getUser(getContext()).isTest()) {
             getCangWangList();
         }
+    }
+
+    @Override
+    public void onItemClick(int position, View view) {
+        ObjectBean objectBean = mList.get(position);
+        Intent intent = new Intent(getActivity(), ObjectLookInfoActivity.class);
+        intent.putExtra("bean", objectBean);
+        if (objectBean.getIs_share() == 1 && objectBean.getShare_users() != null && objectBean.getShare_users().size() > 0) {
+            List<String> share_users = objectBean.getShare_users();
+            List<ShareUserBean> shareUserData = new ArrayList<>();
+            for (int a = 0; a < share_users.size(); a++) {
+                String shareUserId = share_users.get(a);
+                for (int b = 0; b < shareUserBeans.size(); b++) {
+                    ShareUserBean bean = shareUserBeans.get(b);
+                    if (bean.get_id().equals(shareUserId)) {
+                        shareUserData.add(bean);
+                    }
+                }
+            }
+            intent.putExtra("shareUsers", (Serializable) shareUserData);
+        }
+        startActivity(intent);
     }
 }

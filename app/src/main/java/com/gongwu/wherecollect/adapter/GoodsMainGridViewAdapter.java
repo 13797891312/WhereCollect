@@ -2,12 +2,13 @@ package com.gongwu.wherecollect.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.TextureView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,12 +16,10 @@ import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.util.ImageLoader;
-import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.StringUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -33,73 +32,13 @@ import butterknife.ButterKnife;
  * @author zhaojin
  * @since JDK 1.7
  */
-public class GoodsMainGridViewAdapter extends BaseAdapter {
+public class GoodsMainGridViewAdapter extends RecyclerView.Adapter<GoodsMainGridViewAdapter.CustomViewHolder> {
     Context context;
     List<ObjectBean> mlist;
 
     public GoodsMainGridViewAdapter(Context context, List<ObjectBean> list) {
         this.context = context;
         this.mlist = list;
-    }
-
-    @Override
-    public int getCount() {
-        return mlist.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return mlist.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        CustomViewHolder holder;
-        if (view == null) {
-            view = View.inflate(context, R.layout.item_goods_main_gridview, null);
-            holder = new CustomViewHolder(view);
-            view.setTag(holder);
-        } else {
-            holder = (CustomViewHolder) view.getTag();
-        }
-        ObjectBean bean = mlist.get(i);
-        holder.image.refreshDrawableState();
-        if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
-            holder.image.setImageDrawable(null);
-            holder.image.setBackgroundResource(0);
-            ImageLoader.load(context, holder.image, bean.getObject_url());
-            holder.imgTv.setVisibility(View.GONE);
-        } else if (!TextUtils.isEmpty(bean.getObject_url())&&!bean.getObject_url().contains("/")) {
-            holder.image.setImageDrawable(null);
-            holder.image.setBackgroundResource(0);
-            holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
-            holder.imgTv.setVisibility(View.VISIBLE);
-            holder.imgTv.setText(bean.getName());
-        } else {
-            holder.image.setImageDrawable(null);
-            holder.image.setBackgroundResource(0);
-            holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_1));
-            holder.imgTv.setVisibility(View.VISIBLE);
-            holder.imgTv.setText(bean.getName());
-        }
-        if (i == mlist.size() - 1) {
-            holder.footer.setVisibility(View.VISIBLE);
-        } else {
-            holder.footer.setVisibility(View.GONE);
-        }
-        if (bean.getIs_share()==1){
-            holder.isShare.setVisibility(View.VISIBLE);
-        }else{
-            holder.isShare.setVisibility(View.GONE);
-        }
-        holder.nameTv.setText(bean.getName());
-        holder.locationTv.setText(getLoction(bean));
-        return view;
     }
 
     /**
@@ -127,7 +66,55 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         return sb.length() == 0 ? "未归位" : sb.toString();
     }
 
-    public class CustomViewHolder {
+    @NonNull
+    @Override
+    public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_goods_main_gridview, viewGroup, false);
+        return new CustomViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull CustomViewHolder holder, int i) {
+        ObjectBean bean = mlist.get(i);
+        holder.image.refreshDrawableState();
+        if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundResource(0);
+            ImageLoader.load(context, holder.image, bean.getObject_url());
+            holder.imgTv.setVisibility(View.GONE);
+        } else if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("/")) {
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundResource(0);
+            holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
+            holder.imgTv.setVisibility(View.VISIBLE);
+            holder.imgTv.setText(bean.getName());
+        } else {
+            holder.image.setImageDrawable(null);
+            holder.image.setBackgroundResource(0);
+            holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_1));
+            holder.imgTv.setVisibility(View.VISIBLE);
+            holder.imgTv.setText(bean.getName());
+        }
+        if (i == mlist.size() - 1) {
+            holder.footer.setVisibility(View.VISIBLE);
+        } else {
+            holder.footer.setVisibility(View.GONE);
+        }
+        if (bean.getIs_share() == 1) {
+            holder.isShare.setVisibility(View.VISIBLE);
+        } else {
+            holder.isShare.setVisibility(View.GONE);
+        }
+        holder.nameTv.setText(bean.getName());
+        holder.locationTv.setText(getLoction(bean));
+    }
+
+    @Override
+    public int getItemCount() {
+        return mlist == null ? 0 : mlist.size();
+    }
+
+    public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.image)
         ImageView image;
         @Bind(R.id.name_tv)
@@ -142,7 +129,23 @@ public class GoodsMainGridViewAdapter extends BaseAdapter {
         View isShare;
 
         public CustomViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
+            itemView.setTag(this);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(getLayoutPosition(), view);
+            }
+        }
+    }
+
+    public MyOnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(MyOnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 }

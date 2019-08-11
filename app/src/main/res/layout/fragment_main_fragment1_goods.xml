@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,27 +10,42 @@
         android:id="@+id/add_changwang_tv"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_36"
-        android:layout_marginEnd="@dimen/dip_10"
         android:layout_marginStart="@dimen/dip_10"
         android:layout_marginTop="@dimen/dip_10"
+        android:layout_marginEnd="@dimen/dip_10"
         android:background="@drawable/shape_chang_wang_text_bg"
+        android:drawableStart="@drawable/ymy_icon"
         android:drawableEnd="@drawable/go_icon"
         android:drawablePadding="@dimen/dip_6"
-        android:drawableStart="@drawable/ymy_icon"
         android:gravity="center_vertical"
         android:padding="@dimen/dip_4"
-        android:visibility="gone"
         android:text="常忘备余物快速添加,看看“有没有”"
-        android:textSize="@dimen/f_12" />
+        android:textSize="@dimen/f_12"
+        android:visibility="gone" />
 
-    <com.handmark.pulltorefresh.library.PullToRefreshGridView
-        android:id="@id/swipe_target"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/add_changwang_tv"
-        android:background="@color/white"
-        android:paddingLeft="5dp"
-        android:scrollbars="none" />
+        android:layout_marginBottom="@dimen/dip_60">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dip_10" />
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlClassicsSpinnerStyle="Translate" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 
     <com.gongwu.wherecollect.view.ErrorView
         android:id="@+id/empty"
