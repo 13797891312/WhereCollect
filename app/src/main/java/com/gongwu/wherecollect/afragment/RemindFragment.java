@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.EditRemindActivity;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
+import com.gongwu.wherecollect.adapter.OnRemindItemClickListener;
 import com.gongwu.wherecollect.adapter.RemindListAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.RemindBean;
@@ -34,6 +35,10 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.zhaojin.myviews.Loading;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -160,20 +165,40 @@ public class RemindFragment extends BaseFragment {
                 httpPostRemindList();
             }
         });
-        mUnAdapter.setOnItemClickListener(new MyOnItemClickListener() {
+        mUnAdapter.setOnItemClickListener(new OnRemindItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
                 Intent intent = new Intent(getContext(), EditRemindActivity.class);
                 intent.putExtra("remind_bean", (Serializable) mUnData.get(position));
                 startActivityForResult(intent, START_CODE);
             }
+
+            @Override
+            public void onItemDeleteClick(int position, View view) {
+                deleteRemind(mUnData.get(position));
+            }
+
+            @Override
+            public void onItemEditFinishedClick(int position, View view) {
+                setRemindDone(mUnData.get(position));
+            }
         });
-        mAdapter.setOnItemClickListener(new MyOnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnRemindItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
                 Intent intent = new Intent(getContext(), EditRemindActivity.class);
                 intent.putExtra("remind_bean", (Serializable) mData.get(position));
                 startActivityForResult(intent, START_CODE);
+            }
+
+            @Override
+            public void onItemDeleteClick(int position, View view) {
+                deleteRemind(mUnData.get(position));
+            }
+
+            @Override
+            public void onItemEditFinishedClick(int position, View view) {
+                //完成的list 没有标记完成
             }
         });
     }
@@ -254,9 +279,7 @@ public class RemindFragment extends BaseFragment {
                 emptyUnIv.setVisibility(View.GONE);
                 RemindListBean remindListBean = JsonUtils.objectFromJson(r.getResult(), RemindListBean.class);
                 if (remindListBean != null) {
-                    unfinishNumTv.setVisibility(View.VISIBLE);
                     unfinishNumTv.setText(remindListBean.getUnDoneCountString());
-                    finishedNumTv.setVisibility(View.VISIBLE);
                     finishedNumTv.setText(remindListBean.getDoneCountString());
                     if (remindListBean.getReminds() != null && remindListBean.getReminds().size() > 0) {
                         if (CODE_UNFINISH.equals(done)) {
@@ -295,6 +318,67 @@ public class RemindFragment extends BaseFragment {
         HttpClient.getRemindList(getContext(), map, listenner);
     }
 
+    /**
+     * 删除提醒
+     */
+    public void deleteRemind(RemindBean remindBean) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(getContext()).getId());
+        map.put("remind_id", remindBean.get_id());
+        PostListenner listenner = new PostListenner(getContext(), Loading.show(null, getContext(), "")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                try {
+                    JSONObject jsonObject = new JSONObject(r.getResult());
+                    int code = jsonObject.getInt("ok");
+                    if (AppConstant.ADD_REMIND_SUCCESS == code && mRefreshLayout != null) {
+                        page = AppConstant.DEFAULT_PAGE;
+                        mRefreshLayout.autoRefresh();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.deteleRemind(getContext(), map, listenner);
+    }
+
+    /**
+     * 标记已完成
+     */
+    public void setRemindDone(RemindBean remindBean) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(getContext()).getId());
+        map.put("remind_id", remindBean.get_id());
+        PostListenner listenner = new PostListenner(getContext(), Loading.show(null, getContext(), "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                try {
+                    JSONObject jsonObject = new JSONObject(r.getResult());
+                    int code = jsonObject.getInt("ok");
+                    if (AppConstant.ADD_REMIND_SUCCESS == code && mRefreshLayout != null) {
+                        page = AppConstant.DEFAULT_PAGE;
+                        mRefreshLayout.autoRefresh();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.setRemindDone(getContext(), map, listenner);
+    }
 
     @Override
     public void onShow() {

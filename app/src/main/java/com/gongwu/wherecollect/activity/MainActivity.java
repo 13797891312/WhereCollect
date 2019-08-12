@@ -192,16 +192,32 @@ public class MainActivity extends BaseViewActivity {
         });
         myFragmentLayout.setAdapter(fragments, R.layout.tablayout_main_activity, 0x101);
         myFragmentLayout.getViewPager().setOffscreenPageLimit(4);
+        myFragmentLayout.overrideTabClickListenner(1, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tabClick(1);
+            }
+        });
+        myFragmentLayout.overrideTabClickListenner(2, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tabClick(2);
+            }
+        });
         myFragmentLayout.overrideTabClickListenner(3, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MyApplication.getUser(MainActivity.this).isTest()) {
-                    startActivity(new Intent(context, LoginActivity.class));
-                } else {
-                    myFragmentLayout.setCurrenItem(3);
-                }
+                tabClick(3);
             }
         });
+    }
+
+    private void tabClick(int position) {
+        if (MyApplication.getUser(MainActivity.this).isTest()) {
+            startActivity(new Intent(context, LoginActivity.class));
+        } else {
+            myFragmentLayout.setCurrenItem(position);
+        }
     }
 
     public void searchClick() {

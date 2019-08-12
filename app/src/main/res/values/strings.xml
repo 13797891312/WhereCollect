@@ -58,5 +58,6 @@
     <string name="remind_first_label_text">优先</string>
     <string name="float_hint_text">点击释放</string>
     <string name="float_un_hint_text">长按删除</string>
+    <string name="remind_edit_finished_text">标记完成</string>
 
 </resources>

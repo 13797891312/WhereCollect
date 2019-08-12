@@ -15,6 +15,7 @@ import com.gongwu.wherecollect.entity.RemindBean;
 import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DateUtil;
 import com.gongwu.wherecollect.util.ImageLoader;
+import com.gongwu.wherecollect.view.SwipeMenuLayout;
 
 import java.util.List;
 
@@ -40,6 +41,9 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
+        holder.swipeMenuLayout.setIos(false);//设置是否开启IOS阻塞式交互
+        holder.swipeMenuLayout.setLeftSwipe(true);//true往左滑动,false为往右侧滑动
+        holder.swipeMenuLayout.setSwipeEnable(true);//设置侧滑功能开关
         RemindBean remindBean = mData.get(i);
         //是否含有物品信息
         if (TextUtils.isEmpty(remindBean.getAssociated_object_url())) {
@@ -79,6 +83,11 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
         }
         //备注
         holder.remindDescriptionTv.setText(TextUtils.isEmpty(remindBean.getDescription()) ? "" : remindBean.getDescription());
+        if (remindBean.getDone() == 0) {
+            holder.editFinishedTv.setVisibility(View.VISIBLE);
+        } else {
+            holder.editFinishedTv.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -88,6 +97,8 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @Bind(R.id.remind_content_item)
+        SwipeMenuLayout swipeMenuLayout;
         @Bind(R.id.item_remind_goods_iv)
         ImageView imgIv;
         @Bind(R.id.item_remind_name_tv)
@@ -98,25 +109,42 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
         TextView remindDescriptionTv;
         @Bind(R.id.remind_first_label_tv)
         TextView firstLabelTv;
+        @Bind(R.id.remind_edit_finished_tv)
+        TextView editFinishedTv;
+        @Bind(R.id.remind_delete_tv)
+        TextView deleteTv;
+        @Bind(R.id.remind_item_layout)
+        View remindItemView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setTag(this);
-            itemView.setOnClickListener(this);
+            remindItemView.setOnClickListener(this);
+            deleteTv.setOnClickListener(this);
+            editFinishedTv.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(getLayoutPosition(), view);
+                switch (view.getId()) {
+                    case R.id.remind_item_layout:
+                        onItemClickListener.onItemClick(getLayoutPosition(), view);
+                        break;
+                    case R.id.remind_delete_tv:
+                        onItemClickListener.onItemDeleteClick(getLayoutPosition(), view);
+                        break;
+                    case R.id.remind_edit_finished_tv:
+                        onItemClickListener.onItemEditFinishedClick(getLayoutPosition(), view);
+                        break;
+                }
             }
         }
     }
 
-    public MyOnItemClickListener onItemClickListener;
+    public OnRemindItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(MyOnItemClickListener listener) {
+    public void setOnItemClickListener(OnRemindItemClickListener listener) {
         this.onItemClickListener = listener;
     }
 }

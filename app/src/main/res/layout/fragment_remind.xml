@@ -90,10 +90,9 @@
                         android:layout_marginEnd="@dimen/dip_16"
                         android:background="@drawable/shape_remind_num_bg"
                         android:gravity="center"
+                        android:text="0"
                         android:textColor="@color/remind_unfinish_text_color"
-                        android:textSize="@dimen/f_20"
-                        android:visibility="gone"
-                        tools:text="5" />
+                        android:textSize="@dimen/f_20" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -151,10 +150,9 @@
                         android:layout_marginEnd="@dimen/dip_16"
                         android:background="@drawable/shape_remind_num_bg"
                         android:gravity="center"
+                        android:text="0"
                         android:textColor="@color/remind_add_text_color"
-                        android:textSize="@dimen/f_20"
-                        android:visibility="gone"
-                        tools:text="5" />
+                        android:textSize="@dimen/f_20" />
                 </RelativeLayout>
 
                 <RelativeLayout

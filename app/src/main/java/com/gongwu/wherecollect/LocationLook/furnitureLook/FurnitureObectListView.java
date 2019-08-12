@@ -319,8 +319,6 @@ public class FurnitureObectListView extends RelativeLayout {
                     @Override
                     protected void move() {
                         super.move();
-//                        moveLayout.setVisibility(VISIBLE);
-//                        btnlayout.setVisibility(GONE);
                         moveLayout.setTag(mFilterBoxList.get(position));
                         if (floatShowListener != null) {
                             floatShowListener.floatShow(mFilterBoxList.get(position), true);
@@ -384,7 +382,7 @@ public class FurnitureObectListView extends RelativeLayout {
             if (addBtn.isSelected() && mCWListView.getVisibility() == View.VISIBLE)
                 emtpyView.setErrorMsg(cwSelect ? "点击“放置此处”完成物品定位" : "请选择下方要放置的物品");
         }
-        if (boxBean == null) {//选择了隔层
+        if (boxBean == null && objectBean != null) {//选择了隔层
             notifyInducation(objectBean);
             title.setBackgroundResource(R.drawable.icon_text_select);
         }
@@ -580,6 +578,7 @@ public class FurnitureObectListView extends RelativeLayout {
                     getNetDate("");
                     MainActivity.floatBean = null;
                     floatShowListener.floatShow(null, false);
+                    EventBus.getDefault().post(new EventBusMsg.RequestSpace());
                 }
             }
         };
@@ -628,6 +627,7 @@ public class FurnitureObectListView extends RelativeLayout {
                     getNetDate("");
                     MainActivity.floatBean = null;
                     floatShowListener.floatShow(null, false);
+                    EventBus.getDefault().post(new EventBusMsg.RequestSpace());
                 }
             }
         };

@@ -1,78 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.gongwu.wherecollect.view.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/remind_content_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/dip_70"
+    android:clickable="true">
 
-    <ImageView
-        android:id="@+id/item_remind_goods_iv"
-        android:layout_width="@dimen/dip_60"
-        android:layout_height="@dimen/dip_60"
-        android:layout_marginStart="@dimen/dip_16"
-        android:layout_marginTop="@dimen/dip_10"
-        android:layout_marginBottom="@dimen/dip_10" />
-
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/remind_item_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/dip_16"
-        android:layout_marginTop="@dimen/dip_10"
-        android:layout_marginBottom="@dimen/dip_10"
-        android:layout_toEndOf="@id/item_remind_goods_iv"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/item_remind_goods_iv"
+            android:layout_width="@dimen/dip_54"
+            android:layout_height="@dimen/dip_54"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dip_16" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dip_16"
+            android:layout_toEndOf="@id/item_remind_goods_iv"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/item_remind_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/act_relation_goods_text_color"
+                    android:textSize="@dimen/f_15"
+                    tools:text="遥控器" />
+
+                <TextView
+                    android:id="@+id/remind_first_label_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dip_6"
+                    android:layout_toEndOf="@id/item_remind_name_tv"
+                    android:background="@drawable/shape_remind_first_bg"
+                    android:text="@string/remind_first_label_text"
+                    android:textColor="@color/remind_first_color"
+                    android:textSize="@dimen/f_10" />
+            </RelativeLayout>
+
 
             <TextView
-                android:id="@+id/item_remind_name_tv"
+                android:id="@+id/item_remind_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:textColor="@color/act_relation_goods_text_color"
-                android:textSize="@dimen/f_15"
+                android:layout_marginTop="@dimen/dip_4"
+                android:textColor="@color/color999"
+                android:textSize="@dimen/f_13"
                 tools:text="遥控器" />
 
             <TextView
-                android:id="@+id/remind_first_label_tv"
+                android:id="@+id/item_remind_description_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/dip_6"
-                android:layout_toEndOf="@id/item_remind_name_tv"
-                android:background="@drawable/shape_remind_first_bg"
-                android:text="@string/remind_first_label_text"
-                android:textColor="@color/remind_first_color"
-                android:textSize="@dimen/f_10" />
-        </RelativeLayout>
+                android:layout_marginTop="@dimen/dip_4"
+                android:textColor="@color/color999"
+                android:textSize="@dimen/f_12"
+                tools:text="客厅/茶几/抽屉（左）" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/dip_16"
+            android:background="@color/black_12" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/remind_delete_tv"
+        android:layout_width="@dimen/dip_90"
+        android:layout_height="match_parent"
+        android:background="@color/remind_delete_text_color"
+        android:gravity="center"
+        android:text="@string/delete_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_15" />
+
+    <TextView
+        android:id="@+id/remind_edit_finished_tv"
+        android:layout_width="@dimen/dip_90"
+        android:layout_height="match_parent"
+        android:background="@color/remind_add_text_color"
+        android:gravity="center"
+        android:text="@string/remind_edit_finished_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/f_15" />
 
 
-        <TextView
-            android:id="@+id/item_remind_time_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dip_4"
-            android:textColor="@color/color999"
-            android:textSize="@dimen/f_13"
-            tools:text="遥控器" />
-
-        <TextView
-            android:id="@+id/item_remind_description_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dip_4"
-            android:textColor="@color/color999"
-            android:textSize="@dimen/f_12"
-            tools:text="客厅/茶几/抽屉（左）" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/dip_16"
-        android:background="@color/black_12" />
-</RelativeLayout>
+</com.gongwu.wherecollect.view.SwipeMenuLayout>
