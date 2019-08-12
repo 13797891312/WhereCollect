@@ -84,7 +84,7 @@ public class MyApplication extends Application {
     private void initUM() {
         Config.DEBUG = BuildConfig.LOGSHOW;
         PlatformConfig.setWeixin("wx9b2c37b4717d4c13", "e1777498993b4eecbc20e9ef8c520c5d");
-//        PlatformConfig.setQQZone("1105780975", "YtsbvRT5V9PUaG8X");
+//        PlatformConfig.setQQZone("1105780975", "YtsbvRT5V9PUaG8X1");
         PlatformConfig.setQQZone("1106091663", "DknG4bIDrqPOQPSa");
         PlatformConfig.setSinaWeibo("2932944667", "ce56f1cd16996a7895964192463a3027", "https://sns.whalecloud" +
                 ".com/sina2/callback");
