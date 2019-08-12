@@ -37,6 +37,7 @@ import com.gongwu.wherecollect.importObject.ImportObectsActivity;
 import com.gongwu.wherecollect.object.ObjectLookInfoActivity;
 import com.gongwu.wherecollect.util.ACacheClient;
 import com.gongwu.wherecollect.util.AnimationUtil;
+import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
@@ -113,6 +114,7 @@ public class FurnitureObectListView extends RelativeLayout {
     private BoxListAdapter boxAdapter;
     private boolean cwFunction;//判断是否为物品界面添加定位
     private boolean cwSelect;//判断物品是否勾选
+    private String base_Code;
 
     public FurnitureObectListView(Context context) {
         this(context, null);
@@ -133,7 +135,8 @@ public class FurnitureObectListView extends RelativeLayout {
         this.finishListener = listener;
     }
 
-    public void init(ObjectBean furnitureBean, List<ObjectBean> list) {
+    public void init(ObjectBean furnitureBean, List<ObjectBean> list, String baseCode) {
+        this.base_Code = baseCode;
         mList.clear();
         if (list != null && list.size() > 0) {
             mList.addAll(list);
@@ -201,6 +204,7 @@ public class FurnitureObectListView extends RelativeLayout {
                         objectBean.setLayer(true);
                         moveLayout.setTag(objectBean);
                         if (floatShowListener != null) {
+                            AppConstant.BASE_CODE = base_Code;
                             floatShowListener.floatShow(objectBean, true);
                         }
                     }
@@ -321,6 +325,7 @@ public class FurnitureObectListView extends RelativeLayout {
                         super.move();
                         moveLayout.setTag(mFilterBoxList.get(position));
                         if (floatShowListener != null) {
+                            AppConstant.BASE_CODE = base_Code;
                             floatShowListener.floatShow(mFilterBoxList.get(position), true);
                         }
                     }
@@ -554,6 +559,13 @@ public class FurnitureObectListView extends RelativeLayout {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
+                if (floatbox) {
+                    getNetDate("");
+                    MainActivity.floatBean = null;
+                    floatShowListener.floatShow(null, false);
+                    MainLocationFragment.objectMap.remove(AppConstant.BASE_CODE);
+                    EventBus.getDefault().post(new EventBusMsg.RequestSpace());
+                }
                 for (int i = 0; i < StringUtils.getListSize(moveBox.getParents()); i++) {
                     if (moveBox.getParents() != null && moveBox.getParents().get(i).getLevel() == 2) {
                         moveBox.getParents().get(i).setCode(objectBean.getCode());
@@ -570,16 +582,10 @@ public class FurnitureObectListView extends RelativeLayout {
                     }
                 }
                 notifyObject(objectBean, null);
-                EventBusMsg.EditLocationMsg msg1 = new EventBusMsg.EditLocationMsg(((FurnitureLookActivity) context).spacePosition);
-                msg1.hasObjectChanged = true;
-                msg1.hasFurnitureChanged = false;
-                EventBus.getDefault().post(msg1);
-                if (floatbox) {
-                    getNetDate("");
-                    MainActivity.floatBean = null;
-                    floatShowListener.floatShow(null, false);
-                    EventBus.getDefault().post(new EventBusMsg.RequestSpace());
-                }
+                EventBusMsg.EditLocationMsg msg = new EventBusMsg.EditLocationMsg(((FurnitureLookActivity) context).spacePosition);
+                msg.hasObjectChanged = true;
+                msg.hasFurnitureChanged = false;
+                EventBus.getDefault().post(msg);
             }
         };
         HttpClient.moveFurniture(context, map, listenner);
@@ -602,6 +608,13 @@ public class FurnitureObectListView extends RelativeLayout {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
+                if (floatbox) {
+                    getNetDate("");
+                    MainActivity.floatBean = null;
+                    MainLocationFragment.objectMap.remove(AppConstant.BASE_CODE);
+                    floatShowListener.floatShow(null, false);
+                    EventBus.getDefault().post(new EventBusMsg.RequestSpace());
+                }
                 for (int i = 0; i < StringUtils.getListSize(mBoxList); i++) {
                     List<BaseBean> tempList = mBoxList.get(i).getParents();
                     for (int j = 0; j < StringUtils.getListSize(tempList); j++) {
@@ -623,12 +636,6 @@ public class FurnitureObectListView extends RelativeLayout {
                 EventBusMsg.EditLocationMsg msg = new EventBusMsg.EditLocationMsg(((FurnitureLookActivity) context).spacePosition);
                 msg.hasObjectChanged = true;
                 EventBus.getDefault().post(msg);
-                if (floatbox) {
-                    getNetDate("");
-                    MainActivity.floatBean = null;
-                    floatShowListener.floatShow(null, false);
-                    EventBus.getDefault().post(new EventBusMsg.RequestSpace());
-                }
             }
         };
         HttpClient.moveLayer(context, map, listenner);

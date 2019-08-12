@@ -116,7 +116,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
         structView.setBean(furnitureObject);
 //        objectListView.init(furnitureObject, (List<ObjectBean>) getIntent().getSerializableExtra("list"));
         String code = MainLocationFragment.mlist.get(((FurnitureLookActivity) context).spacePosition).getCode();
-        objectListView.init(furnitureObject, MainLocationFragment.objectMap.get(code));
+        objectListView.init(furnitureObject, MainLocationFragment.objectMap.get(code), code);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

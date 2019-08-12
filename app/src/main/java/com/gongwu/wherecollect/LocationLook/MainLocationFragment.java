@@ -1,6 +1,5 @@
 package com.gongwu.wherecollect.LocationLook;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -48,7 +47,6 @@ import com.gongwu.wherecollect.view.ErrorView;
 import com.gongwu.wherecollect.view.FloatWindowView;
 import com.gongwu.wherecollect.view.ObjectView;
 import com.umeng.analytics.MobclickAgent;
-import com.zhaojin.myviews.Loading;
 import com.zhaojin.myviews.TagViewPager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -96,7 +94,6 @@ public class MainLocationFragment extends BaseFragment {
 
     private UserBean user;
     boolean isLoaded = false;
-    Loading loading;
     Handler hd = new Handler();
 
     public static MainLocationFragment newInstance() {
@@ -231,6 +228,14 @@ public class MainLocationFragment extends BaseFragment {
 
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (indicatorView != null) {
+            indicatorView.smoothScrollToPosition(0);
+        }
     }
 
     //View 显示动画
@@ -451,9 +456,32 @@ public class MainLocationFragment extends BaseFragment {
                 initPage();
                 EventBus.getDefault().post(new EventBusMsg.RequestSpaceEdit());
                 EventBus.getDefault().post(new EventBusMsg.showShareImgList(mlist.get(0)));
+                startSystemAddLocationHint();
             }
         };
         HttpClient.getLocationList(getActivity(), map, listenner);
+    }
+
+    private void startSystemAddLocationHint() {
+        //判断是否提示过快速构建,并且不是测试账号
+        if (!SaveDate.getInstence(getActivity()).getQuickAdd
+                (MyApplication.getUser(getActivity()).getId())
+                && !MyApplication.getUser(getActivity()).isTest()) {
+            //没有提示 判断是否有家具 有家具则不跳转到提示界面并设置默认状态
+            if (mlist.size() == 0) {
+                //如果不是测试账号，提示过快速添加
+                SaveDate.getInstence(getActivity()).setQuickAdd(MyApplication.getUser(getActivity()).getId(), true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getActivity(), QuickSpaceSelectListActivity.class);
+                        startActivity(intent);
+                    }
+                }, 200);
+            } else {
+                SaveDate.getInstence(getActivity()).setQuickAdd(MyApplication.getUser(getActivity()).getId(), true);
+            }
+        }
     }
 
     //空间顺序或名称变动过
@@ -512,18 +540,6 @@ public class MainLocationFragment extends BaseFragment {
     public void onMessageEvent(EventBusMsg.ChangeUser msg) {
         locationMap.clear();
         getSpaceData("");
-        //如果不是测试账号，并且没提示过快速添加
-        if (!MyApplication.getUser(getActivity()).isTest() && (!SaveDate.getInstence(getActivity()).getQuickAdd
-                (MyApplication.getUser(getActivity()).getId()))) {
-            SaveDate.getInstence(getActivity()).setQuickAdd(MyApplication.getUser(getActivity()).getId(), true);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(getActivity(), QuickSpaceSelectListActivity.class);
-                    startActivity(intent);
-                }
-            }, 200);
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

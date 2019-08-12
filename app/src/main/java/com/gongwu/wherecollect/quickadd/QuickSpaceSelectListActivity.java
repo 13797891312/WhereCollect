@@ -33,7 +33,6 @@ import butterknife.OnClick;
 public class QuickSpaceSelectListActivity extends BaseViewActivity {
     @Bind(R.id.commit)
     public Button commit;
-    ;
     public int count;//总共选了多少个
     @Bind(R.id.listview)
     ListView listview;

@@ -26,7 +26,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="@dimen/dip_12"></com.gongwu.wherecollect.LocationLook.LocationIndicatorView>
+                android:padding="@dimen/dip_12"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:clipToPadding="true"
-                android:fitsSystemWindows="true"></com.zhaojin.myviews.TagViewPager>
+                android:fitsSystemWindows="true"/>
             <!--下面这个布局只是为了首次引导用的，别无用处-->
             <View
                 android:id="@+id/help_layout"
@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:layout_above="@+id/objectListView"
                 android:clipToPadding="true"
-                android:fitsSystemWindows="true"></View>
+                android:fitsSystemWindows="true"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

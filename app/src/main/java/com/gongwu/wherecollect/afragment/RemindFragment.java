@@ -193,7 +193,7 @@ public class RemindFragment extends BaseFragment {
 
             @Override
             public void onItemDeleteClick(int position, View view) {
-                deleteRemind(mUnData.get(position));
+                deleteRemind(mData.get(position));
             }
 
             @Override
