@@ -382,11 +382,8 @@ public class RemindFragment extends BaseFragment {
 
     @Override
     public void onShow() {
-        if (!init) {
-            init = true;
-            if (mRefreshLayout != null) {
-                mRefreshLayout.autoRefresh();
-            }
+        if (mRefreshLayout != null) {
+            mRefreshLayout.autoRefresh();
         }
     }
 

@@ -360,6 +360,10 @@ public class MainActivity extends BaseViewActivity {
         myFragmentLayout.getTabLayout().findViewById(R.id.my_red).setVisibility(isRed ? View.VISIBLE : View.GONE);
     }
 
+    public void setRemindRed(boolean isRed) {
+        myFragmentLayout.getTabLayout().findViewById(R.id.my_remind).setVisibility(isRed ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

@@ -77,11 +77,12 @@
 
             <View
                 android:id="@+id/my_remind"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
+                android:layout_width="4dp"
+                android:layout_height="4dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_toRightOf="@+id/linea_remind"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/shape_circle_msg_count_red"
                 android:visibility="gone" />
 
