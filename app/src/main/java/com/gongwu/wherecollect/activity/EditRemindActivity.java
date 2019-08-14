@@ -345,6 +345,7 @@ public class EditRemindActivity extends BaseViewActivity {
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
+                editSubmitBtEnable();
                 selectTimeTv.setText(DateUtil.dateToString(date, DateUtil.DatePattern.ONLY_MINUTE));
                 selectTime = date.getTime();
             }
