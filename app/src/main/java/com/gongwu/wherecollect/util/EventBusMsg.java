@@ -212,4 +212,12 @@ public class EventBusMsg {
 
     public static class stopService {
     }
+
+    public static class RefreshRemindRedNum {
+        public boolean show;
+
+        public RefreshRemindRedNum(boolean show) {
+            this.show = show;
+        }
+    }
 }

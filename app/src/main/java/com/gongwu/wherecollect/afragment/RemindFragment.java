@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.afragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 
 import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.activity.EditRemindActivity;
-import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.adapter.OnRemindItemClickListener;
 import com.gongwu.wherecollect.adapter.RemindListAdapter;
 import com.gongwu.wherecollect.application.MyApplication;
@@ -28,8 +28,10 @@ import com.gongwu.wherecollect.entity.RemindBean;
 import com.gongwu.wherecollect.entity.RemindListBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.AppConstant;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
+import com.gongwu.wherecollect.util.iconNum.SendIconNumUtil;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
@@ -37,6 +39,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhaojin.myviews.Loading;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -138,6 +141,7 @@ public class RemindFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         initView();
         initEvent();
+        httpPostRemindList();
         return view;
     }
 
@@ -289,6 +293,7 @@ public class RemindFragment extends BaseFragment {
                             mUnData.addAll(remindListBean.getReminds());
                             mUnAdapter.notifyDataSetChanged();
                             if (mUnData.size() == 0) emptyUnIv.setVisibility(View.VISIBLE);
+                            setMainActTabRedNum();
                         } else {
                             if (page == AppConstant.DEFAULT_PAGE) {
                                 mData.clear();
@@ -316,6 +321,19 @@ public class RemindFragment extends BaseFragment {
             }
         };
         HttpClient.getRemindList(getContext(), map, listenner);
+    }
+
+    private void setMainActTabRedNum() {
+        if (mUnData.size() > 0) {
+            int num = 0;
+            for (RemindBean bean : mUnData) {
+                if (bean.isTimeout()) {
+                    num++;
+                }
+            }
+            EventBus.getDefault().post(new EventBusMsg.RefreshRemindRedNum(num > 0));
+            SendIconNumUtil.sendIconNumNotification(num, (Application) getContext().getApplicationContext());
+        }
     }
 
     /**
@@ -405,5 +423,7 @@ public class RemindFragment extends BaseFragment {
         mUnData = null;
         mData.clear();
         mData = null;
+        ButterKnife.unbind(this);
     }
+
 }

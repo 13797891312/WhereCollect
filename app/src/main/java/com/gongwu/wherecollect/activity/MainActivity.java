@@ -351,6 +351,11 @@ public class MainActivity extends BaseViewActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.RefreshRemindRedNum msg) {
+        setRemindRed(msg.show);
+    }
+
     /**
      * 设置红点是否显示,fragment2里的检测会回调这个方法
      *

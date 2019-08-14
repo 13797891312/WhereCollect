@@ -100,7 +100,7 @@ public class MyApplication extends Application {
             public void onSuccess(String deviceToken) {
                 //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
                 AppConstant.DEVICE_TOKEN = deviceToken;
-                LogUtil.e("PushAgent register Success");
+//                LogUtil.e("PushAgent register Success:" + deviceToken);
             }
 
             @Override
