@@ -1,6 +1,5 @@
 package com.gongwu.wherecollect.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,9 +56,10 @@ public class EditRemindActivity extends BaseViewActivity {
     private static final int START_CODE = 0x523;
     private static final int START_REMARKS_CODE = 0x423;
 
-    private static final int END_YEAR = DateUtil.getNowYear() + 2;//时间选择最大年限
-    private static final int END_MONTH = 11;//时间选择最大月份
-    private static final int END_DAY = 31;//时间选择最大日期
+    private static final int CHECK_TRUE_CODE = 1;
+//    private static final int END_YEAR = DateUtil.getNowYear() + 2;//时间选择最大年限
+//    private static final int END_MONTH = 11;//时间选择最大月份
+//    private static final int END_DAY = 31;//时间选择最大日期
 
     @Bind(R.id.title_text_view)
     TextView titleTv;
@@ -193,9 +193,9 @@ public class EditRemindActivity extends BaseViewActivity {
                     selectTime = detailsBean.getTips_time();
                 }
                 //优化
-                mFirstSwitch.setChecked(detailsBean.getFirst() == 0 ? false : true);
+                mFirstSwitch.setChecked(detailsBean.getFirst() == CHECK_TRUE_CODE);
                 //重复提醒
-                mOverdueTimeSwitch.setChecked(detailsBean.getRepeat() == 0 ? false : true);
+                mOverdueTimeSwitch.setChecked(detailsBean.getRepeat() == CHECK_TRUE_CODE);
                 //备注
                 remarksTv.setText(detailsBean.getDescription());
                 initEvent();
@@ -284,6 +284,9 @@ public class EditRemindActivity extends BaseViewActivity {
         if (selectTime == 0) {
             ToastUtil.show(context, getResources().getString(R.string.add_remind_time_hint), Toast.LENGTH_SHORT);
             return;
+        } else if (selectTime < System.currentTimeMillis()) {
+            ToastUtil.show(context, getResources().getString(R.string.add_remind_time_hint_two), Toast.LENGTH_SHORT);
+            return;
         }
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(context).getId());
@@ -339,22 +342,23 @@ public class EditRemindActivity extends BaseViewActivity {
         selectDate.setTime(new Date(selectTime == 0 ? System.currentTimeMillis() : selectTime));
         Calendar startDate = Calendar.getInstance();
         startDate.set(DateUtil.getNowYear(), DateUtil.getNowMonthNum(), DateUtil.getNowDay());
-//        Calendar endDate = Calendar.getInstance();
+//        Calendar endDate = Calendar.getInstance();//限制选择最大时间
 //        endDate.set(END_YEAR, END_MONTH, END_DAY);
         //时间选择器
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 editSubmitBtEnable();
-                selectTimeTv.setText(DateUtil.dateToString(date, DateUtil.DatePattern.ONLY_MINUTE));
-                selectTime = date.getTime();
+                selectTime = date.getTime() / 1000 / (60 * 60) * (60 * 60) * 1000;
+                selectTimeTv.setText(DateUtil.dateToString(new Date(selectTime), DateUtil.DatePattern.ONLY_MINUTE));
+//                selectTime = date.getTime();
             }
         }).setType(new boolean[]{true, true, true, true, false, false})
                 .setCancelText("取消")//取消按钮文字
                 .setSubmitText("确定")//确认按钮文字
                 .isCyclic(false)
                 .setDate(selectDate)
-                .setRangDate(startDate,null)
+                .setRangDate(startDate, null)
                 .setLabel("年", "月", "日", "时", "", "")
                 .build();
         pvTime.show();
