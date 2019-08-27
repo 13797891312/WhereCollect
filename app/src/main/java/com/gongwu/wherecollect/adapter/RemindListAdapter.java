@@ -88,6 +88,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
         } else {
             holder.editFinishedTv.setVisibility(View.GONE);
         }
+        holder.split_view.setVisibility((i == mData.size() - 1) ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -115,6 +116,8 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
         TextView deleteTv;
         @Bind(R.id.remind_item_layout)
         View remindItemView;
+        @Bind(R.id.split_view)
+        View split_view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

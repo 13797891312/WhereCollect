@@ -65,12 +65,14 @@
                 android:layout_weight="1"
                 android:background="@drawable/shape_remind_item_bg"
                 android:elevation="@dimen/dip_2"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dip_10"
+                android:paddingBottom="@dimen/dip_10">
 
                 <RelativeLayout
                     android:id="@+id/remind_unfinish_title_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dip_60"
+                    android:layout_height="@dimen/dip_40"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -125,12 +127,14 @@
                 android:layout_marginBottom="@dimen/dip_20"
                 android:background="@drawable/shape_remind_item_bg"
                 android:elevation="@dimen/dip_2"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dip_10"
+                android:paddingBottom="@dimen/dip_10">
 
                 <RelativeLayout
                     android:id="@+id/remind_finished_title_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dip_60"
+                    android:layout_height="@dimen/dip_40"
                     android:gravity="center_vertical">
 
                     <TextView

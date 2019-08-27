@@ -122,7 +122,7 @@ public class EditRemindActivity extends BaseViewActivity {
         titleLayout.setVisibility(View.GONE);
         remindGoodsDetailsLayout.setVisibility(View.GONE);
         addRemindFinishedTv.setVisibility(View.VISIBLE);
-        mFirstSwitch.setChecked(true);
+        mOverdueTimeSwitch.setChecked(true);
     }
 
     @OnClick({R.id.back_bt, R.id.remind_goods_layout, R.id.remind_time_layout,
@@ -339,8 +339,8 @@ public class EditRemindActivity extends BaseViewActivity {
         selectDate.setTime(new Date(selectTime == 0 ? System.currentTimeMillis() : selectTime));
         Calendar startDate = Calendar.getInstance();
         startDate.set(DateUtil.getNowYear(), DateUtil.getNowMonthNum(), DateUtil.getNowDay());
-        Calendar endDate = Calendar.getInstance();
-        endDate.set(END_YEAR, END_MONTH, END_DAY);
+//        Calendar endDate = Calendar.getInstance();
+//        endDate.set(END_YEAR, END_MONTH, END_DAY);
         //时间选择器
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
@@ -349,13 +349,13 @@ public class EditRemindActivity extends BaseViewActivity {
                 selectTimeTv.setText(DateUtil.dateToString(date, DateUtil.DatePattern.ONLY_MINUTE));
                 selectTime = date.getTime();
             }
-        }).setType(new boolean[]{true, true, true, true, true, false})
+        }).setType(new boolean[]{true, true, true, true, false, false})
                 .setCancelText("取消")//取消按钮文字
                 .setSubmitText("确定")//确认按钮文字
                 .isCyclic(false)
                 .setDate(selectDate)
-                .setRangDate(startDate, endDate)
-                .setLabel("年", "月", "日", "时", "分", "")
+                .setRangDate(startDate,null)
+                .setLabel("年", "月", "日", "时", "", "")
                 .build();
         pvTime.show();
     }
