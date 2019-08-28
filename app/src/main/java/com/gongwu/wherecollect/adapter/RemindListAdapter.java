@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -51,11 +52,19 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
         } else {
             //图片
             holder.imgIv.setImageDrawable(null);
-            if (TextUtils.isEmpty(remindBean.getAssociated_object_url())) {
-                holder.imgIv.setVisibility(View.GONE);
+            if (!TextUtils.isEmpty(remindBean.getAssociated_object_url()) && remindBean.getAssociated_object_url().contains("http")) {
+                holder.imgIv.setImageDrawable(null);
+                holder.imgIv.setBackgroundResource(0);
+                ImageLoader.load(mContext, holder.imgIv, remindBean.getAssociated_object_url());
+                holder.imgTv.setVisibility(View.GONE);
+            } else if (!TextUtils.isEmpty(remindBean.getAssociated_object_url()) && !remindBean.getAssociated_object_url().contains("/")) {
+                holder.imgIv.setImageDrawable(null);
+                holder.imgIv.setBackgroundResource(0);
+                holder.imgIv.setBackgroundColor(Color.parseColor(remindBean.getAssociated_object_url()));
+                holder.imgTv.setVisibility(View.VISIBLE);
+                holder.imgTv.setText(remindBean.getTitle());
             } else {
-                holder.imgIv.setVisibility(View.VISIBLE);
-                ImageLoader.placeholderLoad(mContext, holder.imgIv, remindBean.getAssociated_object_url(), R.drawable.ic_img_error);
+                holder.imgIv.setVisibility(View.GONE);
             }
         }
         //超时字体颜色
@@ -102,6 +111,8 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
         SwipeMenuLayout swipeMenuLayout;
         @Bind(R.id.item_remind_goods_iv)
         ImageView imgIv;
+        @Bind(R.id.no_url_img_tv)
+        TextView imgTv;
         @Bind(R.id.item_remind_name_tv)
         TextView remindNameTv;
         @Bind(R.id.item_remind_time_tv)

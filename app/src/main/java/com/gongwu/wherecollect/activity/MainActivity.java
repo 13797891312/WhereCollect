@@ -374,6 +374,7 @@ public class MainActivity extends BaseViewActivity {
         super.onNewIntent(intent);
         ObjectBean objectBean = (ObjectBean) intent.getSerializableExtra("object");//需要定位的物品
         if (objectBean != null) {
+            myFragmentLayout.setCurrenItem(0);
             ((MainFragment1) fragments.get(0)).findObject(objectBean);
         }
     }

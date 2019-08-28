@@ -11,19 +11,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/item_remind_goods_iv"
-            android:layout_width="@dimen/dip_54"
-            android:layout_height="@dimen/dip_54"
+        <RelativeLayout
+            android:id="@+id/item_remind_goods_img_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/dip_16" />
+            android:layout_marginStart="@dimen/dip_16">
+
+            <ImageView
+                android:id="@+id/item_remind_goods_iv"
+                android:layout_width="@dimen/dip_54"
+                android:layout_height="@dimen/dip_54" />
+
+            <TextView
+                android:id="@+id/no_url_img_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/f_20"
+                android:visibility="gone" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/dip_16"
-            android:layout_toEndOf="@id/item_remind_goods_iv"
+            android:layout_toEndOf="@id/item_remind_goods_img_layout"
             android:orientation="vertical">
 
             <RelativeLayout

@@ -119,8 +119,8 @@ public class LocationObectListView extends RecyclerView {
     }
 
     public void findObject(ObjectBean objectBean) {
+        adapter.selectPostion = -1;
         setVisibility(View.VISIBLE);
-
         ((FrameLayout) this.getParent()).setVisibility(VISIBLE);
         AnimationUtil.upSlide(((FrameLayout) this.getParent()), 150);
         for (int i = 0; i < StringUtils.getListSize(list); i++) {

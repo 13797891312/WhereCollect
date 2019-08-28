@@ -52,13 +52,8 @@ public class ObjectListAdapter extends RecyclerView.Adapter<ObjectListAdapter.Cu
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        if (position == selectPostion && selectShape) {
-            holder.linearLayout.setBackgroundResource(R.drawable.shape_maincolor_stock);
-        } else {
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.trans));
-        }
         ObjectBean tempBean = mlist.get(position);
-        if (tempBean.isSelect()) {
+        if (tempBean.isSelect() || (position == selectPostion && selectShape)) {
             holder.linearLayout.setBackgroundResource(R.drawable.shape_maincolor_stock);
         } else {
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.trans));

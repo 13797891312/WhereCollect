@@ -40,6 +40,7 @@ import com.gongwu.wherecollect.util.BitmapUtil;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
+import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
@@ -182,10 +183,6 @@ public class MainLocationFragment extends BaseFragment {
             }
         });
         user = MyApplication.getUser(getActivity());
-        if (user == null) return;
-        if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-            mHandler.postDelayed(r, animTime);
-        }
     }
 
     //动画间隔
@@ -238,6 +235,23 @@ public class MainLocationFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        LogUtil.e("isVisibleToUser:" + isVisibleToUser);
+        if (!isVisibleToUser) {
+            mHandler.removeCallbacks(r);
+            hideObjectList();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(r);
+        hideObjectList();
+    }
+
     //View 显示动画
     private void setViewAnim(View view) {
         AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);//初始化操作，参数传入0和1，即由透明度0变化到透明度为1
@@ -250,6 +264,7 @@ public class MainLocationFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.GoodsIsCloseBreathLook msg) {
         if (!msg.isCloseBreathLook) {
+            mHandler.removeCallbacks(r);
             mHandler.postDelayed(r, 5000);
         } else {
             mHandler.removeCallbacks(r);
@@ -274,6 +289,8 @@ public class MainLocationFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mHandler.removeCallbacks(r);
+        hideObjectList();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
     }
@@ -369,12 +386,21 @@ public class MainLocationFragment extends BaseFragment {
                         AnimationUtil.upSlide(listviewLayout, 150);
                         shareIv.setVisibility(View.VISIBLE);
                         AnimationUtil.upLeft(shareIv, 150);
+                        if (user == null) return;//呼吸查看
+                        if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+                            mHandler.removeCallbacks(r);
+                            mHandler.postDelayed(r, animTime);
+                        }
                     }
 
                     @Override
                     public void downSlide() {
                         AnimationUtil.downSlide(listviewLayout, 150);
                         AnimationUtil.upRight(shareIv, 150);
+                        if (user == null) return;
+                        if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+                            mHandler.removeCallbacks(r);
+                        }
                     }
                 });
                 v.getLocationChild(position);
@@ -634,12 +660,6 @@ public class MainLocationFragment extends BaseFragment {
         if (shareIv != null) {
             AnimationUtil.upRight(shareIv, 150);
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        hideObjectList();
     }
 
     /**

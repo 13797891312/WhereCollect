@@ -64,12 +64,29 @@
                 android:layout_marginEnd="@dimen/dip_16"
                 android:background="@drawable/shape_remind_item_bg">
 
-                <ImageView
-                    android:id="@+id/goods_iv"
-                    android:layout_width="@dimen/dip_76"
-                    android:layout_height="@dimen/dip_76"
+                <RelativeLayout
+                    android:id="@+id/remind_goods_img_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/dip_18" />
+                    android:layout_marginStart="@dimen/dip_16">
+
+                    <ImageView
+                        android:id="@+id/goods_iv"
+                        android:layout_width="@dimen/dip_76"
+                        android:layout_height="@dimen/dip_76" />
+
+                    <TextView
+                        android:id="@+id/no_url_img_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/f_20"
+                        android:visibility="gone" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -103,13 +120,28 @@
                         android:layout_height="2px"
                         android:background="@color/black_12" />
 
-                    <TextView
-                        android:id="@+id/goods_location_tv"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        tools:text="位置:" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/goods_location_tv"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            tools:text="位置:" />
+
+                        <ImageView
+                            android:id="@+id/goods_location_btn"
+                            android:layout_width="@dimen/dip_40"
+                            android:layout_height="match_parent"
+                            android:scaleType="center"
+                            android:src="@drawable/icon_location"
+                            android:visibility="gone" />
+                    </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
 

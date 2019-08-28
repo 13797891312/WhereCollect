@@ -1,6 +1,7 @@
 package com.gongwu.wherecollect.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
@@ -91,11 +92,16 @@ public class EditRemindActivity extends BaseViewActivity {
     LinearLayout editDetailLayout;
     @Bind(R.id.edit_remind_submit_tv)
     TextView editSubmitTv;
+    @Bind(R.id.goods_location_btn)
+    ImageView locationIv;
+    @Bind(R.id.no_url_img_tv)
+    TextView imgTv;
 
     private long selectTime = 0;
     private boolean edit = false;
     private ObjectBean selectGoods;
     private RemindDetailsBean detailsBean;
+    private ObjectBean locationBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +133,8 @@ public class EditRemindActivity extends BaseViewActivity {
 
     @OnClick({R.id.back_bt, R.id.remind_goods_layout, R.id.remind_time_layout,
             R.id.add_remind_finished_tv, R.id.remind_remarks_layout,
-            R.id.edit_remind_delete_tv, R.id.edit_remind_submit_tv})
+            R.id.edit_remind_delete_tv, R.id.edit_remind_submit_tv,
+            R.id.goods_location_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_bt://返回
@@ -155,6 +162,11 @@ public class EditRemindActivity extends BaseViewActivity {
                 break;
             case R.id.edit_remind_submit_tv://标记已完成
                 setRemindDone();
+                break;
+            case R.id.goods_location_btn:
+                Intent intentOne = new Intent(context, MainActivity.class);
+                intentOne.putExtra("object", locationBean);
+                startActivity(intentOne);
                 break;
             default:
                 break;
@@ -297,7 +309,7 @@ public class EditRemindActivity extends BaseViewActivity {
         map.put("repeat", mOverdueTimeSwitch.isChecked() ? "1" : "0");
         if (addRemindGoodsLayout.getVisibility() == View.GONE) {
             map.put("associated_object_id", selectGoods != null ? selectGoods.getId() : "");
-            map.put("associated_object_url", selectGoods != null ? (selectGoods.getObject_url().contains("http") ? selectGoods.getObject_url() : "") : "");
+            map.put("associated_object_url", selectGoods != null ? selectGoods.getObject_url() : "");
         }
         if (!TextUtils.isEmpty(AppConstant.DEVICE_TOKEN)) {
             map.put("device_token", AppConstant.DEVICE_TOKEN);
@@ -433,19 +445,31 @@ public class EditRemindActivity extends BaseViewActivity {
      * 初始化关联物品数据
      */
     private void setSelectGoods(ObjectBean selectGoods) {
+        imgTv.setVisibility(View.GONE);
         addRemindGoodsLayout.setVisibility(View.GONE);
         remindGoodsDetailsLayout.setVisibility(View.VISIBLE);
         goodsNameTv.setText(String.format(getString(R.string.remind_goods_name_text), selectGoods.getName()));
-        goodsLocationTv.setText(String.format(getString(R.string.remind_goods_location_text), StringUtils.getGoodsLoction(selectGoods)));
+        String location = StringUtils.getGoodsLoction(selectGoods);
+        goodsLocationTv.setText(String.format(getString(R.string.remind_goods_location_text), location));
         goodsClassifyTv.setText(String.format(getString(R.string.remind_goods_classify_text), StringUtils.getGoodsClassify(selectGoods)));
         if (!TextUtils.isEmpty(selectGoods.getObjectUrl()) && selectGoods.getObjectUrl().contains("http")) {
             ImageLoader.load(context, goodsIv, selectGoods.getObject_url());
+        } else if (!TextUtils.isEmpty(selectGoods.getObject_url()) && !selectGoods.getObject_url().contains("/")) {
+            goodsIv.setBackgroundResource(0);
+            goodsIv.setBackgroundColor(Color.parseColor(selectGoods.getObject_url()));
+            imgTv.setVisibility(View.VISIBLE);
+            imgTv.setText(selectGoods.getName());
         } else {
             goodsIv.setBackgroundColor(getResources().getColor(R.color.colorf9));
         }
         if (TextUtils.isEmpty(mEditText.getText().toString().trim())) {
             mEditText.setText(selectGoods.getName());
         }
+        if (!TextUtils.isEmpty(location)) {
+            locationBean = selectGoods;
+            locationIv.setVisibility(View.VISIBLE);
+        } else {
+            locationIv.setVisibility(View.GONE);
+        }
     }
-
 }
