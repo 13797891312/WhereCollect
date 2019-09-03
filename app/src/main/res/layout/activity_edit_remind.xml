@@ -341,6 +341,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_50"
         android:layout_marginStart="@dimen/dip_16"
+        android:layout_marginTop="@dimen/dip_12"
         android:layout_marginEnd="@dimen/dip_16"
         android:layout_marginBottom="@dimen/dip_12"
         android:gravity="center_vertical"

@@ -215,9 +215,7 @@ public class MainLocationFragment extends BaseFragment {
                     objectListView.adapter.refreshData();
                     setViewAnim(objectListView);
                 }
-                if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-                    mHandler.postDelayed(r, animTime);
-                }
+                startRunnableOrEnd(true);
             }
 
             @Override
@@ -225,6 +223,18 @@ public class MainLocationFragment extends BaseFragment {
 
             }
         });
+    }
+
+    private void startRunnableOrEnd(boolean startOrEnd) {
+        if (user != null && !SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
+            //先取消 再开启
+            mHandler.removeCallbacks(r);
+            if (startOrEnd) {
+                mHandler.postDelayed(r, animTime);
+            } else {
+                objectListView.adapter.defaultData();
+            }
+        }
     }
 
     @Override
@@ -240,7 +250,7 @@ public class MainLocationFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         LogUtil.e("isVisibleToUser:" + isVisibleToUser);
         if (!isVisibleToUser) {
-            mHandler.removeCallbacks(r);
+            startRunnableOrEnd(false);
             hideObjectList();
         }
     }
@@ -248,7 +258,7 @@ public class MainLocationFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mHandler.removeCallbacks(r);
+        startRunnableOrEnd(false);
         hideObjectList();
     }
 
@@ -263,13 +273,7 @@ public class MainLocationFragment extends BaseFragment {
     //呼吸查看
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.GoodsIsCloseBreathLook msg) {
-        if (!msg.isCloseBreathLook) {
-            mHandler.removeCallbacks(r);
-            mHandler.postDelayed(r, 5000);
-        } else {
-            mHandler.removeCallbacks(r);
-            objectListView.adapter.defaultData();
-        }
+        startRunnableOrEnd(!msg.isCloseBreathLook);
     }
 
     @OnClick({R.id.share_iv})
@@ -289,7 +293,7 @@ public class MainLocationFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mHandler.removeCallbacks(r);
+        startRunnableOrEnd(false);
         hideObjectList();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
@@ -386,21 +390,14 @@ public class MainLocationFragment extends BaseFragment {
                         AnimationUtil.upSlide(listviewLayout, 150);
                         shareIv.setVisibility(View.VISIBLE);
                         AnimationUtil.upLeft(shareIv, 150);
-                        if (user == null) return;//呼吸查看
-                        if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-                            mHandler.removeCallbacks(r);
-                            mHandler.postDelayed(r, animTime);
-                        }
+                        startRunnableOrEnd(true);
                     }
 
                     @Override
                     public void downSlide() {
                         AnimationUtil.downSlide(listviewLayout, 150);
                         AnimationUtil.upRight(shareIv, 150);
-                        if (user == null) return;
-                        if (!SaveDate.getInstence(getContext()).getBreathLook(user.getId())) {
-                            mHandler.removeCallbacks(r);
-                        }
+                        startRunnableOrEnd(false);
                     }
                 });
                 v.getLocationChild(position);
@@ -753,6 +750,7 @@ public class MainLocationFragment extends BaseFragment {
                     AnimationUtil.upSlide(listviewLayout, 150);
                     shareIv.setVisibility(View.VISIBLE);
                     AnimationUtil.upLeft(shareIv, 150);
+                    startRunnableOrEnd(true);
                 }
             }
         });
