@@ -40,6 +40,8 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhaojin.myviews.Loading;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -139,9 +141,12 @@ public class RemindFragment extends BaseFragment {
             view = inflater.inflate(R.layout.fragment_remind, container, false);
         }
         ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         initView();
         initEvent();
-        httpPostRemindList();
+        if (!MyApplication.getUser(getContext()).isTest()) {
+            httpPostRemindList();
+        }
         return view;
     }
 
@@ -229,6 +234,7 @@ public class RemindFragment extends BaseFragment {
      * 初始化布局和请求数据
      */
     private void initViewAndData(boolean finished) {
+        //防止用户反复点击未完成 已完成按钮
         if (loading) return;
         if (finished && done == CODE_FINISHED) return;
         if (!finished && done == CODE_UNFINISH) return;
@@ -279,28 +285,24 @@ public class RemindFragment extends BaseFragment {
                 loading = false;
                 mRefreshLayout.finishRefresh(true);
                 mRefreshLayout.finishLoadMore(true);
-                emptyIv.setVisibility(View.GONE);
-                emptyUnIv.setVisibility(View.GONE);
+                //清空数据
+                if (page == AppConstant.DEFAULT_PAGE) {
+                    if (CODE_UNFINISH.equals(done)) {
+                        mUnData.clear();
+                    } else {
+                        mData.clear();
+                    }
+                }
                 RemindListBean remindListBean = JsonUtils.objectFromJson(r.getResult(), RemindListBean.class);
                 if (remindListBean != null) {
                     unfinishNumTv.setText(remindListBean.getUnDoneCountString());
                     finishedNumTv.setText(remindListBean.getDoneCountString());
+                    //数据填充
                     if (remindListBean.getReminds() != null && remindListBean.getReminds().size() > 0) {
                         if (CODE_UNFINISH.equals(done)) {
-                            if (page == AppConstant.DEFAULT_PAGE) {
-                                mUnData.clear();
-                            }
                             mUnData.addAll(remindListBean.getReminds());
-                            mUnAdapter.notifyDataSetChanged();
-                            if (mUnData.size() == 0) emptyUnIv.setVisibility(View.VISIBLE);
-                            setMainActTabRedNum();
                         } else {
-                            if (page == AppConstant.DEFAULT_PAGE) {
-                                mData.clear();
-                            }
                             mData.addAll(remindListBean.getReminds());
-                            mAdapter.notifyDataSetChanged();
-                            if (mData.size() == 0) emptyIv.setVisibility(View.VISIBLE);
                         }
                     } else {
                         if (page > AppConstant.DEFAULT_PAGE) {
@@ -308,7 +310,14 @@ public class RemindFragment extends BaseFragment {
                         }
                         ToastUtil.show(getContext(), getString(R.string.no_more_data), Toast.LENGTH_SHORT);
                     }
-
+                }
+                if (CODE_UNFINISH.equals(done)) {
+                    setMainActTabRedNum();
+                    mUnAdapter.notifyDataSetChanged();
+                    emptyUnIv.setVisibility(mUnData.size() == 0 ? View.VISIBLE : View.GONE);
+                } else {
+                    mAdapter.notifyDataSetChanged();
+                    emptyIv.setVisibility(mData.size() == 0 ? View.VISIBLE : View.GONE);
                 }
             }
 
@@ -424,6 +433,14 @@ public class RemindFragment extends BaseFragment {
         mData.clear();
         mData = null;
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.RefreshRemind msg) {
+        if (mRefreshLayout != null) {
+            mRefreshLayout.autoRefresh();
+        }
     }
 
 }

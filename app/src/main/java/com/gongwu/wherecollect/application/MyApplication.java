@@ -1,28 +1,34 @@
 package com.gongwu.wherecollect.application;
 
 import android.app.Application;
+import android.app.Notification;
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.util.Log;
+import android.os.Vibrator;
 
 import com.gongwu.wherecollect.BuildConfig;
 import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.util.AppConstant;
+import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.JsonUtils;
-import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareConfig;
-import com.umeng.socialize.media.UMImage;
 
+import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePalApplication;
 
 import java.io.File;
@@ -95,7 +101,8 @@ public class MyApplication extends Application {
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "de26ade0140020dd98cc6999598a4ff6");
         //获取消息推送代理示例
         //注册推送服务，每次调用register方法都会回调该接口
-        PushAgent.getInstance(this).register(new IUmengRegisterCallback() {
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.register(new IUmengRegisterCallback() {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
@@ -107,5 +114,47 @@ public class MyApplication extends Application {
             public void onFailure(String s, String s1) {
             }
         });
+        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+            @Override
+            public Notification getNotification(Context context, UMessage msg) {
+                //收到推送
+                EventBus.getDefault().post(new EventBusMsg.RefreshRemind());
+                systemMode();
+                return super.getNotification(context, msg);
+            }
+        };
+        mPushAgent.setMessageHandler(messageHandler);
+    }
+
+    //震动
+    private void startVibrator() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        long[] pattern = {100, 400, 100, 400}; // 停止 开启 停止 开启
+        //第二个参数表示使用pattern第几个参数作为震动时间重复震动，如果是-1就震动一次   0一直震动
+        if (vibrator != null) {
+            vibrator.vibrate(pattern, -1);
+        }
+    }
+
+    private void systemMode() {
+        //获取声音管理器
+        AudioManager audio = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        switch (audio.getRingerMode()) {//获取系统设置的铃声模式
+            case AudioManager.RINGER_MODE_VIBRATE:
+                startVibrator();
+                break;
+            case AudioManager.RINGER_MODE_NORMAL://声音模式   系统提示音
+                startVibrator();
+                MediaPlayer mp = new MediaPlayer();
+                try {
+                    mp.setDataSource(this, RingtoneManager
+                            .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                    mp.prepare();
+                    mp.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 }

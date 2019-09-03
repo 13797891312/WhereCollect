@@ -52,12 +52,13 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
         } else {
             //图片
             holder.imgIv.setImageDrawable(null);
-            if (!TextUtils.isEmpty(remindBean.getAssociated_object_url()) && remindBean.getAssociated_object_url().contains("http")) {
+            holder.imgIv.setVisibility(View.VISIBLE);
+            if (remindBean.getAssociated_object_url().contains("http")) {
                 holder.imgIv.setImageDrawable(null);
                 holder.imgIv.setBackgroundResource(0);
                 ImageLoader.load(mContext, holder.imgIv, remindBean.getAssociated_object_url());
                 holder.imgTv.setVisibility(View.GONE);
-            } else if (!TextUtils.isEmpty(remindBean.getAssociated_object_url()) && !remindBean.getAssociated_object_url().contains("/")) {
+            } else if (remindBean.getAssociated_object_url().contains("#")) {
                 holder.imgIv.setImageDrawable(null);
                 holder.imgIv.setBackgroundResource(0);
                 holder.imgIv.setBackgroundColor(Color.parseColor(remindBean.getAssociated_object_url()));
@@ -65,6 +66,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
                 holder.imgTv.setText(remindBean.getTitle());
             } else {
                 holder.imgIv.setVisibility(View.GONE);
+                holder.imgTv.setVisibility(View.GONE);
             }
         }
         //超时字体颜色
@@ -146,9 +148,11 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Vi
                         onItemClickListener.onItemClick(getLayoutPosition(), view);
                         break;
                     case R.id.remind_delete_tv:
+                        if (swipeMenuLayout != null) swipeMenuLayout.smoothClose();
                         onItemClickListener.onItemDeleteClick(getLayoutPosition(), view);
                         break;
                     case R.id.remind_edit_finished_tv:
+                        if (swipeMenuLayout != null) swipeMenuLayout.smoothClose();
                         onItemClickListener.onItemEditFinishedClick(getLayoutPosition(), view);
                         break;
                 }

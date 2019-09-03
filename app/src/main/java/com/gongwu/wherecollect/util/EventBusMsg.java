@@ -213,6 +213,9 @@ public class EventBusMsg {
     public static class stopService {
     }
 
+    public static class RefreshRemind {
+    }
+
     public static class RefreshRemindRedNum {
         public boolean show;
 

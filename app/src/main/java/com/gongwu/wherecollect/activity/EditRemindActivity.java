@@ -36,7 +36,6 @@ import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.util.ToastUtil;
 import com.zhaojin.myviews.Loading;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -317,7 +316,7 @@ public class EditRemindActivity extends BaseViewActivity {
         if (detailsBean != null) {
             map.put("remind_id", detailsBean.get_id());
         }
-        PostListenner listenner = new PostListenner(context, null) {
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
@@ -361,9 +360,10 @@ public class EditRemindActivity extends BaseViewActivity {
             @Override
             public void onTimeSelect(Date date, View v) {
                 editSubmitBtEnable();
+//                selectTime = date.getTime();
+                //去掉分
                 selectTime = date.getTime() / 1000 / (60 * 60) * (60 * 60) * 1000;
                 selectTimeTv.setText(DateUtil.dateToString(new Date(selectTime), DateUtil.DatePattern.ONLY_MINUTE));
-//                selectTime = date.getTime();
             }
         }).setType(new boolean[]{true, true, true, true, false, false})
                 .setCancelText("取消")//取消按钮文字
@@ -376,12 +376,15 @@ public class EditRemindActivity extends BaseViewActivity {
         pvTime.show();
     }
 
-
     private void editSubmitBtEnable() {
         if (!edit && detailsBean != null) {
             edit = true;
+            //隐藏编辑操作按钮
             editDetailLayout.setVisibility(View.GONE);
+            //显示编辑完成按钮
             addRemindFinishedTv.setVisibility(View.VISIBLE);
+            //隐藏位置按钮
+            locationIv.setVisibility(View.GONE);
         }
     }
 
@@ -431,11 +434,13 @@ public class EditRemindActivity extends BaseViewActivity {
             if (objectBean != null) {
                 selectGoods = objectBean;
                 setSelectGoods(selectGoods);
+                //新建不显示跳转位置按钮
+                locationIv.setVisibility(View.GONE);
             }
         }
         if (requestCode == START_REMARKS_CODE && resultCode == RESULT_OK) {
             remarksTv.setText(data.getStringExtra("remind_remarks"));
-            if (detailsBean != null && remarksTv.getText().toString().trim().equals(detailsBean.getDescription())) {
+            if (detailsBean != null && !remarksTv.getText().toString().trim().equals(detailsBean.getDescription())) {
                 editSubmitBtEnable();
             }
         }
@@ -445,13 +450,20 @@ public class EditRemindActivity extends BaseViewActivity {
      * 初始化关联物品数据
      */
     private void setSelectGoods(ObjectBean selectGoods) {
+        //图片文字
         imgTv.setVisibility(View.GONE);
+        //关联物品跳转按钮
         addRemindGoodsLayout.setVisibility(View.GONE);
+        //显示物品布局
         remindGoodsDetailsLayout.setVisibility(View.VISIBLE);
+        //名称
         goodsNameTv.setText(String.format(getString(R.string.remind_goods_name_text), selectGoods.getName()));
+        //位置
         String location = StringUtils.getGoodsLoction(selectGoods);
         goodsLocationTv.setText(String.format(getString(R.string.remind_goods_location_text), location));
+        //分类
         goodsClassifyTv.setText(String.format(getString(R.string.remind_goods_classify_text), StringUtils.getGoodsClassify(selectGoods)));
+        //判断图片类型 是网络图片还是默认颜色
         if (!TextUtils.isEmpty(selectGoods.getObjectUrl()) && selectGoods.getObjectUrl().contains("http")) {
             ImageLoader.load(context, goodsIv, selectGoods.getObject_url());
         } else if (!TextUtils.isEmpty(selectGoods.getObject_url()) && !selectGoods.getObject_url().contains("/")) {
@@ -462,9 +474,11 @@ public class EditRemindActivity extends BaseViewActivity {
         } else {
             goodsIv.setBackgroundColor(getResources().getColor(R.color.colorf9));
         }
+        //标题
         if (TextUtils.isEmpty(mEditText.getText().toString().trim())) {
             mEditText.setText(selectGoods.getName());
         }
+        //位置跳转按钮显示
         if (!TextUtils.isEmpty(location)) {
             locationBean = selectGoods;
             locationIv.setVisibility(View.VISIBLE);
