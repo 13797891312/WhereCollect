@@ -74,7 +74,7 @@ public class MainLocationFragment extends BaseFragment {
     public static Map<Integer, LocationPage> pageMap = new HashMap<>();
     public static Bitmap bitmap;
     View view;
-    @Bind(R.id.indicatorView)
+    @Bind(R.id.fragment_indicatorView)
     LocationIndicatorView indicatorView;
     @Bind(R.id.objectListView)
     LocationObectListView objectListView;
@@ -471,14 +471,13 @@ public class MainLocationFragment extends BaseFragment {
                 mlist.clear();
                 mlist.addAll(temp);
                 if (selectPostion != -1 && selectPostion <= mlist.size() - 1) {
-                    {
-                        mlist.get(selectPostion).setSelect(true);
-                    }
+                    mlist.get(selectPostion).setSelect(true);
                 }
                 indicatorView.init(mlist);
                 initPage();
-                EventBus.getDefault().post(new EventBusMsg.RequestSpaceEdit());
                 EventBus.getDefault().post(new EventBusMsg.showShareImgList(mlist.get(0)));
+                EventBus.getDefault().post(new EventBusMsg.RequestSpaceEdit());
+                EventBus.getDefault().post(EventBusMsg.SPACE_EDIT);
                 startSystemAddLocationHint();
             }
         };

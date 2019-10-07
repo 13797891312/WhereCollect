@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.LocationLook;
+
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import com.gongwu.wherecollect.util.ScrollSpeedLinearLayoutManger;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Function:
  * Date: 2017/11/14
@@ -22,7 +24,7 @@ import java.util.List;
  * @since JDK 1.7
  */
 public class LocationIndicatorView extends RecyclerView {
-    List<LocationBean> mlist=new ArrayList<>();
+    List<LocationBean> mlist = new ArrayList<>();
     Context context;
     public LocationIndicatorAdapter adapter;
     private ScrollSpeedLinearLayoutManger mLayoutManager;
@@ -57,10 +59,14 @@ public class LocationIndicatorView extends RecyclerView {
     }
 
     public void init(List<LocationBean> list) {
-        mlist = list;
+        if (adapter == null) {
+            adapter = new LocationIndicatorAdapter(context, mlist);
+            setAdapter(adapter);
+        }
         setHasFixedSize(true);
-        adapter = new LocationIndicatorAdapter(context, mlist);
-        setAdapter(adapter);
+        mlist.clear();
+        mlist.addAll(list);
+        adapter.notifyDataSetChanged();
         adapter.setOnItemClickListener(new MyOnItemClickListener() {
             @Override
             public void onItemClick(int positions, View view) {
@@ -81,7 +87,7 @@ public class LocationIndicatorView extends RecyclerView {
      * @return
      */
     public LocationBean getCurrentLocation() {
-        return mlist.get(adapter.getSelectPostion()==-1?null:adapter.getSelectPostion());
+        return mlist.get(adapter.getSelectPostion() == -1 ? null : adapter.getSelectPostion());
     }
 
     /**

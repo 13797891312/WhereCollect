@@ -192,6 +192,7 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String str) {
         if (EventBusMsg.SPACE_EDIT.contains(str)) {
+            indicatorView.init(MainLocationFragment.mlist);
             indicatorView.notifyView();
             initPage();
         }

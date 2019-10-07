@@ -433,6 +433,7 @@ public class EditRemindActivity extends BaseViewActivity {
             ObjectBean objectBean = (ObjectBean) data.getSerializableExtra("objectBean");
             if (objectBean != null) {
                 selectGoods = objectBean;
+                editSubmitBtEnable();
                 setSelectGoods(selectGoods);
                 //新建不显示跳转位置按钮
                 locationIv.setVisibility(View.GONE);

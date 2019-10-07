@@ -57,7 +57,6 @@ public class LocationEditActivity extends BaseViewActivity {
     public static LocationPage addPage;
     @Bind(R.id.tagViewPager)
     public TagViewPager viewPager;
-    View view;
     @Bind(R.id.indicatorView)
     LocationIndicatorView indicatorView;
     @Bind(R.id.edit_space)
@@ -383,6 +382,7 @@ public class LocationEditActivity extends BaseViewActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.RequestSpaceEdit msg) {
+        indicatorView.init(MainLocationFragment.mlist);
         indicatorView.notifyView();
         initPage();
     }
