@@ -24,6 +24,7 @@ public class EventBusMsg {
     public static String ACTIVITY_FINISH = "activity_finish";
     public static String REFRESH_GOODS = "refresh_goods";
     public static String MESSAGE_LIST = "message_list";
+    public static String SELECT_VIEW_PAGER = "select_view_pager";
 
     /**
      * 更换账号

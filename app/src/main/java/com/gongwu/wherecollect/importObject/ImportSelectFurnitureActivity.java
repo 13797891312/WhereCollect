@@ -80,7 +80,6 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ImportSelectFurnitureActivity.this, LocationEditActivity.class);
                 startActivity(intent);
-//                finish();
             }
         });
         //桌布空间头点击事件
@@ -195,6 +194,8 @@ public class ImportSelectFurnitureActivity extends BaseViewActivity {
             indicatorView.init(MainLocationFragment.mlist);
             indicatorView.notifyView();
             initPage();
+        } else if (EventBusMsg.SELECT_VIEW_PAGER.contains(str)) {
+            viewPager.setCurrentItem(indicatorView.getSelection());
         }
     }
 

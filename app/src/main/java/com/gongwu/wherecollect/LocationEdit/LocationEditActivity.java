@@ -88,7 +88,13 @@ public class LocationEditActivity extends BaseViewActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        titleLayout.setBack(true, null);
+        titleLayout.setBack(true, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventBus.getDefault().post(EventBusMsg.SELECT_VIEW_PAGER);
+                finish();
+            }
+        });
         titleLayout.setTitle("位置编辑");
         setContentView(R.layout.activity_location_edit);
         ButterKnife.bind(this);
