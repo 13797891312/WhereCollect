@@ -36,7 +36,6 @@
                 android:id="@+id/share_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="123"
                 android:textColor="@color/black_txt"
                 android:textSize="@dimen/f_18" />
 
@@ -45,7 +44,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dip_4"
-                android:text="123"
                 android:textColor="@color/black_other_one"
                 android:textSize="@dimen/f_13" />
         </LinearLayout>

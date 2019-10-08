@@ -14,7 +14,7 @@
         <com.gongwu.wherecollect.LocationLook.LocationIndicatorView
             android:id="@+id/fragment_indicatorView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dip_48"
             android:padding="@dimen/dip_12"/>
 
         <RelativeLayout

@@ -177,7 +177,6 @@ public class ShareListFragment extends BaseFragment implements ViewPager.OnPageC
     @Override
     public void onPause() {
         super.onPause();
-        LogUtil.e("123", "onDestroyView");
         onShow = false;
     }
 

@@ -59,14 +59,10 @@ public class LocationIndicatorView extends RecyclerView {
     }
 
     public void init(List<LocationBean> list) {
-        if (adapter == null) {
-            adapter = new LocationIndicatorAdapter(context, mlist);
-            setAdapter(adapter);
-        }
+        mlist = list;
         setHasFixedSize(true);
-        mlist.clear();
-        mlist.addAll(list);
-        adapter.notifyDataSetChanged();
+        adapter = new LocationIndicatorAdapter(context, mlist);
+        setAdapter(adapter);
         adapter.setOnItemClickListener(new MyOnItemClickListener() {
             @Override
             public void onItemClick(int positions, View view) {

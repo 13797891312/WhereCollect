@@ -308,7 +308,7 @@ public class MainLocationFragment extends BaseFragment {
             List<LocationBean> temp = JsonUtils.listFromJson(cache, LocationBean.class);
             mlist.clear();
             mlist.addAll(temp);
-            if (indicatorView != null) {
+            if (indicatorView != null && mlist.size() > 0) {
                 indicatorView.init(mlist);
             }
             initPage();
