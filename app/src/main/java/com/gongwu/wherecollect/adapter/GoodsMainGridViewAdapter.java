@@ -77,20 +77,16 @@ public class GoodsMainGridViewAdapter extends RecyclerView.Adapter<GoodsMainGrid
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int i) {
         ObjectBean bean = mlist.get(i);
         holder.image.refreshDrawableState();
+        holder.image.setImageDrawable(null);
+        holder.image.setBackgroundResource(0);
         if (!TextUtils.isEmpty(bean.getObject_url()) && bean.getObject_url().contains("http")) {
-            holder.image.setImageDrawable(null);
-            holder.image.setBackgroundResource(0);
             ImageLoader.load(context, holder.image, bean.getObject_url());
             holder.imgTv.setVisibility(View.GONE);
         } else if (!TextUtils.isEmpty(bean.getObject_url()) && !bean.getObject_url().contains("/")) {
-            holder.image.setImageDrawable(null);
-            holder.image.setBackgroundResource(0);
             holder.image.setBackgroundColor(Color.parseColor(bean.getObject_url()));
             holder.imgTv.setVisibility(View.VISIBLE);
             holder.imgTv.setText(bean.getName());
         } else {
-            holder.image.setImageDrawable(null);
-            holder.image.setBackgroundResource(0);
             holder.image.setBackgroundColor(context.getResources().getColor(R.color.goods_color_1));
             holder.imgTv.setVisibility(View.VISIBLE);
             holder.imgTv.setText(bean.getName());
