@@ -360,18 +360,18 @@ public class EditRemindActivity extends BaseViewActivity {
             @Override
             public void onTimeSelect(Date date, View v) {
                 editSubmitBtEnable();
-//                selectTime = date.getTime();
+                selectTime = date.getTime();
                 //去掉分
-                selectTime = date.getTime() / 1000 / (60 * 60) * (60 * 60) * 1000;
+//                selectTime = date.getTime() / 1000 / (60 * 60) * (60 * 60) * 1000;
                 selectTimeTv.setText(DateUtil.dateToString(new Date(selectTime), DateUtil.DatePattern.ONLY_MINUTE));
             }
-        }).setType(new boolean[]{true, true, true, true, false, false})
+        }).setType(new boolean[]{true, true, true, true, true, false})
                 .setCancelText("取消")//取消按钮文字
                 .setSubmitText("确定")//确认按钮文字
                 .isCyclic(false)
                 .setDate(selectDate)
                 .setRangDate(startDate, null)
-                .setLabel("年", "月", "日", "时", "", "")
+                .setLabel("年", "月", "日", "时", "分", "")
                 .build();
         pvTime.show();
     }

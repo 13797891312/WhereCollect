@@ -60,8 +60,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
 
     private List<SharePersonBean> datas = new ArrayList<>();
     private AddSharePersonOldListAdapter mAdapter;
-    private boolean init;
-    private boolean initList;
+    private boolean init, initList, search;
     private SharePersonBean selectBean;
     private String location_codes, content_text;
     private SharedLocationBean sharedLocationBean;
@@ -100,6 +99,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
                         //会被调用2次
                         if (!init) {
                             init = true;
+                            search = true;
                             getUserCodeData(addShareEditView.getText().toString().trim());
                         }
                     }
@@ -118,8 +118,8 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
                 break;
             case R.id.add_share_scan_ib:
                 Intent intent = new Intent(context, CaptureActivity.class);
-                intent.putExtra("title","添加共享人");
-                intent.putExtra("content","请对方打开“我的”中的二维码进行扫码\n添加");
+                intent.putExtra("title", "添加共享人");
+                intent.putExtra("content", "请对方打开“我的”中的二维码进行扫码\n添加");
                 startActivityForResult(intent, START_CODE);
 
                 break;
@@ -142,6 +142,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
             String result = data.getStringExtra("result");
             addShareEditView.setText(result);
             addShareEditView.setSelection(result.length());
+            search = true;
             getUserCodeData(result);
         }
         if (requestCode == START_CODE && resultCode == Activity.RESULT_OK) {//选择共享空间的结果
@@ -201,7 +202,7 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
             @Override
             protected void code2000(ResponseResult r) {
                 super.code2000(r);
-                if (getIntent().getIntExtra("startType", -1) == START_CODE&&!selectBean.isValid()) {
+                if (getIntent().getIntExtra("startType", -1) == START_CODE && !selectBean.isValid()) {
                     MyShareActivity.start(context);
                 } else {
                     setResult(RESULT_OK);
@@ -251,6 +252,10 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
                 if (beans != null) {
                     datas.add(beans);
                 }
+                if (search && datas.size() > 0) {
+                    selectBean = datas.get(0);
+                    search = false;
+                }
                 mAdapter.notifyDataSetChanged();
                 initList = true;
                 Intent intent = new Intent(AddSharePersonActivity.this, SelectShareSpaceActivity.class);
@@ -297,6 +302,16 @@ public class AddSharePersonActivity extends BaseViewActivity implements MyOnItem
     @Override
     public void afterTextChanged(Editable editable) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        selectBean = null;
+        if (datas != null) {
+            datas.clear();
+            datas = null;
+        }
     }
 
     public static void start(Context context) {

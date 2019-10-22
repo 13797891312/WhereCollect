@@ -251,7 +251,9 @@ public class MainGoodsFragment extends BaseFragment implements MyOnItemClickList
     private void setViewEmpty() {
         if (mList.size() > 0) {
             addCWGoodView.setVisibility(!TextUtils.isEmpty(changWangCode) ? View.VISIBLE : View.GONE);
+            empty.setVisibility(View.GONE);
         } else {
+            empty.setVisibility(View.VISIBLE);
             addCWGoodView.setVisibility(View.GONE);
             emptyGoodLayout.setVisibility(!TextUtils.isEmpty(changWangCode) ? View.VISIBLE : View.GONE);
         }

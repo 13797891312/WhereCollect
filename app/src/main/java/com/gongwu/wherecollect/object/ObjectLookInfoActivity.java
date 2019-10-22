@@ -38,6 +38,7 @@ import com.gongwu.wherecollect.view.GoodsImageView;
 import com.gongwu.wherecollect.view.ObjectInfoLookView;
 import com.gongwu.wherecollect.view.ObjectsLookMenuDialog;
 import com.gongwu.wherecollect.view.PhotosDialog;
+import com.gongwu.wherecollect.view.RemindDialog;
 import com.handmark.pulltorefresh.library.PullToScrollView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -283,6 +284,10 @@ public class ObjectLookInfoActivity extends BaseViewActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
             bean = (ObjectBean) data.getSerializableExtra("bean");
+            if (data.getBooleanExtra("showRemindDialog", false)) {
+                RemindDialog remindDialog = new RemindDialog(ObjectLookInfoActivity.this);
+                remindDialog.showDialog("已将到期时间添加到提醒");
+            }
             isSetResult = true;
             initValues();
         }

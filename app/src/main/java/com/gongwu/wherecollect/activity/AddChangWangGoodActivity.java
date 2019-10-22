@@ -226,7 +226,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
         map.put("uid", MyApplication.getUser(context).getId());
         map.put("object_id", object.getId());
         map.put("option", option);
-        PostListenner listenner = new PostListenner(context, null) {
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "")) {
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);

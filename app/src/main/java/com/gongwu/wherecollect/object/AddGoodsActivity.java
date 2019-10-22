@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.gongwu.wherecollect.LocationLook.MainLocationFragment;
@@ -37,6 +38,8 @@ import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
+import com.gongwu.wherecollect.util.AppConstant;
+import com.gongwu.wherecollect.util.DateUtil;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.FileUtil;
@@ -59,6 +62,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -389,7 +393,7 @@ public class AddGoodsActivity extends BaseViewActivity {
             @Override
             protected void finish(List<String> list) {
                 super.finish(list);
-                LogUtil.e(TAG,"url:"+list.get(0));
+                LogUtil.e(TAG, "url:" + list.get(0));
                 if (editGoodsType == 1) {
                     tempBean.setObject_url(list.get(0));
                     addObject();
@@ -448,6 +452,14 @@ public class AddGoodsActivity extends BaseViewActivity {
                             bean.setColors(colors);
                             bean.setChannels(channels);
                             objectBeans.add(bean);
+                            //判断添加到期提醒
+                            if (!TextUtils.isEmpty(tempBean.getExpire_date())) {
+                                String id = info.getString("_id");
+                                tempBean.set_id(id);
+                                Date date = DateUtil.stringToDate(tempBean.getExpire_date(), DateUtil.DatePattern.ONLY_DAY);
+                                long time = date.getTime() + (9 * 60 * 60 * 1000);
+                                submitRemindHttpPost(time, false);
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -456,7 +468,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                 } else {
                     setResult(RESULT_OK);
                 }
-                FileUtil.deleteFolderFiles(MyApplication.CACHEPATH,false);
+                FileUtil.deleteFolderFiles(MyApplication.CACHEPATH, false);
                 finish();
             }
 
@@ -469,6 +481,52 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
         };
         HttpClient.addObjects(this, map, listenner);
+    }
+
+    /**
+     * 添加提醒
+     */
+    private void submitRemindHttpPost(long time, final boolean showDialog) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("title", tempBean.getName());
+        map.put("tips_time", time + "");
+        map.put("first", "0");
+        map.put("repeat", "1");
+        map.put("associated_object_id", tempBean.getId());
+        map.put("associated_object_url", tempBean.getObject_url());
+        if (!TextUtils.isEmpty(AppConstant.DEVICE_TOKEN)) {
+            map.put("device_token", AppConstant.DEVICE_TOKEN);
+        }
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                try {
+                    JSONObject jsonObject = new JSONObject(r.getResult());
+                    int code = jsonObject.getInt("ok");
+                    if (AppConstant.ADD_REMIND_SUCCESS == code) {
+                        EventBus.getDefault().post(new EventBusMsg.RefreshRemind());
+                    }
+                    if (showDialog) {
+                        Intent intent = new Intent();
+                        intent.putExtra("bean", newBean);
+                        intent.putExtra("showRemindDialog", true);
+                        setResult(100, intent);
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+        };
+        HttpClient.addRemind(context, map, listenner);
     }
 
     /**
@@ -514,6 +572,14 @@ public class AddGoodsActivity extends BaseViewActivity {
                 newBean = JsonUtils.objectFromJson(r.getResult(), ObjectBean.class);
                 editCacheGoods(newBean, tempBean.get_id());
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
+                //判断到期时间是否更改
+                if (!TextUtils.isEmpty(newBean.getExpire_date())) {
+                    String newEndTime = newBean.getExpire_date().split("T")[0];
+                    Date date = DateUtil.stringToDate(newEndTime, DateUtil.DatePattern.ONLY_DAY);
+                    long time = date.getTime() + 9 * 60 * 60 * 1000;
+                    submitRemindHttpPost(time, true);
+                    return;
+                }
                 Intent intent = new Intent();
                 intent.putExtra("bean", newBean);
                 setResult(100, intent);

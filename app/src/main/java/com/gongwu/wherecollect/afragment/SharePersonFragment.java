@@ -123,6 +123,7 @@ public class SharePersonFragment extends BaseFragment implements OnRefreshListen
             @Override
             protected void onFinish() {
                 super.onFinish();
+                EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
             }
         };
         HttpClient.closeShareUser(getContext(), params, listener);
