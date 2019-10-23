@@ -33,6 +33,7 @@ import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.permission.FloatWindowManager;
 import com.gongwu.wherecollect.service.TimerService;
 import com.gongwu.wherecollect.util.AppConstant;
 import com.gongwu.wherecollect.util.DialogUtil;
@@ -237,8 +238,9 @@ public class MainActivity extends BaseViewActivity {
             return;
         }
         isMessage = true;
-        if (!PermissionUtil.judgeXuanFuPermission(context, getResources().getString(R.string.permission_xuanfu)))
+        if (!FloatWindowManager.getInstance().applyOrShowFloatWindow(context)) {
             return;
+        }
         final MessageBean messageBean = msg.messageBean;
         String okStr = "";
         String okUrl = "";
