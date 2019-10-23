@@ -60,6 +60,12 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
     TextView goods_type;
     @Bind(R.id.progressbar_text_view)
     TextView pbarTextView;
+    @Bind(R.id.no_good_view)
+    TextView no_good_view;
+    @Bind(R.id.back_good_view)
+    TextView back_good_view;
+    @Bind(R.id.yes_good_view)
+    TextView yes_good_view;
     @Bind(R.id.progressbar_view)
     ProgressBar mProgressBar;
     @Bind(R.id.cardView_other)
@@ -128,9 +134,11 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
                 finish();
                 break;
             case R.id.no_good_view:
+                setAllBtnEnable(false);
                 mSwipeView.swipeLeft();
                 break;
             case R.id.back_good_view:
+                setAllBtnEnable(false);
                 if (selectedList.size() > 0) {
                     ObjectBean regrets = selectedList.get(selectedList.size() - 1);
                     regrets.setOpt(BLANK_GOOD);
@@ -140,6 +148,7 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
                 }
                 break;
             case R.id.yes_good_view:
+                setAllBtnEnable(false);
                 mSwipeView.swipeRight();
                 break;
             default:
@@ -281,8 +290,15 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
             }
 
             @Override
+            protected void error() {
+                super.error();
+                setAllBtnEnable(true);
+            }
+
+            @Override
             protected void onFinish() {
                 super.onFinish();
+                setAllBtnEnable(true);
             }
         };
         HttpClient.setCangWangDetail(context, map, listenner);
@@ -309,6 +325,12 @@ public class AddChangWangGoodActivity extends BaseViewActivity implements SwipeF
     public void onBackPressed() {
         EventBus.getDefault().post(new EventBusMsg.updateShareMsg());
         super.onBackPressed();
+    }
+
+    private void setAllBtnEnable(boolean enable) {
+        no_good_view.setEnabled(enable);
+        back_good_view.setEnabled(enable);
+        yes_good_view.setEnabled(enable);
     }
 
 }
