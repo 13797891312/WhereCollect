@@ -1,4 +1,5 @@
 package com.gongwu.wherecollect.activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,6 +31,7 @@ import java.util.TreeMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 public class RegisteActivity extends BaseViewActivity implements TextWatcher {
     @Bind(R.id.email_edit)
     EditText emailEdit;
@@ -68,6 +70,14 @@ public class RegisteActivity extends BaseViewActivity implements TextWatcher {
 
     @OnClick(R.id.confirm)
     public void onClick() {
+        if (!isEmail(emailEdit.getText().toString())) {
+            ToastUtil.show(this, "请输入正确的邮箱格式", Toast.LENGTH_LONG);
+            return;
+        }
+        if (!(pwdEdit.getText().toString().length() >= 6 && pwdEdit.getText().toString().length() <= 18)) {
+            ToastUtil.show(this, "密码长度为6-18位", Toast.LENGTH_LONG);
+            return;
+        }
         if (!pwdEdit.getText().toString().equals(pwdAginEdit.getText().toString())) {
             ToastUtil.show(this, "输入的密码不一致", Toast.LENGTH_LONG);
             return;
@@ -75,6 +85,24 @@ public class RegisteActivity extends BaseViewActivity implements TextWatcher {
         register();
     }
 
+    /**
+     * 判断邮箱格式是否正确
+     *
+     * @param strEmail 邮箱
+     * @return
+     */
+    public static boolean isEmail(String strEmail) {
+        String strPattern = "^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$";
+        if (TextUtils.isEmpty(strPattern)) {
+            return false;
+        } else {
+            return strEmail.matches(strPattern);
+        }
+    }
+
+    /**
+     * 邮箱注册
+     */
     public void register() {
         Map<String, String> map = new TreeMap<>();
         map.put("avatar", "http://7xroa4.com1.z0.glb.clouddn.com/default/shounaer_icon.png");

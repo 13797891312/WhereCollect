@@ -19,6 +19,7 @@ import com.gongwu.wherecollect.activity.BaseViewActivity;
 import com.gongwu.wherecollect.adapter.ColorContentAdapter;
 import com.gongwu.wherecollect.adapter.ColorGridAdapter;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
+import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.util.JsonUtils;
@@ -140,6 +141,7 @@ public class SelectColorActivity extends BaseViewActivity {
      */
     private void getColors() {
         Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
         PostListenner listenner = new PostListenner(this) {
             @Override
             protected void code2000(final ResponseResult r) {

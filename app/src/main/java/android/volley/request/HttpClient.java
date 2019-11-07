@@ -697,4 +697,12 @@ public class HttpClient {
         CustomGetRequest request = new CustomGetRequest("api/app/v350/remind-detail", params, listenner);
         Queue.getQueue(context).add(request);
     }
+
+    /**
+     * 判断物品是否提醒
+     */
+    public static void getRemindDetailsByObjectId(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomGetRequest request = new CustomGetRequest("api/app/v350/get-remind-by-objid", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
 }

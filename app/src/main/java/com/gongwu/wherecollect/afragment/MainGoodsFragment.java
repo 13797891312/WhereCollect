@@ -145,11 +145,9 @@ public class MainGoodsFragment extends BaseFragment implements MyOnItemClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.empty_good_layout:
-                if (MainLocationFragment.mlist.size() > 0) {
-                    if (!TextUtils.isEmpty(changWangCode)) {
-                        AddChangWangGoodActivity.start(getContext(), goodType, changWangCode);
-                    }
-                } else {
+                if (!TextUtils.isEmpty(changWangCode)) {
+                    AddChangWangGoodActivity.start(getContext(), goodType, changWangCode);
+                }else{
                     Intent intent = new Intent(getActivity(), QuickSpaceSelectListActivity.class);
                     startActivity(intent);
                 }

@@ -128,6 +128,12 @@ public class ForgetPWDActivity extends BaseViewActivity implements TextWatcher {
                 ToastUtil.show(ForgetPWDActivity.this, "修改成功", Toast.LENGTH_LONG);
                 finish();
             }
+
+            @Override
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
+                ToastUtil.show(ForgetPWDActivity.this, r.getMsg(), Toast.LENGTH_LONG);
+            }
         };
         HttpClient.forgetPWD(this, map, listenner);
     }

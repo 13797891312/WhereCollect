@@ -36,6 +36,7 @@ import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.BaseBean;
 import com.gongwu.wherecollect.entity.BookBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
+import com.gongwu.wherecollect.entity.RemindBeanByObjId;
 import com.gongwu.wherecollect.entity.ResponseResult;
 import com.gongwu.wherecollect.importObject.ImportSelectFurnitureActivity;
 import com.gongwu.wherecollect.util.AppConstant;
@@ -407,7 +408,7 @@ public class AddGoodsActivity extends BaseViewActivity {
     }
 
     /**
-     * 添加物品
+     * 新增物品
      */
     private void addObjects() {
         Map<String, String> map = new TreeMap<>();
@@ -484,7 +485,100 @@ public class AddGoodsActivity extends BaseViewActivity {
     }
 
     /**
-     * 添加提醒
+     * 判断物品是否已有提醒
+     */
+    private void getRemindDetailsByObjectId() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("obj_id", tempBean.getId());
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                RemindBeanByObjId detailsBean = JsonUtils.objectFromJson(r.getResult(), RemindBeanByObjId.class);
+                String newEndTime = newBean.getExpire_date().split("T")[0];
+                Date date = DateUtil.stringToDate(newEndTime, DateUtil.DatePattern.ONLY_DAY);
+                long time = date.getTime() + 9 * 60 * 60 * 1000;
+                if (detailsBean == null) {
+                    submitRemindHttpPost(time, true);
+                } else {
+                    updateRemind(detailsBean, time);
+                }
+            }
+
+            @Override
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
+                //{"code":"6001","data":null,"msg":"该提醒不存在"}
+                if ("6001".equals(r.getCode())) {
+                    String newEndTime = newBean.getExpire_date().split("T")[0];
+                    Date date = DateUtil.stringToDate(newEndTime, DateUtil.DatePattern.ONLY_DAY);
+                    long time = date.getTime() + 9 * 60 * 60 * 1000;
+                    submitRemindHttpPost(time, true);
+                }
+            }
+
+        };
+        HttpClient.getRemindDetailsByObjectId(context, map, listenner);
+    }
+
+    /**
+     * 更新提醒
+     *
+     * @param detailsBean
+     * @param time
+     */
+    private void updateRemind(RemindBeanByObjId detailsBean, long time) {
+        Map<String, String> map = new TreeMap<>();
+        map.put("uid", MyApplication.getUser(context).getId());
+        map.put("title", detailsBean.getTitle());
+        map.put("description", detailsBean.getDescription());
+        map.put("tips_time", time + "");
+        map.put("first", detailsBean.getFirst() + "");
+        map.put("repeat", detailsBean.getRepeat() + "");
+        map.put("associated_object_id", tempBean.getId());
+        map.put("associated_object_url", tempBean.getObject_url());
+        map.put("remind_id", detailsBean.get_id());
+        if (!TextUtils.isEmpty(AppConstant.DEVICE_TOKEN)) {
+            map.put("device_token", AppConstant.DEVICE_TOKEN);
+        }
+        PostListenner listenner = new PostListenner(context, Loading.show(null, context, "正在加载")) {
+            @Override
+            protected void code2000(final ResponseResult r) {
+                super.code2000(r);
+                try {
+                    JSONObject jsonObject = new JSONObject(r.getResult());
+                    int code = jsonObject.getInt("ok");
+                    if (AppConstant.ADD_REMIND_SUCCESS == code) {
+                        EventBus.getDefault().post(new EventBusMsg.RefreshRemind());
+                    }
+                    Intent intent = new Intent();
+                    intent.putExtra("bean", newBean);
+                    intent.putExtra("showRemindDialog", true);
+                    setResult(100, intent);
+                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
+                //{"code":"6001","data":null,"msg":"该提醒不存在"}
+                Intent intent = new Intent();
+                intent.putExtra("bean", newBean);
+                setResult(100, intent);
+                finish();
+            }
+
+        };
+        HttpClient.updateRemind(context, map, listenner);
+    }
+
+
+    /**
+     * 新增提醒
      */
     private void submitRemindHttpPost(long time, final boolean showDialog) {
         Map<String, String> map = new TreeMap<>();
@@ -522,15 +616,22 @@ public class AddGoodsActivity extends BaseViewActivity {
             }
 
             @Override
-            protected void onFinish() {
-                super.onFinish();
+            protected void codeOther(ResponseResult r) {
+                super.codeOther(r);
+                //{"code":"6001","data":null,"msg":"该提醒不存在"}
+                Intent intent = new Intent();
+                intent.putExtra("bean", newBean);
+                setResult(100, intent);
+                finish();
             }
+
         };
         HttpClient.addRemind(context, map, listenner);
     }
 
     /**
      * 编辑其实是先添加一条，再把老的删除
+     * 编辑物品
      */
     private void addObject() {
         Map<String, String> map = new TreeMap<>();
@@ -574,10 +675,7 @@ public class AddGoodsActivity extends BaseViewActivity {
                 EventBus.getDefault().post(EventBusMsg.OBJECT_CHANGE);
                 //判断到期时间是否更改
                 if (!TextUtils.isEmpty(newBean.getExpire_date())) {
-                    String newEndTime = newBean.getExpire_date().split("T")[0];
-                    Date date = DateUtil.stringToDate(newEndTime, DateUtil.DatePattern.ONLY_DAY);
-                    long time = date.getTime() + 9 * 60 * 60 * 1000;
-                    submitRemindHttpPost(time, true);
+                    getRemindDetailsByObjectId();
                     return;
                 }
                 Intent intent = new Intent();
