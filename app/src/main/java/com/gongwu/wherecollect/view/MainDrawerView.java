@@ -114,13 +114,13 @@ public class MainDrawerView extends LinearLayout {
                         querySb.append(query).append(",");
                     }
                 }
-                if (querySb.toString().endsWith(",")){
-                    querySb.delete(querySb.length()-1,querySb.length());
+                if (querySb.toString().endsWith(",")) {
+                    querySb.delete(querySb.length() - 1, querySb.length());
                 }
                 querySb.append("]");
-                if (!querySb.toString().equals(",")){
-                    querySb.delete(0,1);
-                    querySb.delete(querySb.length()-1,querySb.length());
+                if (!querySb.toString().equals(",") && !querySb.toString().contains("star")) {
+                    querySb.delete(0, 1);
+                    querySb.delete(querySb.length() - 1, querySb.length());
                 }
                 query = querySb.toString();
                 ((MainActivity) context).idDrawerlayout.closeDrawer(Gravity.RIGHT);
