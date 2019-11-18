@@ -365,7 +365,7 @@ public class AddGoodsActivity extends BaseViewActivity {
         //编辑物品
         if (editGoodsType == 1) {
             //判断图片是否更改，没更改的情况下 图片地址应该为网络路径
-            if (!tempBean.getObject_url().contains("http") && !tempBean.getObject_url().contains("#")) {
+            if (!TextUtils.isEmpty(tempBean.getObject_url()) && !tempBean.getObject_url().contains("http") && !tempBean.getObject_url().contains("#")) {
                 //图片有更改，先上传
                 upLoadImg(tempBean.getObjectFiles());
             } else {
@@ -375,7 +375,10 @@ public class AddGoodsActivity extends BaseViewActivity {
             return;
         }
         //如果图片没有地址，则传一个颜色服务牌
-        if (!TextUtils.isEmpty(tempBean.getObject_url()) && tempBean.getObject_url().contains("#")) {
+        if (TextUtils.isEmpty(tempBean.getObject_url())) {
+            tempBean.setObject_url("#E66868");
+        }
+        if (tempBean.getObject_url().contains("#")) {
             //调用接口
             addObjects();
         } else if (tempBean.getObject_url().contains("http")) {
@@ -733,8 +736,10 @@ public class AddGoodsActivity extends BaseViewActivity {
             @Override
             public void getResult(List<File> list) {
                 super.getResult(list);
-                imgOldFile = list.get(0);
-                selectImgDialog.cropBitmap(imgOldFile);
+                if (list != null && list.size() > 0) {
+                    imgOldFile = list.get(0);
+                    selectImgDialog.cropBitmap(imgOldFile);
+                }
             }
 
             @Override

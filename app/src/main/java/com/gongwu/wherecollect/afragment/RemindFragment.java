@@ -145,7 +145,7 @@ public class RemindFragment extends BaseFragment {
         initView();
         initEvent();
         if (!MyApplication.getUser(getContext()).isTest()) {
-            httpPostRemindList();
+            httpPostRemindList(false);
         }
         return view;
     }
@@ -164,14 +164,14 @@ public class RemindFragment extends BaseFragment {
             @Override
             public void onRefresh(@NonNull RefreshLayout mRefreshLayout) {
                 page = AppConstant.DEFAULT_PAGE;
-                httpPostRemindList();
+                httpPostRemindList(true);
             }
         });
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout mRefreshLayout) {
                 page++;
-                httpPostRemindList();
+                httpPostRemindList(true);
             }
         });
         mUnAdapter.setOnItemClickListener(new OnRemindItemClickListener() {
@@ -272,7 +272,7 @@ public class RemindFragment extends BaseFragment {
     /**
      * 获取数据
      */
-    private void httpPostRemindList() {
+    private void httpPostRemindList(final boolean showToast) {
         loading = true;
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(getContext()).getId());
@@ -308,7 +308,9 @@ public class RemindFragment extends BaseFragment {
                         if (page > AppConstant.DEFAULT_PAGE) {
                             page--;
                         }
-                        ToastUtil.show(getContext(), getString(R.string.no_more_data), Toast.LENGTH_SHORT);
+                        if (showToast) {
+                            ToastUtil.show(getContext(), getString(R.string.no_more_data), Toast.LENGTH_SHORT);
+                        }
                     }
                 }
                 if (CODE_UNFINISH.equals(done)) {

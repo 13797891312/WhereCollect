@@ -368,7 +368,6 @@ public class MainLocationFragment extends BaseFragment {
                     public void itemClick(ObjectView view) {
                         Intent intent = new Intent(getActivity(), FurnitureLookActivity.class);
                         intent.putExtra("furnitureObject", view.getObjectBean());
-                        intent.putExtra("list", ((ArrayList) objectListView.list));
                         intent.putExtra("position", viewPager.getCurrentItem());
                         if (objectListView.adapter.selectPostion != -1) {
                             intent.putExtra("object", objectListView.adapter.getItem(objectListView.adapter
@@ -518,7 +517,9 @@ public class MainLocationFragment extends BaseFragment {
     //空间需要切换到哪一页
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.EditLocationPositionChangeMsg msg) {
-        viewPager.setCurrentItem(msg.position);
+        if (viewPager != null) {
+            viewPager.setCurrentItem(msg.position);
+        }
     }
 
     //空间需要重新网络获取

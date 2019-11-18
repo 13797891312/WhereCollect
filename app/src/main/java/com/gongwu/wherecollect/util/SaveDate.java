@@ -4,25 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.gongwu.wherecollect.application.MyApplication;
+
 public class SaveDate {
     static SharedPreferences sharedPreferences;
     private static SaveDate SAVEDATE;
-    //上下文
-    private Context con;
-
-    private SaveDate(Context con) {
-        this.con = con;
-    }
 
     /***
      * 得到一个单例对象
      ***/
     public static SaveDate getInstence(Context con) {
-        if (SAVEDATE == null && con != null) {
-            SAVEDATE = new SaveDate(con);
+        if (SAVEDATE == null) {
+            SAVEDATE = new SaveDate();
         }
-        if (sharedPreferences == null && con != null) {
-            sharedPreferences = con.getSharedPreferences("saveDate", Context.MODE_PRIVATE);
+        if (sharedPreferences == null) {
+            sharedPreferences = MyApplication.getContext().getSharedPreferences("saveDate", Context.MODE_PRIVATE);
         }
         return SAVEDATE;
     }

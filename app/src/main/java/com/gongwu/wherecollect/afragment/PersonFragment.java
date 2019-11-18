@@ -208,6 +208,7 @@ public class PersonFragment extends BaseFragment {
      * 刷新UI
      */
     public void refreshUi() {
+        if (!isAdded()) return;
         user = MyApplication.getUser(getActivity());
         if (user == null) return;
         ImageLoader.loadCircle(getActivity(), personIv, user.getAvatar(), R.mipmap.ic_launcher);

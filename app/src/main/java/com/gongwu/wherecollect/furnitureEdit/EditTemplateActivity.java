@@ -83,7 +83,9 @@ public class EditTemplateActivity extends BaseViewActivity implements View.OnCli
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            tablelayout.getSelectBeans().get(0).setName(s.toString());
+            if (tablelayout != null && tablelayout.getSelectBeans().size() > 0) {
+                tablelayout.getSelectBeans().get(0).setName(s.toString());
+            }
             tablelayout.initChild();
         }
 

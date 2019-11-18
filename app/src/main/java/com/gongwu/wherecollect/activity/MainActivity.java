@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -183,12 +184,17 @@ public class MainActivity extends BaseViewActivity {
         myFragmentLayout.setWhereTab(0);
         myFragmentLayout.setOnChangeFragmentListener(new MyFragmentLayout1.ChangeFragmentListener() {
             @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
+            public void change(int lastPosition, final int positon, View lastTabView, View currentTabView) {
                 // TODO Auto-generated method stub
                 titleLayout.setTitle(title[positon]);
                 ((ImageView) lastTabView.findViewById(R.id.tab_img)).setImageResource(tabImages[lastPosition][1]);
                 ((ImageView) currentTabView.findViewById(R.id.tab_img)).setImageResource(tabImages[positon][0]);
-                ((BaseFragment) fragments.get(positon)).onShow();
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((BaseFragment) fragments.get(positon)).onShow();
+                    }
+                });
             }
         });
         myFragmentLayout.setAdapter(fragments, R.layout.tablayout_main_activity, 0x101);

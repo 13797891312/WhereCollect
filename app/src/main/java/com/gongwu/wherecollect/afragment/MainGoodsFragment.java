@@ -73,7 +73,7 @@ public class MainGoodsFragment extends BaseFragment implements MyOnItemClickList
     private GoodsMainGridViewAdapter gridViewAdapter;
     private List<ObjectBean> mList = new ArrayList<>();
     private List<ShareUserBean> shareUserBeans = new ArrayList<>();
-
+    private boolean initData = false;
 
     public MainGoodsFragment() {
     }
@@ -95,13 +95,6 @@ public class MainGoodsFragment extends BaseFragment implements MyOnItemClickList
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_fragment1_goods, container, false);
         ButterKnife.bind(this, view);
-        String cache = SaveDate.getInstence(getActivity()).getObjectList();//取缓存
-        if (TextUtils.isEmpty(cache)) {//没有缓存
-            getData(true);
-        } else {
-            mList.addAll(JsonUtils.listFromJson(cache, ObjectBean.class));
-            getData(false);
-        }
         //判断常忘物品
         if (!MyApplication.getUser(getContext()).isTest()) {
             getCangWangList();
@@ -145,9 +138,10 @@ public class MainGoodsFragment extends BaseFragment implements MyOnItemClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.empty_good_layout:
+                if (!initData) return;
                 if (!TextUtils.isEmpty(changWangCode)) {
                     AddChangWangGoodActivity.start(getContext(), goodType, changWangCode);
-                }else{
+                } else {
                     Intent intent = new Intent(getActivity(), QuickSpaceSelectListActivity.class);
                     startActivity(intent);
                 }
@@ -173,6 +167,7 @@ public class MainGoodsFragment extends BaseFragment implements MyOnItemClickList
             @Override
             protected void code2000(final ResponseResult r) {
                 super.code2000(r);
+                initData = true;
                 mRefreshLayout.finishRefresh(true);
                 mRefreshLayout.finishLoadMore(true);
                 List temp = JsonUtils.listFromJsonWithSubKey(r.getResult(), ObjectBean.class, "items");

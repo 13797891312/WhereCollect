@@ -9,10 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-
-import com.gongwu.wherecollect.R;
 import com.gongwu.wherecollect.adapter.MyOnItemClickListener;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.object.ObjectLookInfoActivity;
@@ -121,7 +119,7 @@ public class LocationObectListView extends RecyclerView {
     public void findObject(ObjectBean objectBean) {
         adapter.selectPostion = -1;
         setVisibility(View.VISIBLE);
-        ((FrameLayout) this.getParent()).setVisibility(VISIBLE);
+        ((ViewGroup) this.getParent()).setVisibility(VISIBLE);
         AnimationUtil.upSlide(((FrameLayout) this.getParent()), 150);
         for (int i = 0; i < StringUtils.getListSize(list); i++) {
             if (list.get(i).get_id().equals(objectBean.get_id())) {

@@ -27,7 +27,6 @@ import com.gongwu.wherecollect.furnitureEdit.CustomTableRowLayout;
 import com.gongwu.wherecollect.util.DialogUtil;
 import com.gongwu.wherecollect.util.EventBusMsg;
 import com.gongwu.wherecollect.util.ImageLoader;
-import com.gongwu.wherecollect.util.LogUtil;
 import com.gongwu.wherecollect.util.SaveDate;
 import com.gongwu.wherecollect.util.StringUtils;
 import com.gongwu.wherecollect.view.FloatWindowView;
@@ -84,7 +83,7 @@ public class FurnitureLookActivity extends BaseViewActivity {
         selectObject = objectBean;
         //TODO 后台数据错误，把盒子也当隔层返回来了
         for (int i = StringUtils.getListSize(furnitureObject.getLayers()) - 1; i >= 0; i--) {
-            if (furnitureObject.getLayers().get(i).getScale() == null) {
+            if (furnitureObject.getLayers().size() > 0 && furnitureObject.getLayers().size() > i && furnitureObject.getLayers().get(i).getScale() == null) {
                 furnitureObject.getLayers().remove(i);
             }
         }
