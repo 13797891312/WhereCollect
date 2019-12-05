@@ -273,6 +273,7 @@ public class RemindFragment extends BaseFragment {
      * 获取数据
      */
     private void httpPostRemindList(final boolean showToast) {
+        if (MyApplication.getUser(getContext()) == null) return;
         loading = true;
         Map<String, String> map = new TreeMap<>();
         map.put("uid", MyApplication.getUser(getContext()).getId());
