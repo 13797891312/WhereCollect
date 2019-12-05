@@ -34,6 +34,7 @@ import com.gongwu.wherecollect.application.MyApplication;
 import com.gongwu.wherecollect.entity.MessageBean;
 import com.gongwu.wherecollect.entity.ObjectBean;
 import com.gongwu.wherecollect.entity.ResponseResult;
+import com.gongwu.wherecollect.entity.UserBean;
 import com.gongwu.wherecollect.permission.FloatWindowManager;
 import com.gongwu.wherecollect.service.TimerService;
 import com.gongwu.wherecollect.util.AppConstant;
@@ -220,7 +221,8 @@ public class MainActivity extends BaseViewActivity {
     }
 
     private void tabClick(int position) {
-        if (MyApplication.getUser(MainActivity.this).isTest()) {
+        UserBean userBean = MyApplication.getUser(MainActivity.this);
+        if (userBean == null || userBean.isTest()) {
             startActivity(new Intent(context, LoginActivity.class));
         } else {
             myFragmentLayout.setCurrenItem(position);
@@ -311,7 +313,7 @@ public class MainActivity extends BaseViewActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.ChangeUser msg) {
-        ((PersonFragment) fragments.get(1)).refreshUi();
+        ((PersonFragment) fragments.get(fragments.size() - 1)).refreshUi();
         myFragmentLayout.setCurrenItem(0);
         filterView.getFilterList();
         MainLocationFragment.locationMap.clear();
@@ -362,6 +364,11 @@ public class MainActivity extends BaseViewActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusMsg.RefreshRemindRedNum msg) {
         setRemindRed(msg.show);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusMsg.SelectMainTagPosition msg) {
+        myFragmentLayout.setCurrenItem(msg.position);
     }
 
     /**

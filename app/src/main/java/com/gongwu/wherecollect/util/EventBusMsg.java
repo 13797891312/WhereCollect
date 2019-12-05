@@ -224,4 +224,12 @@ public class EventBusMsg {
             this.show = show;
         }
     }
+
+    public static class SelectMainTagPosition {
+        public int position;
+
+        public SelectMainTagPosition(int position) {
+            this.position = position;
+        }
+    }
 }

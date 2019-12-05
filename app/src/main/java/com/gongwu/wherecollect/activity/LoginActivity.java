@@ -63,6 +63,7 @@ public class LoginActivity extends BaseViewActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         titleLayout.setBack(false, null);
         titleLayout.setTitle("登录");
         titleLayout.textBtnLeft.setText("试用一下");
@@ -73,11 +74,11 @@ public class LoginActivity extends BaseViewActivity {
                 if (MyApplication.getUser(context) == null) {
                     loginTest();
                 } else {
+                    EventBus.getDefault().post(new EventBusMsg.SelectMainTagPosition(0));
                     finish();
                 }
             }
         });
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class LoginActivity extends BaseViewActivity {
         UMShareAPI.get(this).getPlatformInfo(this, sm, listener);
     }
 
-    @OnClick({R.id.wx_layout, R.id.agree, R.id.wb_layout, R.id.qq_layout, R.id.msg_layout, R.id.other_btn})
+    @OnClick({R.id.wx_layout, R.id.agree, R.id.phone_layout, R.id.wb_layout, R.id.qq_layout, R.id.msg_layout, R.id.other_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.wx_layout:
@@ -98,6 +99,10 @@ public class LoginActivity extends BaseViewActivity {
                 break;
             case R.id.agree:
                 WebActivity.start(this, "收哪儿服务条款", "http://www.shouner.com/privacy");
+                break;
+            case R.id.phone_layout:
+                Intent intent1 = new Intent(this, LoginPhoneActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.wb_layout:
                 otherLogin(SHARE_MEDIA.SINA);
@@ -142,12 +147,12 @@ public class LoginActivity extends BaseViewActivity {
                 super.code2000(r);
                 final UserBean user = JsonUtils.objectFromJson(r.getResult(), UserBean.class);
                 if (TextUtils.isEmpty(user.getMax_version())) {
-                    startMainActivity(user,infoMap.get("uid"));
+                    startMainActivity(user, infoMap.get("uid"));
                 } else {
                     DialogUtil.show("提示", TextUtils.isEmpty(user.getLogin_messag()) ? "您的帐号已经在高版本使用过,请使用IOS版" : user.getLogin_messag(), "继续", "取消", LoginActivity.this, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            startMainActivity(user,infoMap.get("uid"));
+                            startMainActivity(user, infoMap.get("uid"));
                         }
                     }, null);
                 }
@@ -156,7 +161,7 @@ public class LoginActivity extends BaseViewActivity {
         HttpClient.login(this, map, StringUtils.getCurrentVersionName(context), listenner);
     }
 
-    private void startMainActivity(UserBean user,String uid) {
+    private void startMainActivity(UserBean user, String uid) {
         logoutTest(MyApplication.getUser(context));
         user.setOpenid(uid);
         SaveDate.getInstence(LoginActivity.this).setUser(JsonUtils.jsonFromObject(user));

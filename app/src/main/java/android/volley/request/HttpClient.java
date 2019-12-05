@@ -25,6 +25,11 @@ public class HttpClient {
         CustomPostRequest request = new CustomPostRequest("users/login?version=" + versionName, params, listenner);
         Queue.getQueue(context).add(request);
     }
+
+    public static void loginByPhone(Context context, Map<String, String> params, PostListenner listenner) {
+        CustomPostRequest request = new CustomPostRequest("api/app/v340/login-with-code", params, listenner);
+        Queue.getQueue(context).add(request);
+    }
     //    https://www.shouner.com/users/register?version=2.2.100&systemName=iPhone%20OS&systemVersion=9.3
     // .1&model=iPhone&from=sne_app_ios
 

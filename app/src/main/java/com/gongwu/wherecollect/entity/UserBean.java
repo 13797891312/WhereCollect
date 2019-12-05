@@ -65,6 +65,8 @@ public class UserBean {
 
     private boolean isPassLogin;
 
+    private boolean isTest;
+
     public String getUsid() {
         return usid;
     }
@@ -101,6 +103,10 @@ public class UserBean {
         return !TextUtils.isEmpty(_id);
     }
 
+    public void setTestId(String id) {
+        this._id = id;
+    }
+
     public String getBirthday() {
         return birthday;
     }
@@ -131,6 +137,14 @@ public class UserBean {
 
     public void setCategory_update(boolean category_update) {
         this.category_update = category_update;
+    }
+
+    public void setTest(boolean test) {
+        isTest = test;
+    }
+
+    public boolean getTest() {
+        return isTest;
     }
 
     public int getStatus() {
